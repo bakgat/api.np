@@ -1,0 +1,762 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"up",
+				"updatedRole"
+			],
+			[
+				"rol",
+				"roleRepo"
+			],
+			[
+				"Schema",
+				"Schema::drop	Drop an existing database table"
+			],
+			[
+				"Log",
+				"Log::debug	Log a debug message to the logs."
+			],
+			[
+				"val",
+				"validateRequest"
+			],
+			[
+				"udpate",
+				"updatedUser"
+			],
+			[
+				"update",
+				"updatedUser"
+			],
+			[
+				"User",
+				"UserRepository"
+			],
+			[
+				"fi",
+				"firstName"
+			],
+			[
+				"first",
+				"first_name"
+			],
+			[
+				"user",
+				"userRepo"
+			],
+			[
+				"dele",
+				"deleted_at"
+			],
+			[
+				"creta",
+				"created_at"
+			],
+			[
+				"incl",
+				"incl1	include_once …"
+			],
+			[
+				"inc",
+				"incl1	include_once …"
+			],
+			[
+				"del",
+				"deletedResponse"
+			],
+			[
+				"req",
+				"request"
+			],
+			[
+				"fu",
+				"fun	function …"
+			],
+			[
+				"class",
+				"class_alias"
+			],
+			[
+				"glo",
+				"globalSettings"
+			],
+			[
+				"an",
+				"animate"
+			],
+			[
+				"selec",
+				"selectedId"
+			],
+			[
+				"paper-data",
+				"paper-datatable-column"
+			],
+			[
+				"_on",
+				"_onUserTap"
+			],
+			[
+				"_onE",
+				"_onExitFinish"
+			],
+			[
+				"_onEx",
+				"_onExitStart"
+			],
+			[
+				"_onEn",
+				"_onEntryFinish"
+			],
+			[
+				"_onEntr",
+				"_onEntryStart"
+			],
+			[
+				"header",
+				"headerPanelMain"
+			],
+			[
+				"scr",
+				"scrollToTop"
+			],
+			[
+				"dra",
+				"drawerPanel"
+			],
+			[
+				"hei",
+				"heightDiff"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"base",
+				"_baseRouteConfig"
+			],
+			[
+				"new",
+				"newContextualButtons"
+			],
+			[
+				"contex",
+				"contextualButtons"
+			],
+			[
+				"s",
+				"subtitle"
+			],
+			[
+				"paper-butt",
+				"paper-icon-button	paper-icon-button"
+			],
+			[
+				"inlin",
+				"inline-block"
+			],
+			[
+				"HTTP",
+				"HTTP_PROVIDERS	const"
+			],
+			[
+				"ob",
+				"Observable	alias"
+			],
+			[
+				"setAt",
+				"setAttribute	method"
+			],
+			[
+				"createElem",
+				"createElementNS	method"
+			],
+			[
+				"setAtt",
+				"setAttributeNS	method"
+			],
+			[
+				"Prom",
+				"PromiseWrapper	alias"
+			],
+			[
+				"svgS",
+				"svgSrc_	property"
+			],
+			[
+				"sv",
+				"svgIcon_	property"
+			],
+			[
+				"svg",
+				"svgIcon_	property"
+			],
+			[
+				"re",
+				"renderer_	property"
+			],
+			[
+				"icon",
+				"iconCache	property"
+			],
+			[
+				"ic",
+				"iconCache	property"
+			],
+			[
+				"def",
+				"defaultIconSize	property"
+			],
+			[
+				"de",
+				"defaultFontSet	property"
+			],
+			[
+				"defa",
+				"defaultViewBoxSize	property"
+			],
+			[
+				"Con",
+				"ConfigurationItem	class"
+			],
+			[
+				"SVGP",
+				"SVGPathElement	interface"
+			],
+			[
+				"cre",
+				"createElement	method"
+			],
+			[
+				"c",
+				"createElement	method"
+			],
+			[
+				"get",
+				"getElementsByTagName	method"
+			],
+			[
+				"ch",
+				"firstChild	property"
+			],
+			[
+				"view",
+				"viewProviders	property"
+			],
+			[
+				"Http",
+				"HTTP_PROVIDERS	const"
+			],
+			[
+				"create",
+				"createText	method"
+			],
+			[
+				"cons",
+				"constructor	keyword"
+			],
+			[
+				"auth",
+				"authors"
+			],
+			[
+				"volum",
+				"volumeInfo"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/Users/karlvaniseghem/BakGat/api.np/database/migrations/2016_04_08_201627_create_users_table.php",
+			"settings":
+			{
+				"buffer_size": 919,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/karlvaniseghem/BakGat/api.np/database/migrations/2016_04_27_044445_create_role_user_table.php",
+			"settings":
+			{
+				"buffer_size": 629,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "pi",
+		"selected_items":
+		[
+			[
+				"pi",
+				"Package Control: Install Package"
+			],
+			[
+				"Laravel ",
+				"Laravel Artisan 5: Serve"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"snipp",
+				"Snippet: template"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 704.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"cd /users",
+			"git status",
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"php -i",
+			"phpinfo()",
+			"php"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/karlvaniseghem/BakGat/api.np",
+		"/Users/karlvaniseghem/BakGat/api.np/app",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Domain",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Repositories",
+		"/Users/karlvaniseghem/BakGat/api.np/database",
+		"/Users/karlvaniseghem/BakGat/api.np/database/migrations",
+		"/Users/karlvaniseghem/BakGat/api.np/database/seeds"
+	],
+	"file_history":
+	[
+		"/Applications/Adobe InDesign CC 2015/Resources/CEP/extensions/WhatsNewBundle/lightTheme.css",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Repositories/UserRepository.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Http/routes.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Domain/Model/Role.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Domain/Model/User.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/UserController.php",
+		"/Users/karlvaniseghem/BakGat/api.np/database/migrations/2016_04_08_201627_create_users_table.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Repositories/RoleRepository.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Domain/Model/UserRepositoryInterface.php",
+		"/Users/karlvaniseghem/BakGat/api.np/database/seeds/RoleTableSeeder.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/RoleController.php",
+		"/Users/karlvaniseghem/BakGat/api.np/bootstrap/app.php",
+		"/Users/karlvaniseghem/BakGat/api.np/database/migrations/2016_04_27_043852_create_roles_table.php",
+		"/Users/karlvaniseghem/BakGat/api.np/database/seeds/UserTableSeeder.php",
+		"/Users/karlvaniseghem/BakGat/api.np/database/seeds/DatabaseSeeder.php",
+		"/Users/karlvaniseghem/BakGat/api.np/database/migrations/2016_04_27_044445_create_role_user_table.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Domain/Model/RoleRepositoryInterface.php",
+		"/Users/karlvaniseghem/BakGat/api.np.sublime-project",
+		"/Users/karlvaniseghem/BakGat/api.np/storage/logs/lumen.log",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-psr7/src/Analyzer.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/psr/log/Psr/Log/LoggerAwareTrait.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Http/Requests/UserFormRequest.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/RestControllerTrait.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/Providers/LumenServiceProvider.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/Providers/LaravelServiceProvider.php",
+		"/Users/karlvaniseghem/BakGat/api.np/config/cors-illuminate.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-psr7/src/Contracts/AnalysisResultInterface.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Http/Middleware/LumenCors.php",
+		"/Users/karlvaniseghem/BakGat/api.np/tests/UserControllerTest.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/illuminate/database/Eloquent/Model.php",
+		"/Users/karlvaniseghem/BakGat/api.np/tests/UserRoutesTest.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Http/Requests/FormRequest.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Controller.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Controller.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Repositories/CrudInterface.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/illuminate/contracts/Validation/ValidatesWhenResolved.php",
+		"/Users/karlvaniseghem/BakGat/api.np/database/factories/ModelFactory.php",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Providers/AppServiceProvider.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/illuminate/database/Eloquent/Factory.php",
+		"/Users/karlvaniseghem/BakGat/api.np/composer.json",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Domain/Model/UserRepositoryInterface",
+		"/Users/karlvaniseghem/BakGat/api.np/app/Http/Routes/UserRoutes.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Testing/Concerns/MakesHttpRequests.php",
+		"/Users/karlvaniseghem/BakGat/api.np/tests/ExampleTest.php",
+		"/Users/karlvaniseghem/Library/Application Support/Sublime Text 3/Packages/Xdebug Client/Xdebug.sublime-settings",
+		"/Users/karlvaniseghem/Library/Application Support/Sublime Text 3/Packages/User/Xdebug.sublime-settings",
+		"/Users/karlvaniseghem/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/karlvaniseghem/Library/Application Support/Sublime Text 3/Packages/CodeFormatter/Default (OSX).sublime-keymap",
+		"/Users/karlvaniseghem/Library/Application Support/Sublime Text 3/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/karlvaniseghem/Library/Application Support/Sublime Text 3/Packages/User/PHP Companion.sublime-settings",
+		"/Users/karlvaniseghem/Library/Application Support/Sublime Text 3/Packages/PHP Companion/PHP Companion.sublime-settings",
+		"/Users/karlvaniseghem/Library/Application Support/Sublime Text 3/Packages/CodeFormatter/CodeFormatter.sublime-settings",
+		"/Users/karlvaniseghem/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/karlvaniseghem/BakGat/api.np/.env",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/illuminate/contracts/Auth/Authenticatable.php",
+		"/Users/karlvaniseghem/BakGat/api.np/vendor/illuminate/contracts/Auth/Access/Authorizable.php",
+		"/Users/karlvaniseghem/BakGat/dart/web/index.dart",
+		"/Users/karlvaniseghem/BakGat/dart/pubspec.yaml",
+		"/Users/karlvaniseghem/BakGat/dart/web/index.html",
+		"/Users/karlvaniseghem/BakGat/dart/web/styles.css",
+		"/Users/karlvaniseghem/BakGat/dart/lib/text-reverser.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/users/user-list.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/flyout-text/flyout-text.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/routing.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/scripts/app.js",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/index.html",
+		"/Users/karlvaniseghem/Library/Application Support/Sublime Text 3/Packages/HTML-CSS-JS Prettify/.jsbeautifyrc",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/users/user-view.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/users/user-list.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/elements.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/users/user-view.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/users/user-detail.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/users/index.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/users/user-item.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/np-app/np-app.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/elements.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/settings/global-settings.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/scripts/app.js",
+		"/Users/karlvaniseghem/BakGat/bids/app/styles/shared-styles.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/toolbar/toolbar-header.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/offers/offer-view.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/routing.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/index.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/toolbar/return-button.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/toolbar/add-button.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/toolbar/bid-toolbar.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/toolbar/bid-toolbar",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/home/home-view.html",
+		"/Users/karlvaniseghem/BakGat/bids/app/elements/offers/offer-data.html",
+		"/Users/karlvaniseghem/PhpstormProjects/portal/public/js/modules/dashboard/slider.html",
+		"/Users/karlvaniseghem/BakGat/bids/wct.conf.js",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/elements.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/users/user-data.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/users/user-data",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/users/user-item.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/scripts/app.js",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/routing.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/users/user.json",
+		"/Users/karlvaniseghem/BakGat/pagetrans/bower.json",
+		"/Users/karlvaniseghem/BakGat/notosplus.old/app/elements/book-item/book-item.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/master-page/master-page.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/index.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/users/user-detail.html",
+		"/Users/karlvaniseghem/BakGat/notosplus.old2/app/elements/elements.html",
+		"/Users/karlvaniseghem/BakGat/notosplus.old2/app/index.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/detail-page/detail-page.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/settings-page/settings-page.html",
+		"/Users/karlvaniseghem/BakGat/pagetrans/app/elements/list-page/list-page.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/users/user-view.js",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/users/user-detail.js",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/users/user-item.js",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/users/user-list.js",
+		"/Users/karlvaniseghem/BakGat/notosplus/gulpfile.js",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/home-view/home-view.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/home-view/home-view.js",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/spread-menu-button/spread-menu-button.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/spread-menu-button/spread-menu-button.js",
+		"/Users/karlvaniseghem/BakGat/notosplus/bower.json",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/flyout-text/flyout-text.js",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/toolbar/nt-toolbar-icons.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/users/users-view.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/index.old.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/toolbar/nt-toolbar-icons-data.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/styles/shared-styles.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/styles/app-theme.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html",
+		"/Users/karlvaniseghem/BakGat/notosplus/app/elements/toolbar/nt-toolbar.html"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"<current file>",
+			"<current file>,/Users/karlvaniseghem/BakGat/notosplus",
+			"<current file>",
+			"/Users/karlvaniseghem/PhpstormProjects/material2/node_modules",
+			"<current file>",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"User",
+			"FormRequest.php",
+			"scrollPageT",
+			"'",
+			"}],\n",
+			"book",
+			"classes",
+			"users",
+			"console",
+			"headerPanelMain",
+			"paper-scroll-header-panel-full-header",
+			"var(--paper-scroll-header-panel-full-header)",
+			"#mainToolbar",
+			"toolbar",
+			"paper-material",
+			"section[data-route",
+			"babe",
+			"gulp-load-plugins",
+			"vulcanize",
+			"DOMParser",
+			"card",
+			"setText(",
+			"ionRangeSlider",
+			"dropdown-to",
+			"menu",
+			"product",
+			"rotation",
+			"http://vbsichtegem.be",
+			"/DeSchatkist",
+			"pages",
+			"FAQ",
+			"bannerSet",
+			"personal",
+			"isTouchDevice",
+			"menu()",
+			"scrollwi",
+			"submit",
+			"nav",
+			"dropzone",
+			"fix_height",
+			"animations();",
+			"isTouchD",
+			"headerCustomizer();",
+			"slider",
+			"chartJs",
+			"scope.$form",
+			"valueGetter",
+			"$data",
+			"valueGetter",
+			"valueGetter =",
+			"self.directiveN",
+			"self.directiveName",
+			"self.directiveName =",
+			"setLocalValue",
+			"valueGetter",
+			"$data",
+			"setcontenttags",
+			"{{!",
+			"{!!",
+			"<%",
+			"escaped"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"\"",
+			"user",
+			".mainToolbar",
+			"icon",
+			"http://blog.vbsichtegem.be",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Users/karlvaniseghem/BakGat/api.np/database/migrations/2016_04_08_201627_create_users_table.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 919,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								624,
+								624
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Users/karlvaniseghem/BakGat/api.np/database/migrations/2016_04_27_044445_create_role_user_table.php",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 629,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								626,
+								626
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.doc":
+	{
+		"height": 0.0
+	},
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.xdebug":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "/Users/karlvaniseghem/BakGat/api.np.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/BakGat/np.sublime-workspace"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 704.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+		"xdebug":
+		{
+			"hide_conflict": false
+		}
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 306.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
