@@ -7,9 +7,6 @@ cache: bundler
 before_script:
   - composer self-update
   - composer install --no-interaction --prefer-source
-  - cp .env.travis .env
-  - cp config/doctrine.travis.php config/doctrine.php
-  - cp bootstrap/autoload.travis.php autoload.php
 
 
 script:
