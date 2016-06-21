@@ -69,4 +69,27 @@ class StudentInGroupTest extends TestCase
         $this->assertCount(2, $user->groups());
         $this->assertCount(1, $user->activeGroups());
     }
+
+    /**
+     * @test
+     * @group group student
+     */
+    public function should_leave_active_group_for_user() {
+        $group1 = new Group($this->faker->word());
+        $group2 = new Group($this->faker->word());
+
+        $fn = $this->faker->firstName();
+        $ln = $this->faker->lastName();
+        $email = $this->faker->email();
+
+        $user = new Student($fn, $ln, $email);
+
+        $user->joinGroup($group1);
+        $user->joinGroup($group2);
+        $this->assertCount(2, $user->activeGroups());
+
+        $user->leaveGroup($group1);
+        $this->assertCount(2, $user->groups());
+        $this->assertCount(1, $user->activeGroups());
+    }
 }
