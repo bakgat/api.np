@@ -84,12 +84,16 @@ class StudentInGroupTest extends TestCase
 
         $user = new Student($fn, $ln, $email);
 
-        $user->joinGroup($group1);
-        $user->joinGroup($group2);
+        $user->joinGroup($group1)
+            ->joinGroup($group2, null, new DateTime()); //once was in group2
+        $this->assertCount(1, $user->activeGroups());
+
+        $user->joinGroup($group2); //again in group2
+        $this->assertCount(3, $user->groups());
         $this->assertCount(2, $user->activeGroups());
 
-        $user->leaveGroup($group1);
-        $this->assertCount(2, $user->groups());
+        $user->leaveGroup($group2); //leave group2 again
+        $this->assertCount(3, $user->groups());
         $this->assertCount(1, $user->activeGroups());
     }
 }
