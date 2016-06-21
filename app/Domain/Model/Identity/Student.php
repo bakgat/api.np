@@ -147,7 +147,7 @@ class Student
     {
         $groups = [];
         foreach ($this->studentInGroups as $studentInGroup) {
-            if ($studentInGroup->getEnd() === null) {
+            if ($studentInGroup->isActive()) {
                 $groups[] = $studentInGroup->getGroup();
             }
         }

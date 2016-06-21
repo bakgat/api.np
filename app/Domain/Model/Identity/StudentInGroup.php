@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Identity;
 
 
+use App\Domain\Model\Time\DateRange;
 use DateTime;
 
 class StudentInGroup
@@ -17,10 +18,8 @@ class StudentInGroup
     protected $student;
     /** @var Group */
     protected $group;
-    /** @var DateTime */
-    protected $start;
-    /** @var DateTime */
-    protected $end;
+    /** @var DateRange */
+    protected $dateRange;
 
     public function __construct(Student $student, Group $group, $start = null, $end = null)
     {
@@ -29,8 +28,9 @@ class StudentInGroup
         }
         $this->student = $student;
         $this->group = $group;
-        $this->start = $start;
-        $this->end = $end;
+
+        $dr = ['start' => $start, 'end' => $end];
+        $this->dateRange = DateRange::fromData($dr);
     }
 
     public function getStudent()
@@ -43,28 +43,33 @@ class StudentInGroup
         return $this->group;
     }
 
-    public function getStart()
+    public function getDateRange()
     {
-        return $this->start;
+        return $this->dateRange;
     }
 
-    public function getEnd()
+    public function isActive()
     {
-        return $this->end;
+        return $this->dateRange->isFuture();
     }
 
-    public function leaveGroup($end = null) {
+    public function leaveGroup($end = null)
+    {
         //end date is already taken
         //group is already left
-        if($this->end !== null) {
-            return $this;
+        if(!$this->isActive()) {
+            return;
         }
 
-        if($end === null) {
+        if ($end === null) {
             $end = new DateTime();
         }
 
-        $this->end = $end;
+        $start = $this->dateRange->getStart();
+
+        $dr = ['start' => $start, 'end' => $end];
+        $this->dateRange = DateRange::fromData($dr);
+
         return $this;
     }
 }
