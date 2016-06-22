@@ -62,7 +62,7 @@ class Student
     protected $birthday;
 
     /**
-     * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="student")
+     * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="student", cascade={"persist"})
      *
      * @var StudentInGroup[]
      */

@@ -36,7 +36,7 @@ class Group
     protected $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="group")
+     * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="group", cascade={"persist"})
      *
      * @var StudentInGroups[]
      */

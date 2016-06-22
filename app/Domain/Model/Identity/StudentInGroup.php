@@ -16,7 +16,7 @@ use Webpatser\Uuid\Uuid;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="studentInGroups")
+ * @ORM\Table(name="student_in_groups")
  *
  * Class StudentInGroup
  * @package App\Domain\Model\Identity
