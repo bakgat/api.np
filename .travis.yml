@@ -7,6 +7,8 @@ cache: bundler
 before_script:
   - composer self-update
   - composer install --no-interaction --prefer-source
+  - php artisan doctrine:schema:create
+  - php artisan db:seed
 
 
 script:
