@@ -1,4 +1,5 @@
 <?php
+use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Repositories\Identity\DoctrineStudentRepository;
 
@@ -44,6 +45,22 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         foreach ($students as $student) {
             $this->assertCount(1, $student->activeGroups());
         }
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group studentrepo
+     */
+    public function should_find_user_by_its_id()
+    {
+        $students = $this->studentRepo->all();
+        $id = $students[0]->getId();
+
+        $student = $this->studentRepo->find($id);
+
+        $this->assertInstanceOf(Student::class, $student);
+        $this->assertEquals($student->getId(), $id);
     }
 
 }
