@@ -9,22 +9,38 @@
 namespace App\Domain\Model\Identity;
 
 
-use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
-use JsonSerializable;
 use Webpatser\Uuid\Uuid;
 
 /**
+ * @ORM\Entity
+ * @ORM\Table(name="groups")
  *
  * Class Group
  * @package App\Domain\Model\Identity
  */
 class Group
 {
-    /** @var Uuid id */
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="guid")
+     *
+     * @var Uuid id
+     */
     protected $id;
+    /**
+     * @ORM\Column(type="string", unique=true)
+     *
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="group")
+     *
+     * @var StudentInGroups[]
+     */
+    protected $studentInGroups;
 
 
     public function __construct($name)
@@ -42,5 +58,16 @@ class Group
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
+    public function toString() {
+        return $this->__toString();
     }
 }

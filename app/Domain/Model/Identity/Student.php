@@ -14,31 +14,58 @@ use Doctrine\ORM\Mapping AS ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Webpatser\Uuid\Uuid;
 
-//* @ORM\Entity
-//* @ORM\Table(name="students")
+//
+//*
 
 /**
+ * @ORM\Entity
+ * @ORM\Table(name="students")
  *
  * Class Student
  * @package App\Domain\Model\Person
  */
 class Student
 {
-    /** @var Uuid id */
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="guid")
+     * @var Uuid id
+     */
     protected $id;
 
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
     protected $firstName;
 
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
     protected $lastName;
 
+
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
     protected $email;
+
 
     protected $gender;
 
-    /** @var DateTime */
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     * @var DateTime
+     */
     protected $birthday;
 
-    /** @var StudentInGroup[] */
+    /**
+     * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="student")
+     *
+     * @var StudentInGroup[]
+     */
     protected $studentInGroups;
 
 
@@ -85,7 +112,7 @@ class Student
 
 
     /**
-     * @return
+     * @return string
      */
     public function getEmail()
     {
@@ -125,6 +152,10 @@ class Student
         return $this;
     }
 
+    /**
+     * @param Group $group
+     * @param DateTime|null $end
+     */
     public function leaveGroup(Group $group, $end = null)
     {
         $id = $group->getId();
@@ -135,6 +166,9 @@ class Student
         }
     }
 
+    /**
+     * @return Group[]
+     */
     public function groups()
     {
         $groups = [];
@@ -144,11 +178,9 @@ class Student
         return $groups;
     }
 
-    public function studentInGroups()
-    {
-        return $this->studentInGroups;
-    }
-
+    /**
+     * @return Group[]
+     */
     public function activeGroups()
     {
         $groups = [];
@@ -160,6 +192,11 @@ class Student
         return $groups;
     }
 
+    /**
+     * @param Group $group
+     * @param DateTime $date
+     * @return bool
+     */
     public function wasActiveInGroupAt(Group $group, DateTime $date)
     {
         foreach ($this->studentInGroups as $studentInGroup) {
@@ -172,6 +209,11 @@ class Student
         return false;
     }
 
+    /**
+     * @param Group $group
+     * @param DateRange $dateRange
+     * @return bool
+     */
     public function wasActiveInGroupBetween(Group $group, DateRange $dateRange)
     {
         foreach ($this->studentInGroups as $studentInGroup) {
