@@ -8,12 +8,17 @@
 
 namespace App\Domain\Model\Time;
 
+use Doctrine\ORM\Mapping AS ORM;
 
-use App\Domain\ValueObject;
-use Carbon\Carbon;
 use DateTime;
 use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
 
+/**
+ * @ORM\Embeddable
+ *
+ * Class DateRange
+ * @package App\Domain\Model\Time
+ */
 class DateRange
 {
     /**
@@ -29,9 +34,15 @@ class DateRange
      */
     const PAST = '1000-01-01';
 
-    /** @var DateTime */
+    /**
+     * @ORM\Column(type="date", nullable=false)
+     * @var DateTime
+     */
     protected $start;
-    /** @var DateTime */
+    /**
+     * @ORM\Column(type="date", nullable=false)
+     * @var DateTime
+     */
     protected $end;
 
     public function __construct(DateTime $start, DateTime $end)
@@ -303,7 +314,8 @@ class DateRange
         );
     }
 
-    public function toString() {
+    public function toString()
+    {
         return $this->__toString();
     }
 }

@@ -43,7 +43,12 @@ class StudentInGroup
      * @var Group
      */
     protected $group;
-    /** @var DateRange */
+
+    /**
+     * @ORM\Embedded(class="App\Domain\Model\Time\DateRange")
+     *
+     * @var DateRange
+     */
     protected $dateRange;
 
     public function __construct(Student $student, Group $group, $daterange)
@@ -90,7 +95,7 @@ class StudentInGroup
     public function isActive()
     {
         return $this->dateRange->isFuture()
-            && $this->dateRange->getStart() <= new DateTime;
+        && $this->dateRange->getStart() <= new DateTime;
     }
 
     /**
