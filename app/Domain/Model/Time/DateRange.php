@@ -240,37 +240,15 @@ class DateRange
     {
         if ($arg instanceof DateTime) {
             return $this->getStart() <= $arg
-             && $this->getEnd() >= $arg;
+            && $this->getEnd() >= $arg;
         } else if ($arg instanceof DateRange) {
             return $this->includes($arg->getStart())
-                && $this->includes($arg->getEnd());
+            && $this->includes($arg->getEnd());
         } else {
             throw new InvalidArgumentException(
                 'Argument must be an instance of DateTime or ' . __CLASS__
             );
         }
-    }
-
-    /**
-     * Convert the DateRange to an ISO-8601 interval string
-     *
-     * http://en.wikipedia.org/wiki/ISO_8601#Time_intervals
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        if ($this->isEmpty()) {
-            return '';
-        }
-
-        return implode(
-            '/',
-            [
-                $this->getStart()->format('Y-m-d'),
-                $this->getEnd()->format('Y-m-d')
-            ]
-        );
     }
 
     /**
@@ -301,5 +279,31 @@ class DateRange
     public function isInfinite()
     {
         return static::infinite() == $this;
+    }
+
+    /**
+     * Convert the DateRange to an ISO-8601 interval string
+     *
+     * http://en.wikipedia.org/wiki/ISO_8601#Time_intervals
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        if ($this->isEmpty()) {
+            return '';
+        }
+
+        return implode(
+            '/',
+            [
+                $this->getStart()->format('Y-m-d'),
+                $this->getEnd()->format('Y-m-d')
+            ]
+        );
+    }
+
+    public function toString() {
+        return $this->__toString();
     }
 }

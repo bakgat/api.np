@@ -68,7 +68,7 @@ class StudentInGroupTest extends TestCase
         $user->joinGroup($group1);
         $this->assertCount(1, $user->groups());
 
-        $user->joinGroup($group2, null, new \DateTime());
+        $user->joinGroup($group2, null, Carbon::now());
         $this->assertCount(2, $user->groups());
         $this->assertCount(1, $user->activeGroups());
     }
@@ -90,7 +90,7 @@ class StudentInGroupTest extends TestCase
         $user = new Student($fn, $ln, $email);
 
         $user->joinGroup($group1)
-            ->joinGroup($group2, null, new DateTime()); //once was in group2
+            ->joinGroup($group2, null, Carbon::now()); //once was in group2
         $this->assertCount(1, $user->activeGroups());
 
         $user->joinGroup($group2); //again in group2

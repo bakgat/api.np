@@ -154,18 +154,18 @@ class DateRangeTest extends TestCase
             new DateTime(DateRange::PAST),
             new DateTime(DateRange::FUTURE)
         );
-        $this->assertFalse($dr1->isPast(), $dr1->__toString());
-        $this->assertFalse($dr1->isFuture(), $dr1->__toString());
-        $this->assertFalse($dr1->isInfinite(), $dr1->__toString());
-        $this->assertTrue($dr2->isPast(), $dr2->__toString());
-        $this->assertFalse($dr2->isFuture(), $dr2->__toString());
-        $this->assertFalse($dr2->isInfinite(), $dr2->__toString());
-        $this->assertFalse($dr3->isPast(), $dr3->__toString());
-        $this->assertTrue($dr3->isFuture(), $dr3->__toString());
-        $this->assertFalse($dr3->isInfinite(), $dr3->__toString());
-        $this->assertTrue($dr4->isPast(), $dr4->__toString());
-        $this->assertTrue($dr4->isFuture(), $dr4->__toString());
-        $this->assertTrue($dr4->isInfinite(), $dr4->__toString());
+        $this->assertFalse($dr1->isPast(), $dr1->toString());
+        $this->assertFalse($dr1->isFuture(), $dr1->toString());
+        $this->assertFalse($dr1->isInfinite(), $dr1->toString());
+        $this->assertTrue($dr2->isPast(), $dr2->toString());
+        $this->assertFalse($dr2->isFuture(), $dr2->toString());
+        $this->assertFalse($dr2->isInfinite(), $dr2->toString());
+        $this->assertFalse($dr3->isPast(), $dr3->toString());
+        $this->assertTrue($dr3->isFuture(), $dr3->toString());
+        $this->assertFalse($dr3->isInfinite(), $dr3->toString());
+        $this->assertTrue($dr4->isPast(), $dr4->toString());
+        $this->assertTrue($dr4->isFuture(), $dr4->toString());
+        $this->assertTrue($dr4->isInfinite(), $dr4->toString());
     }
 
 }
