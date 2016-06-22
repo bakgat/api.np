@@ -67,7 +67,7 @@ class DateRange
     public static function fromIso8601($string)
     {
         $split = explode('/', $string, 2);
-        if (count($split) !== 2) {
+        if (count($split) < 2) {
             throw new InvalidArgumentException(
                 'The format is expected to be Y-m-d/Y-m-d'
             );
