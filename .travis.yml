@@ -4,9 +4,13 @@ php:  5.6
 
 cache: bundler
 
+services:
+  - mysql
+
 before_script:
   - composer self-update
   - composer install --no-interaction --prefer-source
+  - cp .travis.env .env
   - php artisan doctrine:schema:create
   - php artisan db:seed
 
