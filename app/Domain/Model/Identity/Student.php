@@ -147,6 +147,9 @@ class Student
      */
     public function joinGroup(Group $group, $start = null, $end = null)
     {
+        if ($start == null) {
+            $start = new DateTime;
+        }
         $studentGroup = new StudentInGroup($this, $group, ['start' => $start, 'end' => $end]);
         $this->studentInGroups[] = $studentGroup;
         return $this;
