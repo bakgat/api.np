@@ -1,5 +1,6 @@
 <?php
 use App\Domain\Model\Identity\Student;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
@@ -21,11 +22,11 @@ class StudentSeeder extends Seeder
     {
         DB::table('students')->delete();
 
-        /*$qb = EntityManager::createQueryBuilder();
+        $qb = EntityManager::createQueryBuilder();
         $qb->select('g')
-            ->from('App\Domain\Model\Group\Group', 'g');
+            ->from('App\Domain\Model\Identity\Group', 'g');
 
-        $groups = $qb->getQuery()->getResult();*/
+        $groups = $qb->getQuery()->getResult();
 
         $faker = Faker\Factory::create('nl_BE');
         foreach (range(1, 440) as $index) {
@@ -34,8 +35,14 @@ class StudentSeeder extends Seeder
                 $faker->lastName(),
                 $faker->email()
             );
-            //$student->setBirthday($faker->dateTimeBetween('-12years', '-3years'));
-            // $student->joinGroup($faker->randomElement($groups));
+            $student->setBirthday($faker->dateTimeBetween('-12years', '-3years'));
+            $student->joinGroup($faker->unique(true)->randomElement($groups));
+            for ($i=0;$i<$faker->biasedNumberBetween(1, 10);$i++) {
+                $lower = $faker->dateTimeBetween('-9years', '-1year');
+                $upper = $faker->dateTimeBetween($lower, 'now');
+                $student->joinGroup($faker->unique()->randomElement($groups), $lower, $upper);
+            }
+
             EntityManager::persist($student);
         }
         EntityManager::flush();
