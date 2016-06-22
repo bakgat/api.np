@@ -11,6 +11,7 @@ before_script:
   - composer self-update
   - composer install --no-interaction --prefer-source
   - cp .travis.env .env
+  - mysql -e 'create database np;'
   - php artisan doctrine:schema:create
   - php artisan db:seed
 
