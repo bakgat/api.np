@@ -1,5 +1,5 @@
 <?php
-use App\Domain\Model\Group\Group;
+use App\Domain\Model\Identity\Group;
 use Illuminate\Database\Seeder;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
@@ -24,9 +24,9 @@ class GroupSeeder extends Seeder
         $faker = Faker\Factory::create('nl_BE');
 
         foreach (range(1, 20) as $index) {
-            $group = new Group(
-                $faker->word()
-            );
+            $w = $faker->unique()->word();
+
+            $group = new Group($w);
             EntityManager::persist($group);
         }
         EntityManager::flush();
