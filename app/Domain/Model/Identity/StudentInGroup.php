@@ -21,16 +21,16 @@ class StudentInGroup
     /** @var DateRange */
     protected $dateRange;
 
-    public function __construct(Student $student, Group $group, $start = null, $end = null)
+    public function __construct(Student $student, Group $group, $daterange)
     {
-        if ($start === null) {
-            $start = new DateTime();
-        }
         $this->student = $student;
         $this->group = $group;
 
-        $dr = ['start' => $start, 'end' => $end];
-        $this->dateRange = DateRange::fromData($dr);
+        if ($daterange instanceof DateRange) {
+            $this->dateRange = $daterange;
+        } else {
+            $this->dateRange = DateRange::fromData($daterange);
+        }
     }
 
     public function getStudent()
@@ -43,21 +43,36 @@ class StudentInGroup
         return $this->group;
     }
 
-    public function getDateRange()
-    {
-        return $this->dateRange;
-    }
-
     public function isActive()
     {
         return $this->dateRange->isFuture();
+    }
+
+    public function isActiveSince()
+    {
+        return $this->dateRange->getStart();
+    }
+
+    public function isActiveUntil()
+    {
+        return $this->dateRange->getEnd();
+    }
+
+    public function wasActiveAt(DateTime $date)
+    {
+        return $this->dateRange->includes($date);
+    }
+
+    public function wasActiveBetween(DateRange $dateRange)
+    {
+        return $this->dateRange->includes($dateRange);
     }
 
     public function leaveGroup($end = null)
     {
         //end date is already taken
         //group is already left
-        if(!$this->isActive()) {
+        if (!$this->isActive()) {
             return;
         }
 
@@ -65,11 +80,19 @@ class StudentInGroup
             $end = new DateTime();
         }
 
-        $start = $this->dateRange->getStart();
-
-        $dr = ['start' => $start, 'end' => $end];
+        $dr = ['start' => $this->dateRange->getStart(), 'end' => $end];
         $this->dateRange = DateRange::fromData($dr);
 
         return $this;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->student->getDisplayName() . ' - ' . $this->group->getName()
+        . ': ' . $this->dateRange;
     }
 }

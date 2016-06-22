@@ -1,6 +1,8 @@
 <?php
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
+use App\Domain\Model\Time\DateRange;
+use Carbon\Carbon;
 
 /**
  * Created by PhpStorm.
@@ -73,9 +75,11 @@ class StudentInGroupTest extends TestCase
 
     /**
      * @test
-     * @group group student
+     * @group group
+     * @group student
      */
-    public function should_leave_active_group_for_user() {
+    public function should_leave_active_group_for_user()
+    {
         $group1 = new Group($this->faker->word());
         $group2 = new Group($this->faker->word());
 
@@ -96,5 +100,69 @@ class StudentInGroupTest extends TestCase
         $user->leaveGroup($group2); //leave group2 again
         $this->assertCount(3, $user->groups());
         $this->assertCount(1, $user->activeGroups());
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group group
+     */
+    public function should_been_active_at()
+    {
+        $group1 = new Group($this->faker->word());
+        $group2 = new Group($this->faker->word());
+
+        $fn = $this->faker->firstName();
+        $ln = $this->faker->lastName();
+        $email = $this->faker->email();
+
+        $user = new Student($fn, $ln, $email);
+
+        $nearInfinite = new DateTime('9999-01-01');
+        $lowerBound = new DateTime('2014-01-01');
+        $upperBound = new DateTime('2016-01-01');
+
+        $user->joinGroup($group1, $lowerBound)
+            ->joinGroup($group2, $lowerBound, $upperBound);
+
+
+        $this->assertTrue($user->wasActiveInGroupAt($group1, $nearInfinite));
+        $this->assertTrue($user->wasActiveInGroupAt($group1, $lowerBound));
+        $this->assertTrue($user->wasActiveInGroupAt($group1, $upperBound));
+
+        $this->assertTrue($user->wasActiveInGroupAt($group2, $lowerBound));
+        $this->assertTrue($user->wasActiveInGroupAt($group2, $upperBound));
+        $this->assertFalse($user->wasActiveInGroupAt($group2, $nearInfinite));
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group group
+     */
+    public function should_been_active_between()
+    {
+        $group1 = new Group($this->faker->word());
+        $group2 = new Group($this->faker->word());
+
+        $fn = $this->faker->firstName();
+        $ln = $this->faker->lastName();
+        $email = $this->faker->email();
+
+        $user = new Student($fn, $ln, $email);
+
+        $nearInfinite = new DateTime('9999-01-01');
+        $lowerBound = new DateTime('2014-01-01');
+        $upperBound = new DateTime('2016-01-01');
+
+        $user->joinGroup($group1, $lowerBound)
+            ->joinGroup($group2, $lowerBound, $upperBound);
+
+
+        $this->assertTrue($user->wasActiveInGroupBetween($group1, new DateRange($lowerBound, $upperBound)));
+        $this->assertTrue($user->wasActiveInGroupBetween($group1, new DateRange($lowerBound, $nearInfinite)));
+
+        $this->assertTrue($user->wasActiveInGroupBetween($group2, new DateRange($lowerBound, $upperBound)));
+        $this->assertFalse($user->wasActiveInGroupBetween($group2, new DateRange($lowerBound, $nearInfinite)));
     }
 }

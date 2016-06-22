@@ -8,6 +8,7 @@
 
 namespace App\Domain\Model\Identity;
 
+use App\Domain\Model\Time\DateRange;
 use DateTime;
 use Doctrine\ORM\Mapping AS ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -119,7 +120,7 @@ class Student
      */
     public function joinGroup(Group $group, $start = null, $end = null)
     {
-        $studentGroup = new StudentInGroup($this, $group, $start, $end);
+        $studentGroup = new StudentInGroup($this, $group, ['start' => $start, 'end' => $end]);
         $this->studentInGroups[] = $studentGroup;
         return $this;
     }
@@ -128,7 +129,7 @@ class Student
     {
         $id = $group->getId();
         foreach ($this->studentInGroups as $studentInGroup) {
-            if($studentInGroup->getGroup()->getId() === $id) {
+            if ($studentInGroup->getGroup()->getId() === $id) {
                 $studentInGroup->leaveGroup($end);
             }
         }
@@ -143,6 +144,11 @@ class Student
         return $groups;
     }
 
+    public function studentInGroups()
+    {
+        return $this->studentInGroups;
+    }
+
     public function activeGroups()
     {
         $groups = [];
@@ -154,4 +160,27 @@ class Student
         return $groups;
     }
 
+    public function wasActiveInGroupAt(Group $group, DateTime $date)
+    {
+        foreach ($this->studentInGroups as $studentInGroup) {
+            if ($studentInGroup->getGroup()->getId() == $group->getId()
+                && $studentInGroup->wasActiveAt($date)
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function wasActiveInGroupBetween(Group $group, DateRange $dateRange)
+    {
+        foreach ($this->studentInGroups as $studentInGroup) {
+            if ($studentInGroup->getGroup()->getId() == $group->getId()
+                && $studentInGroup->wasActiveBetween($dateRange)
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
