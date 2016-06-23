@@ -2,6 +2,8 @@
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Repositories\Identity\DoctrineStudentRepository;
+use Doctrine\ORM\EntityNotFoundException;
+use Webpatser\Uuid\Uuid;
 
 
 /**
@@ -39,7 +41,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      * @group student
      * @group studentrepo
      */
-    public function should_have_1_active_group_per_user()
+    public function should_have_1_active_group_per_student()
     {
         $students = $this->studentRepo->all();
         foreach ($students as $student) {
@@ -52,10 +54,11 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      * @group student
      * @group studentrepo
      */
-    public function should_find_user_by_its_id()
+    public function should_find_student_by_its_id()
     {
         $students = $this->studentRepo->all();
         $id = $students[0]->getId();
+
 
         $this->em->clear();
 
@@ -63,6 +66,51 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
 
         $this->assertInstanceOf(Student::class, $student);
         $this->assertEquals($student->getId(), $id);
+
+
     }
 
+    /**
+     * @test
+     * @group student
+     * @group studentrepo
+     */
+    public function should_return_null_when_no_student_found()
+    {
+        $fakeId = Uuid::generate(4);
+        $student = $this->studentRepo->find($fakeId);
+        $this->assertNull($student);
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group studentrepo
+     */
+    public function should_get_student_by_its_id()
+    {
+        $students = $this->studentRepo->all();
+        $id = $students[0]->getId();
+
+
+        $this->em->clear();
+
+        $student = $this->studentRepo->get($id);
+
+        $this->assertInstanceOf(Student::class, $student);
+        $this->assertEquals($student->getId(), $id);
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group studentrepo
+     */
+    public function should_throw_exception_when_get_student_fails()
+    {
+        $this->setExpectedException(EntityNotFoundException::class);
+        $fakeId = Uuid::generate(4);
+        $student = $this->studentRepo->get($fakeId);
+
+    }
 }
