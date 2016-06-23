@@ -9,9 +9,8 @@
 namespace App\Domain\Model\Identity;
 
 use App\Domain\Model\Time\DateRange;
-use DateTime;
+use \DateTime;
 use Doctrine\ORM\Mapping AS ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use Webpatser\Uuid\Uuid;
 
 //
@@ -69,7 +68,7 @@ class Student
     protected $studentInGroups;
 
 
-    public function __construct($firstName, $lastName, $email, DateTime $birthday)
+    public function __construct($firstName, $lastName, $email, DateTime $birthday = null)
     {
         $this->id = Uuid::generate(4);
         $this->firstName = $firstName;
