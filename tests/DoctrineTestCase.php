@@ -1,4 +1,5 @@
 <?php
+use Doctrine\ORM\EntityManager;
 
 /**
  * Created by PhpStorm.
@@ -8,6 +9,7 @@
  */
 abstract class DoctrineTestCase extends TestCase
 {
+    /** @var EntityManager */
     protected $em;
 
     public function setUp()

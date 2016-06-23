@@ -57,6 +57,8 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $students = $this->studentRepo->all();
         $id = $students[0]->getId();
 
+        $this->em->clear();
+
         $student = $this->studentRepo->find($id);
 
         $this->assertInstanceOf(Student::class, $student);
