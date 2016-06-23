@@ -177,7 +177,7 @@ class Student
     /**
      * @return Group[]
      */
-    public function groups()
+    public function getGroups()
     {
         $groups = [];
         foreach ($this->studentInGroups as $studentInGroup) {
@@ -189,7 +189,7 @@ class Student
     /**
      * @return Group[]
      */
-    public function activeGroups()
+    public function getActiveGroups()
     {
         $groups = [];
         foreach ($this->studentInGroups as $studentInGroup) {

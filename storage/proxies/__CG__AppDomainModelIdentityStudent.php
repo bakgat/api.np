@@ -279,23 +279,23 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
-    public function groups()
+    public function getGroups()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'groups', []);
 
-        return parent::groups();
+        return parent::getGroups();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function activeGroups()
+    public function getActiveGroups()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'activeGroups', []);
 
-        return parent::activeGroups();
+        return parent::getActiveGroups();
     }
 
     /**

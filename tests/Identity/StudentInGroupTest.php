@@ -32,11 +32,11 @@ class StudentInGroupTest extends TestCase
         $user = new Student($fn, $ln, $email);
 
         $user->joinGroup($group1);
-        $this->assertCount(1, $user->groups());
+        $this->assertCount(1, $user->getGroups());
 
         $user->joinGroup($group2);
-        $this->assertCount(2, $user->groups());
-        $this->assertCount(2, $user->activeGroups());
+        $this->assertCount(2, $user->getGroups());
+        $this->assertCount(2, $user->getActiveGroups());
     }
 
     /**
@@ -55,11 +55,11 @@ class StudentInGroupTest extends TestCase
         $user = new Student($fn, $ln, $email);
 
         $user->joinGroup($group1);
-        $this->assertCount(1, $user->groups());
+        $this->assertCount(1, $user->getGroups());
 
         $user->joinGroup($group2, null, Carbon::now());
-        $this->assertCount(2, $user->groups());
-        $this->assertCount(1, $user->activeGroups());
+        $this->assertCount(2, $user->getGroups());
+        $this->assertCount(1, $user->getActiveGroups());
     }
 
     /**
@@ -80,15 +80,15 @@ class StudentInGroupTest extends TestCase
 
         $user->joinGroup($group1)
             ->joinGroup($group2, null, Carbon::now()); //once was in group2
-        $this->assertCount(1, $user->activeGroups());
+        $this->assertCount(1, $user->getActiveGroups());
 
         $user->joinGroup($group2); //again in group2
-        $this->assertCount(3, $user->groups());
-        $this->assertCount(2, $user->activeGroups());
+        $this->assertCount(3, $user->getGroups());
+        $this->assertCount(2, $user->getActiveGroups());
 
         $user->leaveGroup($group2); //leave group2 again
-        $this->assertCount(3, $user->groups());
-        $this->assertCount(1, $user->activeGroups());
+        $this->assertCount(3, $user->getGroups());
+        $this->assertCount(1, $user->getActiveGroups());
     }
 
     /**

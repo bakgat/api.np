@@ -204,4 +204,19 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $this->assertEquals(1, $count);
         $this->assertNull($removedStudent);
     }
+
+    /**
+     * @test
+     * @group student
+     * @group group
+     * @group get
+     */
+    public function should_have_at_least_two_groups()
+    {
+        $students = $this->studentRepo->all();
+        $id = $students[0]->getId();
+
+        $student = $this->studentRepo->get($id);
+        $this->assertGreaterThan(1, $student->getGroups());
+    }
 }
