@@ -74,4 +74,43 @@ class DoctrineStudentRepository implements StudentRepository
 
         return $student;
     }
+
+    /**
+     * Saves a new student.
+     *
+     * @param Student $student
+     * @return Uuid
+     */
+    public function insert(Student $student)
+    {
+        $this->em->persist($student);
+        $this->em->flush();
+        return $student->getId();
+    }
+
+    /**
+     * Saves an existing student.
+     *
+     * @param Student $student
+     * @return int Number of affected rows
+     */
+    public function update(Student $student)
+    {
+        $this->em->persist($student);
+        $this->em->flush();
+        return 1;
+    }
+
+    /**
+     * Deletes an existing student.
+     *
+     * @param $id
+     * @return int Number of affected rows.
+     */
+    public function delete(Uuid $id) {
+        $student = $this->get($id);
+        $this->em->remove($student);
+        $this->em->flush();
+        return 1;
+    }
 }

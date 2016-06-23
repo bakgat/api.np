@@ -119,15 +119,6 @@ class Student
         return $this->email;
     }
 
-    /**
-     * @param DateTime $birthday
-     * @return $this
-     */
-    public function setBirthday(DateTime $birthday)
-    {
-        $this->birthday = $birthday;
-        return $this;
-    }
 
     /**
      * @return DateTime
@@ -135,6 +126,22 @@ class Student
     public function getBirthday()
     {
         return $this->birthday;
+    }
+
+    /**
+     * Updating the profile for this student
+     * @param $firstName
+     * @param $lastName
+     * @param $email
+     * @param DateTime|null $birthday
+     * @return Student
+     */
+    public function updateProfile($firstName, $lastName, $email, DateTime $birthday = null)
+    {
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->email = $email;
+        $this->birthday = $birthday;
     }
 
 

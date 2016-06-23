@@ -111,6 +111,72 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $this->setExpectedException(EntityNotFoundException::class);
         $fakeId = Uuid::generate(4);
         $student = $this->studentRepo->get($fakeId);
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group studentrepo
+     */
+    public function should_insert_new_student()
+    {
+        $fn = $this->faker->firstName;
+        $ln = $this->faker->lastName;
+        $email = $this->faker->email;
+
+        $student = new Student($fn, $ln, $email);
+        $id = $this->studentRepo->insert($student);
+
+        $this->em->clear();
+
+        $dbStudent = $this->studentRepo->get($id);
+
+
+        $this->assertInstanceOf(Student::class, $dbStudent);
+        $this->assertEquals($dbStudent->getId(), $student->getId());
+        $this->assertEquals($dbStudent->getId(), $id);
+        $this->assertEquals($dbStudent->getDisplayName(), $student->getDisplayName());
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group studentrepo
+     */
+    public function should_update_existing_student() {
+        $fn = $this->faker->firstName;
+        $ln = $this->faker->lastName;
+        $email = $this->faker->email;
+
+        $student = new Student($fn, $ln, $email);
+        $id = $this->studentRepo->insert($student);
+
+        $this->em->clear();
+
+        $dbStudent = $this->studentRepo->get($id);
+        $dbStudent->updateProfile('Karl', 'Van Iseghem', 'karl.vaniseghem@klimtoren.be', new DateTime('1979-11-30'));
+        $count = $this->studentRepo->update($dbStudent);
+
+        $this->em->clear();
+
+        $savedStudent = $this->studentRepo->get($id);
+
+        $this->assertInstanceOf(Student::class, $dbStudent);
+        $this->assertInstanceOf(Student::class, $savedStudent);
+
+        $this->assertEquals(1, $count);
+
+        $this->assertNotEquals($student->getDisplayName(), $savedStudent->getDisplayName());
+        $this->assertNotEquals($student->getBirthday(), $savedStudent->getBirthday());
+        $this->assertNotEquals($student->getEmail(), $savedStudent->getEmail());
+
+        $this->assertEquals($student->getId(), $savedStudent->getId());
+
+        $this->assertEquals($savedStudent->getDisplayName(), 'Karl Van Iseghem');
+        $this->assertEquals($dbStudent->getId(), $savedStudent->getId());
+        $this->assertEquals($dbStudent->getDisplayName(), $savedStudent->getDisplayName());
+        $this->assertEquals($dbStudent->getBirthday(), $savedStudent->getBirthday());
+        $this->assertEquals($dbStudent->getEmail(), $savedStudent->getEmail());
 
     }
 }

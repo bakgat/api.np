@@ -21,7 +21,7 @@ interface StudentRepository
     public function all();
 
     /**
-     * Finds a student by its id, if not returns null
+     * Finds a student by its id, if not returns null.
      *
      * @param $id
      * @return Student|null
@@ -29,10 +29,34 @@ interface StudentRepository
     public function find($id);
 
     /**
-     * Gets an existing student by its id
+     * Gets an existing student by its id.
      *
      * @param $id
      * @return Student
      */
     public function get($id);
+
+    /**
+     * Saves a new student.
+     *
+     * @param Student $student
+     * @return Uuid
+     */
+    public function insert(Student $student);
+
+    /**
+     * Saves an existing student.
+     *
+     * @param Student $student
+     * @return int Number of affected rows
+     */
+    public function update(Student $student);
+
+    /**
+     * Deletes an existing student.
+     *
+     * @param $id
+     * @return int Number of affected rows.
+     */
+    public function delete(Uuid $id);
 }

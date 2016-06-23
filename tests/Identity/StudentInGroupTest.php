@@ -12,19 +12,8 @@ use Carbon\Carbon;
  */
 class StudentInGroupTest extends TestCase
 {
-    /** @var Faker\Generator */
-    private $faker;
 
-    public function setUp()
-    {
-        parent::setUp();
-        $this->faker = Faker\Factory::create('nl_BE');
-    }
 
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
 
 
     /**
