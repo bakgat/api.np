@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: karlvaniseghem
- * Date: 22/06/16
- * Time: 16:16
+ * Date: 23/06/16
+ * Time: 15:25
  */
 
 namespace App\Domain\Model\Identity;
@@ -11,49 +11,49 @@ namespace App\Domain\Model\Identity;
 
 use Webpatser\Uuid\Uuid;
 
-interface StudentRepository
+interface GroupRepository
 {
     /**
-     * Gets all the active students.
+     * Gets all the groups.
      *
-     * @return ArrayCollection|Student[]
+     * @return ArrayCollection|Group[]
      */
     public function all();
 
     /**
-     * Finds a student by its id, if not returns null.
+     * Finds a group by its id, if not returns null.
      *
      * @param $id
-     * @return Student|null
+     * @return Group|null
      */
     public function find($id);
 
     /**
-     * Gets an existing student by its id.
+     * Gets an existing group by its id.
      *
      * @param $id
-     * @return Student
+     * @return Group
      */
     public function get($id);
 
     /**
-     * Saves a new student.
+     * Saves a new group.
      *
-     * @param Student $student
+     * @param Group $group
      * @return Uuid
      */
-    public function insert(Student $student);
+    public function insert(Group $group);
 
     /**
-     * Saves an existing student.
+     * Saves an existing group.
      *
-     * @param Student $student
+     * @param Group $group
      * @return int Number of affected rows.
      */
-    public function update(Student $student);
+    public function update(Group $group);
 
     /**
-     * Deletes an existing student.
+     * Deletes an existing group.
      *
      * @param $id
      * @return int Number of affected rows.
