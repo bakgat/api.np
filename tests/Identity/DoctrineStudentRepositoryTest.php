@@ -28,6 +28,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      * @test
      * @group student
      * @group studentrepo
+     * @group all
      */
     public function should_return_440_students()
     {
@@ -40,19 +41,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      * @test
      * @group student
      * @group studentrepo
-     */
-    public function should_have_1_active_group_per_student()
-    {
-        $students = $this->studentRepo->all();
-        foreach ($students as $student) {
-            $this->assertCount(1, $student->activeGroups());
-        }
-    }
-
-    /**
-     * @test
-     * @group student
-     * @group studentrepo
+     * @group find
      */
     public function should_find_student_by_its_id()
     {
@@ -74,6 +63,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      * @test
      * @group student
      * @group studentrepo
+     * @group find
      */
     public function should_return_null_when_no_student_found()
     {
@@ -86,6 +76,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      * @test
      * @group student
      * @group studentrepo
+     * @group get
      */
     public function should_get_student_by_its_id()
     {
@@ -105,6 +96,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      * @test
      * @group student
      * @group studentrepo
+     * @group get
      */
     public function should_throw_exception_when_get_student_fails()
     {
@@ -117,6 +109,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      * @test
      * @group student
      * @group studentrepo
+     * @group insert
      */
     public function should_insert_new_student()
     {
@@ -142,8 +135,10 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      * @test
      * @group student
      * @group studentrepo
+     * @group update
      */
-    public function should_update_existing_student() {
+    public function should_update_existing_student()
+    {
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
         $email = $this->faker->email;
@@ -178,5 +173,35 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $this->assertEquals($dbStudent->getBirthday(), $savedStudent->getBirthday());
         $this->assertEquals($dbStudent->getEmail(), $savedStudent->getEmail());
 
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group studentrepo
+     * @group delete
+     */
+    public function should_delete_existing_student()
+    {
+        $fn = $this->faker->firstName;
+        $ln = $this->faker->lastName;
+        $email = $this->faker->email;
+
+        $student = new Student($fn, $ln, $email);
+        $id = $this->studentRepo->insert($student);
+
+        $this->em->clear();
+
+        $savedStudent = $this->studentRepo->find($id);
+
+        $count = $this->studentRepo->delete($id);
+
+        $this->em->clear();
+
+        $removedStudent = $this->studentRepo->find($id);
+
+        $this->assertEquals($savedStudent->getId(), $id);
+        $this->assertEquals(1, $count);
+        $this->assertNull($removedStudent);
     }
 }
