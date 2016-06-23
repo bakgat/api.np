@@ -33,9 +33,10 @@ class StudentSeeder extends Seeder
             $student = new Student(
                 $faker->firstName(),
                 $faker->lastName(),
-                $faker->email()
+                $faker->email(),
+                $faker->dateTimeBetween('-12years', '-3years')
             );
-            $student->setBirthday($faker->dateTimeBetween('-12years', '-3years'));
+
             $student->joinGroup($faker->unique(true)->randomElement($groups));
             for ($i=0;$i<$faker->biasedNumberBetween(1, 10);$i++) {
                 $lower = $faker->dateTimeBetween('-9years', '-1year');

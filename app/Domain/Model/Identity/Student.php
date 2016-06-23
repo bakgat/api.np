@@ -69,12 +69,13 @@ class Student
     protected $studentInGroups;
 
 
-    public function __construct($firstName, $lastName, $email)
+    public function __construct($firstName, $lastName, $email, DateTime $birthday)
     {
         $this->id = Uuid::generate(4);
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
+        $this->birthday = $birthday;
     }
 
     /**
@@ -119,7 +120,6 @@ class Student
         return $this->email;
     }
 
-
     /**
      * @return DateTime
      */
@@ -143,7 +143,6 @@ class Student
         $this->email = $email;
         $this->birthday = $birthday;
     }
-
 
     /**
      *
