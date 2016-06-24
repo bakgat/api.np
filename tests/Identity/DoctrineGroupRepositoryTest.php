@@ -1,4 +1,5 @@
 <?php
+use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Repositories\Identity\DoctrineGroupRepository;
@@ -85,8 +86,16 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
         $this->assertEquals($group->getId(), $id);
     }
 
+    /**
+     * @test
+     * @group group
+     * @group grouprepo
+     * @group get
+     */
     public function should_throw_when_get_group_fails()
     {
-
+        $this->setExpectedException(GroupNotFoundException::class);
+        $fakeId = Uuid::generate(4);
+        $group = $this->groupRepo->get($fakeId);
     }
 }

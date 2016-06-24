@@ -10,6 +10,7 @@ namespace App\Repositories\Identity;
 
 
 use App\Domain\Model\Identity\ArrayCollection;
+use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
 use Doctrine\ORM\EntityManager;
