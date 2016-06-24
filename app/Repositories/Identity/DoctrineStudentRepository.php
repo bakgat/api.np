@@ -10,6 +10,7 @@ namespace App\Repositories\Identity;
 
 
 use App\Domain\Model\Identity\ArrayCollection;
+use App\Domain\Model\Identity\Exceptions\StudentNotFoundException;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
 use Doctrine\ORM\EntityManager;
@@ -59,17 +60,21 @@ class DoctrineStudentRepository implements StudentRepository
      *
      * @param Uuid $id
      * @return Student
-     * @throws EntityNotFoundException
+     * @throws StudentNotFoundException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function get(Uuid $id)
     {
-        $query = $this->em->createQuery('SELECT s FROM ' . Student::class . ' s WHERE s.id=?1')
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('s')
+            ->from(Student::class, 's')
+            ->where('s.id=?1')
             ->setParameter(1, $id);
 
-        $student = $query->getOneOrNullResult();
+        $student = $qb->getQuery()->getOneOrNullResult();
 
         if ($student == null) {
-            throw new EntityNotFoundException($id);
+            throw new StudentNotFoundException($id);
         }
 
         return $student;
@@ -106,8 +111,10 @@ class DoctrineStudentRepository implements StudentRepository
      *
      * @param $id
      * @return int Number of affected rows.
+     * @throws StudentNotFoundException
      */
-    public function delete(Uuid $id) {
+    public function delete(Uuid $id)
+    {
         $student = $this->get($id);
         $this->em->remove($student);
         $this->em->flush();

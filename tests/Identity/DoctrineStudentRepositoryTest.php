@@ -1,4 +1,5 @@
 <?php
+use App\Domain\Model\Identity\Exceptions\StudentNotFoundException;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Repositories\Identity\DoctrineStudentRepository;
@@ -100,7 +101,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      */
     public function should_throw_exception_when_get_student_fails()
     {
-        $this->setExpectedException(EntityNotFoundException::class);
+        $this->setExpectedException(StudentNotFoundException::class);
         $fakeId = Uuid::generate(4);
         $student = $this->studentRepo->get($fakeId);
     }

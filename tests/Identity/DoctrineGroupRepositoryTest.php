@@ -65,4 +65,28 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
         $group = $this->groupRepo->find($fakeId);
         $this->assertNull($group);
     }
+
+    /**
+     * @test
+     * @group group
+     * @group grouprepo
+     * @group get
+     */
+    public function should_get_group_its_id()
+    {
+        $groups = $this->groupRepo->all();
+        $id = $groups[0]->getId();
+
+        $this->em->clear();
+
+        $group = $this->groupRepo->get($id);
+
+        $this->assertInstanceOf(Group::class, $group);
+        $this->assertEquals($group->getId(), $id);
+    }
+
+    public function should_throw_when_get_group_fails()
+    {
+
+    }
 }

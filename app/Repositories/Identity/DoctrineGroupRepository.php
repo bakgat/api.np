@@ -60,6 +60,8 @@ class DoctrineGroupRepository implements GroupRepository
      *
      * @param Uuid $id
      * @return Group
+     * @throws GroupNotFoundException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function get(Uuid $id)
     {
@@ -68,7 +70,14 @@ class DoctrineGroupRepository implements GroupRepository
             ->from(Group::class, 'g')
             ->where('g.id=?1')
             ->setParameter(1, $id);
-        return $qb->getQuery()->getSingleResult();
+
+        $group = $qb->getQuery()->getOneOrNullResult();
+
+        if ($group == null) {
+            throw new GroupNotFoundException($id);
+        }
+
+        return $group;
     }
 
     /**
