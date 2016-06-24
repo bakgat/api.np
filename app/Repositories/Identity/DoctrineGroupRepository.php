@@ -58,10 +58,10 @@ class DoctrineGroupRepository implements GroupRepository
     /**
      * Gets an existing group by its id.
      *
-     * @param $id
+     * @param Uuid $id
      * @return Group
      */
-    public function get($id)
+    public function get(Uuid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('g')

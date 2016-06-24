@@ -2,6 +2,7 @@
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Repositories\Identity\DoctrineGroupRepository;
+use Webpatser\Uuid\Uuid;
 
 /**
  * Created by PhpStorm.
@@ -46,9 +47,22 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
 
         $this->em->clear();
 
-        $group = $this->groupRepo->find($id);
+        $group = $this->groupRepo->find(Uuid::import($id));
 
         $this->assertInstanceOf(Group::class, $group);
         $this->assertEquals($group->getId(), $id);
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group grouprepo
+     * @group find
+     */
+    public function should_return_null_when_no_group_found()
+    {
+        $fakeId = Uuid::generate(4);
+        $group = $this->groupRepo->find($fakeId);
+        $this->assertNull($group);
     }
 }

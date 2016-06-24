@@ -31,10 +31,10 @@ interface GroupRepository
     /**
      * Gets an existing group by its id.
      *
-     * @param $id
+     * @param Uuid $id
      * @return Group
      */
-    public function get($id);
+    public function get(Uuid $id);
 
     /**
      * Saves a new group.
