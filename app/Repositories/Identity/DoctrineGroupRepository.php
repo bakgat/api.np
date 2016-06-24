@@ -10,16 +10,19 @@ namespace App\Repositories\Identity;
 
 
 use App\Domain\Model\Identity\ArrayCollection;
+use App\Domain\Model\Identity\Exceptions\GroupNameNotUniqueException;
 use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
 use Doctrine\ORM\EntityManager;
+use Illuminate\Support\Facades\Cache;
 use Webpatser\Uuid\Uuid;
 
 class DoctrineGroupRepository implements GroupRepository
 {
     /** @var EntityManager */
     protected $em;
+
 
     public function __construct(EntityManager $em)
     {
@@ -86,11 +89,20 @@ class DoctrineGroupRepository implements GroupRepository
      *
      * @param Group $group
      * @return Uuid
+     * @throws GroupNameNotUniqueException
      */
     public function insert(Group $group)
     {
+        if(array_has($this->getNames(), $group->getName())) {
+            throw new GroupNameNotUniqueException($group->getName());
+        }
+
         $this->em->persist($group);
         $this->em->flush();
+
+
+        $this->getNames(); //reconfigure cache
+
         return $group->getId();
     }
 
@@ -104,6 +116,8 @@ class DoctrineGroupRepository implements GroupRepository
     {
         $this->em->persist($group);
         $this->em->flush();
+        Cache::forget('group_names');
+        $this->getNames();
         return 1;
     }
 
@@ -119,6 +133,28 @@ class DoctrineGroupRepository implements GroupRepository
         $group = $this->get($id);
         $this->em->remove($group);
         $this->em->flush();
+        Cache::forget('group_names');
+        $this->getNames();
         return 1;
+    }
+
+    /**
+     * Get all the names of the groups.
+     * Internal function with cache
+     *
+     * @return array
+     */
+    private function getNames()
+    {
+        if (!Cache::has('group_names')) {
+            $qb = $this->em->createQueryBuilder();
+            $qb->select('g.name')
+                ->from(Group::class, 'g');
+
+            $result = $qb->getQuery()->getScalarResult();
+            Cache::forever('group_names', array_map('current', $result));
+        }
+
+        return Cache::get('group_names');
     }
 }

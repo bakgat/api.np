@@ -107,7 +107,7 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
      */
     public function should_insert_new_group()
     {
-        $name = $this->faker->word();
+        $name = 'fake_word_unique_' . $this->faker->uuid;
 
         $group = new Group($name);
         $id = $this->groupRepo->insert($group);
@@ -120,4 +120,6 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
         $this->assertEquals($dbGroup->getName(), $group->getName());
         $this->assertEquals($dbGroup->getId(), $group->getId());
     }
+
+
 }
