@@ -47,7 +47,7 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
 
         $this->em->clear();
 
-        $group = $this->groupRepo->find(Uuid::import($id));
+        $group = $this->groupRepo->find($id);
 
         $this->assertInstanceOf(Group::class, $group);
         $this->assertEquals($group->getId(), $id);

@@ -52,7 +52,10 @@ class Group
 
     public function getId()
     {
-        return $this->id;
+        if($this->id instanceof Uuid) {
+            return $this->id;
+        }
+        return Uuid::import($this->id);
     }
 
     public function getName()

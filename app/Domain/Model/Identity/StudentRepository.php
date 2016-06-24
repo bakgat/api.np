@@ -23,18 +23,18 @@ interface StudentRepository
     /**
      * Finds a student by its id, if not returns null.
      *
-     * @param $id
+     * @param Uuid $id
      * @return Student|null
      */
-    public function find($id);
+    public function find(Uuid $id);
 
     /**
      * Gets an existing student by its id.
      *
-     * @param $id
+     * @param Uuid $id
      * @return Student
      */
-    public function get($id);
+    public function get(Uuid $id);
 
     /**
      * Saves a new student.
