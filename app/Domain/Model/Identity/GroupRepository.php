@@ -39,6 +39,8 @@ interface GroupRepository
     /**
      * Saves a new group.
      *
+     * Note: the name of the group must be unique.
+     *
      * @param Group $group
      * @return Uuid
      */

@@ -89,7 +89,9 @@ class DoctrineGroupRepository implements GroupRepository
      */
     public function insert(Group $group)
     {
-        // TODO: Implement insert() method.
+        $this->em->persist($group);
+        $this->em->flush();
+        return $group->getId();
     }
 
     /**
@@ -100,7 +102,9 @@ class DoctrineGroupRepository implements GroupRepository
      */
     public function update(Group $group)
     {
-        // TODO: Implement update() method.
+        $this->em->persist($group);
+        $this->em->flush();
+        return 1;
     }
 
     /**
@@ -108,9 +112,13 @@ class DoctrineGroupRepository implements GroupRepository
      *
      * @param $id
      * @return int Number of affected rows.
+     * @
      */
     public function delete(Uuid $id)
     {
-        // TODO: Implement delete() method.
+        $group = $this->get($id);
+        $this->em->remove($group);
+        $this->em->flush();
+        return 1;
     }
 }

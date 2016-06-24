@@ -98,4 +98,26 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
         $fakeId = Uuid::generate(4);
         $group = $this->groupRepo->get($fakeId);
     }
+
+    /**
+     * @test
+     * @group group
+     * @group grouprepo
+     * @group insert
+     */
+    public function should_insert_new_group()
+    {
+        $name = $this->faker->word();
+
+        $group = new Group($name);
+        $id = $this->groupRepo->insert($group);
+
+        $this->em->clear();
+
+        $dbGroup = $this->groupRepo->get($id);
+
+        $this->assertInstanceOf(Group::class, $dbGroup);
+        $this->assertEquals($dbGroup->getName(), $group->getName());
+        $this->assertEquals($dbGroup->getId(), $group->getId());
+    }
 }
