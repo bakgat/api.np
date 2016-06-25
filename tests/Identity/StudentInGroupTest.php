@@ -20,7 +20,7 @@ class StudentInGroupTest extends TestCase
      * @test
      * @group group student
      */
-    public function should_add_user_to_groups()
+    public function should_add_student_to_groups()
     {
         $group1 = new Group($this->faker->word());
         $group2 = new Group($this->faker->word());
@@ -29,21 +29,21 @@ class StudentInGroupTest extends TestCase
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
 
-        $user = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email);
 
-        $user->joinGroup($group1);
-        $this->assertCount(1, $user->getGroups());
+        $student->joinGroup($group1);
+        $this->assertCount(1, $student->getGroups());
 
-        $user->joinGroup($group2);
-        $this->assertCount(2, $user->getGroups());
-        $this->assertCount(2, $user->getActiveGroups());
+        $student->joinGroup($group2);
+        $this->assertCount(2, $student->getGroups());
+        $this->assertCount(2, $student->getActiveGroups());
     }
 
     /**
      * @test
      * @group group student
      */
-    public function should_end_active_group_for_user()
+    public function should_end_active_group_for_student()
     {
         $group1 = new Group($this->faker->word());
         $group2 = new Group($this->faker->word());
@@ -52,14 +52,14 @@ class StudentInGroupTest extends TestCase
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
 
-        $user = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email);
 
-        $user->joinGroup($group1);
-        $this->assertCount(1, $user->getGroups());
+        $student->joinGroup($group1);
+        $this->assertCount(1, $student->getGroups());
 
-        $user->joinGroup($group2, null, Carbon::now());
-        $this->assertCount(2, $user->getGroups());
-        $this->assertCount(1, $user->getActiveGroups());
+        $student->joinGroup($group2, null, Carbon::now());
+        $this->assertCount(2, $student->getGroups());
+        $this->assertCount(1, $student->getActiveGroups());
     }
 
     /**
@@ -67,7 +67,7 @@ class StudentInGroupTest extends TestCase
      * @group group
      * @group student
      */
-    public function should_leave_active_group_for_user()
+    public function should_leave_active_group_for_student()
     {
         $group1 = new Group($this->faker->word());
         $group2 = new Group($this->faker->word());
@@ -76,19 +76,19 @@ class StudentInGroupTest extends TestCase
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
 
-        $user = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email);
 
-        $user->joinGroup($group1)
+        $student->joinGroup($group1)
             ->joinGroup($group2, null, Carbon::now()); //once was in group2
-        $this->assertCount(1, $user->getActiveGroups());
+        $this->assertCount(1, $student->getActiveGroups());
 
-        $user->joinGroup($group2); //again in group2
-        $this->assertCount(3, $user->getGroups());
-        $this->assertCount(2, $user->getActiveGroups());
+        $student->joinGroup($group2); //again in group2
+        $this->assertCount(3, $student->getGroups());
+        $this->assertCount(2, $student->getActiveGroups());
 
-        $user->leaveGroup($group2); //leave group2 again
-        $this->assertCount(3, $user->getGroups());
-        $this->assertCount(1, $user->getActiveGroups());
+        $student->leaveGroup($group2); //leave group2 again
+        $this->assertCount(3, $student->getGroups());
+        $this->assertCount(1, $student->getActiveGroups());
     }
 
     /**
@@ -138,20 +138,20 @@ class StudentInGroupTest extends TestCase
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
 
-        $user = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email);
 
         $nearInfinite = new DateTime('9999-01-01');
         $lowerBound = new DateTime('2014-01-01');
         $upperBound = new DateTime('2016-01-01');
 
-        $user->joinGroup($group1, $lowerBound)
+        $student->joinGroup($group1, $lowerBound)
             ->joinGroup($group2, $lowerBound, $upperBound);
 
 
-        $this->assertTrue($user->wasActiveInGroupBetween($group1, new DateRange($lowerBound, $upperBound)));
-        $this->assertTrue($user->wasActiveInGroupBetween($group1, new DateRange($lowerBound, $nearInfinite)));
+        $this->assertTrue($student->wasActiveInGroupBetween($group1, new DateRange($lowerBound, $upperBound)));
+        $this->assertTrue($student->wasActiveInGroupBetween($group1, new DateRange($lowerBound, $nearInfinite)));
 
-        $this->assertTrue($user->wasActiveInGroupBetween($group2, new DateRange($lowerBound, $upperBound)));
-        $this->assertFalse($user->wasActiveInGroupBetween($group2, new DateRange($lowerBound, $nearInfinite)));
+        $this->assertTrue($student->wasActiveInGroupBetween($group2, new DateRange($lowerBound, $upperBound)));
+        $this->assertFalse($student->wasActiveInGroupBetween($group2, new DateRange($lowerBound, $nearInfinite)));
     }
 }
