@@ -27,6 +27,8 @@ class Staff
 
     /** @var DateTime */
     protected $birthday;
+    /** @var StaffInGroup[] */
+    protected $staffInGroups;
 
     public function __construct($firstName, $lastName, $email)
     {
@@ -34,6 +36,8 @@ class Staff
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
+
+        $this->staffInGroups = [];
     }
 
     /**
@@ -66,7 +70,8 @@ class Staff
     /**
      * @return string
      */
-    public function getDisplayName() {
+    public function getDisplayName()
+    {
         return $this->firstName . ' ' . $this->lastName;
     }
 
@@ -84,5 +89,47 @@ class Staff
     public function getBirthday()
     {
         return $this->birthday;
+    }
+
+    /**
+     * @param Group $group
+     * @param DateTime|null $start
+     * @param DateTime|null $end
+     * @return $this
+     */
+    public function joinGroup(Group $group, $type, $start = null, $end = null)
+    {
+        if ($start == null) {
+            $start = new DateTime;
+        }
+        $staffGroup = new StaffInGroup($this, $group, $type, ['start' => $start, 'end' => $end]);
+        $this->staffInGroups[] = $staffGroup;
+        return $this;
+    }
+
+    /**
+     * @return Group[]
+     */
+    public function getGroups()
+    {
+        $groups = [];
+        foreach ($this->staffInGroups as $staffInGroup) {
+            $groups[] = $staffInGroup->getGroup();
+        }
+        return $groups;
+    }
+
+    /**
+     * @return Group[]
+     */
+    public function getActiveGroups()
+    {
+        $groups = [];
+        foreach ($this->staffInGroups as $staffInGroup) {
+            if ($staffInGroup->isActive()) {
+                $groups[] = $staffInGroup->getGroup();
+            }
+        }
+        return $groups;
     }
 }

@@ -75,6 +75,8 @@ class Student
         $this->lastName = $lastName;
         $this->email = $email;
         $this->birthday = $birthday;
+
+        $this->studentInGroups = [];
     }
 
     /**
@@ -203,17 +205,6 @@ class Student
         return $groups;
     }
 
-    /**
-     * @return StudentInGroup
-     */
-    public function studentInGroups()
-    {
-        foreach ($this->studentInGroups as $studentInGroup) {
-            if ($studentInGroup->isActive()) {
-                return $studentInGroup;
-            }
-        }
-    }
 
     /**
      * @param Group $group

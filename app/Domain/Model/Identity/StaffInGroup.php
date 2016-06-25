@@ -2,61 +2,37 @@
 /**
  * Created by PhpStorm.
  * User: karlvaniseghem
- * Date: 21/06/16
- * Time: 08:13
+ * Date: 25/06/16
+ * Time: 23:14
  */
 
 namespace App\Domain\Model\Identity;
 
 
-use Doctrine\ORM\Mapping AS ORM;
 use App\Domain\Model\Time\DateRange;
 use DateTime;
 use Webpatser\Uuid\Uuid;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="student_in_groups")
- *
- * Class StudentInGroup
- * @package App\Domain\Model\Identity
- */
-class StudentInGroup
+class StaffInGroup
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="guid")
-     *
-     * @var Uuid
-     */
+    /** @var Uuid */
     protected $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Student", inversedBy="studentInGroups")
-     *
-     * @var Student
-     */
-    protected $student;
-    /**
-     * @ORM\ManyToOne(targetEntity="Group", inversedBy="studentInGroups")
-     *
-     * @var Group
-     */
+    /** @var Staff */
+    protected $staff;
+    /** @var Group */
     protected $group;
-
-    /**
-     * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)
-     *
-     * @var DateRange
-     */
+    /** @var */
+    protected $type; //TODO Make enum with types
+    /** @var DateRange */
     protected $dateRange;
 
-    public function __construct(Student $student, Group $group, $daterange)
+
+    public function __construct(Staff $staff, Group $group, $type, $daterange)
     {
         $this->id = Uuid::generate(4);
-        $this->student = $student;
+        $this->staff = $staff;
         $this->group = $group;
-
+        $this->type = $type;
         if ($daterange instanceof DateRange) {
             $this->dateRange = $daterange;
         } else {
@@ -65,23 +41,28 @@ class StudentInGroup
     }
 
     /**
-     * Accessor that returns the student in this relation
-     *
-     * @return Student
+     * @return Staff
      */
-    public function getStudent()
+    public function getStaff()
     {
-        return $this->student;
+        return $this->staff;
     }
 
     /**
-     * Accessor that returns the group in this relation
-     *
      * @return Group
      */
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
@@ -94,7 +75,7 @@ class StudentInGroup
      */
     public function isActive()
     {
-        return $this->dateRange->isFuture()
+        return $this->dateRange->getEnd() >= new DateTime
         && $this->dateRange->getStart() <= new DateTime;
     }
 
@@ -159,22 +140,20 @@ class StudentInGroup
         }
 
         if ($end == null) {
-            $end = new DateTime();
+            $end = new DateTime;
         }
-
         $dr = ['start' => $this->dateRange->getStart(), 'end' => $end];
         $this->dateRange = DateRange::fromData($dr);
 
         return $this;
     }
 
-
     /**
      * @return string
      */
     public function __toString()
     {
-        return $this->student->getDisplayName() . ' - ' . $this->group->getName()
+        return $this->staff->getDisplayName() . ' - ' . $this->group->getName()
         . ': ' . $this->dateRange;
     }
 
