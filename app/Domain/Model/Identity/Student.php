@@ -44,11 +44,13 @@ class Student
      */
     protected $lastName;
 
+
     /**
      * @ORM\Column(type="string")
      * @var string
      */
     protected $email;
+
 
     protected $gender;
 
@@ -199,6 +201,18 @@ class Student
             }
         }
         return $groups;
+    }
+
+    /**
+     * @return StudentInGroup
+     */
+    public function studentInGroups()
+    {
+        foreach ($this->studentInGroups as $studentInGroup) {
+            if ($studentInGroup->isActive()) {
+                return $studentInGroup;
+            }
+        }
     }
 
     /**
