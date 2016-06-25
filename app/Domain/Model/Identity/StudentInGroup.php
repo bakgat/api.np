@@ -45,7 +45,7 @@ class StudentInGroup
     protected $group;
 
     /**
-     * @ORM\Embedded(class="App\Domain\Model\Time\DateRange")
+     * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)
      *
      * @var DateRange
      */

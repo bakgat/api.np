@@ -44,13 +44,11 @@ class Student
      */
     protected $lastName;
 
-
     /**
      * @ORM\Column(type="string")
      * @var string
      */
     protected $email;
-
 
     protected $gender;
 
