@@ -193,7 +193,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
 
         $this->em->clear();
 
-        $savedStudent = $this->studentRepo->find($id);
+        $savedStudent = $this->studentRepo->get($id);
 
         $count = $this->studentRepo->delete($id);
 

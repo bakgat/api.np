@@ -100,7 +100,7 @@ class DoctrineGroupRepository implements GroupRepository
         $this->em->persist($group);
         $this->em->flush();
 
-
+        Cache::forget('group_names');
         $this->getNames(); //reconfigure cache
 
         return $group->getId();
@@ -111,13 +111,20 @@ class DoctrineGroupRepository implements GroupRepository
      *
      * @param Group $group
      * @return int Number of affected rows.
+     * @throws NonUniqueGroupNameException
      */
     public function update(Group $group)
     {
+        if(in_array( $group->getName(), $this->getNames())) {
+            throw new NonUniqueGroupNameException($group->getName());
+        }
+
         $this->em->persist($group);
         $this->em->flush();
+
         Cache::forget('group_names');
         $this->getNames();
+
         return 1;
     }
 
