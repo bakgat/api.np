@@ -239,6 +239,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $groups = $this->groupRepo->all();
         $group = $groups[10];
 
+        $count = count($student->getGroups());
         $this->assertCount(1, $student->getActiveGroups());
 
         $student->joinGroup($group);
@@ -248,5 +249,6 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
 
         $student = $this->studentRepo->get($id);
         $this->assertCount(2, $student->getActiveGroups());
+        $this->assertCount($count + 1, $student->getGroups());
     }
 }
