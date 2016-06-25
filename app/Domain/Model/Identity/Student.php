@@ -82,7 +82,7 @@ class Student
      */
     public function getId()
     {
-        if($this->id instanceof Uuid) {
+        if ($this->id instanceof Uuid) {
             return $this->id;
         }
         return Uuid::import($this->id);
@@ -171,7 +171,7 @@ class Student
     {
         $id = $group->getId();
         foreach ($this->studentInGroups as $studentInGroup) {
-            if ($studentInGroup->getGroup()->getId() === $id) {
+            if ($studentInGroup->getGroup()->getId() == $id) {
                 $studentInGroup->leaveGroup($end);
             }
         }

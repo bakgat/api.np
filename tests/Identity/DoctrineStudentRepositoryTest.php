@@ -251,4 +251,26 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $this->assertCount(2, $student->getActiveGroups());
         $this->assertCount($count + 1, $student->getGroups());
     }
+
+    /**
+     * @test
+     * @group student
+     * @group group
+     * @group update
+     */
+    public function should_leave_active_group()
+    {
+        $students = $this->studentRepo->all();
+        $student = $students[0];
+        $id = $student->getId();
+
+        $group = $student->getActiveGroups()[0];
+        $student->leaveGroup($group);
+        $this->studentRepo->update($student);
+
+        $this->em->clear();
+
+        $student = $this->studentRepo->get($id);
+        $this->assertCount(0, $student->getActiveGroups());
+    }
 }
