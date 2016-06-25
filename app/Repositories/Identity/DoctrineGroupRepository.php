@@ -10,7 +10,7 @@ namespace App\Repositories\Identity;
 
 
 use App\Domain\Model\Identity\ArrayCollection;
-use App\Domain\Model\Identity\Exceptions\GroupNameNotUniqueException;
+use App\Domain\Model\Identity\Exceptions\NonUniqueGroupNameException;
 use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
@@ -89,12 +89,12 @@ class DoctrineGroupRepository implements GroupRepository
      *
      * @param Group $group
      * @return Uuid
-     * @throws GroupNameNotUniqueException
+     * @throws NonUniqueGroupNameException
      */
     public function insert(Group $group)
     {
-        if(array_has($this->getNames(), $group->getName())) {
-            throw new GroupNameNotUniqueException($group->getName());
+        if(in_array( $group->getName(), $this->getNames())) {
+            throw new NonUniqueGroupNameException($group->getName());
         }
 
         $this->em->persist($group);

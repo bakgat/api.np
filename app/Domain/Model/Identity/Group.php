@@ -52,7 +52,7 @@ class Group
 
     public function getId()
     {
-        if($this->id instanceof Uuid) {
+        if ($this->id instanceof Uuid) {
             return $this->id;
         }
         return Uuid::import($this->id);
@@ -63,6 +63,11 @@ class Group
         return $this->name;
     }
 
+    public function updateName($name)
+    {
+        $this->name = $name;
+    }
+
     /**
      * @return string
      */
@@ -70,7 +75,10 @@ class Group
     {
         return $this->name;
     }
-    public function toString() {
+
+    public function toString()
+    {
         return $this->__toString();
     }
+
 }

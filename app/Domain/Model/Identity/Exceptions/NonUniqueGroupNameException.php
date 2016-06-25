@@ -9,11 +9,11 @@
 namespace App\Domain\Model\Identity\Exceptions;
 
 
-class GroupNameNotUniqueException extends \Exception
+class NonUniqueGroupNameException extends \Exception
 {
 
     /**
-     * GroupNameNotUniqueException constructor.
+     * NonUniqueGroupNameException constructor.
      * @param string $name
      */
     public function __construct($name)
