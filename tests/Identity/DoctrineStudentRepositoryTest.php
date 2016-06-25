@@ -1,7 +1,9 @@
 <?php
 use App\Domain\Model\Identity\Exceptions\StudentNotFoundException;
+use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
+use App\Repositories\Identity\DoctrineGroupRepository;
 use App\Repositories\Identity\DoctrineStudentRepository;
 use Doctrine\ORM\EntityNotFoundException;
 use Webpatser\Uuid\Uuid;
@@ -17,12 +19,15 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
 {
     /** @var StudentRepository */
     protected $studentRepo;
+    /** @var GroupRepository */
+    protected $groupRepo;
 
     public function setUp()
     {
         parent::setUp();
 
         $this->studentRepo = new DoctrineStudentRepository($this->em);
+        $this->groupRepo = new DoctrineGroupRepository($this->em);
     }
 
     /**
@@ -215,9 +220,33 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
     public function should_have_at_least_two_groups()
     {
         $students = $this->studentRepo->all();
-        $id = $students[0]->getId();
+        $student = $students[0];
+        $this->assertGreaterThan(1, $student->getGroups());
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group group
+     * @group update
+     */
+    public function should_join_a_second_active_group()
+    {
+        $students = $this->studentRepo->all();
+        $student = $students[0];
+        $id = $student->getId();
+
+        $groups = $this->groupRepo->all();
+        $group = $groups[10];
+
+        $this->assertCount(1, $student->getActiveGroups());
+
+        $student->joinGroup($group);
+        $this->studentRepo->update($student);
+
+        $this->em->clear();
 
         $student = $this->studentRepo->get($id);
-        $this->assertGreaterThan(1, $student->getGroups());
+        $this->assertCount(2, $student->getActiveGroups());
     }
 }
