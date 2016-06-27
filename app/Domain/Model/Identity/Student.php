@@ -12,9 +12,6 @@ use App\Domain\Model\Time\DateRange;
 use \DateTime;
 use Doctrine\ORM\Mapping AS ORM;
 
-//
-//*
-
 /**
  * @ORM\Entity
  * @ORM\Table(name="students")

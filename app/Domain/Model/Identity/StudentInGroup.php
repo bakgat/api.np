@@ -22,6 +22,7 @@ class StudentInGroup extends PersonInGroup
 {
     /**
      * @ORM\ManyToOne(targetEntity="Student", inversedBy="studentInGroups")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      *
      * @var Student
      */

@@ -12,9 +12,23 @@ namespace App\Domain\Model\Identity;
 use App\Domain\Model\Time\DateRange;
 use \DateTime;
 
+
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="staff")
+ *
+ * Class Staff
+ * @package App\Domain\Model\Identity
+ */
 class Staff extends Person
 {
-    /** @var StaffInGroup[] */
+    /**
+     * @ORM\OneToMany(targetEntity="StaffInGroup", mappedBy="staff", cascade={"persist"})
+     *
+     * @var StaffInGroup[]
+     */
     protected $staffInGroups;
 
     public function __construct($firstName, $lastName, $email, DateTime $birthday = null)

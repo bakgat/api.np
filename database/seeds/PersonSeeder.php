@@ -1,4 +1,5 @@
 <?php
+use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\Student;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -10,7 +11,7 @@ use LaravelDoctrine\ORM\Facades\EntityManager;
  * Date: 19/06/16
  * Time: 10:30
  */
-class StudentSeeder extends Seeder
+class PersonSeeder extends Seeder
 {
 
     /**
@@ -21,6 +22,7 @@ class StudentSeeder extends Seeder
     public function run()
     {
         DB::table('students')->delete();
+        DB::table('staff')->delete();
 
         $qb = EntityManager::createQueryBuilder();
         $qb->select('g')
@@ -36,7 +38,6 @@ class StudentSeeder extends Seeder
                 $faker->email(),
                 $faker->dateTimeBetween('-12years', '-3years')
             );
-
             $student->joinGroup($faker->unique(true)->randomElement($groups));
             for ($i=0;$i<$faker->biasedNumberBetween(1, 10);$i++) {
                 $lower = $faker->dateTimeBetween('-9years', '-1year');
@@ -46,6 +47,20 @@ class StudentSeeder extends Seeder
 
             EntityManager::persist($student);
         }
+
+
+        foreach(range(1, 40) as $index) {
+            $staff = new Staff(
+                $faker->firstName,
+                $faker->lastName,
+                $faker->email(),
+                $faker->dateTimeBetween('-60years','-21years')
+            );
+            $staff->joinGroup($faker->unique(true)->randomElement($groups), 'T');
+
+            EntityManager::persist($staff);
+        }
+
         EntityManager::flush();
     }
 }

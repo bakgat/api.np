@@ -9,13 +9,31 @@
 namespace App\Domain\Model\Identity;
 
 
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="staff_in_groups")
+ *
+ * Class StaffInGroup
+ * @package App\Domain\Model\Identity
+ */
 class StaffInGroup extends PersonInGroup
 {
 
-    /** @var Staff */
+    /**
+     * @ORM\ManyToOne(targetEntity="Staff", inversedBy="staffInGroups")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
+     * @var Staff
+     */
     protected $staff;
-    /** @var */
-    protected $type; //TODO Make enum with types
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    protected $type; //TODO: Make enum with types
 
     public function __construct(Staff $staff, Group $group, $type, $daterange)
     {

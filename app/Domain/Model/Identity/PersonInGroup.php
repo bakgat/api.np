@@ -27,6 +27,7 @@ abstract class PersonInGroup
 
     /**
      * @ORM\ManyToOne(targetEntity="Group", inversedBy="studentInGroups")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      *
      * @var Group
      */
