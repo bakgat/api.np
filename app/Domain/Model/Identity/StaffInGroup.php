@@ -140,7 +140,8 @@ class StaffInGroup
         }
 
         if ($end == null) {
-            $end = new DateTime;
+            $now = new DateTime;
+            $end =$now->modify('-1 day');
         }
         $dr = ['start' => $this->dateRange->getStart(), 'end' => $end];
         $this->dateRange = DateRange::fromData($dr);

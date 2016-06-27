@@ -77,7 +77,7 @@ class StudentInGroupTest extends TestCase
 
         $student = new Student($fn, $ln, $email);
 
-        $now = new DateTime();
+        $now = new DateTime;
 
         $student->joinGroup($group1)
             ->joinGroup($group2, null, $now->modify('-1 day')); //once was in group2
