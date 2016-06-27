@@ -27,5 +27,6 @@ class StudentTest extends TestCase
         $this->assertInstanceOf(Uuid::class, $student->getId());
         $this->assertEquals($fn . ' ' . $ln, $student->getDisplayName());
         $this->assertCount(5, explode('-', $student->getId()));
+        $this->assertEquals($student->getGender(), $gender);
     }
 }

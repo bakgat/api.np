@@ -28,6 +28,7 @@ class StaffTest extends TestCase
         $this->assertCount(5, explode('-', $staff->getId()));
         $this->assertEquals($staff->getDisplayName(), $fn . ' ' . $ln);
         $this->assertEquals($staff->getEmail(), $email);
+        $this->assertEquals($staff->getGender(), $gender);
     }
 
 }

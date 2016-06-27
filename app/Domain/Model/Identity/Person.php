@@ -110,10 +110,10 @@ abstract class Person
     }
 
     /**
-     * @return Gender
+     * @return string
      */
     public function getGender() {
-        return $this->gender;
+        return $this->gender->getValue();
     }
 
     /**
