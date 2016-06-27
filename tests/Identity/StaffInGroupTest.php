@@ -1,6 +1,7 @@
 <?php
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Staff;
+use Carbon\Carbon;
 
 /**
  * Created by PhpStorm.
@@ -16,8 +17,8 @@ class StaffInGroupTest extends TestCase
      */
     public function should_add_staff_to_groups()
     {
-        $group1 = new Group($this->faker->word());
-        $group2 = new Group($this->faker->word());
+        $group1 = new Group($this->faker->unique()->word());
+        $group2 = new Group($this->faker->unique()->word());
 
         $fn = $this->faker->firstName();
         $ln = $this->faker->lastName();
@@ -29,6 +30,29 @@ class StaffInGroupTest extends TestCase
         $this->assertCount(1, $staff->getGroups());
 
         $staff->joinGroup($group2, 'test', $this->faker->dateTimeBetween('-1day', '2years'));
+        $this->assertCount(2, $staff->getGroups());
+        $this->assertCount(1, $staff->getActiveGroups());
+    }
+
+    /**
+     * @test
+     * @group staff
+     */
+    public function should_end_active_group_for_staff()
+    {
+        $group1 = new Group($this->faker->unique()->word());
+        $group2 = new Group($this->faker->unique()->word());
+
+        $fn = $this->faker->firstName();
+        $ln = $this->faker->lastName();
+        $email = $this->faker->email();
+
+        $staff = new Staff($fn, $ln, $email);
+
+        $staff->joinGroup($group1, 'test');
+        $this->assertCount(1, $staff->getGroups());
+        $yesterday = new DateTime();
+        $staff->joinGroup($group2, 'test', null, $yesterday->modify("-1 day"));
         $this->assertCount(2, $staff->getGroups());
         $this->assertCount(1, $staff->getActiveGroups());
     }
