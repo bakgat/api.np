@@ -14,8 +14,6 @@ class StudentInGroupTest extends TestCase
 {
 
 
-
-
     /**
      * @test
      * @group group student
@@ -57,7 +55,8 @@ class StudentInGroupTest extends TestCase
         $student->joinGroup($group1);
         $this->assertCount(1, $student->getGroups());
 
-        $student->joinGroup($group2, null, new DateTime);
+        $now = new DateTime;
+        $student->joinGroup($group2, null, $now->modify('-1 day'));
         $this->assertCount(2, $student->getGroups());
         $this->assertCount(1, $student->getActiveGroups());
     }
@@ -78,8 +77,10 @@ class StudentInGroupTest extends TestCase
 
         $student = new Student($fn, $ln, $email);
 
+        $now = new DateTime();
+
         $student->joinGroup($group1)
-            ->joinGroup($group2, null, new DateTime); //once was in group2
+            ->joinGroup($group2, null, $now->modify('-1 day')); //once was in group2
         $this->assertCount(1, $student->getActiveGroups());
 
         $student->joinGroup($group2); //again in group2

@@ -51,8 +51,9 @@ class StaffInGroupTest extends TestCase
 
         $staff->joinGroup($group1, 'test');
         $this->assertCount(1, $staff->getGroups());
-        $yesterday = new DateTime();
-        $staff->joinGroup($group2, 'test', null, $yesterday->modify("-1 day"));
+
+        $now = new DateTime();
+        $staff->joinGroup($group2, 'test', null, $now->modify("-1 day"));
         $this->assertCount(2, $staff->getGroups());
         $this->assertCount(1, $staff->getActiveGroups());
     }
