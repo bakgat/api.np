@@ -1,4 +1,5 @@
 <?php
+use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\Student;
 use Carbon\Carbon;
@@ -36,7 +37,7 @@ class PersonSeeder extends Seeder
                 $faker->firstName(),
                 $faker->lastName(),
                 $faker->email(),
-                $faker->randomElement(['M', 'F']),
+                new Gender($faker->randomElement(['M', 'F'])),
                 $faker->dateTimeBetween('-12years', '-3years')
             );
             $student->joinGroup($faker->unique(true)->randomElement($groups));
@@ -55,7 +56,7 @@ class PersonSeeder extends Seeder
                 $faker->firstName,
                 $faker->lastName,
                 $faker->email(),
-                $faker->randomElement(['M', 'F']),
+                new Gender($faker->randomElement(['M', 'F'])),
                 $faker->dateTimeBetween('-60years','-21years')
             );
             $staff->joinGroup($faker->unique(true)->randomElement($groups), 'T');
