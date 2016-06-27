@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Identity;
 
 
+use App\Domain\Model\Time\DateRange;
 use \DateTime;
 
 class Staff extends Person
@@ -65,5 +66,39 @@ class Staff extends Person
             }
         }
         return $groups;
+    }
+
+    /**
+     * @param Group $group
+     * @param DateTime $date
+     * @return bool
+     */
+    public function wasActiveInGroupAt(Group $group, DateTime $date)
+    {
+        foreach ($this->staffInGroups as $staffInGroup) {
+            if ($staffInGroup->getGroup()->getId() == $group->getId()
+                && $staffInGroup->wasActiveAt($date)
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param Group $group
+     * @param DateRange $dateRange
+     * @return bool
+     */
+    public function wasActiveInGroupBetween(Group $group, DateRange $dateRange)
+    {
+        foreach ($this->staffInGroups as $staffInGroup) {
+            if ($staffInGroup->getGroup()->getId() == $group->getId()
+                && $staffInGroup->wasActiveBetween($dateRange)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 }

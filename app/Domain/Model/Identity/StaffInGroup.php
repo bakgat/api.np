@@ -17,7 +17,6 @@ class StaffInGroup extends PersonInGroup
     /** @var */
     protected $type; //TODO Make enum with types
 
-
     public function __construct(Staff $staff, Group $group, $type, $daterange)
     {
         parent::__construct($group, $daterange);
@@ -49,7 +48,6 @@ class StaffInGroup extends PersonInGroup
     {
         return $this->type;
     }
-
 
     /**
      * @return string

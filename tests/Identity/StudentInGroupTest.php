@@ -106,23 +106,23 @@ class StudentInGroupTest extends TestCase
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
 
-        $user = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email);
 
         $nearInfinite = new DateTime('9999-01-01');
         $lowerBound = new DateTime('2014-01-01');
         $upperBound = new DateTime('2016-01-01');
 
-        $user->joinGroup($group1, $lowerBound)
+        $student->joinGroup($group1, $lowerBound)
             ->joinGroup($group2, $lowerBound, $upperBound);
 
 
-        $this->assertTrue($user->wasActiveInGroupAt($group1, $nearInfinite));
-        $this->assertTrue($user->wasActiveInGroupAt($group1, $lowerBound));
-        $this->assertTrue($user->wasActiveInGroupAt($group1, $upperBound));
+        $this->assertTrue($student->wasActiveInGroupAt($group1, $nearInfinite));
+        $this->assertTrue($student->wasActiveInGroupAt($group1, $lowerBound));
+        $this->assertTrue($student->wasActiveInGroupAt($group1, $upperBound));
 
-        $this->assertTrue($user->wasActiveInGroupAt($group2, $lowerBound));
-        $this->assertTrue($user->wasActiveInGroupAt($group2, $upperBound));
-        $this->assertFalse($user->wasActiveInGroupAt($group2, $nearInfinite));
+        $this->assertTrue($student->wasActiveInGroupAt($group2, $lowerBound));
+        $this->assertTrue($student->wasActiveInGroupAt($group2, $upperBound));
+        $this->assertFalse($student->wasActiveInGroupAt($group2, $nearInfinite));
     }
 
     /**
