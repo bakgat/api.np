@@ -94,7 +94,7 @@ class StudentInGroup
      */
     public function isActive()
     {
-        return $this->dateRange->getEnd() > new DateTime
+        return $this->dateRange->getEnd() >= new DateTime
         && $this->dateRange->getStart() <= new DateTime;
     }
 
