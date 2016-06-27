@@ -1,4 +1,5 @@
 <?php
+use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Time\DateRange;
@@ -24,8 +25,9 @@ class StaffInGroupTest extends TestCase
         $fn = $this->faker->firstName();
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $staff = new Staff($fn, $ln, $email);
+        $staff = new Staff($fn, $ln, $email, $gender);
 
         $staff->joinGroup($group1, 'test');
         $this->assertCount(1, $staff->getGroups());
@@ -48,8 +50,9 @@ class StaffInGroupTest extends TestCase
         $fn = $this->faker->firstName();
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $staff = new Staff($fn, $ln, $email);
+        $staff = new Staff($fn, $ln, $email, $gender);
 
         $staff->joinGroup($group1, 'test');
         $this->assertCount(1, $staff->getGroups());
@@ -73,8 +76,9 @@ class StaffInGroupTest extends TestCase
         $fn = $this->faker->firstName();
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $staff = new Staff($fn, $ln, $email);
+        $staff = new Staff($fn, $ln, $email, $gender);
 
         $nearInfinite = new DateTime('9999-01-01');
         $lowerBound = new DateTime('2014-01-01');
@@ -106,8 +110,9 @@ class StaffInGroupTest extends TestCase
         $fn = $this->faker->firstName();
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $staff = new Staff($fn, $ln, $email);
+        $staff = new Staff($fn, $ln, $email, $gender);
 
         $nearInfinite = new DateTime('9999-01-01');
         $lowerBound = new DateTime('2014-01-01');

@@ -15,7 +15,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class EnumGenderType extends Type
 {
-    const ENUM_GENDER = 'enumgender';
+
     const GENDER_MALE = 'M';
     const GENDER_FEMALE = 'F';
     const GENDER_OTHER = 'O';
@@ -31,12 +31,15 @@ class EnumGenderType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return sprintf("ENUM('M', 'F', 'O') COMMENT ('DC2Type:%s)'", self::ENUM_GENDER);
+        return sprintf("ENUM('M', 'F', 'O')", 'gender');
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return $value;
+        if(!static::validate($value)) {
+            throw new \InvalidArgumentException('Invalid gender');
+        }
+        return new Gender($value);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
@@ -44,19 +47,17 @@ class EnumGenderType extends Type
         if (!static::validate($value)) {
             throw new \InvalidArgumentException('Invalid gender');
         }
-        return $value;
+        return (string)$value;
     }
 
     /**
      * Gets the name of this type.
      *
      * @return string
-     *
-     * @todo Needed?
      */
     public function getName()
     {
-        return self::ENUM_GENDER;
+        return 'gender';
     }
 
     public static function validate($type)

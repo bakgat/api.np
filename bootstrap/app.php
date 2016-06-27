@@ -1,5 +1,7 @@
 <?php
 
+use Doctrine\DBAL\Types\Type;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 try {
@@ -60,7 +62,8 @@ $app->singleton(Faker\Generator::class, function () {
  */
 
 $repos = [
-    'Person\Student',
+    'Identity\Student',
+    'Identity\Group',
 ];
 
 foreach ($repos as $idx => $repo) {
@@ -119,6 +122,19 @@ $app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
 //class_alias('LaravelDoctrine\ORM\Facades\Doctrine', 'Doctrine');
 //class_alias('Webpatser\Uuid\Uuid', 'Uuid');
 
+
+/*
+|--------------------------------------------------------------------------
+| Load Doctrine Custom Types
+|--------------------------------------------------------------------------
+|
+| When you have implemented the type you still need to let Doctrine know about it.
+| This can be achieved through the Doctrine\DBAL\Types\Type#addType($name, $className) method.
+|
+ */
+if (!Type::hasType('gender')) {
+    Type::addType('gender', \App\Domain\Model\Identity\EnumGenderType::class);
+}
 
 /*
 |--------------------------------------------------------------------------

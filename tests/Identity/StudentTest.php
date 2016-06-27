@@ -1,4 +1,5 @@
 <?php
+use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Student;
 use Webpatser\Uuid\Uuid;
 
@@ -19,8 +20,9 @@ class StudentTest extends TestCase
         $fn = 'Karl';
         $ln = 'Van Iseghem';
         $email = 'karl.vaniseghem@klimtoren.be';
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $student = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email, $gender);
 
         $this->assertInstanceOf(Uuid::class, $student->getId());
         $this->assertEquals($fn . ' ' . $ln, $student->getDisplayName());

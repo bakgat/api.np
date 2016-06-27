@@ -41,7 +41,11 @@ abstract class Person
      */
     protected $email;
 
-
+    /**
+     * @ORM\Column(type="gender")
+     *
+     * @var Gender
+     */
     protected $gender;
 
     /**
@@ -50,12 +54,13 @@ abstract class Person
      */
     protected $birthday;
 
-    public function __construct($firstName, $lastName, $email, DateTime $birthday = null)
+    public function __construct($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
     {
         $this->id = Uuid::generate(4);
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
+        $this->gender = $gender;
         $this->birthday = $birthday;
     }
 
@@ -70,7 +75,6 @@ abstract class Person
         }
         return Uuid::import($this->id);
     }
-
 
     /**
      * @return string
@@ -106,6 +110,13 @@ abstract class Person
     }
 
     /**
+     * @return Gender
+     */
+    public function getGender() {
+        return $this->gender;
+    }
+
+    /**
      * @return DateTime
      */
     public function getBirthday()
@@ -121,11 +132,12 @@ abstract class Person
      * @param DateTime|null $birthday
      * @return Student
      */
-    public function updateProfile($firstName, $lastName, $email, DateTime $birthday = null)
+    public function updateProfile($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
     {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
+        $this->gender = $gender;
         $this->birthday = $birthday;
     }
 

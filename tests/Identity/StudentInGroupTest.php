@@ -1,4 +1,5 @@
 <?php
+use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Time\DateRange;
@@ -26,8 +27,9 @@ class StudentInGroupTest extends TestCase
         $fn = $this->faker->firstName();
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $student = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email, $gender);
 
         $student->joinGroup($group1);
         $this->assertCount(1, $student->getGroups());
@@ -49,8 +51,10 @@ class StudentInGroupTest extends TestCase
         $fn = $this->faker->firstName();
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $student = new Student($fn, $ln, $email);
+
+        $student = new Student($fn, $ln, $email, $gender);
 
         $student->joinGroup($group1);
         $this->assertCount(1, $student->getGroups());
@@ -74,8 +78,9 @@ class StudentInGroupTest extends TestCase
         $fn = $this->faker->firstName();
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $student = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email, $gender);
 
         $now = new DateTime;
 
@@ -105,8 +110,9 @@ class StudentInGroupTest extends TestCase
         $fn = $this->faker->firstName();
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $student = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email, $gender);
 
         $nearInfinite = new DateTime('9999-01-01');
         $lowerBound = new DateTime('2014-01-01');
@@ -138,8 +144,10 @@ class StudentInGroupTest extends TestCase
         $fn = $this->faker->firstName();
         $ln = $this->faker->lastName();
         $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $student = new Student($fn, $ln, $email);
+
+        $student = new Student($fn, $ln, $email, $gender);
 
         $nearInfinite = new DateTime('9999-01-01');
         $lowerBound = new DateTime('2014-01-01');

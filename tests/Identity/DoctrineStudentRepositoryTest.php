@@ -1,5 +1,6 @@
 <?php
 use App\Domain\Model\Identity\Exceptions\StudentNotFoundException;
+use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
@@ -122,8 +123,10 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
         $email = $this->faker->email;
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $student = new Student($fn, $ln, $email);
+
+        $student = new Student($fn, $ln, $email, $gender);
         $id = $this->studentRepo->insert($student);
 
         $this->em->clear();
@@ -148,14 +151,15 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
         $email = $this->faker->email;
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $student = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email, $gender);
         $id = $this->studentRepo->insert($student);
 
         $this->em->clear();
 
         $dbStudent = $this->studentRepo->get($id);
-        $dbStudent->updateProfile('Karl', 'Van Iseghem', 'karl.vaniseghem@klimtoren.be', new DateTime('1979-11-30'));
+        $dbStudent->updateProfile('Karl', 'Van Iseghem', 'karl.vaniseghem@klimtoren.be', $gender, new DateTime('1979-11-30'));
         $count = $this->studentRepo->update($dbStudent);
 
         $this->em->clear();
@@ -192,8 +196,9 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
         $email = $this->faker->email;
+        $gender= new Gender($this->faker->randomElement(['F', 'M']));
 
-        $student = new Student($fn, $ln, $email);
+        $student = new Student($fn, $ln, $email, $gender);
         $id = $this->studentRepo->insert($student);
 
         $this->em->clear();

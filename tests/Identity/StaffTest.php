@@ -1,4 +1,5 @@
 <?php
+use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Staff;
 use Webpatser\Uuid\Uuid;
 
@@ -19,8 +20,9 @@ class StaffTest extends TestCase
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
         $email = $this->faker->email;
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $staff = new Staff($fn, $ln, $email);
+        $staff = new Staff($fn, $ln, $email, $gender);
 
         $this->assertInstanceOf(Uuid::class, $staff->getId());
         $this->assertCount(5, explode('-', $staff->getId()));

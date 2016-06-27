@@ -30,9 +30,9 @@ class Student extends Person
     protected $studentInGroups;
 
 
-    public function __construct($firstName, $lastName, $email, DateTime $birthday = null)
+    public function __construct($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
     {
-        parent::__construct($firstName, $lastName, $email, $birthday);
+        parent::__construct($firstName, $lastName, $email, $gender, $birthday);
 
         $this->studentInGroups = [];
     }
