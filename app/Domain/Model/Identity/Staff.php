@@ -9,87 +9,21 @@
 namespace App\Domain\Model\Identity;
 
 
-use DateTime;
-use Webpatser\Uuid\Uuid;
+use \DateTime;
 
-class Staff
+class Staff extends Person
 {
-    /** @var Uuid */
-    protected $id;
-    /** @var string */
-    protected $firstName;
-    /** @var string */
-    protected $lastName;
-    /** @var string */
-    protected $email;
-
-    protected $gender;
-
-    /** @var DateTime */
-    protected $birthday;
     /** @var StaffInGroup[] */
     protected $staffInGroups;
 
-    public function __construct($firstName, $lastName, $email)
+    public function __construct($firstName, $lastName, $email, DateTime $birthday = null)
     {
-        $this->id = Uuid::generate(4);
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->email = $email;
+        parent::__construct($firstName, $lastName, $email, $birthday);
+
 
         $this->staffInGroups = [];
     }
 
-    /**
-     * @return Uuid
-     */
-    public function getId()
-    {
-        if ($this->id instanceof Uuid) {
-            return $this->id;
-        }
-        return Uuid::import($this->id);
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDisplayName()
-    {
-        return $this->firstName . ' ' . $this->lastName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getBirthday()
-    {
-        return $this->birthday;
-    }
 
     /**
      * @param Group $group

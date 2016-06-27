@@ -11,7 +11,6 @@ namespace App\Domain\Model\Identity;
 use App\Domain\Model\Time\DateRange;
 use \DateTime;
 use Doctrine\ORM\Mapping AS ORM;
-use Webpatser\Uuid\Uuid;
 
 //
 //*
@@ -23,42 +22,8 @@ use Webpatser\Uuid\Uuid;
  * Class Student
  * @package App\Domain\Model\Person
  */
-class Student
+class Student extends Person
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="guid")
-     * @var Uuid id
-     */
-    protected $id;
-
-    /**
-     * @ORM\Column(type="string")
-     * @var string
-     */
-    protected $firstName;
-
-    /**
-     * @ORM\Column(type="string")
-     * @var string
-     */
-    protected $lastName;
-
-
-    /**
-     * @ORM\Column(type="string")
-     * @var string
-     */
-    protected $email;
-
-
-    protected $gender;
-
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     * @var DateTime
-     */
-    protected $birthday;
 
     /**
      * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="student", cascade={"persist"})
@@ -70,82 +35,9 @@ class Student
 
     public function __construct($firstName, $lastName, $email, DateTime $birthday = null)
     {
-        $this->id = Uuid::generate(4);
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->email = $email;
-        $this->birthday = $birthday;
+        parent::__construct($firstName, $lastName, $email, $birthday);
 
         $this->studentInGroups = [];
-    }
-
-    /**
-     * @return Uuid
-     */
-    public function getId()
-    {
-        if ($this->id instanceof Uuid) {
-            return $this->id;
-        }
-        return Uuid::import($this->id);
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDisplayName()
-    {
-        return $this->firstName . ' ' . $this->lastName;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getBirthday()
-    {
-        return $this->birthday;
-    }
-
-    /**
-     * Updating the profile for this student
-     * @param $firstName
-     * @param $lastName
-     * @param $email
-     * @param DateTime|null $birthday
-     * @return Student
-     */
-    public function updateProfile($firstName, $lastName, $email, DateTime $birthday = null)
-    {
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->email = $email;
-        $this->birthday = $birthday;
     }
 
     /**
