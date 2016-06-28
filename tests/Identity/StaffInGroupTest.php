@@ -2,6 +2,7 @@
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Staff;
+use App\Domain\Model\Identity\StaffType;
 use App\Domain\Model\Time\DateRange;
 use Carbon\Carbon;
 
@@ -29,10 +30,10 @@ class StaffInGroupTest extends TestCase
 
         $staff = new Staff($fn, $ln, $email, $gender);
 
-        $staff->joinGroup($group1, 'test');
+        $staff->joinGroup($group1, new StaffType(StaffType::MANAGER));
         $this->assertCount(1, $staff->getGroups());
 
-        $staff->joinGroup($group2, 'test', $this->faker->dateTimeBetween('-1day', '2years'));
+        $staff->joinGroup($group2, new StaffType(StaffType::TEACHER), $this->faker->dateTimeBetween('-1day', '2years'));
         $this->assertCount(2, $staff->getGroups());
         $this->assertCount(1, $staff->getActiveGroups());
     }
@@ -54,11 +55,11 @@ class StaffInGroupTest extends TestCase
 
         $staff = new Staff($fn, $ln, $email, $gender);
 
-        $staff->joinGroup($group1, 'test');
+        $staff->joinGroup($group1, new StaffType(StaffType::MANAGER));
         $this->assertCount(1, $staff->getGroups());
 
         $now = new DateTime();
-        $staff->joinGroup($group2, 'test', null, $now->modify("-1 day"));
+        $staff->joinGroup($group2, new StaffType(StaffType::TEACHER), null, $now->modify("-1 day"));
         $this->assertCount(2, $staff->getGroups());
         $this->assertCount(1, $staff->getActiveGroups());
     }
@@ -84,9 +85,8 @@ class StaffInGroupTest extends TestCase
         $lowerBound = new DateTime('2014-01-01');
         $upperBound = new DateTime('2016-01-01');
 
-        $staff->joinGroup($group1, 'test', $lowerBound)
-            ->joinGroup($group2, 'test', $lowerBound, $upperBound);
-
+        $staff->joinGroup($group1, new StaffType(StaffType::MANAGER), $lowerBound)
+            ->joinGroup($group2, new StaffType(StaffType::TEACHER), $lowerBound, $upperBound);
 
         $this->assertTrue($staff->wasActiveInGroupAt($group1, $nearInfinite));
         $this->assertTrue($staff->wasActiveInGroupAt($group1, $lowerBound));
@@ -118,8 +118,8 @@ class StaffInGroupTest extends TestCase
         $lowerBound = new DateTime('2014-01-01');
         $upperBound = new DateTime('2016-01-01');
 
-        $staff->joinGroup($group1, 'test', $lowerBound)
-            ->joinGroup($group2, 'test', $lowerBound, $upperBound);
+        $staff->joinGroup($group1, new StaffType(StaffType::MANAGER), $lowerBound)
+            ->joinGroup($group2, new StaffType(StaffType::TEACHER), $lowerBound, $upperBound);
 
 
         $this->assertTrue($staff->wasActiveInGroupBetween($group1, new DateRange($lowerBound, $upperBound)));

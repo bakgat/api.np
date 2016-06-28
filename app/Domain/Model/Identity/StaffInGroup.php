@@ -29,13 +29,13 @@ class StaffInGroup extends PersonInGroup
      */
     protected $staff;
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="stafftype")
      *
-     * @var string
+     * @var StaffType
      */
     protected $type; //TODO: Make enum with types
 
-    public function __construct(Staff $staff, Group $group, $type, $daterange)
+    public function __construct(Staff $staff, Group $group, StaffType $type, $daterange)
     {
         parent::__construct($group, $daterange);
         $this->staff = $staff;
@@ -60,7 +60,7 @@ class StaffInGroup extends PersonInGroup
 
     /**
      *
-     * @return string
+     * @return StaffType
      */
     public function getType()
     {

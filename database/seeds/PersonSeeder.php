@@ -1,6 +1,7 @@
 <?php
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Staff;
+use App\Domain\Model\Identity\StaffType;
 use App\Domain\Model\Identity\Student;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -59,7 +60,7 @@ class PersonSeeder extends Seeder
                 new Gender($faker->randomElement(['M', 'F'])),
                 $faker->dateTimeBetween('-60years','-21years')
             );
-            $staff->joinGroup($faker->unique(true)->randomElement($groups), 'T');
+            $staff->joinGroup($faker->unique(true)->randomElement($groups), StaffType::TEACHER);
 
             EntityManager::persist($staff);
         }

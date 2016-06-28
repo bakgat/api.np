@@ -135,6 +135,9 @@ $app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
 if (!Type::hasType('gender')) {
     Type::addType('gender', \App\Domain\Model\Identity\EnumGenderType::class);
 }
+if (!Type::hasType('stafftype')) {
+    Type::addType('stafftype', \App\Domain\Model\Identity\EnumStaffType::class);
+}
 
 /*
 |--------------------------------------------------------------------------

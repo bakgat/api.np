@@ -42,11 +42,12 @@ class Staff extends Person
 
     /**
      * @param Group $group
+     * @param StaffType $type
      * @param DateTime|null $start
      * @param DateTime|null $end
      * @return $this
      */
-    public function joinGroup(Group $group, $type, $start = null, $end = null)
+    public function joinGroup(Group $group, StaffType $type, $start = null, $end = null)
     {
         if ($start == null) {
             $start = new DateTime;

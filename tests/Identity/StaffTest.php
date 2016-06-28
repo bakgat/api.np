@@ -1,6 +1,7 @@
 <?php
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Staff;
+use App\Domain\Model\Identity\StaffType;
 use Webpatser\Uuid\Uuid;
 
 /**
@@ -30,5 +31,4 @@ class StaffTest extends TestCase
         $this->assertEquals($staff->getEmail(), $email);
         $this->assertEquals($staff->getGender(), $gender);
     }
-
 }
