@@ -60,7 +60,7 @@ class PersonSeeder extends Seeder
                 new Gender($faker->randomElement(['M', 'F'])),
                 $faker->dateTimeBetween('-60years','-21years')
             );
-            $staff->joinGroup($faker->unique(true)->randomElement($groups), StaffType::TEACHER);
+            $staff->joinGroup($faker->unique(true)->randomElement($groups), new StaffType(StaffType::TEACHER));
 
             EntityManager::persist($staff);
         }
