@@ -32,5 +32,24 @@ class BranchTest extends TestCase
         $this->assertEquals($branch_name, $branch->getName());
     }
 
+    /**
+     * @test
+     * @group branch
+     * @group major
+     */
+    public function should_update_existing_branch()
+    {
+        $major_name = $this->faker->word();
+        $major = new Major($major_name);
 
+        $branch_name = $this->faker->unique()->word();
+        $branch = new Branch($branch_name, $major);
+
+
+        $new_branch_name = $this->faker->unique()->word();
+        $branch->changeName($new_branch_name);
+
+        $this->assertNotEquals($branch_name, $branch->getName());
+        $this->assertEquals($new_branch_name, $branch->getName());
+    }
 }
