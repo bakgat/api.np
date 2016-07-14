@@ -37,6 +37,14 @@ interface StudentRepository
     public function get(Uuid $id);
 
     /**
+     * Gets all groups where a student was member of.
+     *
+     * @param Uuid $id
+     * @return array
+     */
+    public function allGroups(Uuid $id);
+
+    /**
      * Saves a new student.
      *
      * @param Student $student

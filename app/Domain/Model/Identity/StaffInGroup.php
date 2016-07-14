@@ -20,7 +20,6 @@ use Doctrine\ORM\Mapping AS ORM;
  */
 class StaffInGroup extends PersonInGroup
 {
-
     /**
      * @ORM\ManyToOne(targetEntity="Staff", inversedBy="staffInGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -33,7 +32,7 @@ class StaffInGroup extends PersonInGroup
      *
      * @var StaffType
      */
-    protected $type; //TODO: Make enum with types
+    protected $type;
 
     public function __construct(Staff $staff, Group $group, StaffType $type, $daterange)
     {

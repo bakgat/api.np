@@ -11,6 +11,7 @@ namespace App\Domain\Model\Identity;
 use App\Domain\Model\Time\DateRange;
 use \DateTime;
 use Doctrine\ORM\Mapping AS ORM;
+use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * @ORM\Entity
@@ -19,7 +20,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * Class Student
  * @package App\Domain\Model\Person
  */
-class Student extends Person
+class Student extends Person implements \JsonSerializable
 {
 
     /**
@@ -127,5 +128,36 @@ class Student extends Person
             }
         }
         return false;
+    }
+
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        return [
+            'id' => (string)$this->getId(),
+            'gender' => $this->getGender(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'displayName' => $this->getDisplayName(),
+            'username' => $this->getEmail(),
+            'birthday' => $this->getBirthday()->format('Y-m-d'),
+            'classGroups' => $this->getActiveGroups(),
+        ];
+    }
+
+    private function getStudentInGroups()
+    {
+        $groups = [];
+        foreach ($this->studentInGroups as $studentInGroup) {
+            $groups[] = $studentInGroup;
+        }
+        return $groups;
     }
 }

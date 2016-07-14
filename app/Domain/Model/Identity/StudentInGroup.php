@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * Class StudentInGroup
  * @package App\Domain\Model\Identity
  */
-class StudentInGroup extends PersonInGroup
+class StudentInGroup extends PersonInGroup implements \JsonSerializable
 {
     /**
      * @ORM\ManyToOne(targetEntity="Student", inversedBy="studentInGroups")
@@ -60,5 +60,21 @@ class StudentInGroup extends PersonInGroup
     public function toString()
     {
         return $this->__toString();
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        return [
+            'start' => $this->dateRange->getStart()->format('Y-m-d'),
+            'end' => $this->dateRange->getEnd()->format('Y-m-d'),
+            'group' => $this->getGroup(),
+        ];
     }
 }

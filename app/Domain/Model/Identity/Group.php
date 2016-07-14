@@ -10,6 +10,7 @@ namespace App\Domain\Model\Identity;
 
 
 use Doctrine\ORM\Mapping AS ORM;
+use Illuminate\Contracts\Support\Arrayable;
 use Webpatser\Uuid\Uuid;
 
 /**
@@ -19,7 +20,7 @@ use Webpatser\Uuid\Uuid;
  * Class Group
  * @package App\Domain\Model\Identity
  */
-class Group
+class Group implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -81,4 +82,19 @@ class Group
         return $this->__toString();
     }
 
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        return [
+            'id' => (string)$this->getId(),
+            'name' => $this->getName(),
+        ];
+    }
 }
