@@ -18,7 +18,7 @@ use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Facades\Cache;
 use Webpatser\Uuid\Uuid;
 
-class DoctrineGroupRepository implements GroupRepository
+class GroupDoctrineRepository implements GroupRepository
 {
     /** @var EntityManager */
     protected $em;

@@ -3,7 +3,8 @@ use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Exceptions\NonUniqueGroupNameException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
-use App\Repositories\Identity\DoctrineGroupRepository;
+use App\Repositories\Identity\GropuDoctrineRepository;
+use App\Repositories\Identity\GroupDoctrineRepository;
 use Webpatser\Uuid\Uuid;
 
 /**
@@ -21,7 +22,7 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
     {
         parent::setUp();
 
-        $this->groupRepo = new DoctrineGroupRepository($this->em);
+        $this->groupRepo = new GroupDoctrineRepository($this->em);
     }
 
     /**

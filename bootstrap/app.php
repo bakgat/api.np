@@ -69,7 +69,7 @@ $repos = [
 foreach ($repos as $idx => $repo) {
     $app->bind(
         'App\Domain\Model\\' . $repo . 'Repository',
-        'App\Repositories\\' . $repo . 'DoctrineORMRepository'
+        'App\Repositories\\' . $repo . 'DoctrineRepository'
     );
 }
 

@@ -12,12 +12,12 @@ namespace App\Repositories\Identity;
 use App\Domain\Model\Identity\ArrayCollection;
 use App\Domain\Model\Identity\Exceptions\StudentNotFoundException;
 use App\Domain\Model\Identity\Student;
+use App\Domain\Model\Identity\StudentInGroup;
 use App\Domain\Model\Identity\StudentRepository;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityNotFoundException;
 use Webpatser\Uuid\Uuid;
 
-class DoctrineStudentRepository implements StudentRepository
+class StudentDoctrineRepository implements StudentRepository
 {
     /** @var EntityManager */
     protected $em;
@@ -29,16 +29,17 @@ class DoctrineStudentRepository implements StudentRepository
     }
 
     /**
-     * Gets all thetive students.
+     * Gets all the students.
      *
      * @return ArrayCollection|Student[]
      */
     public function all()
     {
         $qb = $this->em->createQueryBuilder();
-        $qb->select('s')
-            ->from(Student::class, 's');
-
+        $qb->select('s, sig, g')
+            ->from(Student::class, 's')
+            ->join('s.studentInGroups', 'sig')
+            ->join('sig.group', 'g');
         return $qb->getQuery()->getResult();
     }
 
@@ -78,6 +79,25 @@ class DoctrineStudentRepository implements StudentRepository
         }
 
         return $student;
+    }
+
+    /**
+     * Gets all groups where a student was member of.
+     *
+     * @param Uuid $id
+     * @return array
+     */
+    public function allGroups(Uuid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('sig, g')
+            ->from(StudentInGroup::class, 'sig')
+            ->join('sig.group', 'g')
+            ->orderBy('sig.dateRange.start', 'DESC')
+            ->where('sig.student=?1')
+            ->setParameter(1, $id);
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
