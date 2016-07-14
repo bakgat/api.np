@@ -23,7 +23,7 @@ class BranchTest extends TestCase
         $major = new Major($major_name);
 
         $branch_name = $this->faker->word();
-        $branch = new Branch($branch_name, $major);
+        $branch = new Branch($branch_name);
 
         $this->assertInstanceOf(Uuid::class, $major->getId());
         $this->assertEquals($major_name, $major->getName());
@@ -39,11 +39,9 @@ class BranchTest extends TestCase
      */
     public function should_update_existing_branch()
     {
-        $major_name = $this->faker->word();
-        $major = new Major($major_name);
 
         $branch_name = $this->faker->unique()->word();
-        $branch = new Branch($branch_name, $major);
+        $branch = new Branch($branch_name);
 
 
         $new_branch_name = $this->faker->unique()->word();
@@ -51,5 +49,25 @@ class BranchTest extends TestCase
 
         $this->assertNotEquals($branch_name, $branch->getName());
         $this->assertEquals($new_branch_name, $branch->getName());
+    }
+
+    /**
+     * @test
+     * @group branch
+     * @group major
+     */
+    public function should_add_branches_to_major()
+    {
+        $major_name = $this->faker->unique()->word();
+        $major = new Major($major_name);
+
+        foreach (range(0, 5) as $value) {
+            $branch_name = $this->faker->unique()->word();
+            $branch = new  Branch($branch_name);
+
+            $major->addBranch($branch);
+        }
+
+        $this->assertEquals(6, $major->countBranches());
     }
 }

@@ -22,11 +22,10 @@ class Branch
     /** @var Major */
     private $major;
 
-    public function __construct($name, Major $major)
+    public function __construct($name)
     {
         $this->id = Uuid::generate(4);
         $this->name = $name;
-        $this->major = $major;
     }
 
     public function getId()
@@ -39,12 +38,18 @@ class Branch
         return $this->name;
     }
 
+    public function joinMajor(Major $major)
+    {
+        $this->major = $major;
+    }
+
     public function getMajor()
     {
         return $this->major;
     }
 
-    public function changeName($name) {
+    public function changeName($name)
+    {
         $this->name = $name;
     }
 }

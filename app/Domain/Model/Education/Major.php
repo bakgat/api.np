@@ -56,4 +56,9 @@ class Major
         $this->branches->remove($id);
         return $this;
     }
+
+    public function countBranches()
+    {
+        return $this->branches->count();
+    }
 }
