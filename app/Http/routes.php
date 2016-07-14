@@ -15,7 +15,8 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
-$app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Person'], function () use ($app) {
+$app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
     $app->get('/', 'StudentController@index');
     $app->get('/{id}', 'StudentController@show');
+    $app->get('/{id}/groups', 'StudentController@allGroups');
 });
