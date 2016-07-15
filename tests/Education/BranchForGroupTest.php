@@ -27,6 +27,7 @@ class BranchForGroupTest extends TestCase
         $branch_name = $this->faker->unique()->word();
         $group_name = $this->faker->unique()->word();
         $evaluationType = new EvaluationType(EvaluationType::POINT);
+        $daterange = ['start' => new DateTime];
         $max = 20;
 
         $major = new Major($major_name);
@@ -35,7 +36,7 @@ class BranchForGroupTest extends TestCase
 
         $group = new Group($group_name);
 
-        $bfg = new BranchForGroup($branch, $group, $evaluationType, $max);
+        $bfg = new BranchForGroup($branch, $group, $daterange, $evaluationType, $max);
 
         $this->assertInstanceOf(BranchForGroup::class, $bfg);
         $this->assertInstanceOf(Uuid::class, $bfg->getId());
@@ -57,6 +58,7 @@ class BranchForGroupTest extends TestCase
         $major_name = $this->faker->unique()->word();
         $branch_name = $this->faker->unique()->word();
         $group_name = $this->faker->unique()->word();
+        $daterange = ['start' => new DateTime];
         $evaluationType = new EvaluationType(EvaluationType::POINT);
 
         $major = new Major($major_name);
@@ -65,7 +67,7 @@ class BranchForGroupTest extends TestCase
 
         $group = new Group($group_name);
 
-        $bfg = new BranchForGroup($branch, $group, $evaluationType);
+        $bfg = new BranchForGroup($branch, $group, $daterange, $evaluationType);
     }
 
     /**
@@ -79,6 +81,7 @@ class BranchForGroupTest extends TestCase
         $major_name = $this->faker->unique()->word();
         $branch_name = $this->faker->unique()->word();
         $group_name = $this->faker->unique()->word();
+        $daterange = ['start' => new DateTime];
         $evaluationType = new EvaluationType(EvaluationType::COMPREHENSIVE);
 
         $major = new Major($major_name);
@@ -87,7 +90,7 @@ class BranchForGroupTest extends TestCase
 
         $group = new Group($group_name);
 
-        $bfg = new BranchForGroup($branch, $group, $evaluationType);
+        $bfg = new BranchForGroup($branch, $group, $daterange, $evaluationType);
 
         $this->assertInstanceOf(BranchForGroup::class, $bfg);
         $this->assertInstanceOf(Uuid::class, $bfg->getId());
@@ -107,6 +110,7 @@ class BranchForGroupTest extends TestCase
         $major_name = $this->faker->unique()->word();
         $branch_name = $this->faker->unique()->word();
         $group_name = $this->faker->unique()->word();
+        $daterange = ['start' => new DateTime];
         $evaluationType = new EvaluationType(EvaluationType::COMPREHENSIVE);
         $max = 20;
 
@@ -116,7 +120,7 @@ class BranchForGroupTest extends TestCase
 
         $group = new Group($group_name);
 
-        $bfg = new BranchForGroup($branch, $group, $evaluationType, $max);
+        $bfg = new BranchForGroup($branch, $group, $daterange, $evaluationType, $max);
 
         $this->assertInstanceOf(BranchForGroup::class, $bfg);
         $this->assertInstanceOf(Uuid::class, $bfg->getId());
