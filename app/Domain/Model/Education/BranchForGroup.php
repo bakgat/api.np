@@ -48,9 +48,9 @@ class BranchForGroup
      *
      * @var DateRange
      */
-    private $daterange;
+    private $dateRange;
 
-    public function __construct(Branch $branch, Group $group, EvaluationType $evaluationType, $max = null)
+    public function __construct(Branch $branch, Group $group, $daterange, EvaluationType $evaluationType, $max = null)
     {
         $this->id = Uuid::generate(4);
         $this->branch = $branch;
@@ -62,8 +62,12 @@ class BranchForGroup
             }
             $this->max = $max;
         }
-        $now = new DateTime;
-        $this->daterange = DateRange::fromData(['start'=>$now->format('Y-m-d')]);
+
+        if ($daterange instanceof DateRange) {
+            $this->dateRange = $daterange;
+        } else {
+            $this->dateRange = DateRange::fromData($daterange);
+        }
     }
 
     public function getId()
@@ -89,6 +93,22 @@ class BranchForGroup
     public function getMax()
     {
         return $this->max;
+    }
+
+    public function isActive()
+    {
+        return $this->dateRange->getEnd() >= new DateTime
+        && $this->dateRange->getStart() <= new DateTime;
+    }
+
+    public function isActiveSince()
+    {
+        return $this->dateRange->getStart();
+    }
+
+    public function isActiveUntil()
+    {
+        return $this->dateRange->getEnd();
     }
 
     public function changeMax($max)

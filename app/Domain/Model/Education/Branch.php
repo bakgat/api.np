@@ -9,6 +9,9 @@
 namespace App\Domain\Model\Education;
 
 
+use App\Domain\Model\Evaluation\EvaluationType;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Webpatser\Uuid\Uuid;
 
 class Branch
@@ -21,6 +24,11 @@ class Branch
 
     /** @var Major */
     private $major;
+
+    /**
+     * @var BranchForGroup[]
+     */
+    private $branchForGroups;
 
     public function __construct($name)
     {
@@ -51,5 +59,12 @@ class Branch
     public function changeName($name)
     {
         $this->name = $name;
+    }
+
+    public function joinGroup(Group $group, $start = null, $end = null, EvaluationType $evaluationType, $max = null) {
+        if($start ==null) {
+            $start = new DateTime;
+        }
+        $branchForGroup = new BranchForGroup($this, $group, ['start' => $start, 'end' => $end], $evaluationType, $max);
     }
 }
