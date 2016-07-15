@@ -61,10 +61,26 @@ class Branch
         $this->name = $name;
     }
 
-    public function joinGroup(Group $group, $start = null, $end = null, EvaluationType $evaluationType, $max = null) {
-        if($start ==null) {
+    public function joinGroup(Group $group, $start = null, $end = null, EvaluationType $evaluationType, $max = null)
+    {
+        if ($start == null) {
             $start = new DateTime;
         }
         $branchForGroup = new BranchForGroup($this, $group, ['start' => $start, 'end' => $end], $evaluationType, $max);
+        $this->branchForGroups[] = $branchForGroup;
+
+        return $this;
+    }
+
+    public function leaveGroup(Group $group, $evaluationType = null, $end = null)
+    {
+        $id = $group->getId();
+        foreach ($this->branchForGroups as $branchForGroup) {
+            if ($evaluationType === null || $branchForGroup->getEvaluationType() === $evaluationType) {
+                if ($branchForGroup->getGroup()->getId() == $id) {
+                    $branchForGroup->leaveGroup($end);
+                }
+            }
+        }
     }
 }

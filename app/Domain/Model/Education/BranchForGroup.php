@@ -97,6 +97,7 @@ class BranchForGroup
 
     public function isActive()
     {
+
         return $this->dateRange->getEnd() >= new DateTime
         && $this->dateRange->getStart() <= new DateTime;
     }
@@ -119,4 +120,27 @@ class BranchForGroup
         return $this;
     }
 
+    /**
+     * Stops the relation between a branch and a group at a certain date
+     *
+     * @param DateTime|null $end
+     * @return BranchForGroup
+     */
+    public function leaveGroup($end = null)
+    {
+        //group is already left
+        if($this->isActive()) {
+            return $this;
+        }
+
+        if($end == null) {
+            $now = new DateTime;
+            $end = $now->modify('-1 day');
+        }
+
+        $dr = ['start' => $this->dateRange->getStart(), 'end' => $end];
+        $this->dateRange = DateRange::fromData($dr);
+
+        return $this;
+    }
 }
