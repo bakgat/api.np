@@ -90,5 +90,31 @@ class BranchTest extends TestCase
         $this->assertCount(1, $branch->getActiveGroups($fEvaluation));
     }
 
+    /**
+     * @test
+     * @group branch
+     * @group education
+     * @group group
+     */
+    public function should_register_inactive_group_for_branch()
+    {
+        $group1 = new Group($this->faker->word());
+        $group2 = new Group($this->faker->word());
 
+        $pEvaluation = new EvaluationType(EvaluationType::POINT);
+        $cEvaluation = new EvaluationType(EvaluationType::COMPREHENSIVE);
+        $max = 20;
+
+        $branch = new Branch($this->faker->word());
+
+        $branch->joinGroup($group1, $pEvaluation, $max);
+        $this->assertCount(1, $branch->getGroups());
+
+        $now = new DateTime;
+        $branch->joinGroup($group2, $cEvaluation, null, null, $now->modify('-1 day'));
+        $this->assertCount(2, $branch->getGroups());
+        $this->assertCount(1, $branch->getActiveGroups());
+
+        $this->assertCount(0, $branch->getActiveGroups($cEvaluation));
+    }
 }
