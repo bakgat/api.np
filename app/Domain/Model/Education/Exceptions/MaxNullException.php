@@ -14,9 +14,8 @@ class MaxNullException extends \Exception
     /**
      * Constructor.
      *
-     * @param string $message The exception message.
      */
-    public function __construct($message)
+    public function __construct()
     {
         $exception = null;
 

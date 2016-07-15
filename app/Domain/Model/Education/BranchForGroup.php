@@ -56,7 +56,7 @@ class BranchForGroup
         $this->branch = $branch;
         $this->group = $group;
         $this->evaluationType = $evaluationType;
-        if ($this->evaluationType = EvaluationType::POINT) {
+        if ($this->evaluationType->getValue() === EvaluationType::POINT) {
             if ($max === null) {
                 throw new MaxNullException();
             }
