@@ -10,6 +10,7 @@ namespace App\Domain\Model\Education;
 
 
 use App\Domain\Model\Evaluation\EvaluationType;
+use App\Domain\Model\Identity\Group;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Webpatser\Uuid\Uuid;
@@ -61,7 +62,7 @@ class Branch
         $this->name = $name;
     }
 
-    public function joinGroup(Group $group, $start = null, $end = null, EvaluationType $evaluationType, $max = null)
+    public function joinGroup(Group $group, EvaluationType $evaluationType, $max = null, $start = null, $end = null)
     {
         if ($start == null) {
             $start = new DateTime;
@@ -83,4 +84,36 @@ class Branch
             }
         }
     }
+
+    /**
+     * @return Group[]
+     */
+    public function getGroups(EvaluationType $evaluationType = null)
+    {
+        $groups = [];
+        foreach ($this->branchForGroups as $branchForGroup) {
+            if ($evaluationType == null || $branchForGroup->getEvaluationType() == $evaluationType) {
+                $groups[] = $branchForGroup->getGroup();
+            }
+        }
+        return $groups;
+    }
+
+    /**
+     * @return Group[]
+     */
+    public function getActiveGroups(EvaluationType $evaluationType = null)
+    {
+        $groups = [];
+        foreach ($this->branchForGroups as $branchForGroup) {
+            if ($branchForGroup->isActive()) {
+                if ($evaluationType == null || $branchForGroup->getEvaluationType() == $evaluationType) {
+                    $groups[] = $branchForGroup->getGroup();
+                }
+            }
+        }
+        return $groups;
+    }
+
+
 }
