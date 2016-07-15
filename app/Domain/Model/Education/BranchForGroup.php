@@ -126,8 +126,9 @@ class BranchForGroup
      */
     public function leaveGroup($end = null)
     {
+
         //group is already left
-        if($this->isActive()) {
+        if(!$this->isActive()) {
             return $this;
         }
 

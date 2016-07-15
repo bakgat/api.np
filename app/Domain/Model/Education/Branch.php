@@ -77,7 +77,8 @@ class Branch
     {
         $id = $group->getId();
         foreach ($this->branchForGroups as $branchForGroup) {
-            if ($evaluationType === null || $branchForGroup->getEvaluationType() === $evaluationType) {
+
+            if ($evaluationType == null || $branchForGroup->getEvaluationType()->getValue() == $evaluationType->getValue()) {
                 if ($branchForGroup->getGroup()->getId() == $id) {
                     $branchForGroup->leaveGroup($end);
                 }
