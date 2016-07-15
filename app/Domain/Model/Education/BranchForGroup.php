@@ -97,9 +97,7 @@ class BranchForGroup
 
     public function isActive()
     {
-
-        return $this->dateRange->getEnd() >= new DateTime
-        && $this->dateRange->getStart() <= new DateTime;
+        return $this->dateRange->includes(new DateTime);
     }
 
     public function isActiveSince()
