@@ -9,20 +9,38 @@
 namespace App\Domain\Model\Education;
 
 
+use App\Domain\Model\Education\Exceptions\MaxNullException;
+use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Time\DateRange;
-use DoctrineProxies\__CG__\App\Domain\Model\Identity\Group;
+use App\Domain\Model\Identity\Group;
+use DateTime;
 use Webpatser\Uuid\Uuid;
 
 class BranchForGroup
 {
+    /**
+     * @var Uuid
+     */
     private $id;
 
+    /**
+     * @var Branch
+     */
     private $branch;
 
+    /**
+     * @var Group
+     */
     private $group;
 
+    /**
+     * @var EvaluationType
+     */
     private $evaluationType; //point - comprehensive
 
+    /**
+     * @var int|null
+     */
     private $max;
 
     /**
@@ -32,14 +50,20 @@ class BranchForGroup
      */
     private $daterange;
 
-    public function __construct(Branch $branch, Group $group, $evaluationType, $max = null)
+    public function __construct(Branch $branch, Group $group, EvaluationType $evaluationType, $max = null)
     {
         $this->id = Uuid::generate(4);
         $this->branch = $branch;
         $this->group = $group;
         $this->evaluationType = $evaluationType;
-        $this->max = $max;
-        $this->daterange = new DateRange(new DateTime, null);
+        if ($this->evaluationType = EvaluationType::POINT) {
+            if ($max === null) {
+                throw new MaxNullException();
+            }
+            $this->max = $max;
+        }
+        $now = new DateTime;
+        $this->daterange = DateRange::fromData(['start'=>$now->format('Y-m-d')]);
     }
 
     public function getId()
@@ -65,6 +89,14 @@ class BranchForGroup
     public function getMax()
     {
         return $this->max;
+    }
+
+    public function changeMax($max)
+    {
+        if ($this->evaluationType === EvaluationType::POINT) {
+            $this->max = $max;
+        }
+        return $this;
     }
 
 }
