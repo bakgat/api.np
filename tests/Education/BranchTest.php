@@ -51,23 +51,5 @@ class BranchTest extends TestCase
         $this->assertEquals($new_branch_name, $branch->getName());
     }
 
-    /**
-     * @test
-     * @group branch
-     * @group major
-     */
-    public function should_add_branches_to_major()
-    {
-        $major_name = $this->faker->unique()->word();
-        $major = new Major($major_name);
 
-        foreach (range(0, 5) as $value) {
-            $branch_name = $this->faker->unique()->word();
-            $branch = new  Branch($branch_name);
-
-            $major->addBranch($branch);
-        }
-
-        $this->assertEquals(6, $major->countBranches());
-    }
 }

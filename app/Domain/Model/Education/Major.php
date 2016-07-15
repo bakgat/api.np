@@ -57,8 +57,4 @@ class Major
         return $this;
     }
 
-    public function countBranches()
-    {
-        return $this->branches->count();
-    }
 }
