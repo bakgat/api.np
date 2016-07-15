@@ -117,4 +117,32 @@ class BranchTest extends TestCase
 
         $this->assertCount(0, $branch->getActiveGroups($cEvaluation));
     }
+
+    /**
+     * @test
+     * @group branch
+     * @group education
+     * @group group
+     */
+    public function should_leave_active_group_for_branch()
+    {
+        $group1 = new Group($this->faker->word());
+        $group2 = new Group($this->faker->word());
+
+        $pEvaluation = new EvaluationType(EvaluationType::POINT);
+        $cEvaluation = new EvaluationType(EvaluationType::COMPREHENSIVE);
+        $max = 20;
+
+        $branch = new Branch($this->faker->word());
+
+        $branch->joinGroup($group1, $pEvaluation, $max)
+            ->joinGroup($group2, $cEvaluation);
+
+        $this->assertCount(2, $branch->getActiveGroups());
+
+        $branch->leaveGroup($group2);
+        $this->assertCount(2, $branch->getGroups());
+        $this->assertCount(1, $branch->getActiveGroups());
+        $this->assertCount(0, $branch->getActiveGroups($cEvaluation));
+    }
 }
