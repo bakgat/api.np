@@ -40,15 +40,15 @@ abstract class PersonInGroup
      */
     protected $dateRange;
 
-    public function __construct(Group $group, $daterange)
+    public function __construct(Group $group, $dateRange)
     {
         $this->id = Uuid::generate(4);
         $this->group = $group;
 
-        if ($daterange instanceof DateRange) {
-            $this->dateRange = $daterange;
+        if ($dateRange instanceof DateRange) {
+            $this->dateRange = $dateRange;
         } else {
-            $this->dateRange = DateRange::fromData($daterange);
+            $this->dateRange = DateRange::fromData($dateRange);
         }
     }
 
