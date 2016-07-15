@@ -15,7 +15,7 @@ class BranchTest extends TestCase
     /**
      * @test
      * @group branch
-     * @group major
+     * @group education
      */
     public function should_create_new()
     {
@@ -35,7 +35,7 @@ class BranchTest extends TestCase
     /**
      * @test
      * @group branch
-     * @group major
+     * @group education
      */
     public function should_update_existing_branch()
     {
