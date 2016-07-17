@@ -12,18 +12,39 @@ namespace App\Domain\Model\Education;
 use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Identity\Group;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Webpatser\Uuid\Uuid;
+use Doctrine\ORM\Mapping AS ORM;
 
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="branches")
+ *
+ * Class Branch
+ * @package App\Domain\Model\Education
+ */
 class Branch
 {
-    /** @var Uuid */
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="guid")
+     *
+     * @var Uuid
+     */
     private $id;
 
-    /** @var string */
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
     private $name;
 
-    /** @var Major */
+    /**
+     * @ORM\ManyToOne(targetEntity="Major", inversedBy="branches")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
+     * @var Major
+     */
     private $major;
 
     /**
@@ -87,7 +108,8 @@ class Branch
     }
 
     /**
-     * @return Group[]
+     * @param EvaluationType $evaluationType
+     * @return \App\Domain\Model\Identity\Group[]
      */
     public function getGroups(EvaluationType $evaluationType = null)
     {
@@ -101,7 +123,8 @@ class Branch
     }
 
     /**
-     * @return Group[]
+     * @param EvaluationType $evaluationType
+     * @return \App\Domain\Model\Identity\Group[]
      */
     public function getActiveGroups(EvaluationType $evaluationType = null)
     {

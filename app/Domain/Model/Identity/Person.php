@@ -18,6 +18,7 @@ abstract class Person
     /**
      * @ORM\Id
      * @ORM\Column(type="guid")
+     *
      * @var Uuid id
      */
     protected $id;

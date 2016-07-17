@@ -11,16 +11,37 @@ namespace App\Domain\Model\Education;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Webpatser\Uuid\Uuid;
+use Doctrine\ORM\Mapping AS ORM;
 
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="majors")
+ *
+ * Class Major
+ * @package App\Domain\Model\Education
+ */
 class Major
 {
-    /** @var Uuid */
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="guid")
+     *
+     * @var Uuid
+     */
     private $id;
 
-    /** @var string */
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
     private $name;
 
-    /** @var ArrayCollection */
+    /**
+     * @ORM\OneToMany(targetEntity="Branch", mappedBy="major", cascade={"persist"})
+     *
+     * @var ArrayCollection
+     */
     private $branches;
 
     public function __construct($name)
@@ -39,6 +60,7 @@ class Major
     {
         return $this->name;
     }
+
 
     public function changeName($name)
     {

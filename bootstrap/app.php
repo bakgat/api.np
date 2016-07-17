@@ -138,6 +138,9 @@ if (!Type::hasType('gender')) {
 if (!Type::hasType('stafftype')) {
     Type::addType('stafftype', \App\Domain\Model\Identity\EnumStaffType::class);
 }
+if (!Type::hasType('evaluationtype')) {
+    Type::addType('evaluationtype', \App\Domain\Model\Evaluation\EnumEvaluationType::class);
+}
 
 /*
 |--------------------------------------------------------------------------

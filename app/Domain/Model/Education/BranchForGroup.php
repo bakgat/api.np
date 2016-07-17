@@ -34,6 +34,7 @@ class BranchForGroup
     private $group;
 
     /**
+     *
      * @var EvaluationType
      */
     private $evaluationType; //point - comprehensive
