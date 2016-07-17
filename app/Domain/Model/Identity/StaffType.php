@@ -16,5 +16,5 @@ class StaffType extends Enum
     const TEACHER = 'T';
     const TITULAR = 'X';
     const MANAGER = 'M';
-    CONST SECRETARY = 'S';
+    const SECRETARY = 'S';
 }

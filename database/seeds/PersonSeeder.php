@@ -3,7 +3,6 @@ use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffType;
 use App\Domain\Model\Identity\Student;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
