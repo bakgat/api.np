@@ -43,6 +43,13 @@ class Group implements \JsonSerializable
      */
     protected $studentInGroups;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Education\BranchForGroup", mappedBy="group", cascade={"persist"})
+     *
+     * @var BranchForGroup[]
+     */
+    protected $branchForGroups;
+
 
     public function __construct($name)
     {

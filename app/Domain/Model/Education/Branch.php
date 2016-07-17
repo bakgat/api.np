@@ -48,6 +48,8 @@ class Branch
     private $major;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Education\BranchForGroup", mappedBy="branch", cascade={"persist"})
+     *
      * @var BranchForGroup[]
      */
     private $branchForGroups;

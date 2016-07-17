@@ -15,31 +15,52 @@ use App\Domain\Model\Time\DateRange;
 use App\Domain\Model\Identity\Group;
 use DateTime;
 use Webpatser\Uuid\Uuid;
+use Doctrine\ORM\Mapping AS ORM;
 
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="branch_for_groups")
+ *
+ * Class BranchForGroup
+ * @package App\Domain\Model\Education
+ */
 class BranchForGroup
 {
     /**
+     * @ORM\Id
+     * @ORM\Column(type="guid")
+     *
      * @var Uuid
      */
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Branch", inversedBy="branchForGroups")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
      * @var Branch
      */
     private $branch;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Identity\Group", inversedBy="branchForGroups")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
      * @var Group
      */
     private $group;
 
     /**
+     * @ORM\Column(type="evaluationtype")
      *
      * @var EvaluationType
      */
-    private $evaluationType; //point - comprehensive
+    private $evaluationType; //point - comprehensive - feedback
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     *
      * @var int|null
      */
     private $max;
