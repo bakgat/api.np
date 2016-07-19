@@ -13,6 +13,8 @@ use App\Domain\Model\Education\ArrayCollection;
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Education\Major;
+use App\Domain\Model\Identity\Exceptions\BranchNotFoundException;
+use App\Domain\Model\Identity\Exceptions\MajorNotFoundException;
 use App\Domain\Model\Identity\Group;
 use Doctrine\ORM\EntityManager;
 use Webpatser\Uuid\Uuid;
@@ -52,7 +54,12 @@ class BranchDoctrineRepository implements BranchRepository
      */
     public function findBranch(Uuid $id)
     {
-        // TODO: Implement findBranch() method.
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('b')
+            ->from(Branch::class, 'b')
+            ->where('b.id=?1')
+            ->setParameter(1, $id);
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -60,10 +67,24 @@ class BranchDoctrineRepository implements BranchRepository
      *
      * @param Uuid $id
      * @return Branch
+     *
+     * @throws BranchNotFoundException
      */
     public function getBranch(Uuid $id)
     {
-        // TODO: Implement getBranch() method.
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('b')
+            ->from(Branch::class, 'b')
+            ->where('b.id=?1')
+            ->setParameter(1, $id);
+
+        $branch = $qb->getQuery()->getOneOrNullResult();
+
+        if ($branch == null) {
+            throw new BranchNotFoundException;
+        }
+
+        return $branch;
     }
 
     /**
@@ -75,7 +96,17 @@ class BranchDoctrineRepository implements BranchRepository
      */
     public function allBranches(Group $group, Major $major)
     {
-        // TODO: Implement allBranches() method.
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('b')
+            ->from(Branch::class, 'b')
+            ->join('b.branchForGroup', 'bfg')
+            ->where('b.major=?1')
+            ->andWhere('bfg.group=?2')
+            ->setParameter(1, $major->getId())
+            ->setParameter(2, $group->getId());
+
+        return $qb->getQuery()->getResult();
+
     }
 
     /**
@@ -86,7 +117,14 @@ class BranchDoctrineRepository implements BranchRepository
      */
     public function allMajors(Group $group)
     {
-        // TODO: Implement allMajors() method.
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('m')
+            ->from(Major::class, 'm')
+            ->join('m.branches', 'b')
+            ->join('b.branchForGroups', 'bfg')
+            ->where('bfg.group=?1')
+            ->setParameter(1, $group->getId());
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -97,7 +135,13 @@ class BranchDoctrineRepository implements BranchRepository
      */
     public function findMajor(Uuid $id)
     {
-        // TODO: Implement findMajor() method.
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('m')
+            ->from(Major::class, 'm')
+            ->where('m.id=?1')
+            ->setParameter(1, $id);
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -108,7 +152,19 @@ class BranchDoctrineRepository implements BranchRepository
      */
     public function getMajor(Uuid $id)
     {
-        // TODO: Implement getMajor() method.
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('m')
+            ->from(Major::class, 'm')
+            ->where('m.id=?1')
+            ->setParameter(1, $id);
+
+        $major = $qb->getQuery()->getOneOrNullResult();
+
+        if ($major == null) {
+            throw new MajorNotFoundException;
+        }
+
+        return $major;
     }
 
     /**
@@ -119,7 +175,8 @@ class BranchDoctrineRepository implements BranchRepository
      */
     public function insert(Branch $branch)
     {
-        // TODO: Implement insert() method.
+        $this->em->persist($branch);
+        $this->em->flush();
     }
 
     /**
@@ -130,7 +187,8 @@ class BranchDoctrineRepository implements BranchRepository
      */
     public function update(Branch $branch)
     {
-        // TODO: Implement update() method.
+        $this->em->persist($branch);
+        $this->em->flush();
     }
 
     /**
@@ -141,7 +199,10 @@ class BranchDoctrineRepository implements BranchRepository
      */
     public function deleteBranch(Uuid $id)
     {
-        // TODO: Implement deleteBranch() method.
+        $branch = $this->getBranch($id);
+        $this->em->remove($branch);
+        $this->em->flush();
+        return 1;
     }
 
     /**
@@ -152,6 +213,9 @@ class BranchDoctrineRepository implements BranchRepository
      */
     public function deleteMajor(Uuid $id)
     {
-        // TODO: Implement deleteMajor() method.
+        $major = $this->getMajor($id);
+        $this->em->remove($major);
+        $this->em->flush();
+        return 1;
     }
 }
