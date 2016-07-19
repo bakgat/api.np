@@ -70,6 +70,7 @@ class Major
     public function addBranch(Branch $branch)
     {
         $this->branches->add($branch);
+        $branch->joinMajor($this);
         return $this;
     }
 
@@ -77,6 +78,12 @@ class Major
     {
         $this->branches->remove($id);
         return $this;
+    }
+
+
+    public function getBranches()
+    {
+        return $this->branches;
     }
 
 }

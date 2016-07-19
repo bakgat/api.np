@@ -64,6 +64,7 @@ $app->singleton(Faker\Generator::class, function () {
 $repos = [
     'Identity\Student',
     'Identity\Group',
+    'Education\Branch',
 ];
 
 foreach ($repos as $idx => $repo) {

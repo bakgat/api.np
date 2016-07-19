@@ -35,25 +35,35 @@ class EducationSeeder extends Seeder
         $faker = Faker\Factory::create('nl_BE');
 
         $majors = [];
+        $branches = [];
         foreach (range(1, 10) as $index) {
             $major = new Major($faker->unique()->word());
 
             $majors[] = $major;
 
-            foreach (range(1, 10) as $index) {
+            foreach (range(1, 5) as $index) {
                 $branch = new Branch($faker->unique(true)->word());
                 $major->addBranch($branch);
-                $branch->joinMajor($major);
-                $evType = $faker->randomElement($evaluationTypes);
-                $max = $evType->getValue() === EvaluationType::POINT ? $faker->biasedNumberBetween(0, 100) : null;
-                $lower = $faker->dateTimeBetween('-9years', '-1year');
 
-                $branch->joinGroup($faker->unique()->randomElement($groups), $evType, $max, $lower);
+                $branches[] = $branch;
+
             }
             EntityManager::persist($major);
         }
 
+        foreach ($groups as $group) {
+            $faker->unique(true)->randomElement($branches);
+            foreach (range(1, $faker->biasedNumberBetween(10, 16)) as $index) {
+                $branch = $faker->unique()->randomElement($branches);
 
+                $evType = $faker->randomElement($evaluationTypes);
+                $max = $evType->getValue() === EvaluationType::POINT ? $faker->biasedNumberBetween(0, 100) : null;
+                $lower = $faker->dateTimeBetween('-9years', '-1year');
+
+                $branch->joinGroup($group, $evType, $max, $lower);
+                EntityManager::persist($branch);
+            }
+        }
 
         EntityManager::flush();
     }
