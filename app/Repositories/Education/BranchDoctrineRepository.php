@@ -39,8 +39,8 @@ class BranchDoctrineRepository implements BranchRepository
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('m, b')
-            ->from(Major::class, 'm')
-            ->join('m.branches', 'b')
+            ->from(Branch::class, 'b')
+            ->join('b.major', 'm')
             ->join('b.branchForGroups', 'bfg')
             ->where('bfg.group=?1')
             ->setParameter(1, $group->getId());
@@ -49,10 +49,10 @@ class BranchDoctrineRepository implements BranchRepository
 
     /**
      * Finds a branch by its id, if not returns null.
-     * @param Uuid $id
+     * @param $id
      * @return Branch|null
      */
-    public function findBranch(Uuid $id)
+    public function findBranch($id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('b')

@@ -28,7 +28,7 @@ interface BranchRepository
      * @param Uuid $id
      * @return Branch|null
      */
-    public function findBranch(Uuid $id);
+    public function findBranch($id);
 
     /**
      * Gets an existing Branch by its id.

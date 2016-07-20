@@ -64,10 +64,10 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'firstName', 'lastName', 'email', 'gender', 'birthday', 'studentInGroups'];
+            return ['__isInitialized__', 'studentInGroups', 'id', 'firstName', 'lastName', 'email', 'gender', 'birthday'];
         }
 
-        return ['__isInitialized__', 'id', 'firstName', 'lastName', 'email', 'gender', 'birthday', 'studentInGroups'];
+        return ['__isInitialized__', 'studentInGroups', 'id', 'firstName', 'lastName', 'email', 'gender', 'birthday'];
     }
 
     /**
@@ -176,12 +176,85 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
+    public function joinGroup(\App\Domain\Model\Identity\Group $group, $start = NULL, $end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'joinGroup', [$group, $start, $end]);
+
+        return parent::joinGroup($group, $start, $end);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function leaveGroup(\App\Domain\Model\Identity\Group $group, $end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'leaveGroup', [$group, $end]);
+
+        return parent::leaveGroup($group, $end);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGroups()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGroups', []);
+
+        return parent::getGroups();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getActiveGroups()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActiveGroups', []);
+
+        return parent::getActiveGroups();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function wasActiveInGroupAt(\App\Domain\Model\Identity\Group $group, \DateTime $date)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'wasActiveInGroupAt', [$group, $date]);
+
+        return parent::wasActiveInGroupAt($group, $date);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function wasActiveInGroupBetween(\App\Domain\Model\Identity\Group $group, \App\Domain\Model\Time\DateRange $dateRange)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'wasActiveInGroupBetween', [$group, $dateRange]);
+
+        return parent::wasActiveInGroupBetween($group, $dateRange);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
+
+        return parent::jsonSerialize();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getId()
     {
-        if ($this->__isInitialized__ === false) {
-            return  parent::getId();
-        }
-
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
@@ -235,12 +308,12 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
-    public function setBirthday(\DateTime $birthday)
+    public function getGender()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setBirthday', [$birthday]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGender', []);
 
-        return parent::setBirthday($birthday);
+        return parent::getGender();
     }
 
     /**
@@ -257,67 +330,12 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
-    public function joinGroup(\App\Domain\Model\Identity\Group $group, $start = NULL, $end = NULL)
+    public function updateProfile($firstName, $lastName, $email, \App\Domain\Model\Identity\Gender $gender, \DateTime $birthday = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'joinGroup', [$group, $start, $end]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'updateProfile', [$firstName, $lastName, $email, $gender, $birthday]);
 
-        return parent::joinGroup($group, $start, $end);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function leaveGroup(\App\Domain\Model\Identity\Group $group, $end = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'leaveGroup', [$group, $end]);
-
-        return parent::leaveGroup($group, $end);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getGroups()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'groups', []);
-
-        return parent::getGroups();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getActiveGroups()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'activeGroups', []);
-
-        return parent::getActiveGroups();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function wasActiveInGroupAt(\App\Domain\Model\Identity\Group $group, \DateTime $date)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'wasActiveInGroupAt', [$group, $date]);
-
-        return parent::wasActiveInGroupAt($group, $date);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function wasActiveInGroupBetween(\App\Domain\Model\Identity\Group $group, \App\Domain\Model\Time\DateRange $dateRange)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'wasActiveInGroupBetween', [$group, $dateRange]);
-
-        return parent::wasActiveInGroupBetween($group, $dateRange);
+        return parent::updateProfile($firstName, $lastName, $email, $gender, $birthday);
     }
 
 }

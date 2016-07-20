@@ -37,22 +37,33 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
     public function should_return_between_50_distinct_branches()
     {
         $groups = $this->groupRepo->all();
-        $branches = [];
+        $br = [];
         foreach ($groups as $group) {
-            $majors = $this->branchRepo->all($group);
-            foreach ($majors as $major) {
-                foreach ($major->getBranches() as $branch) {
-                    if (!in_array($branch->getId(), $branches)) {
-                        array_push($branches, (string)$branch->getId());
-                    }
-                }
+            $branches = $this->branchRepo->all($group);
+            foreach ($branches as $branch) {
+                array_push($br, $branch->getId());
             }
         }
-        $this->assertCount(50, $branches);
+        $br = array_unique($br);
+        $this->assertCount(50, $br);
     }
 
-    public function should_find_existing_branch()
+    /**
+     * @test
+     * @group group
+     * @group branch
+     * @group major
+     * @group find
+     */
+    public function should_find_existing_branch_by_its_id()
     {
+        $groups  = $this->groupRepo->all();
+        $branches = $this->branchRepo->all($groups[0]);
+        $id = $branches[0]->getId();
+        $this->em->clear();
 
+        $branch = $this->branchRepo->findBranch($id);
+        $this->assertInstanceOf(Branch::class, $branch);
+        $this->assertEquals($branch->getId(), $id);
     }
 }

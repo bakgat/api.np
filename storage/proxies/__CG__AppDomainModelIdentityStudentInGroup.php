@@ -64,10 +64,10 @@ class StudentInGroup extends \App\Domain\Model\Identity\StudentInGroup implement
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'student', 'group', 'dateRange'];
+            return ['__isInitialized__', 'student', 'id', 'group', 'dateRange'];
         }
 
-        return ['__isInitialized__', 'id', 'student', 'group', 'dateRange'];
+        return ['__isInitialized__', 'student', 'id', 'group', 'dateRange'];
     }
 
     /**
@@ -187,6 +187,39 @@ class StudentInGroup extends \App\Domain\Model\Identity\StudentInGroup implement
     /**
      * {@inheritDoc}
      */
+    public function __toString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', []);
+
+        return parent::__toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'toString', []);
+
+        return parent::toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
+
+        return parent::jsonSerialize();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getGroup()
     {
 
@@ -259,28 +292,6 @@ class StudentInGroup extends \App\Domain\Model\Identity\StudentInGroup implement
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'leaveGroup', [$end]);
 
         return parent::leaveGroup($end);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __toString()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', []);
-
-        return parent::__toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function toString()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'toString', []);
-
-        return parent::toString();
     }
 
 }

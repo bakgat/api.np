@@ -64,10 +64,10 @@ class Group extends \App\Domain\Model\Identity\Group implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'name', 'studentInGroups'];
+            return ['__isInitialized__', 'id', 'name', 'studentInGroups', 'branchForGroups'];
         }
 
-        return ['__isInitialized__', 'id', 'name', 'studentInGroups'];
+        return ['__isInitialized__', 'id', 'name', 'studentInGroups', 'branchForGroups'];
     }
 
     /**
@@ -178,10 +178,6 @@ class Group extends \App\Domain\Model\Identity\Group implements \Doctrine\ORM\Pr
      */
     public function getId()
     {
-        if ($this->__isInitialized__ === false) {
-            return  parent::getId();
-        }
-
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
@@ -197,6 +193,17 @@ class Group extends \App\Domain\Model\Identity\Group implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getName', []);
 
         return parent::getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updateName($name)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'updateName', [$name]);
+
+        return parent::updateName($name);
     }
 
     /**
@@ -219,6 +226,17 @@ class Group extends \App\Domain\Model\Identity\Group implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'toString', []);
 
         return parent::toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
+
+        return parent::jsonSerialize();
     }
 
 }
