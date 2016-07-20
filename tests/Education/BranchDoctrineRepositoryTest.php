@@ -1,6 +1,7 @@
 <?php
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\BranchRepository;
+use App\Domain\Model\Education\Exceptions\BranchNotFoundException;
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Repositories\Education\BranchDoctrineRepository;
@@ -99,5 +100,19 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
         $branch = $this->branchRepo->getBranch($id);
         $this->assertInstanceOf(Branch::class, $branch);
         $this->assertEquals($branch->getId(), $id);
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group branch
+     * @group major
+     * @group get
+     */
+    public function should_throw_when_get_branch_fails()
+    {
+        $this->setExpectedException(BranchNotFoundException::class);
+        $fakeId = Uuid::generate(4);
+        $branch = $this->branchRepo->getBranch($fakeId);
     }
 }

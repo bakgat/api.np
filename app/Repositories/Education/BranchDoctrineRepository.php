@@ -13,8 +13,8 @@ use App\Domain\Model\Education\ArrayCollection;
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Education\Major;
-use App\Domain\Model\Identity\Exceptions\BranchNotFoundException;
-use App\Domain\Model\Identity\Exceptions\MajorNotFoundException;
+use App\Domain\Model\Education\Exceptions\BranchNotFoundException;
+use App\Domain\Model\Education\Exceptions\MajorNotFoundException;
 use App\Domain\Model\Identity\Group;
 use Doctrine\ORM\EntityManager;
 use Webpatser\Uuid\Uuid;
@@ -81,7 +81,7 @@ class BranchDoctrineRepository implements BranchRepository
         $branch = $qb->getQuery()->getOneOrNullResult();
 
         if ($branch == null) {
-            throw new BranchNotFoundException;
+            throw new BranchNotFoundException($id);
         }
 
         return $branch;
@@ -149,6 +149,7 @@ class BranchDoctrineRepository implements BranchRepository
      *
      * @param Uuid $id
      * @return Major
+     * @throws MajorNotFoundException
      */
     public function getMajor(Uuid $id)
     {
@@ -161,7 +162,7 @@ class BranchDoctrineRepository implements BranchRepository
         $major = $qb->getQuery()->getOneOrNullResult();
 
         if ($major == null) {
-            throw new MajorNotFoundException;
+            throw new MajorNotFoundException($id);
         }
 
         return $major;

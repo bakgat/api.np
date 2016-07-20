@@ -6,7 +6,7 @@
  * Time: 09:08
  */
 
-namespace  App\Domain\Model\Identity\Exceptions;
+namespace  App\Domain\Model\Education\Exceptions;
 
 
 use \Exception;
