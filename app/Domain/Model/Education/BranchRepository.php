@@ -72,12 +72,19 @@ interface BranchRepository
     public function getMajor(Uuid $id);
 
     /**
+     * Saves a new Major
+     *
+     * @param Major $major
+     * @return Uuid
+     */
+    public function insertMajor(Major $major);
+    /**
      * Saves a new Branch
      *
      * @param Branch $branch
      * @return Uuid
      */
-    public function insert(Branch $branch);
+    public function insertBranch(Branch $branch);
 
     /**
      * Saves an existing branch.

@@ -152,7 +152,8 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
      * @group major
      * @group get
      */
-    public function should_get_major_by_its_id() {
+    public function should_get_major_by_its_id()
+    {
         $groups = $this->groupRepo->all();
         $branches = $this->branchRepo->all($groups[0]);
         $id = Uuid::import($branches[0]->getMajor()->getId());
@@ -166,13 +167,42 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
 
     /**
      * @test
-     * @group group
      * @group major
      * @group get
      */
-    public function should_throw_when_get_major_fails() {
+    public function should_throw_when_get_major_fails()
+    {
         $this->setExpectedException(MajorNotFoundException::class);
         $fakeId = Uuid::generate(4);
         $this->branchRepo->getMajor($fakeId);
+    }
+
+    /**
+     * @test
+     * @group branch
+     * @group major
+     */
+    public function should_insert_new_major_and_branch()
+    {
+        $branch_name = 'fake_unique_branch_' . $this->faker->uuid;
+        $major_name = 'fake_unique_major_' . $this->faker->uuid;
+
+        $major = new Major($major_name);
+        $branch = new Branch($branch_name);
+        $major->addBranch($branch);
+
+        $id = $this->branchRepo->insertMajor($major);
+
+        $this->em->clear();
+
+        $dbMajor = $this->branchRepo->getMajor($id);
+        $dbBranch = $dbMajor->getBranches()[0];
+
+        $this->assertInstanceOf(Branch::class, $dbBranch);
+        $this->assertInstanceOf(Major::class, $dbMajor);
+
+        $this->assertEquals($branch->getName(), $dbBranch->getName());
+        $this->assertEquals($major->getId(), $id);
+        $this->assertEquals($dbMajor->getName(), $major->getName());
     }
 }

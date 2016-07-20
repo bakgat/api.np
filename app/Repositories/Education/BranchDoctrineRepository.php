@@ -169,12 +169,23 @@ class BranchDoctrineRepository implements BranchRepository
     }
 
     /**
+     * Saves a new Major
+     *
+     * @param Major $major
+     * @return Uuid
+     */
+    public function insertMajor(Major $major) {
+        $this->em->persist($major);
+        $this->em->flush();
+        return $major->getId();
+    }
+    /**
      * Saves a new Branch
      *
      * @param Branch $branch
      * @return Uuid
      */
-    public function insert(Branch $branch)
+    public function insertBranch(Branch $branch)
     {
         $this->em->persist($branch);
         $this->em->flush();
