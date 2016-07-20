@@ -52,7 +52,7 @@ class BranchDoctrineRepository implements BranchRepository
      * @param $id
      * @return Branch|null
      */
-    public function findBranch($id)
+    public function findBranch(Uuid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('b')

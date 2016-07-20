@@ -23,10 +23,10 @@ interface GroupRepository
     /**
      * Finds a group by its id, if not returns null.
      *
-     * @param $id
+     * @param Uuid $id
      * @return Group|null
      */
-    public function find($id);
+    public function find(Uuid $id);
 
     /**
      * Gets an existing group by its id.

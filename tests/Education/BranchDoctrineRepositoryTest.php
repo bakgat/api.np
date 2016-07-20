@@ -60,7 +60,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
     {
         $groups = $this->groupRepo->all();
         $branches = $this->branchRepo->all($groups[0]);
-        $id = $branches[0]->getId();
+        $id = Uuid::import($branches[0]->getId());
         $this->em->clear();
 
         $branch = $this->branchRepo->findBranch($id);
