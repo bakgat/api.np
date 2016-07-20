@@ -5,6 +5,7 @@ use App\Domain\Model\Education\Major;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Repositories\Education\BranchDoctrineRepository;
 use App\Repositories\Identity\GroupDoctrineRepository;
+use Webpatser\Uuid\Uuid;
 
 /**
  * Created by PhpStorm.
@@ -57,12 +58,45 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
      */
     public function should_find_existing_branch_by_its_id()
     {
-        $groups  = $this->groupRepo->all();
+        $groups = $this->groupRepo->all();
         $branches = $this->branchRepo->all($groups[0]);
         $id = $branches[0]->getId();
         $this->em->clear();
 
         $branch = $this->branchRepo->findBranch($id);
+        $this->assertInstanceOf(Branch::class, $branch);
+        $this->assertEquals($branch->getId(), $id);
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group branch
+     * @group major
+     * @group find
+     */
+    public function should_return_null_when_no_branch_found()
+    {
+        $fakeId = Uuid::generate(4);
+        $branch = $this->branchRepo->findBranch($fakeId);
+        $this->assertNull($branch);
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group branch
+     * @group major
+     * @group get
+     */
+    public function should_get_branch_by_its_id()
+    {
+        $groups = $this->groupRepo->all();
+        $branches = $this->branchRepo->all($groups[0]);
+        $id = Uuid::import($branches[0]->getId());
+        $this->em->clear();
+
+        $branch = $this->branchRepo->getBranch($id);
         $this->assertInstanceOf(Branch::class, $branch);
         $this->assertEquals($branch->getId(), $id);
     }
