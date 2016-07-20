@@ -192,15 +192,16 @@ class BranchDoctrineRepository implements BranchRepository
     }
 
     /**
-     * Saves an existing branch.
+     * Saves an existing major.
      *
-     * @param Branch $branch
+     * @param Major $major
      * @return int Number of affected rows.
      */
-    public function update(Branch $branch)
+    public function update(Major $major)
     {
-        $this->em->persist($branch);
+        $this->em->persist($major);
         $this->em->flush();
+        return 1;
     }
 
     /**

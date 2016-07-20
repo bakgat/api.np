@@ -181,6 +181,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
      * @test
      * @group branch
      * @group major
+     * @group insert
      */
     public function should_insert_new_major_and_branch()
     {
@@ -204,5 +205,43 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
         $this->assertEquals($branch->getName(), $dbBranch->getName());
         $this->assertEquals($major->getId(), $id);
         $this->assertEquals($dbMajor->getName(), $major->getName());
+    }
+
+    /**
+     * @test
+     * @group branch
+     * @group major
+     * @group update
+     */
+    public function should_insert_new_branch_on_existing_major()
+    {
+        $groups = $this->groupRepo->all();
+        $branches = $this->branchRepo->all($groups[0]);
+        /** @var Major $major */
+        $major = $branches[0]->getMajor();
+
+        $major_id = Uuid::import($major->getId());
+        $branch_count = count($major->getBranches());
+
+        $branch_name = 'fake_unique_branch_' . $this->faker->uuid;
+        $branch = new Branch($branch_name);
+        $major->addBranch($branch);
+
+        $rows = $this->branchRepo->update($major);
+
+        $this->em->clear();
+
+        $dbMajor = $this->branchRepo->getMajor($major_id);
+        $dbBranch = null;
+        foreach ($dbMajor->getBranches() as $branch) {
+            if($branch->getName() == $branch_name) {
+                $dbBranch = $branch;
+            }
+        }
+
+        $this->assertEquals(1, $rows);
+        $this->assertNotNull($dbBranch);
+        $this->assertInstanceOf(Branch::class, $dbBranch);
+        $this->assertEquals($branch_count + 1, count($dbMajor->getBranches()));
     }
 }

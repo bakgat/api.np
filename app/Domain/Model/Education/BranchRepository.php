@@ -87,12 +87,12 @@ interface BranchRepository
     public function insertBranch(Branch $branch);
 
     /**
-     * Saves an existing branch.
+     * Saves an existing major.
      *
-     * @param Branch $branch
+     * @param Major $major
      * @return int Number of affected rows.
      */
-    public function update(Branch $branch);
+    public function update(Major $major);
 
     /**
      * Deletes an existing Branch.
