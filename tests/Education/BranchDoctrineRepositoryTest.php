@@ -244,4 +244,6 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
         $this->assertInstanceOf(Branch::class, $dbBranch);
         $this->assertEquals($branch_count + 1, count($dbMajor->getBranches()));
     }
+
+
 }
