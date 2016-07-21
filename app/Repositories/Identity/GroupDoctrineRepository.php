@@ -14,6 +14,9 @@ use App\Domain\Model\Identity\Exceptions\NonUniqueGroupNameException;
 use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
+use App\Domain\Model\Identity\Student;
+use App\Domain\Model\Identity\Students;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Facades\Cache;
 use Webpatser\Uuid\Uuid;
@@ -39,6 +42,24 @@ class GroupDoctrineRepository implements GroupRepository
         $qb = $this->em->createQueryBuilder();
         $qb->select('g')
             ->from(Group::class, 'g');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Gets all the active groups
+     *
+     * @return ArrayCollection|Group[]
+     */
+    public function allActive()
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('g')
+            ->from(Group::class, 'g')
+            ->join('g.studentInGroups', 'sig')
+            ->where('sig.dateRange.start<=?1')
+            ->andWhere('sig.dateRange.end>=?1')
+            ->setParameter(1, new DateTime);
 
         return $qb->getQuery()->getResult();
     }
@@ -93,7 +114,7 @@ class GroupDoctrineRepository implements GroupRepository
      */
     public function insert(Group $group)
     {
-        if(in_array( $group->getName(), $this->getNames())) {
+        if (in_array($group->getName(), $this->getNames())) {
             throw new NonUniqueGroupNameException($group->getName());
         }
 
@@ -115,7 +136,7 @@ class GroupDoctrineRepository implements GroupRepository
      */
     public function update(Group $group)
     {
-        if(in_array( $group->getName(), $this->getNames())) {
+        if (in_array($group->getName(), $this->getNames())) {
             throw new NonUniqueGroupNameException($group->getName());
         }
 
@@ -163,5 +184,26 @@ class GroupDoctrineRepository implements GroupRepository
         }
 
         return Cache::get('group_names');
+    }
+
+    /**
+     * Gets all the active students in a group.
+     *
+     * @param Uuid $id
+     * @return ArrayCollection|Students[]
+     */
+    public function allActiveStudents(Uuid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('s')
+            ->from(Student::class, 's')
+            ->join('s.studentInGroups', 'sig')
+            ->where('sig.group=?1')
+            ->andWhere('sig.dateRange.start<=?2')
+            ->andWhere('sig.dateRange.end>=?2')
+            ->setParameter(1, $id)
+            ->setParameter(2, new DateTime);
+
+        return $qb->getQuery()->getResult();
     }
 }

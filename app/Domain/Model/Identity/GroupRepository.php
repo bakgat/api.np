@@ -21,6 +21,13 @@ interface GroupRepository
     public function all();
 
     /**
+     * Gets all the active groups
+     *
+     * @return ArrayCollection|Group[]
+     */
+    public function allActive();
+
+    /**
      * Finds a group by its id, if not returns null.
      *
      * @param Uuid $id
@@ -61,4 +68,12 @@ interface GroupRepository
      * @return int Number of affected rows.
      */
     public function delete(Uuid $id);
+
+    /**
+     * Gets all the active students in a group.
+     *
+     * @param Uuid $id
+     * @return ArrayCollection|Students[]
+     */
+    public function allActiveStudents(Uuid $id);
 }

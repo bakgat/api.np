@@ -21,6 +21,11 @@ $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identi
     $app->get('/{id}/groups', 'StudentController@allGroups');
 });
 
+$app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
+    $app->get('/', 'GroupController@index');
+    $app->get('/{id}/students', 'GroupController@allActiveStudents');
+});
+
 $app->group(['prefix' => 'branches', 'namespace' => 'App\Http\Controllers\Education'], function () use ($app) {
     $app->get('/{groupId}', 'BranchController@index');
 });
