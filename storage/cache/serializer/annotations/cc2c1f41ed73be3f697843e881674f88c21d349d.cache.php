@@ -1,0 +1,1 @@
+<?php return unserialize('a:1:{i:0;O:39:"JMS\\Serializer\\Annotation\\AccessorOrder":2:{s:5:"order";s:6:"custom";s:6:"custom";a:3:{i:0;s:2:"id";i:1;s:11:"displayName";i:2;s:5:"email";}}}');
