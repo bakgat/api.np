@@ -11,9 +11,13 @@ namespace App\Domain\Model\Identity;
 use App\Domain\Model\Time\DateRange;
 use \DateTime;
 use Doctrine\ORM\Mapping AS ORM;
-use Illuminate\Contracts\Support\Arrayable;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
 
 /**
+ * @ExclusionPolicy("all")
+ *
  * @ORM\Entity
  * @ORM\Table(name="students")
  *

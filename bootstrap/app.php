@@ -123,6 +123,21 @@ $app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
 //class_alias('LaravelDoctrine\ORM\Facades\Doctrine', 'Doctrine');
 //class_alias('Webpatser\Uuid\Uuid', 'Uuid');
 
+$app->singleton(JMS\Serializer\Serializer::class, function ($app) {
+
+    /** @var \Illuminate\Config\Repository $config */
+    $config = $app->make('Illuminate\Config\Repository');
+
+    return JMS\Serializer\SerializerBuilder
+        ::create()
+        ->setCacheDir(storage_path('cache/serializer'))
+        ->setDebug($config->get('app.debug'))
+        ->setPropertyNamingStrategy(new JMS\Serializer\Naming\SerializedNameAnnotationStrategy(new JMS\Serializer\Naming\IdenticalPropertyNamingStrategy()))
+        ->addDefaultHandlers()
+        ->build();
+});
+$app->bind(JMS\Serializer\SerializerInterface::class, JMS\Serializer\Serializer::class);
+\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
 
 /*
 |--------------------------------------------------------------------------

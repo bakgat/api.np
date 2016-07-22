@@ -17,7 +17,8 @@
     "neomerx/cors-illuminate": "^1.1",
     "laravel-doctrine/orm": "1.1.*",
     "webpatser/laravel-uuid": "2.*",
-    "myclabs/php-enum": "^1.4"
+    "myclabs/php-enum": "^1.4",
+    "jms/serializer": "^1.1"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
@@ -37,5 +38,7 @@
       "tests/",
       "database/"
     ]
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

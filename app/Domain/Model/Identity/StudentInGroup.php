@@ -10,10 +10,15 @@ namespace App\Domain\Model\Identity;
 
 
 use Doctrine\ORM\Mapping AS ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="student_in_groups")
+ *
+ * @ExclusionPolicy("all")
  *
  * Class StudentInGroup
  * @package App\Domain\Model\Identity
@@ -21,6 +26,8 @@ use Doctrine\ORM\Mapping AS ORM;
 class StudentInGroup extends PersonInGroup implements \JsonSerializable
 {
     /**
+     * @Groups({"group_students"})
+     * @Expose
      * @ORM\ManyToOne(targetEntity="Student", inversedBy="studentInGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *

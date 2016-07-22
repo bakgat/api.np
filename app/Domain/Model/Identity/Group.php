@@ -10,19 +10,26 @@ namespace App\Domain\Model\Identity;
 
 
 use Doctrine\ORM\Mapping AS ORM;
-use Illuminate\Contracts\Support\Arrayable;
 use Webpatser\Uuid\Uuid;
+
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="groups")
  *
+ * @ExclusionPolicy("all")
+ *
  * Class Group
  * @package App\Domain\Model\Identity
  */
-class Group implements \JsonSerializable
+class Group
 {
     /**
+     * @Groups({"group", "group_students"})
+     * @Expose
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -30,6 +37,8 @@ class Group implements \JsonSerializable
      */
     protected $id;
     /**
+     * @Groups({"group", "group_students"})
+     * @Expose
      * @ORM\Column(type="string", unique=true)
      *
      * @var string
@@ -37,9 +46,11 @@ class Group implements \JsonSerializable
     protected $name;
 
     /**
+     * @Groups({"group_students"})
+     * @Expose
      * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="group", cascade={"persist"})
      *
-     * @var StudentInGroups[]
+     * @var StudentInGroup[]
      */
     protected $studentInGroups;
 
@@ -90,18 +101,5 @@ class Group implements \JsonSerializable
     }
 
 
-    /**
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
-     */
-    function jsonSerialize()
-    {
-        return [
-            'id' => (string)$this->getId(),
-            'name' => $this->getName(),
-        ];
-    }
+
 }

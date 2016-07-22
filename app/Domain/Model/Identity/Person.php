@@ -12,10 +12,20 @@ namespace App\Domain\Model\Identity;
 use \DateTime;
 use Doctrine\ORM\Mapping AS ORM;
 use Webpatser\Uuid\Uuid;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\AccessorOrder;
 
+/**
+ * @AccessorOrder("custom", custom = {"id", "displayName" ,"email"})
+ */
 abstract class Person
 {
     /**
+     * @Groups({"group_students"})
+     * @Expose
+     *
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -37,6 +47,9 @@ abstract class Person
 
 
     /**
+     * @Groups({"group_students"})
+     * @Expose
+     *
      * @ORM\Column(type="string")
      * @var string
      */
@@ -94,6 +107,9 @@ abstract class Person
     }
 
     /**
+     * @VirtualProperty
+     * @Groups({"group_students"})
+     *
      * @return string
      */
     public function getDisplayName()
