@@ -2,4 +2,5 @@
 .env
 .DS_STORE
 /.idea
+/composer.lock
 /storage/cache
