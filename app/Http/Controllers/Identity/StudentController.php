@@ -11,7 +11,7 @@ namespace App\Http\Controllers\Identity;
 
 use App\Domain\Model\Identity\StudentRepository;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Collection;
+use JMS\Serializer\SerializerInterface;
 use Webpatser\Uuid\Uuid;
 
 class StudentController extends Controller
@@ -19,14 +19,15 @@ class StudentController extends Controller
     /** @var StudentRepository studentRepo */
     private $studentRepo;
 
-    public function __construct(StudentRepository $studentRepo)
+    public function __construct(StudentRepository $studentRepo, SerializerInterface $serializer)
     {
+        parent::__construct($serializer);
         $this->studentRepo = $studentRepo;
     }
 
     public function index()
     {
-        return Collection::make($this->studentRepo->all());
+        return $this->response($this->studentRepo->all(), ['student_list']);
     }
 
     public function show($id)
@@ -34,13 +35,14 @@ class StudentController extends Controller
         if (!$id instanceof Uuid) {
             $id = Uuid::import($id);
         }
-        return Collection::make($this->studentRepo->find($id));
+        return $this->response($this->studentRepo->find($id), ['student_detail']);
     }
 
-    public function allGroups($id) {
+    public function allGroups($id)
+    {
         if (!$id instanceof Uuid) {
             $id = Uuid::import($id);
         }
-        return $this->studentRepo->allGroups($id);
+        return $this->response($this->studentRepo->allGroups($id), ['list']);
     }
 }

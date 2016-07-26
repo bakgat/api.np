@@ -14,6 +14,9 @@ use App\Domain\Model\Time\DateRange;
 use DateTime;
 use Webpatser\Uuid\Uuid;
 
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Expose;
+
 abstract class PersonInGroup
 {
     /**
@@ -26,6 +29,8 @@ abstract class PersonInGroup
 
 
     /**
+     * @Groups({"student_list", "student_detail"})
+     *
      * @ORM\ManyToOne(targetEntity="Group", inversedBy="studentInGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
@@ -34,6 +39,9 @@ abstract class PersonInGroup
     protected $group;
 
     /**
+     * @Groups({"student_list", "student_detail"})
+     * @Expose
+     *
      * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)
      *
      * @var DateRange

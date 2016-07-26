@@ -14,9 +14,12 @@ use Doctrine\ORM\Mapping AS ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\AccessorOrder;
+use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
  * @ExclusionPolicy("all")
+ * @AccessorOrder("custom", custom = {"id", "displayName", "firstName", "lastName", "email", "gender", "birthday", "studentInGroups"})
  *
  * @ORM\Entity
  * @ORM\Table(name="students")
@@ -24,10 +27,13 @@ use JMS\Serializer\Annotation\Groups;
  * Class Student
  * @package App\Domain\Model\Person
  */
-class Student extends Person implements \JsonSerializable
+class Student extends Person
 {
 
     /**
+     * @Groups({"student_detail"})
+     * @Expose
+     *
      * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="student", cascade={"persist"})
      *
      * @var StudentInGroup[]
@@ -86,6 +92,9 @@ class Student extends Person implements \JsonSerializable
     }
 
     /**
+     * @VirtualProperty
+     * @Groups({"student_list", "student_detail"})
+     *
      * @return Group[]
      */
     public function getActiveGroups()
@@ -135,26 +144,7 @@ class Student extends Person implements \JsonSerializable
     }
 
 
-    /**
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
-     */
-    function jsonSerialize()
-    {
-        return [
-            'id' => (string)$this->getId(),
-            'gender' => $this->getGender(),
-            'firstName' => $this->getFirstName(),
-            'lastName' => $this->getLastName(),
-            'displayName' => $this->getDisplayName(),
-            'username' => $this->getEmail(),
-            'birthday' => $this->getBirthday()->format('Y-m-d'),
-            'classGroups' => $this->getActiveGroups(),
-        ];
-    }
+
 
     private function getStudentInGroups()
     {

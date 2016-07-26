@@ -20,16 +20,14 @@ use JMS\Serializer\Annotation\Groups;
  * @ORM\Entity
  * @ORM\Table(name="groups")
  *
- * @ExclusionPolicy("all")
- *
  * Class Group
  * @package App\Domain\Model\Identity
  */
 class Group
 {
     /**
-     * @Groups({"group", "group_students"})
-     * @Expose
+     * @Groups({"group", "group_students", "student_list", "student_detail"})
+     *
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -37,8 +35,8 @@ class Group
      */
     protected $id;
     /**
-     * @Groups({"group", "group_students"})
-     * @Expose
+     * @Groups({"group", "group_students", "student_list", "student_detail"})
+     *
      * @ORM\Column(type="string", unique=true)
      *
      * @var string
@@ -47,7 +45,7 @@ class Group
 
     /**
      * @Groups({"group_students"})
-     * @Expose
+     *
      * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="group", cascade={"persist"})
      *
      * @var StudentInGroup[]

@@ -39,7 +39,8 @@ class StudentDoctrineRepository implements StudentRepository
         $qb->select('s, sig, g')
             ->from(Student::class, 's')
             ->join('s.studentInGroups', 'sig')
-            ->join('sig.group', 'g');
+            ->join('sig.group', 'g')
+            ->orderBy('s.lastName');
         return $qb->getQuery()->getResult();
     }
 

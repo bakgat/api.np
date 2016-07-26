@@ -23,11 +23,12 @@ use JMS\Serializer\Annotation\Groups;
  * Class StudentInGroup
  * @package App\Domain\Model\Identity
  */
-class StudentInGroup extends PersonInGroup implements \JsonSerializable
+class StudentInGroup extends PersonInGroup
 {
     /**
      * @Groups({"group_students"})
      * @Expose
+     *
      * @ORM\ManyToOne(targetEntity="Student", inversedBy="studentInGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
@@ -69,19 +70,5 @@ class StudentInGroup extends PersonInGroup implements \JsonSerializable
         return $this->__toString();
     }
 
-    /**
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
-     */
-    function jsonSerialize()
-    {
-        return [
-            'start' => $this->dateRange->getStart()->format('Y-m-d'),
-            'end' => $this->dateRange->getEnd()->format('Y-m-d'),
-            'group' => $this->getGroup(),
-        ];
-    }
+
 }

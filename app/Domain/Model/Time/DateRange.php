@@ -13,6 +13,9 @@ use Doctrine\ORM\Mapping AS ORM;
 use DateTime;
 use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
 
+use JMS\Serializer\Annotation\HandlerCallback;
+use JMS\Serializer\JsonSerializationVisitor;
+
 /**
  * @ORM\Embeddable
  *
@@ -317,5 +320,17 @@ class DateRange
     public function toString()
     {
         return $this->__toString();
+    }
+
+    /**
+     * @HandlerCallback("json",  direction = "serialization")
+     *
+     * @param JsonSerializationVisitor $visitor
+     * @return array
+     */
+    public function serializeToJson(JsonSerializationVisitor $visitor)
+    {
+        $visitor->addData('start', $this->getStart()->format('Y-m-d'));
+        $visitor->addData('end', $this->getEnd()->format('Y-m-d'));
     }
 }

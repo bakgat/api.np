@@ -16,6 +16,7 @@ use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\VirtualProperty;
 use JMS\Serializer\Annotation\AccessorOrder;
+use JMS\Serializer\Annotation\Type;
 
 /**
  * @AccessorOrder("custom", custom = {"id", "displayName" ,"email"})
@@ -23,8 +24,7 @@ use JMS\Serializer\Annotation\AccessorOrder;
 abstract class Person
 {
     /**
-     * @Groups({"group_students"})
-     * @Expose
+     * @Groups({"student_list", "student_detail", "group_students"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -34,12 +34,16 @@ abstract class Person
     protected $id;
 
     /**
+     * @Groups({"student_list", "student_detail"})
+     *
      * @ORM\Column(type="string")
      * @var string
      */
     protected $firstName;
 
     /**
+     * @Groups({"student_list", "student_detail"})
+     *
      * @ORM\Column(type="string")
      * @var string
      */
@@ -47,8 +51,7 @@ abstract class Person
 
 
     /**
-     * @Groups({"group_students"})
-     * @Expose
+     * @Groups({"student_list", "student_detail", "group_students"})
      *
      * @ORM\Column(type="string")
      * @var string
@@ -56,6 +59,8 @@ abstract class Person
     protected $email;
 
     /**
+     * @Groups({"student_list", "student_detail", "group_students"})
+     *
      * @ORM\Column(type="gender")
      *
      * @var Gender
@@ -63,6 +68,9 @@ abstract class Person
     protected $gender;
 
     /**
+     * @Groups({"student_list", "student_detail"})
+     * @Type("DateTime<'Y-m-d'>")
+     *
      * @ORM\Column(type="date", nullable=true)
      * @var DateTime
      */
@@ -108,13 +116,13 @@ abstract class Person
 
     /**
      * @VirtualProperty
-     * @Groups({"group_students"})
+     * @Groups({"student_list", "student_detail", "group_students"})
      *
      * @return string
      */
     public function getDisplayName()
     {
-        return $this->firstName . ' ' . $this->lastName;
+        return $this->getFirstName() . ' ' . $this->getLastName();
     }
 
 
@@ -129,7 +137,8 @@ abstract class Person
     /**
      * @return Gender
      */
-    public function getGender() {
+    public function getGender()
+    {
         return $this->gender->getValue();
     }
 
