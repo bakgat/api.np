@@ -45,6 +45,10 @@ class Group
     protected $name;
 
     /**
+     * @Groups({"group"})
+     *
+     * @ORM\Column(type="boolean", options={"default" : true})
+     *
      * @var bool
      */
     protected $active;

@@ -32,7 +32,7 @@ class GroupController extends Controller
 
     public function index(Request $request)
     {
-        if($request->has('active') && $request->get('active') == 'true') {
+        if ($request->has('active') && $request->get('active') == 'true') {
             return $this->response($this->groupRepo->allActive(), ['group']);
         }
         return $this->response($this->groupRepo->all(), ['group']);
@@ -72,13 +72,21 @@ class GroupController extends Controller
         $group = $this->groupRepo->get($id);
 
         $group->updateName($request->get('name'));
+        if ($request->has('active')) {
+            if ($request->get('active')) {
+                $group->activate();
+            } else {
+                $group->block();
+            }
+        }
 
         $this->groupRepo->update($group);
 
         return $this->response($group, ['group']);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:groups'
         ]);
@@ -87,7 +95,17 @@ class GroupController extends Controller
             return response($validator->messages(), 422);
         }
 
-        $group = new Group($request->get('name'));
+        $name = $request->get('name');
+
+        //Let Domain Model decide what default is for "active"
+        if ($request->has('active')) {
+            $active = $request->get('active');
+            $group = new Group($name, $active);
+        } else {
+            $group = new Group($name);
+        }
+
+
         $this->groupRepo->insert($group);
 
 
