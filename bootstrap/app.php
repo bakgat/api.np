@@ -157,6 +157,9 @@ if (!Type::hasType('stafftype')) {
 if (!Type::hasType('evaluationtype')) {
     Type::addType('evaluationtype', \App\Domain\Model\Evaluation\EnumEvaluationType::class);
 }
+if (!Type::hasType('redicoditype')) {
+    Type::addType('redicoditype', \App\Domain\Model\Education\EnumRedicodiType::class);
+}
 
 /*
 |--------------------------------------------------------------------------

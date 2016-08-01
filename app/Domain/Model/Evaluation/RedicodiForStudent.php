@@ -15,8 +15,12 @@ use App\Domain\Model\Time\DateRange;
 use App\Domain\Model\Time\DateRangeTrait;
 use App\Domain\Uuid;
 use \DateTime;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Entity
+ * @ORM\Table(name="redicodi_for_students")
+ *
  * Class RedicodiForStudent
  * @package App\Domain\Model\Evaluation
  */
@@ -25,29 +29,45 @@ class RedicodiForStudent
     use DateRangeTrait;
 
     /**
+     * @ORM\Id
+     * @ORM\Column(type="guid")
+     *
      * @var Uuid
      */
     protected $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Identity\Student", inversedBy="redicodiForStudents")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
      * @var Student
      */
     protected $student;
 
     /**
+     * @ORM\Column(type="redicoditype")
+     *
      * @var Redicodi
      */
     protected $redicodi;
+
     /**
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Education\Branch")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
      * @var Branch
      */
     protected $branch;
 
     /**
+     * @ORM\Column(type="string")
+     *
      * @var string
      */
     protected $content;
     /**
+     * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)
+     *
      * @var DateRange
      */
     protected $dateRange;

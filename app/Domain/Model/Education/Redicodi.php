@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Education;
 
 
+use JMS\Serializer\JsonSerializationVisitor;
 use MyCLabs\Enum\Enum;
 
 class Redicodi extends Enum
@@ -17,4 +18,16 @@ class Redicodi extends Enum
     const CHALLENGE = 'C';
     const SUPPORT = 'S';
     const TOOLS = 'T';
+
+
+    /**
+     * @HandlerCallback("json",  direction = "serialization")
+     *
+     * @param JsonSerializationVisitor $visitor
+     * @return array
+     */
+    public function serializeToJson(JsonSerializationVisitor $visitor)
+    {
+        $visitor->addData('redicodi', $this->getValue());
+    }
 }

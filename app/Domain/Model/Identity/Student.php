@@ -8,6 +8,7 @@
 
 namespace App\Domain\Model\Identity;
 
+use App\Domain\Model\Evaluation\RedicodiForStudent;
 use App\Domain\Model\Time\DateRange;
 use \DateTime;
 use Doctrine\ORM\Mapping AS ORM;
@@ -39,6 +40,13 @@ class Student extends Person
      * @var StudentInGroup[]
      */
     protected $studentInGroups;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\RedicodiForStudent", mappedBy="student", cascade={"persist"})
+     *
+     * @var RedicodiForStudent[]
+     */
+    protected $redicodiForStudents;
 
 
     public function __construct($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
