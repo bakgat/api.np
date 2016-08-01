@@ -45,6 +45,11 @@ class Group
     protected $name;
 
     /**
+     * @var bool
+     */
+    protected $active;
+
+    /**
      * @Groups({"group_students"})
      *
      * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="group", cascade={"persist"})
@@ -61,10 +66,11 @@ class Group
     protected $branchForGroups;
 
 
-    public function __construct($name)
+    public function __construct($name, $active = true)
     {
         $this->id = Uuid::generate(4);
         $this->name = $name;
+        $this->active = $active;
     }
 
     public function getId()
@@ -85,6 +91,22 @@ class Group
         $this->name = $name;
     }
 
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    public function activate()
+    {
+        $this->active = true;
+    }
+
+    public function block()
+    {
+        $this->active = false;
+    }
+
+
     /**
      * @return string
      */
@@ -97,7 +119,6 @@ class Group
     {
         return $this->__toString();
     }
-
 
 
 }
