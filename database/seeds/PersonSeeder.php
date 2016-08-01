@@ -27,7 +27,9 @@ class PersonSeeder extends Seeder
 
         $qb = EntityManager::createQueryBuilder();
         $qb->select('g')
-            ->from('App\Domain\Model\Identity\Group', 'g');
+            ->from('App\Domain\Model\Identity\Group', 'g')
+            ->where('g.active=?1')
+            ->setParameter(1, true); //only use active groups
 
         $groups = $qb->getQuery()->getResult();
 
@@ -41,7 +43,7 @@ class PersonSeeder extends Seeder
                 $faker->dateTimeBetween('-12years', '-3years')
             );
             $student->joinGroup($faker->unique(true)->randomElement($groups));
-            for ($i=0;$i<$faker->biasedNumberBetween(1, 10);$i++) {
+            for ($i = 0; $i < $faker->biasedNumberBetween(1, 10); $i++) {
                 $lower = $faker->dateTimeBetween('-9years', '-1year');
                 $upper = $faker->dateTimeBetween($lower, 'now');
                 $student->joinGroup($faker->unique()->randomElement($groups), $lower, $upper);
@@ -51,13 +53,13 @@ class PersonSeeder extends Seeder
         }
 
 
-        foreach(range(1, 40) as $index) {
+        foreach (range(1, 40) as $index) {
             $staff = new Staff(
                 $faker->firstName,
                 $faker->lastName,
                 $faker->email(),
                 new Gender($faker->randomElement(['M', 'F'])),
-                $faker->dateTimeBetween('-60years','-21years')
+                $faker->dateTimeBetween('-60years', '-21years')
             );
             $staff->joinGroup($faker->unique(true)->randomElement($groups), new StaffType(StaffType::TEACHER));
 

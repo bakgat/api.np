@@ -26,7 +26,14 @@ class GroupSeeder extends Seeder
         foreach (range(1, 20) as $index) {
             $w = $faker->unique()->word();
 
-            $group = new Group($w);
+            $group = new Group($w, true);
+            EntityManager::persist($group);
+        }
+        //make 5 inactive groups
+        foreach (range(1, 5) as $index) {
+            $w = $faker->unique()->word();
+
+            $group = new Group($w, false);
             EntityManager::persist($group);
         }
         EntityManager::flush();
