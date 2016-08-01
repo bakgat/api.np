@@ -12,7 +12,7 @@
  */
 
 $app->get('/', function () use ($app) {
-    return $app->version();
+    return phpinfo();
 });
 
 $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
@@ -25,6 +25,8 @@ $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity
     $app->get('/', 'GroupController@index');
     $app->get('{id}', 'GroupController@show');
     $app->get('/{id}/students', 'GroupController@allActiveStudents');
+    $app->post('/', 'GroupController@store');
+    $app->put('/{id}', 'GroupController@update');
 });
 
 $app->group(['prefix' => 'branches', 'namespace' => 'App\Http\Controllers\Education'], function () use ($app) {

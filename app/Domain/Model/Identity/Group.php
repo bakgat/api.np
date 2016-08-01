@@ -10,11 +10,12 @@ namespace App\Domain\Model\Identity;
 
 
 use Doctrine\ORM\Mapping AS ORM;
-use Webpatser\Uuid\Uuid;
+use App\Domain\Uuid;
 
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Type;
 
 /**
  * @ORM\Entity
@@ -64,7 +65,6 @@ class Group
     {
         $this->id = Uuid::generate(4);
         $this->name = $name;
-
     }
 
     public function getId()

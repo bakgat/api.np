@@ -179,28 +179,7 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
         $this->assertEquals($dbGroup->getName(), $savedGroup->getName());
     }
 
-    /**
-     * @test
-     * @group group
-     * @group grouprepo
-     * @group update
-     */
-    public function should_throw_not_unique_on_update()
-    {
-        $groups = $this->groupRepo->all();
-        $non_unique_group = $groups[0];
-        $dbGroup = $groups[1];
 
-        $this->em->clear();
-
-        $updateName = $non_unique_group->getName();
-
-        $this->setExpectedException(NonUniqueGroupNameException::class);
-
-        $dbGroup->updateName($updateName);
-        $this->groupRepo->update($dbGroup);
-
-    }
 
     /**
      * @test

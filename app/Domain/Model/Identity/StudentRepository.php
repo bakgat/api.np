@@ -21,6 +21,15 @@ interface StudentRepository
     public function all();
 
     /**
+     * Gets a list of id/given field for all students.
+     * ie generate a list of id and email-addresses to check client-side uniqueness
+     *
+     * @param $field
+     * @return ArrayCollection|Student[]
+     */
+    public function flat($field);
+
+    /**
      * Finds a student by its id, if not returns null.
      *
      * @param Uuid $id

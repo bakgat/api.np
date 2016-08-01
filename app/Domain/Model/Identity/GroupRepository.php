@@ -20,6 +20,7 @@ interface GroupRepository
      */
     public function all();
 
+
     /**
      * Gets all the active groups
      *

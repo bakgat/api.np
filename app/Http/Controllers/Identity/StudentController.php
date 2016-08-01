@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Identity;
 
 use App\Domain\Model\Identity\StudentRepository;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use JMS\Serializer\SerializerInterface;
 use Webpatser\Uuid\Uuid;
 
@@ -25,8 +26,13 @@ class StudentController extends Controller
         $this->studentRepo = $studentRepo;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('flat')) {
+            $field = $request->get('flat');
+            return $this->response($this->studentRepo->flat($field));
+        }
+
         return $this->response($this->studentRepo->all(), ['student_list']);
     }
 

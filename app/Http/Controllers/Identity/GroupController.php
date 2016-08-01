@@ -9,8 +9,11 @@
 namespace App\Http\Controllers\Identity;
 
 
+use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Webpatser\Uuid\Uuid;
@@ -27,8 +30,11 @@ class GroupController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
+        if($request->has('active') && $request->get('active') == 'true') {
+            return $this->response($this->groupRepo->allActive(), ['group']);
+        }
         return $this->response($this->groupRepo->all(), ['group']);
     }
 
@@ -49,5 +55,42 @@ class GroupController extends Controller
         $activeStudents = $this->groupRepo->allActiveStudents($id);
 
         return $this->response($activeStudents, ['group_students']);
+    }
+
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'name' => 'unique:groups,name,' . $request->get('id') . ',id'
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->messages(), 422);
+        }
+
+        $id = Uuid::import($request->get('id'));
+        $group = $this->groupRepo->get($id);
+
+        $group->updateName($request->get('name'));
+
+        $this->groupRepo->update($group);
+
+        return $this->response($group, ['group']);
+    }
+
+    public function store(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:groups'
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->messages(), 422);
+        }
+
+        $group = new Group($request->get('name'));
+        $this->groupRepo->insert($group);
+
+
+        return $this->response($group, ['group']);
     }
 }

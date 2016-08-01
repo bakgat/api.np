@@ -45,6 +45,22 @@ class StudentDoctrineRepository implements StudentRepository
     }
 
     /**
+     * Gets a list of id/given field for all students.
+     * ie generate a list of id and email-addresses to check client-side uniqueness
+     *
+     * @param $field
+     * @return ArrayCollection|Student[]
+     */
+    public function flat($field)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('s.id, s.' . $field)
+            ->from(Student::class, 's')
+            ->orderBy('s.' . $field);
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * Finds a student by its id, if not returns null
      *
      * @param Uuid $id

@@ -30,7 +30,7 @@ class Controller extends BaseController
         }
     }
 
-    public function response($data, $groups)
+    public function response($data, $groups= null)
     {
         if (is_array($groups) && count($groups) > 0) {
             return $this->serializer->serialize($data, 'json', SerializationContext::create()->setGroups($groups));

@@ -81,31 +81,6 @@ class GroupDoctrineRepository implements GroupRepository
     }
 
     /**
-     * Gets an existing group by its id.
-     *
-     * @param Uuid $id
-     * @return Group
-     * @throws GroupNotFoundException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function get(Uuid $id)
-    {
-        $qb = $this->em->createQueryBuilder();
-        $qb->select('g')
-            ->from(Group::class, 'g')
-            ->where('g.id=?1')
-            ->setParameter(1, $id);
-
-        $group = $qb->getQuery()->getOneOrNullResult();
-
-        if ($group == null) {
-            throw new GroupNotFoundException($id);
-        }
-
-        return $group;
-    }
-
-    /**
      * Saves a new group.
      *
      * @param Group $group
@@ -128,18 +103,33 @@ class GroupDoctrineRepository implements GroupRepository
     }
 
     /**
+     * Get all the names of the groups.
+     * Internal function with cache
+     *
+     * @return array
+     */
+    private function getNames()
+    {
+        if (!Cache::has('group_names')) {
+            $qb = $this->em->createQueryBuilder();
+            $qb->select('g.name')
+                ->from(Group::class, 'g');
+
+            $result = $qb->getQuery()->getScalarResult();
+            Cache::forever('group_names', array_map('current', $result));
+        }
+
+        return Cache::get('group_names');
+    }
+
+    /**
      * Saves an existing group.
      *
      * @param Group $group
      * @return int Number of affected rows.
-     * @throws NonUniqueGroupNameException
      */
     public function update(Group $group)
     {
-        if (in_array($group->getName(), $this->getNames())) {
-            throw new NonUniqueGroupNameException($group->getName());
-        }
-
         $this->em->persist($group);
         $this->em->flush();
 
@@ -167,23 +157,28 @@ class GroupDoctrineRepository implements GroupRepository
     }
 
     /**
-     * Get all the names of the groups.
-     * Internal function with cache
+     * Gets an existing group by its id.
      *
-     * @return array
+     * @param Uuid $id
+     * @return Group
+     * @throws GroupNotFoundException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    private function getNames()
+    public function get(Uuid $id)
     {
-        if (!Cache::has('group_names')) {
-            $qb = $this->em->createQueryBuilder();
-            $qb->select('g.name')
-                ->from(Group::class, 'g');
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('g')
+            ->from(Group::class, 'g')
+            ->where('g.id=?1')
+            ->setParameter(1, $id);
 
-            $result = $qb->getQuery()->getScalarResult();
-            Cache::forever('group_names', array_map('current', $result));
+        $group = $qb->getQuery()->getOneOrNullResult();
+
+        if ($group == null) {
+            throw new GroupNotFoundException($id);
         }
 
-        return Cache::get('group_names');
+        return $group;
     }
 
     /**
