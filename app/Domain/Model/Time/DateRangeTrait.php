@@ -9,6 +9,8 @@
 namespace App\Domain\Model\Time;
 
 
+use DateTime;
+
 trait DateRangeTrait
 {
     public function isActive()
