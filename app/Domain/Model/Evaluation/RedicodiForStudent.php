@@ -17,6 +17,9 @@ use App\Domain\Uuid;
 use \DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
+use JMS\Serializer\Annotation\Groups;
+
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="redicodi_for_students")
@@ -37,6 +40,8 @@ class RedicodiForStudent
     protected $id;
 
     /**
+     * @Groups({})
+     *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Identity\Student", inversedBy="redicodiForStudents")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
@@ -45,6 +50,7 @@ class RedicodiForStudent
     protected $student;
 
     /**
+     * @Groups({"student_redicodi"})
      * @ORM\Column(type="redicoditype")
      *
      * @var Redicodi
@@ -52,6 +58,8 @@ class RedicodiForStudent
     protected $redicodi;
 
     /**
+     * @Groups({"student_redicodi"})
+     *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Education\Branch")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
@@ -60,12 +68,16 @@ class RedicodiForStudent
     protected $branch;
 
     /**
+     * @Groups({"student_redicodi"})
+     *
      * @ORM\Column(type="string")
      *
      * @var string
      */
     protected $content;
     /**
+     * @Groups({"student_redicodi"})
+     *
      * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)
      *
      * @var DateRange

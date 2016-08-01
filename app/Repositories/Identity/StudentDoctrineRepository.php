@@ -9,6 +9,7 @@
 namespace App\Repositories\Identity;
 
 
+use App\Domain\Model\Evaluation\RedicodiForStudent;
 use App\Domain\Model\Identity\ArrayCollection;
 use App\Domain\Model\Identity\Exceptions\StudentNotFoundException;
 use App\Domain\Model\Identity\Student;
@@ -98,24 +99,7 @@ class StudentDoctrineRepository implements StudentRepository
         return $student;
     }
 
-    /**
-     * Gets all groups where a student was member of.
-     *
-     * @param Uuid $id
-     * @return array
-     */
-    public function allGroups(Uuid $id)
-    {
-        $qb = $this->em->createQueryBuilder();
-        $qb->select('sig, g')
-            ->from(StudentInGroup::class, 'sig')
-            ->join('sig.group', 'g')
-            ->orderBy('sig.dateRange.start', 'DESC')
-            ->where('sig.student=?1')
-            ->setParameter(1, $id);
 
-        return $qb->getQuery()->getResult();
-    }
 
     /**
      * Saves a new student.
@@ -156,5 +140,44 @@ class StudentDoctrineRepository implements StudentRepository
         $this->em->remove($student);
         $this->em->flush();
         return 1;
+    }
+
+    /**
+     * Gets all groups where a student was member of.
+     *
+     * @param Uuid $id
+     * @return array
+     */
+    public function allGroups(Uuid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('sig, g')
+            ->from(StudentInGroup::class, 'sig')
+            ->join('sig.group', 'g')
+            ->orderBy('sig.dateRange.start', 'DESC')
+            ->where('sig.student=?1')
+            ->setParameter(1, $id);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Gets all 'redicodi' applicale for a given student.
+     *
+     * @param Uuid $id
+     * @return RedicodiForStudent[]
+     */
+    public function allRedicodi(Uuid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('rfs')
+            ->from(RedicodiForStudent::class, 'rfs')
+            ->join('rfs.student', 's')
+            ->join('rfs.branch', 'b')
+            ->orderBy('rfs.dateRange.start', 'DESC')
+            ->where('rfs.student=?1')
+            ->setParameter(1, $id);
+
+        return $qb->getQuery()->getResult();
     }
 }

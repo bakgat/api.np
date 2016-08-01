@@ -19,6 +19,7 @@ $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identi
     $app->get('/', 'StudentController@index');
     $app->get('/{id}', 'StudentController@show');
     $app->get('/{id}/groups', 'StudentController@allGroups');
+    $app->get('/{id}/redicodi', 'StudentController@allRedicodi');
 });
 
 $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {

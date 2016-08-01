@@ -15,6 +15,8 @@ use DateTime;
 use Webpatser\Uuid\Uuid;
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="branches")
@@ -25,6 +27,8 @@ use Doctrine\ORM\Mapping AS ORM;
 class Branch implements \JsonSerializable
 {
     /**
+     * @Groups({"student_redicodi"})
+     *
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -33,6 +37,8 @@ class Branch implements \JsonSerializable
     private $id;
 
     /**
+     * @Groups({"student_redicodi"})
+     *
      * @ORM\Column(type="string")
      *
      * @var string

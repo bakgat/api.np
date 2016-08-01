@@ -54,6 +54,14 @@ interface StudentRepository
     public function allGroups(Uuid $id);
 
     /**
+     * Gets all 'redicodi' applicale for a given student.
+     *
+     * @param Uuid $id
+     * @return RedicodiForStudent[]
+     */
+    public function allRedicodi(Uuid $id);
+
+    /**
      * Saves a new student.
      *
      * @param Student $student

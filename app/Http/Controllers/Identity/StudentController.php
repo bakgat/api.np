@@ -49,6 +49,14 @@ class StudentController extends Controller
         if (!$id instanceof Uuid) {
             $id = Uuid::import($id);
         }
-        return $this->response($this->studentRepo->allGroups($id), ['list']);
+        return $this->response($this->studentRepo->allGroups($id), ['student_groups']);
+    }
+
+    public function allRedicodi($id)
+    {
+        if (!$id instanceof Uuid) {
+            $id = Uuid::import($id);
+        }
+        return $this->response($this->studentRepo->allRedicodi($id), ['student_redicodi']);
     }
 }

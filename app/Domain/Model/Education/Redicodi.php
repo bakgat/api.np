@@ -10,6 +10,8 @@ namespace App\Domain\Model\Education;
 
 
 use JMS\Serializer\JsonSerializationVisitor;
+use JMS\Serializer\Annotation\HandlerCallback;
+
 use MyCLabs\Enum\Enum;
 
 class Redicodi extends Enum
