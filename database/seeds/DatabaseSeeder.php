@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call('EducationSeeder');
         $this->call('PersonSeeder');
+        $this->call('RedicodiSeeder');
     }
 }
