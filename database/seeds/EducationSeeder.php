@@ -38,12 +38,12 @@ class EducationSeeder extends Seeder
         $majors = [];
         $branches = [];
         foreach (range(1, 10) as $index) {
-            $major = new Major('major_' . Uuid::generate(1));
+            $major = new Major('major_' . $faker->unique()->company());
 
             $majors[] = $major;
 
             foreach (range(1, 5) as $index) {
-                $branch = new Branch('branch_' . Uuid::generate(1));
+                $branch = new Branch('branch_' . $faker->unique()->company());
                 $major->addBranch($branch);
 
                 $branches[] = $branch;
