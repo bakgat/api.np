@@ -3,6 +3,7 @@
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Evaluation\EvaluationType;
+use App\Domain\Uuid;
 use Illuminate\Database\Seeder;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
@@ -37,12 +38,12 @@ class EducationSeeder extends Seeder
         $majors = [];
         $branches = [];
         foreach (range(1, 10) as $index) {
-            $major = new Major($faker->unique()->word());
+            $major = new Major('major_' . Uuid::generate(1));
 
             $majors[] = $major;
 
             foreach (range(1, 5) as $index) {
-                $branch = new Branch($faker->unique(true)->word());
+                $branch = new Branch('branch_' . Uuid::generate(1));
                 $major->addBranch($branch);
 
                 $branches[] = $branch;
