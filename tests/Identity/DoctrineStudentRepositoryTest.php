@@ -283,4 +283,6 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $student = $this->studentRepo->get($id);
         $this->assertCount(0, $student->getActiveGroups());
     }
+
+    //TODO: tests for redicodi
 }

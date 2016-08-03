@@ -13,6 +13,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Webpatser\Uuid\Uuid;
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="majors")
@@ -23,6 +25,8 @@ use Doctrine\ORM\Mapping AS ORM;
 class Major implements \JsonSerializable
 {
     /**
+     * @Groups({"student_redicodi"})
+     *
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -31,6 +35,8 @@ class Major implements \JsonSerializable
     private $id;
 
     /**
+     * @Groups({"student_redicodi"})
+     *
      * @ORM\Column(type="string", unique=true)
      *
      * @var string

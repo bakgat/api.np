@@ -46,6 +46,8 @@ class Branch implements \JsonSerializable
     private $name;
 
     /**
+     * @Groups({"student_redicodi"})
+     *
      * @ORM\ManyToOne(targetEntity="Major", inversedBy="branches")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
