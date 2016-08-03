@@ -12,6 +12,7 @@ namespace App\Domain\Model\Evaluation;
 use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Uuid;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class PointResult
 {
@@ -36,16 +37,16 @@ class PointResult
     protected $score;
 
     /**
-     * @var Redicodi[]
+     * @var ArrayCollection
      */
     protected $redicodi;
 
     public function __construct(Student $student, $score)
     {
         $this->id = Uuid::generate(4);
-        //$this->evaluation  = $evaluation;
         $this->student = $student;
         $this->score = $score;
+        $this->redicodi = new ArrayCollection;
     }
 
     public function getId()
@@ -71,6 +72,11 @@ class PointResult
     public function getScore()
     {
         return $this->score;
+    }
+
+    public function addRedicodi(Redicodi $redicodi)
+    {
+        $this->redicodi->add($redicodi);
     }
 
 }
