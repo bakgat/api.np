@@ -1,9 +1,11 @@
 <?php
 use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\BranchForGroup;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Identity\Gender;
+use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
 
 /**
@@ -23,10 +25,15 @@ class PointResultTest extends TestCase
     public function should_create_new()
     {
         $branch = new Branch($this->faker->word());
+        $group = new Group($this->faker->word());
         $evType = new EvaluationType(EvaluationType::POINT);
+        $max = 20;
+
+        $branchForGroup= new BranchForGroup($branch, $group, ['start'=> new DateTime], $evType, $max);
+
         $title = $this->faker->words(3);
 
-        $evaluation = new Evaluation($branch, $evType, $title, new DateTime, 100);
+        $evaluation = new Evaluation($branchForGroup, $title, new DateTime, 100);
 
 
         foreach (range(1, 10) as $index) {
@@ -44,5 +51,6 @@ class PointResultTest extends TestCase
         $this->assertEquals(55, $evaluation->getAverage());
         $this->assertEquals(55, $evaluation->getMedian());
         $this->assertEquals(100, $evaluation->getMax());
+        $this->assertEquals($evType, $evaluation->getEvaluationType());
     }
 }

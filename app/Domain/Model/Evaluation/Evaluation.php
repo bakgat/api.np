@@ -9,7 +9,7 @@
 namespace App\Domain\Model\Evaluation;
 
 
-use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\BranchForGroup;
 use App\Domain\Uuid;
 use App\Support\BrilliantArrayCollection;
 use DateTime;
@@ -22,14 +22,10 @@ class Evaluation
     protected $id;
 
     /**
-     * @var Branch
+     * @var BranchForGroup
      */
-    protected $branch;
+    protected $branchForGroup;
 
-    /**
-     * @var EvaluationType
-     */
-    protected $evaluationType;
 
     /**
      * @var DateTime
@@ -67,11 +63,10 @@ class Evaluation
     protected $results;
 
 
-    public function __construct(Branch $branch, EvaluationType $type, $title, $date = null, $max = null, $permanent = true)
+    public function __construct(BranchForGroup $branchForGroup, $title, $date = null, $max = null, $permanent = true)
     {
         $this->id = Uuid::generate(4);
-        $this->branch = $branch;
-        $this->evaluationType = $type;
+        $this->branchForGroup = $branchForGroup;
         $this->title = $title;
         $this->permanent = $permanent;
         $this->max = $max;
@@ -89,12 +84,15 @@ class Evaluation
 
     public function getBranch()
     {
-        return $this->branch;
+        return $this->branchForGroup->getBranch();
+    }
+    public function getGroup() {
+        return $this->branchForGroup->getGroup();
     }
 
     public function getEvaluationType()
     {
-        return $this->evaluationType;
+        return $this->branchForGroup->getEvaluationType();
     }
 
     public function getDate()
