@@ -67,5 +67,6 @@ class EducationSeeder extends Seeder
         }
 
         EntityManager::flush();
+        EntityManager::clear();
     }
 }

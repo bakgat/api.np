@@ -67,5 +67,6 @@ class PersonSeeder extends Seeder
         }
 
         EntityManager::flush();
+        EntityManager::clear();
     }
 }

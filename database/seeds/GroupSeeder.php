@@ -37,5 +37,6 @@ class GroupSeeder extends Seeder
             EntityManager::persist($group);
         }
         EntityManager::flush();
+        EntityManager::clear();
     }
 }

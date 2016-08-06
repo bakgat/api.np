@@ -53,5 +53,6 @@ class RedicodiSeeder extends Seeder
         }
 
         EntityManager::flush();
+        EntityManager::clear();
     }
 }

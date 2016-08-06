@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Identity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use App\Domain\Uuid;
 
@@ -58,14 +59,14 @@ class Group
      *
      * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="group", cascade={"persist"})
      *
-     * @var StudentInGroup[]
+     * @var ArrayCollection
      */
     protected $studentInGroups;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Domain\Model\Education\BranchForGroup", mappedBy="group", cascade={"persist"})
      *
-     * @var BranchForGroup[]
+     * @var ArrayCollection
      */
     protected $branchForGroups;
 
@@ -75,6 +76,8 @@ class Group
         $this->id = Uuid::generate(4);
         $this->name = $name;
         $this->active = $active;
+        $this->studentInGroups = new ArrayCollection;
+        $this->branchForGroups = new ArrayCollection;
     }
 
     public function getId()

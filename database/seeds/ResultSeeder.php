@@ -24,6 +24,7 @@ class ResultSeeder extends Seeder
      */
     public function run()
     {
+
         $qb = EntityManager::createQueryBuilder();
         $qb->select('g, bfg, b')
             ->from('App\Domain\Model\Identity\Group', 'g')
@@ -37,8 +38,6 @@ class ResultSeeder extends Seeder
 
         foreach ($groups as $group) {
             foreach ($group->getBranchForGroups() as $branchForGroup) {
-                /** @var BranchForGroup */
-                $branchForGroup = $branchForGroup;
                 $evCount = $faker->biasedNumberBetween(1, 5);
                 foreach (range(1, $evCount) as $index) {
                     $title = $faker->realText(20);
