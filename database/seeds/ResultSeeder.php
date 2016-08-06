@@ -35,8 +35,12 @@ class ResultSeeder extends Seeder
         $groups = $qb->getQuery()->getResult();
 
         $faker = Faker\Factory::create('nl_BE');
-
+        $i = 0;
         foreach ($groups as $group) {
+            $i++;
+            if ($i == 2) {
+                break;
+            }
             foreach ($group->getBranchForGroups() as $branchForGroup) {
                 $evCount = $faker->biasedNumberBetween(1, 5);
                 foreach (range(1, $evCount) as $index) {
