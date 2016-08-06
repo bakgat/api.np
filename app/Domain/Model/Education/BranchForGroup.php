@@ -16,7 +16,7 @@ use App\Domain\Model\Identity\Group;
 use DateTime;
 use Webpatser\Uuid\Uuid;
 use Doctrine\ORM\Mapping AS ORM;
-
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
@@ -28,6 +28,8 @@ use Doctrine\ORM\Mapping AS ORM;
 class BranchForGroup
 {
     /**
+     * @Groups({"group_evaluations"})
+     *
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -36,6 +38,7 @@ class BranchForGroup
     private $id;
 
     /**
+     * @Groups({"group_evaluations"})
      * @ORM\ManyToOne(targetEntity="Branch", inversedBy="branchForGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
@@ -150,11 +153,11 @@ class BranchForGroup
     {
 
         //group is already left
-        if(!$this->isActive()) {
+        if (!$this->isActive()) {
             return $this;
         }
 
-        if($end == null) {
+        if ($end == null) {
             $now = new DateTime;
             $end = $now->modify('-1 day');
         }

@@ -65,6 +65,7 @@ $repos = [
     'Identity\Student',
     'Identity\Group',
     'Education\Branch',
+    'Evaluation\Evaluation',
 ];
 
 foreach ($repos as $idx => $repo) {

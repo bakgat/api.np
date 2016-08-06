@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Identity;
 
 
+use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Http\Controllers\Controller;
@@ -22,11 +23,14 @@ class GroupController extends Controller
 {
     /** @var GroupRepository */
     private $groupRepo;
+    /** @var EvaluationRepository */
+    private $evaluationRepo;
 
-    public function __construct(GroupRepository $groupRepository, SerializerInterface $serializer)
+    public function __construct(GroupRepository $groupRepository, EvaluationRepository $evaluationRepository, SerializerInterface $serializer)
     {
         parent::__construct($serializer);
         $this->groupRepo = $groupRepository;
+        $this->evaluationRepo = $evaluationRepository;
     }
 
 
@@ -110,5 +114,11 @@ class GroupController extends Controller
 
 
         return $this->response($group, ['group']);
+    }
+
+    public function indexEvaluations($id)
+    {
+        $group = $this->groupRepo->get(Uuid::import($id));
+        return $this->response($this->evaluationRepo->allEvaluationsForGroup($group), ['group_evaluations']);
     }
 }

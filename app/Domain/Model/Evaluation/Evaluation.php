@@ -15,6 +15,8 @@ use App\Domain\Uuid;
 use App\Support\BrilliantArrayCollection;
 use DateTime;
 
+use JMS\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="evaluations")
@@ -25,6 +27,7 @@ use DateTime;
 class Evaluation
 {
     /**
+     * @Groups({"group_evaluations"})
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -33,6 +36,8 @@ class Evaluation
     protected $id;
 
     /**
+     * @Groups({"group_evaluations"})
+     *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Education\BranchForGroup")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
@@ -42,6 +47,8 @@ class Evaluation
 
 
     /**
+     * @Groups({"group_evaluations"})
+     *
      * @ORM\Column(type="date")
      *
      * @var DateTime
@@ -49,6 +56,8 @@ class Evaluation
     protected $date;
 
     /**
+     * @Groups({"group_evaluations"})
+     *
      * @ORM\Column(type="string")
      *
      * @var string

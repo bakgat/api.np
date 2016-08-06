@@ -28,6 +28,8 @@ $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity
     $app->get('/{id}/students', 'GroupController@allActiveStudents');
     $app->post('/', 'GroupController@store');
     $app->put('/{id}', 'GroupController@update');
+
+    $app->get('/{id}/evaluations', 'GroupController@indexEvaluations');
 });
 
 $app->group(['prefix' => 'branches', 'namespace' => 'App\Http\Controllers\Education'], function () use ($app) {
