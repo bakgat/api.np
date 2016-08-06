@@ -9,40 +9,62 @@
 namespace App\Domain\Model\Evaluation;
 
 
+use Doctrine\ORM\Mapping AS ORM;
 use App\Domain\Model\Education\BranchForGroup;
 use App\Domain\Uuid;
 use App\Support\BrilliantArrayCollection;
 use DateTime;
 
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="evaluations")
+ *
+ * Class Evaluation
+ * @package App\Domain\Model\Evaluation
+ */
 class Evaluation
 {
     /**
+     * @ORM\Id
+     * @ORM\Column(type="guid")
+     *
      * @var Uuid
      */
     protected $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Education\BranchForGroup")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
      * @var BranchForGroup
      */
     protected $branchForGroup;
 
 
     /**
+     * @ORM\Column(type="date")
+     *
      * @var DateTime
      */
     protected $date;
 
     /**
+     * @ORM\Column(type="string")
+     *
      * @var string
      */
     protected $title;
 
     /**
+     * @ORM\Column(type="boolean")
+     *
      * @var bool
      */
     protected $permanent; //permanent or end
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     *
      * @var int
      */
     protected $max;
@@ -58,6 +80,8 @@ class Evaluation
     protected $median;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\PointResult", mappedBy="evaluation", cascade={"persist"})
+     *
      * @var BrilliantArrayCollection
      */
     protected $results;
@@ -86,7 +110,9 @@ class Evaluation
     {
         return $this->branchForGroup->getBranch();
     }
-    public function getGroup() {
+
+    public function getGroup()
+    {
         return $this->branchForGroup->getGroup();
     }
 

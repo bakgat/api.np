@@ -9,34 +9,54 @@
 namespace App\Domain\Model\Evaluation;
 
 
+use Doctrine\ORM\Mapping AS ORM;
+
 use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Uuid;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="point_results")
+ *
+ * Class PointResult
+ * @package App\Domain\Model\Evaluation
+ */
 class PointResult
 {
     /**
+     * @ORM\Id
+     * @ORM\Column(type="guid")
+     *
      * @var Uuid
      */
     protected $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Evaluation\Evaluation", inversedBy="results")
+     *
      * @var Evaluation
      */
     protected $evaluation;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Identity\Student")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
      * @var Student
      */
     protected $student;
 
     /**
+     * @ORM\Column(type="float")
+     *
      * @var float
      */
     protected $score;
 
     /**
+     *
      * @var ArrayCollection
      */
     protected $redicodi;

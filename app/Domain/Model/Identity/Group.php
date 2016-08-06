@@ -124,5 +124,13 @@ class Group
         return $this->__toString();
     }
 
+    public function getStudentInGroups()
+    {
+        return $this->studentInGroups;
+    }
 
+    public function getBranchForGroups()
+    {
+        return $this->branchForGroups;
+    }
 }

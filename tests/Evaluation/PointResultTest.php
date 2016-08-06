@@ -22,7 +22,7 @@ class PointResultTest extends TestCase
      * @group result
      *
      */
-    public function should_create_new()
+    public function should_create_new_evaluation()
     {
         $branch = new Branch($this->faker->word());
         $group = new Group($this->faker->word());
@@ -52,5 +52,8 @@ class PointResultTest extends TestCase
         $this->assertEquals(55, $evaluation->getMedian());
         $this->assertEquals(100, $evaluation->getMax());
         $this->assertEquals($evType, $evaluation->getEvaluationType());
+        $this->assertEquals($branch, $evaluation->getBranch());
+        $this->assertEquals($group, $evaluation->getGroup());
     }
+
 }
