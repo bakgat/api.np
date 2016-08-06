@@ -26,10 +26,14 @@ class ResultSeeder extends Seeder
     {
 
         $qb = EntityManager::createQueryBuilder();
-        $qb->select('g, bfg, b')
+        $qb->select('g, bfg, b, sig, s')
             ->from('App\Domain\Model\Identity\Group', 'g')
             ->join('g.branchForGroups', 'bfg')
-            ->join('bfg.branch', 'b');
+            ->join('bfg.branch', 'b')
+            ->join('g.studentInGroups', 'sig')
+            ->join('sig.student', 's')
+            ->where('g.active=?1')
+            ->setParameter(1, true);
 
         /** @var Group[] $groups */
         $groups = $qb->getQuery()->getResult();
@@ -38,23 +42,25 @@ class ResultSeeder extends Seeder
         $i = 0;
         foreach ($groups as $group) {
             $i++;
-            if ($i == 2) {
+            if ($i == 21) {
                 break;
             }
             foreach ($group->getBranchForGroups() as $branchForGroup) {
-                $evCount = $faker->biasedNumberBetween(1, 5);
-                foreach (range(1, $evCount) as $index) {
-                    $title = $faker->realText(20);
-                    $max = null;
-                    $date = $faker->dateTimeBetween('-1year');
-                    $permanent = $index != $evCount;
+                if ($branchForGroup->getEvaluationType()->getValue() == 'P') {
 
-                    if ($branchForGroup->getEvaluationType()->getValue() == 'P') {
-                        $max = $faker->randomElement([10, 20]);
-                    }
-                    $ev = new Evaluation($branchForGroup, $title, $date, $max, $permanent);
+                    $evCount = $faker->biasedNumberBetween(1, 3);
+                    foreach (range(1, $evCount) as $index) {
+                        $title = $faker->realText(20);
+                        $max = null;
+                        $date = $faker->dateTimeBetween('-1year');
+                        $permanent = $index != $evCount;
 
-                    if ($branchForGroup->getEvaluationType()->getValue() == 'P') {
+                        //if ($branchForGroup->getEvaluationType()->getValue() == 'P') {
+                        $max = $faker->randomElement([10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110]);
+                        //}
+                        $ev = new Evaluation($branchForGroup, $title, $date, $max, $permanent);
+
+                        //if ($branchForGroup->getEvaluationType()->getValue() == 'P') {
                         foreach ($group->getStudentInGroups() as $studentInGroup) {
                             if ($studentInGroup->isActive()) {
                                 $student = $studentInGroup->getStudent();
@@ -64,13 +70,12 @@ class ResultSeeder extends Seeder
                                 $ev->addResult($pr);
                             }
                         }
+                        //}
+
+                        EntityManager::persist($ev);
+                        EntityManager::flush();
                     }
-
-                    EntityManager::persist($ev);
-                    EntityManager::flush();
                 }
-
-
             }
         }
 

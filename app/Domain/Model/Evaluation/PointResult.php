@@ -35,6 +35,7 @@ class PointResult
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Evaluation\Evaluation", inversedBy="results")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      *
      * @var Evaluation
      */
