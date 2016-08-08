@@ -170,13 +170,9 @@ class Evaluation
     {
         return collection_median($this->results, 'score');
     }
-
+    /** ArrayCollection is not accessible */
     public function getResults() {
-        $results = [];
-        foreach ($this->results as $result) {
-            $results[] = $result;
-        }
-        return $results;
+        return clone $this->results;
     }
     public function addResult(PointResult $result)
     {
