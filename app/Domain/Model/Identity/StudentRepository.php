@@ -29,7 +29,7 @@ interface StudentRepository
      * @param DateTime|null $date
      * @return Collection
      */
-    public function allActiveInGroup(Group $group, $date);
+    public function allActiveInGroup(Group $group, $date=null);
 
     /**
      * Gets a list of id/given field for all students.

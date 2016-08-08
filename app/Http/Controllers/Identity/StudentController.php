@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Identity;
 
 
+use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -19,11 +20,14 @@ class StudentController extends Controller
 {
     /** @var StudentRepository studentRepo */
     private $studentRepo;
+    /** @var GroupRepository */
+    private $groupRepo;
 
-    public function __construct(StudentRepository $studentRepo, SerializerInterface $serializer)
+    public function __construct(StudentRepository $studentRepo, GroupRepository $groupRepository, SerializerInterface $serializer)
     {
         parent::__construct($serializer);
         $this->studentRepo = $studentRepo;
+        $this->groupRepo = $groupRepository;
     }
 
     public function index(Request $request)
@@ -31,6 +35,11 @@ class StudentController extends Controller
         if ($request->has('flat')) {
             $field = $request->get('flat');
             return $this->response($this->studentRepo->flat($field));
+        }
+        if ($request->has('group')) {
+            $groupId = Uuid::import($request->get('group'));
+            $group = $this->groupRepo->get($groupId);
+            return $this->response($this->studentRepo->allActiveInGroup($group), ['student_list']);
         }
 
         return $this->response($this->studentRepo->all(), ['student_list']);
