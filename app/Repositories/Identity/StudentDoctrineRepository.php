@@ -12,9 +12,12 @@ namespace App\Repositories\Identity;
 use App\Domain\Model\Evaluation\RedicodiForStudent;
 use App\Domain\Model\Identity\ArrayCollection;
 use App\Domain\Model\Identity\Exceptions\StudentNotFoundException;
+use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentInGroup;
 use App\Domain\Model\Identity\StudentRepository;
+use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Webpatser\Uuid\Uuid;
 
@@ -42,6 +45,36 @@ class StudentDoctrineRepository implements StudentRepository
             ->join('s.studentInGroups', 'sig')
             ->join('sig.group', 'g')
             ->orderBy('s.lastName');
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Gets all the active students in a group.
+     *
+     * @param Group $group
+     * @param DateTime|null $date
+     * @return Collection
+     */
+    public function allActiveInGroup(Group $group, $date = null)
+    {
+        if ($date == null) {
+            $date = new DateTime;
+        }
+
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('s')
+            ->from(Student::class, 's')
+            ->join('s.studentInGroups', 'sig')
+            ->where($qb->expr()->andX(
+                $qb->expr()->lte('sig.dateRange.start', '?1'),
+                $qb->expr()->gte('sig.dateRange.end', '?1'),
+                $qb->expr()->eq('sig.group', '?2')
+            ))
+            ->setParameter(1, $date)
+            ->setParameter(2, $group->getId())
+            ->orderBy('s.lastName');
+
         return $qb->getQuery()->getResult();
     }
 
@@ -98,7 +131,6 @@ class StudentDoctrineRepository implements StudentRepository
 
         return $student;
     }
-
 
 
     /**
@@ -180,4 +212,6 @@ class StudentDoctrineRepository implements StudentRepository
 
         return $qb->getQuery()->getResult();
     }
+
+
 }

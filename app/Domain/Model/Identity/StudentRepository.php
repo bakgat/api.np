@@ -9,6 +9,8 @@
 namespace App\Domain\Model\Identity;
 
 
+use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Webpatser\Uuid\Uuid;
 
 interface StudentRepository
@@ -16,16 +18,25 @@ interface StudentRepository
     /**
      * Gets all the active students.
      *
-     * @return ArrayCollection|Student[]
+     * @return Collection
      */
     public function all();
+
+    /**
+     * Gets all the active students in a group.
+     *
+     * @param Group $group
+     * @param DateTime|null $date
+     * @return Collection
+     */
+    public function allActiveInGroup(Group $group, $date);
 
     /**
      * Gets a list of id/given field for all students.
      * ie generate a list of id and email-addresses to check client-side uniqueness
      *
      * @param $field
-     * @return ArrayCollection|Student[]
+     * @return Collection
      */
     public function flat($field);
 
@@ -84,4 +95,6 @@ interface StudentRepository
      * @return int Number of affected rows.
      */
     public function delete(Uuid $id);
+
+
 }

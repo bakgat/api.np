@@ -45,6 +45,20 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
 
         $this->assertCount(440, $students);
     }
+    /**
+     * @test
+     * @group student
+     * @group studentrepo
+     * @group ingroup
+     */
+    public function should_return_some_students_in_group()
+    {
+        $groups = $this->groupRepo->allActive();
+        $group = $groups[0];
+
+        $students = $this->studentRepo->allActiveInGroup($group);
+        $this->assertGreaterThan(1, count($students));
+    }
 
     /**
      * @test
