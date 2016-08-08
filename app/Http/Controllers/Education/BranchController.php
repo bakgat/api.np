@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Education;
 use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Webpatser\Uuid\Uuid;
 
 class BranchController extends Controller
@@ -27,12 +28,13 @@ class BranchController extends Controller
         $this->groupRepo = $groupRepository;
     }
 
-    public function index($groupId)
+    public function index(Request $request)
     {
-        if (!$groupId instanceof Uuid) {
-            $groupId = Uuid::import($groupId);
+        if($request->has('group')) {
+            $groupId = Uuid::import($request->get('group'));
         }
+
         $group = $this->groupRepo->get($groupId);
-        return $this->branchRepo->all($group);
+        return $this->response($this->branchRepo->all($group), ['branch_list']);
     }
 }
