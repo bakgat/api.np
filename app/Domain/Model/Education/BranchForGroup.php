@@ -37,7 +37,7 @@ class BranchForGroup
     private $id;
 
     /**
-     * @Groups({"group_evaluations"})
+     * @Groups({"group_evaluations", "evaluation_detail"})
      * @ORM\ManyToOne(targetEntity="Branch", inversedBy="branchForGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *

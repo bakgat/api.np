@@ -31,7 +31,7 @@ use JMS\Serializer\Annotation\Type;
 class Evaluation
 {
     /**
-     * @Groups({"group_evaluations"})
+     * @Groups({"group_evaluations", "evaluation_detail"})
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -40,7 +40,7 @@ class Evaluation
     protected $id;
 
     /**
-     * @Groups({"group_evaluations"})
+     * @Groups({"group_evaluations", "evaluation_detail"})
      *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Education\BranchForGroup")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -51,7 +51,7 @@ class Evaluation
 
 
     /**
-     * @Groups({"group_evaluations"})
+     * @Groups({"group_evaluations", "evaluation_detail"})
      * @Type("DateTime<'Y-m-d'>")
      *
      * @ORM\Column(type="date")
@@ -61,7 +61,7 @@ class Evaluation
     protected $date;
 
     /**
-     * @Groups({"group_evaluations"})
+     * @Groups({"group_evaluations", "evaluation_detail"})
      *
      * @ORM\Column(type="string")
      *
@@ -70,7 +70,7 @@ class Evaluation
     protected $title;
 
     /**
-     * @Groups({"group_evaluations"})
+     * @Groups({"group_evaluations", "evaluation_detail"})
      * @ORM\Column(type="boolean")
      *
      * @var bool
@@ -78,7 +78,7 @@ class Evaluation
     protected $permanent; //permanent or end
 
     /**
-     * @Groups({"group_evaluations"})
+     * @Groups({"group_evaluations", "evaluation_detail"})
      * @ORM\Column(type="integer", nullable=true)
      *
      * @var int
@@ -88,6 +88,7 @@ class Evaluation
 
 
     /**
+     * @Groups({"evaluation_detail"})
      * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\PointResult", mappedBy="evaluation", cascade={"persist"})
      *
      * @var ArrayCollection
@@ -151,7 +152,7 @@ class Evaluation
 
     /**
      * @VirtualProperty
-     * @Groups({"group_evaluations"})
+     * @Groups({"group_evaluations", "evaluation_detail"})
      *
      * @return float
      */
@@ -162,7 +163,7 @@ class Evaluation
 
     /**
      * @VirtualProperty
-     * @Groups({"group_evaluations"})
+     * @Groups({"group_evaluations", "evaluation_detail"})
      *
      * @return float
      */

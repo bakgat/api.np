@@ -24,7 +24,7 @@ use JMS\Serializer\Annotation\Type;
 abstract class Person
 {
     /**
-     * @Groups({"student_list", "student_detail", "group_students"})
+     * @Groups({"student_list", "student_detail", "group_students", "evaluation_detail"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -116,7 +116,7 @@ abstract class Person
 
     /**
      * @VirtualProperty
-     * @Groups({"student_list", "student_detail", "group_students"})
+     * @Groups({"student_list", "student_detail", "group_students", "evaluation_detail"})
      *
      * @return string
      */

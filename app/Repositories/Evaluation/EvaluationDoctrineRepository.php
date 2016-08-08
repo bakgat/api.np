@@ -12,6 +12,7 @@ namespace App\Repositories\Evaluation;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Identity\Group;
+use App\Domain\Uuid;
 use Doctrine\ORM\EntityManager;
 
 class EvaluationDoctrineRepository implements EvaluationRepository
@@ -37,5 +38,22 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->setParameter(1, $group->getId());
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function get(Uuid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('e, bfg, b, m, pr, s')
+            ->from(Evaluation::class, 'e')
+            ->join('e.branchForGroup', 'bfg')
+            ->join('bfg.branch', 'b')
+            ->join('b.major', 'm')
+            ->join('e.results', 'pr')
+            ->join('pr.student', 's')
+            ->where('e.id=?1')
+            ->setParameter(1, $id)
+            ->orderBy('s.lastName');
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

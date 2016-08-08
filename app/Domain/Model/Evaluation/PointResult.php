@@ -43,7 +43,7 @@ class PointResult
     protected $evaluation;
 
     /**
-     *
+     * @Groups({"evaluation_detail"})
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Identity\Student")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
@@ -52,6 +52,7 @@ class PointResult
     protected $student;
 
     /**
+     * @Groups({"evaluation_detail"})
      *
      * @ORM\Column(type="float")
      *
@@ -60,6 +61,7 @@ class PointResult
     protected $score;
 
     /**
+     * @Groups({"evaluation_detail"})
      *
      * @var ArrayCollection
      */

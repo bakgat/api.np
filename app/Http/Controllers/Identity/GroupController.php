@@ -23,14 +23,12 @@ class GroupController extends Controller
 {
     /** @var GroupRepository */
     private $groupRepo;
-    /** @var EvaluationRepository */
-    private $evaluationRepo;
 
-    public function __construct(GroupRepository $groupRepository, EvaluationRepository $evaluationRepository, SerializerInterface $serializer)
+    public function __construct(GroupRepository $groupRepository, SerializerInterface $serializer)
     {
         parent::__construct($serializer);
         $this->groupRepo = $groupRepository;
-        $this->evaluationRepo = $evaluationRepository;
+
     }
 
 
@@ -116,9 +114,5 @@ class GroupController extends Controller
         return $this->response($group, ['group']);
     }
 
-    public function indexEvaluations($id)
-    {
-        $group = $this->groupRepo->get(Uuid::import($id));
-        return $this->response($this->evaluationRepo->allEvaluationsForGroup($group), ['group_evaluations']);
-    }
+
 }
