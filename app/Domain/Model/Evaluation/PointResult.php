@@ -15,6 +15,7 @@ use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Uuid;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
@@ -42,6 +43,7 @@ class PointResult
     protected $evaluation;
 
     /**
+     *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Identity\Student")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
@@ -50,6 +52,7 @@ class PointResult
     protected $student;
 
     /**
+     *
      * @ORM\Column(type="float")
      *
      * @var float

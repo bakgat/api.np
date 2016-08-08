@@ -9,15 +9,19 @@
 namespace App\Domain\Model\Evaluation;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use App\Domain\Model\Education\BranchForGroup;
 use App\Domain\Uuid;
-use App\Support\BrilliantArrayCollection;
 use DateTime;
 
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\AccessorOrder;
+use JMS\Serializer\Annotation\Type;
 
 /**
+ * @AccessorOrder("custom", custom = {"id", "title", "date", "permanent", "branchForGroup", "max", "average", "median"})
  * @ORM\Entity
  * @ORM\Table(name="evaluations")
  *
@@ -48,6 +52,7 @@ class Evaluation
 
     /**
      * @Groups({"group_evaluations"})
+     * @Type("DateTime<'Y-m-d'>")
      *
      * @ORM\Column(type="date")
      *
@@ -65,6 +70,7 @@ class Evaluation
     protected $title;
 
     /**
+     * @Groups({"group_evaluations"})
      * @ORM\Column(type="boolean")
      *
      * @var bool
@@ -72,26 +78,19 @@ class Evaluation
     protected $permanent; //permanent or end
 
     /**
+     * @Groups({"group_evaluations"})
      * @ORM\Column(type="integer", nullable=true)
      *
      * @var int
      */
     protected $max;
 
-    /**
-     * @var float
-     */
-    protected $average;
 
-    /**
-     * @var float
-     */
-    protected $median;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\PointResult", mappedBy="evaluation", cascade={"persist"})
      *
-     * @var BrilliantArrayCollection
+     * @var ArrayCollection
      */
     protected $results;
 
@@ -107,7 +106,7 @@ class Evaluation
             $date = new DateTime;
         }
         $this->date = $date;
-        $this->results = new BrilliantArrayCollection;
+        $this->results = new ArrayCollection;
     }
 
     public function getId()
@@ -150,14 +149,26 @@ class Evaluation
         return $this->max;
     }
 
+    /**
+     * @VirtualProperty
+     * @Groups({"group_evaluations"})
+     *
+     * @return float
+     */
     public function getAverage()
     {
-        return $this->results->average('score');
+        return collection_average($this->results, 'score');
     }
 
+    /**
+     * @VirtualProperty
+     * @Groups({"group_evaluations"})
+     *
+     * @return float
+     */
     public function getMedian()
     {
-        return $this->results->median('score');
+        return collection_median($this->results, 'score');
     }
 
     public function addResult(PointResult $result)

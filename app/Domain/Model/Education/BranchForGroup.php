@@ -28,7 +28,6 @@ use JMS\Serializer\Annotation\Groups;
 class BranchForGroup
 {
     /**
-     * @Groups({"group_evaluations"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")

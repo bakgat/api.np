@@ -27,9 +27,12 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     public function allEvaluationsForGroup(Group $group)
     {
         $qb = $this->em->createQueryBuilder();
-        $qb->select('e')
+        $qb->select('e, bfg, b, m, pr')
             ->from(Evaluation::class, 'e')
             ->join('e.branchForGroup', 'bfg')
+            ->join('bfg.branch', 'b')
+            ->join('b.major', 'm')
+            ->join('e.results', 'pr')
             ->where('bfg.group=?1')
             ->setParameter(1, $group->getId());
 

@@ -25,7 +25,7 @@ use JMS\Serializer\Annotation\Groups;
 class Major implements \JsonSerializable
 {
     /**
-     * @Groups({"student_redicodi"})
+     * @Groups({"student_redicodi", "group_evaluations"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -35,7 +35,7 @@ class Major implements \JsonSerializable
     private $id;
 
     /**
-     * @Groups({"student_redicodi"})
+     * @Groups({"student_redicodi", "group_evaluations"})
      *
      * @ORM\Column(type="string", unique=true)
      *
