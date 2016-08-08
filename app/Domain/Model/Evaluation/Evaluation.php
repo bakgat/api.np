@@ -171,6 +171,13 @@ class Evaluation
         return collection_median($this->results, 'score');
     }
 
+    public function getResults() {
+        $results = [];
+        foreach ($this->results as $result) {
+            $results[] = $result;
+        }
+        return $results;
+    }
     public function addResult(PointResult $result)
     {
         $this->results->add($result);

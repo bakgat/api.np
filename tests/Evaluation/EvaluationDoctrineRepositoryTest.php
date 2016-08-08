@@ -1,8 +1,10 @@
 <?php
+use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Repositories\Evaluation\EvaluationDoctrineRepository;
+use App\Repositories\Identity\GroupDoctrineRepository;
 use App\Repositories\Identity\StudentDoctrineRepository;
 
 /**
@@ -29,12 +31,24 @@ class EvaluationDoctrineRepositoryTest extends DoctrineTestCase
         $this->studentRepo = new StudentDoctrineRepository($this->em);
     }
 
+    /**
+     * @test
+     * @group evaluation
+     * @group evaluationrepo
+     * @group ingroup
+     */
     public function should_get_result_for_every_student_in_group()
     {
         $groups = $this->groupRepo->allActive();
         $group = $groups[0];
 
-        $students = $this->studentRepo->allInGroup($group);
+        $students = $this->studentRepo->allActiveInGroup($group);
+
+        $evaluations = $this->evaluationRepo->allEvaluationsForGroup($group);
+        /** @var Evaluation $evaluation */
+        foreach ($evaluations as $evaluation) {
+            $this->assertCount(count($evaluation->getResults()), $students);
+        }
     }
 
 }
