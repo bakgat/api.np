@@ -13,6 +13,7 @@ use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use JMS\Serializer\SerializerInterface;
 use Webpatser\Uuid\Uuid;
 
 class BranchController extends Controller
@@ -22,19 +23,38 @@ class BranchController extends Controller
 
     private $groupRepo;
 
-    public function __construct(BranchRepository $branchRepository, GroupRepository $groupRepository)
+    public function __construct(BranchRepository $branchRepository, GroupRepository $groupRepository, SerializerInterface $serializer)
     {
+        parent::__construct($serializer);
         $this->branchRepo = $branchRepository;
         $this->groupRepo = $groupRepository;
     }
 
     public function index(Request $request)
     {
-        if($request->has('group')) {
+        if ($request->has('group')) {
             $groupId = Uuid::import($request->get('group'));
         }
 
         $group = $this->groupRepo->get($groupId);
-        return $this->response($this->branchRepo->all($group), ['branch_list']);
+        if ($group) {
+            return $this->response($this->branchRepo->all($group), ['major_list']);
+        } else {
+            return null;
+        }
+    }
+
+    public function indexMajors(Request $request) {
+        if ($request->has('group')) {
+            $groupId = Uuid::import($request->get('group'));
+        }
+
+        $group = $this->groupRepo->get($groupId);
+        if($group) {
+            return $this->response($this->branchRepo->allMajors($group), ['major_list']);
+        } else {
+            return null;
+        }
+
     }
 }

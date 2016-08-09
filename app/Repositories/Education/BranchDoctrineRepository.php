@@ -118,7 +118,7 @@ class BranchDoctrineRepository implements BranchRepository
     public function allMajors(Group $group)
     {
         $qb = $this->em->createQueryBuilder();
-        $qb->select('m')
+        $qb->select('m,b')
             ->from(Major::class, 'm')
             ->join('m.branches', 'b')
             ->join('b.branchForGroups', 'bfg')

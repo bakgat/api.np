@@ -32,8 +32,11 @@ $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity
     //$app->get('/{id}/evaluations', 'GroupController@indexEvaluations');
 });
 
+$app->group(['prefix' => 'majors', 'namespace' => 'App\Http\Controllers\Education'], function () use ($app) {
+    $app->get('/', 'BranchController@indexMajors');
+});
 $app->group(['prefix' => 'branches', 'namespace' => 'App\Http\Controllers\Education'], function () use ($app) {
-    $app->get('/{groupId}', 'BranchController@index');
+    $app->get('/', 'BranchController@index');
 });
 
 $app->group(['prefix'=>'evaluations', 'namespace' => 'App\Http\Controllers\Evaluation'], function() use($app) {
