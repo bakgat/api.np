@@ -43,18 +43,4 @@ class BranchController extends Controller
             return null;
         }
     }
-
-    public function indexMajors(Request $request) {
-        if ($request->has('group')) {
-            $groupId = Uuid::import($request->get('group'));
-        }
-
-        $group = $this->groupRepo->get($groupId);
-        if($group) {
-            return $this->response($this->branchRepo->allMajors($group), ['major_list']);
-        } else {
-            return null;
-        }
-
-    }
 }
