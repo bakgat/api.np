@@ -39,8 +39,8 @@ class BranchDoctrineRepository implements BranchRepository
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('m, b')
-            ->from(Branch::class, 'b')
-            ->join('b.major', 'm')
+            ->from(Major::class, 'm')
+            ->join('m.branches', 'b')
             ->join('b.branchForGroups', 'bfg')
             ->where('bfg.group=?1')
             ->setParameter(1, $group->getId());
