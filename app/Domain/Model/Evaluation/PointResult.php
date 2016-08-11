@@ -14,8 +14,8 @@ use Doctrine\ORM\Mapping AS ORM;
 use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Uuid;
-use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Accessor;
 
 /**
  * @ORM\Entity
@@ -61,18 +61,21 @@ class PointResult
     protected $score;
 
     /**
+     * @Accessor(getter="getRedicodi",setter="setRedicodi")
      * @Groups({"evaluation_detail"})
      *
-     * @var ArrayCollection
+     * @ORM\Column(type="string")
+     * @var string[]
+     *
      */
     protected $redicodi;
 
-    public function __construct(Student $student, $score)
+    public function __construct(Student $student, $score, $redicodi = [])
     {
         $this->id = Uuid::generate(4);
         $this->student = $student;
         $this->score = $score;
-        $this->redicodi = new ArrayCollection;
+        $this->redicodi = implode(',', $redicodi);
     }
 
     public function getId()
@@ -100,9 +103,14 @@ class PointResult
         return $this->score;
     }
 
-    public function addRedicodi(Redicodi $redicodi)
+
+    public function getRedicodi()
     {
-        $this->redicodi->add($redicodi);
+        return explode(',', $this->redicodi);
     }
 
+    public function setRedicodi(array $redicodi)
+    {
+        $this->redicodi = implode(',', $redicodi);
+    }
 }

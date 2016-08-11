@@ -1,6 +1,7 @@
 <?php
 
 use App\Domain\Model\Education\BranchForGroup;
+use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Identity\Group;
@@ -65,7 +66,10 @@ class ResultSeeder extends Seeder
                             if ($studentInGroup->isActive()) {
                                 $student = $studentInGroup->getStudent();
                                 $score = $faker->biasedNumberBetween(0, $ev->getMax());
-                                $pr = new PointResult($student, $score);
+
+                                $redCount = $faker->biasedNumberBetween(0, count(Redicodi::values()));
+                                $red = $faker->randomElements(Redicodi::values(), $redCount);
+                                $pr = new PointResult($student, $score, $red);
 
                                 $ev->addResult($pr);
                             }
