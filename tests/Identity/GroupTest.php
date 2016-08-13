@@ -1,4 +1,5 @@
 <?php
+
 use App\Domain\Model\Identity\Group;
 use Webpatser\Uuid\Uuid;
 

@@ -51,7 +51,6 @@ class Staff extends Person
     }
 
 
-
     /**
      * @param Group $group
      * @param StaffType $type
@@ -129,8 +128,14 @@ class Staff extends Person
         return false;
     }
 
-    public function assignRole(Role $role) {
+    public function assignRole(Role $role)
+    {
         $this->roles->add($role);
         $role->addStaff($this);
+    }
+
+    public function getRoles()
+    {
+        return clone $this->roles;
     }
 }
