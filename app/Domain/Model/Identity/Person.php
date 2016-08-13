@@ -10,6 +10,7 @@ namespace App\Domain\Model\Identity;
 
 
 use \DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use Webpatser\Uuid\Uuid;
 use JMS\Serializer\Annotation\Groups;
@@ -75,6 +76,7 @@ abstract class Person
      * @var DateTime
      */
     protected $birthday;
+
 
     public function __construct($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
     {
@@ -166,5 +168,7 @@ abstract class Person
         $this->gender = $gender;
         $this->birthday = $birthday;
     }
+
+
 
 }

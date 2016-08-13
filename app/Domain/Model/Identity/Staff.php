@@ -13,6 +13,7 @@ use App\Domain\Model\Time\DateRange;
 use \DateTime;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -31,13 +32,24 @@ class Staff extends Person
      */
     protected $staffInGroups;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="staff")
+     * @ORM\JoinTable(name="staff_roles")
+     *
+     * @var ArrayCollection
+     */
+    protected $roles;
+
+
     public function __construct($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
     {
         parent::__construct($firstName, $lastName, $email, $gender, $birthday);
 
 
         $this->staffInGroups = [];
+        $this->roles = new ArrayCollection;
     }
+
 
 
     /**
@@ -115,5 +127,10 @@ class Staff extends Person
             }
         }
         return false;
+    }
+
+    public function assignRole(Role $role) {
+        $this->roles->add($role);
+        $role->addStaff($this);
     }
 }
