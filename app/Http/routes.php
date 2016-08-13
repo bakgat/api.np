@@ -15,6 +15,9 @@ $app->get('/', function () use ($app) {
     return phpinfo();
 });
 
+$app->group(['prefix' => 'users', 'namespace' => 'App\Http\Controllers\Identity'], function() use($app) {
+    $app->post('/login', 'UserController@login');
+});
 $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
     $app->get('/', 'StudentController@index');
     $app->get('/{id}', 'StudentController@show');
