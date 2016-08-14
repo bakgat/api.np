@@ -33,12 +33,11 @@ class Staff extends Person
     protected $staffInGroups;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Role", inversedBy="staff")
-     * @ORM\JoinTable(name="staff_roles")
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="role", , cascade={"persist"})
      *
      * @var ArrayCollection
      */
-    protected $roles;
+    protected $staffRoles;
 
 
     public function __construct($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
@@ -47,7 +46,7 @@ class Staff extends Person
 
 
         $this->staffInGroups = [];
-        $this->roles = new ArrayCollection;
+        $this->staffRoles = new ArrayCollection;
     }
 
 
@@ -128,14 +127,24 @@ class Staff extends Person
         return false;
     }
 
-    public function assignRole(Role $role)
-    {
-        $this->roles->add($role);
-        $role->addStaff($this);
-    }
 
     public function getRoles()
     {
-        return clone $this->roles;
+        $roles = new ArrayCollection;
+        /** @var StaffRole $staffRole */
+        foreach ($this->staffRoles as $staffRole) {
+            $roles->add($staffRole->getRole());
+        }
+        return $roles;
+    }
+
+    public function assignRole(Role $role, $start=null,$end=null)
+    {
+        if($start == null) {
+            $start = new DateTime;
+        }
+        $staffRole = new StaffRole($this, $role, ['start' => $start, 'end' => $end] );
+        $this->staffRoles->add($staffRole);
+        return $this;
     }
 }

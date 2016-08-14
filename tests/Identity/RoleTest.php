@@ -47,5 +47,6 @@ class RoleTest extends TestCase
 
         $this->assertCount(1, $staff->getRoles());
         $this->assertInstanceOf(Role::class, $staff->getRoles()[0]);
+
     }
 }
