@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="
+ * @ORM\Table(name="staff_roles")
  * Class StaffRole
  * @package App\Domain\Model\Identity
  */

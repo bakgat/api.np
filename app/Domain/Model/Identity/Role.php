@@ -39,12 +39,11 @@ class Role
     protected $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Staff", mappedBy="roles", cascade={"persist"})
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\OneToMany(targetEntity="StaffRole", mappedBy="role", cascade={"persist"})
      *
      * @var ArrayCollection
      */
-    protected $staff;
+    protected $staffRoles;
 
     /**
      * @var ArrayCollection
@@ -55,7 +54,7 @@ class Role
     {
         $this->id = Uuid::generate(4);
         $this->name = $name;
-        $this->staff = new ArrayCollection;
+        $this->staffRoles = new ArrayCollection;
     }
 
     public function getId()
@@ -68,12 +67,7 @@ class Role
         return $this->name;
     }
 
-    public function addUser($user)
-    {
-        if ($user instanceof Staff) {
-            $this->addStaff($user);
-        }
-    }
+
 
     public function addStaff(Staff $staff)
     {

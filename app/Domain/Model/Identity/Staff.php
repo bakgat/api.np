@@ -33,7 +33,7 @@ class Staff extends Person
     protected $staffInGroups;
 
     /**
-     * @ORM\OneToMany(targetEntity="Role", mappedBy="role", , cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="StaffRole", mappedBy="staff", cascade={"persist"})
      *
      * @var ArrayCollection
      */
