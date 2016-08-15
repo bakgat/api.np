@@ -139,7 +139,7 @@ class Staff extends Person
 
     /**
      * @VirtualProperty
-     * @Groups({"staff_list", "staff_detail"})
+     * @Groups({"staff_detail"})
      *
      * @return ArrayCollection
      */
