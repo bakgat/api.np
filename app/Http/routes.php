@@ -25,6 +25,13 @@ $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identi
     $app->get('/{id}/redicodi', 'StudentController@allRedicodi');
 });
 
+$app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
+    $app->get('/', 'StaffController@index');
+    $app->get('/{id}', 'StaffController@show');
+    $app->get('/{id}/groups', 'StaffController@allGroups');
+    $app->get('/{id}/roles', 'StaffController@allRoles');
+});
+
 $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
     $app->get('/', 'GroupController@index');
     $app->get('{id}', 'GroupController@show');

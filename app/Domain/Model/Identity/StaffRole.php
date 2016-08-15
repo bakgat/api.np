@@ -14,6 +14,8 @@ use App\Domain\Uuid;
 
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="staff_roles")
@@ -25,6 +27,7 @@ class StaffRole
     use DateRangeTrait;
 
     /**
+     *
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -41,6 +44,8 @@ class StaffRole
     protected $staff;
 
     /**
+     * @Groups({"staff_list"})
+     *
      * @ORM\ManyToOne(targetEntity="Role", inversedBy="staffRoles")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
@@ -49,6 +54,8 @@ class StaffRole
     protected $role;
 
     /**
+     * @Groups({"staff_list"})
+     *
      * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)
      *
      * @var DateRange

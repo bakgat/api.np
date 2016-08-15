@@ -14,6 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="roles")
@@ -24,6 +26,8 @@ use Doctrine\ORM\Mapping AS ORM;
 class Role
 {
     /**
+     * @Groups({"staff_list"})
+     *
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -32,6 +36,8 @@ class Role
     protected $id;
 
     /**
+     * @Groups({"staff_list"})
+     *
      * @ORM\Column(type="string")
      *
      * @var string

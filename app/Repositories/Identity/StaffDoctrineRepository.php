@@ -40,10 +40,10 @@ class StaffDoctrineRepository implements StaffRepository
         $qb = $this->em->createQueryBuilder();
         $qb->select('s, sig, g, sr, r')
             ->from(Staff::class, 's')
-            ->join('s.staffInGroups', 'sig')
-            ->join('sig.group', 'g')
+            ->leftJoin('s.staffInGroups', 'sig')
+            ->leftJoin('sig.group', 'g')
             ->leftJoin('s.staffRoles', 'sr')
-            ->join('sr.role', 'r')
+            ->leftJoin('sr.role', 'r')
             ->orderBy('s.lastName');
         return $qb->getQuery()->getResult();
     }

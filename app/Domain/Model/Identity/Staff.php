@@ -16,6 +16,9 @@ use \DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="staff")
@@ -127,7 +130,12 @@ class Staff extends Person
         return false;
     }
 
-
+    /**
+     * @VirtualProperty
+     * @Groups({"staff_list"})
+     *
+     * @return ArrayCollection
+     */
     public function getRoles()
     {
         $roles = new ArrayCollection;
