@@ -16,10 +16,13 @@ use \DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\AccessorOrder;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
+ * @AccessorOrder("custom", custom = {"id", "displayName", "firstName", "lastName", "email", "gender", "birthday", "roles"})
+ *
  * @ORM\Entity
  * @ORM\Table(name="staff")
  *
