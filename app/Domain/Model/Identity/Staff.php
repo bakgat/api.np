@@ -32,6 +32,7 @@ use JMS\Serializer\Annotation\VirtualProperty;
 class Staff extends Person
 {
     /**
+     *
      * @ORM\OneToMany(targetEntity="StaffInGroup", mappedBy="staff", cascade={"persist"})
      *
      * @var StaffInGroup[]
@@ -74,6 +75,9 @@ class Staff extends Person
     }
 
     /**
+     * @VirtualProperty
+     * @Groups({"staff_detail"})
+     *
      * @return Group[]
      */
     public function getGroups()
@@ -135,7 +139,7 @@ class Staff extends Person
 
     /**
      * @VirtualProperty
-     * @Groups({"staff_list"})
+     * @Groups({"staff_list", "staff_detail"})
      *
      * @return ArrayCollection
      */

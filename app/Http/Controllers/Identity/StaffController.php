@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Identity;
 
 
 use App\Domain\Model\Identity\StaffRepository;
+use App\Domain\Uuid;
 use App\Http\Controllers\Controller;
 use JMS\Serializer\SerializerInterface;
 
@@ -28,5 +29,13 @@ class StaffController extends Controller
     {
         $result = $this->staffRepo->all();
         return $this->response($result, ['staff_list']);
+    }
+
+    public function show($id) {
+        if(!$id instanceof Uuid) {
+            $id = Uuid::import($id);
+        }
+        $member = $this->staffRepo->get($id);
+        return $this->response($member, ['staff_detail']);
     }
 }
