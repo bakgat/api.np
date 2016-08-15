@@ -43,6 +43,7 @@ class EnumStaffType extends Type
         if (!in_array($value, StaffType::values())) {
             throw new \InvalidArgumentException('Invalid staff type');
         }
+        return new StaffType($value);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)

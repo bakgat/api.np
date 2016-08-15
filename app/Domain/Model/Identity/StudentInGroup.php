@@ -18,7 +18,6 @@ use JMS\Serializer\Annotation\Groups;
  * @ORM\Entity
  * @ORM\Table(name="student_in_groups")
  *
- * @ExclusionPolicy("all")
  *
  * Class StudentInGroup
  * @package App\Domain\Model\Identity
@@ -27,7 +26,6 @@ class StudentInGroup extends PersonInGroup
 {
     /**
      * @Groups({"group_students"})
-     * @Expose
      *
      * @ORM\ManyToOne(targetEntity="Student", inversedBy="studentInGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")

@@ -91,6 +91,9 @@ class Staff extends Person
     }
 
     /**
+     * @VirtualProperty
+     * @Groups({"staff_detail"})
+     *
      * @return Group[]
      */
     public function getActiveGroups()
