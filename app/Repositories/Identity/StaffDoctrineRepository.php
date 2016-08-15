@@ -10,7 +10,6 @@ namespace App\Repositories\Identity;
 
 
 use App\Domain\Model\Identity\Collection;
-use App\Domain\Model\Identity\DateTime;
 use App\Domain\Model\Identity\Exceptions\StaffNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Role;
@@ -18,8 +17,10 @@ use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Uuid;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\Expr\Join;
 
 class StaffDoctrineRepository implements StaffRepository
 {
@@ -41,10 +42,19 @@ class StaffDoctrineRepository implements StaffRepository
         $qb = $this->em->createQueryBuilder();
         $qb->select('s, sig, g, sr, r')
             ->from(Staff::class, 's')
-            ->leftJoin('s.staffInGroups', 'sig')
+            ->leftJoin('s.staffInGroups', 'sig', Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->lte('sig.dateRange.start', '?1'),
+                    $qb->expr()->gte('sig.dateRange.end', '?1')
+                ))
             ->leftJoin('sig.group', 'g')
-            ->leftJoin('s.staffRoles', 'sr')
+            ->leftJoin('s.staffRoles', 'sr', Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->lte('sr.dateRange.start', '?1'),
+                    $qb->expr()->gte('sr.dateRange.end', '?1')
+                ))
             ->leftJoin('sr.role', 'r')
+            ->setParameter(1, new DateTime)
             ->orderBy('s.lastName');
         return $qb->getQuery()->getResult();
     }
@@ -84,12 +94,22 @@ class StaffDoctrineRepository implements StaffRepository
         $qb = $this->em->createQueryBuilder();
         $qb->select('s, sig, g, sr, r')
             ->from(Staff::class, 's')
-            ->leftJoin('s.staffInGroups', 'sig')
+            ->leftJoin('s.staffInGroups', 'sig', Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->lte('sig.dateRange.start', '?1'),
+                    $qb->expr()->gte('sig.dateRange.end', '?1')
+                ))
             ->leftJoin('sig.group', 'g')
-            ->leftJoin('s.staffRoles', 'sr')
+            ->leftJoin('s.staffRoles', 'sr', Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->lte('sr.dateRange.start', '?1'),
+                    $qb->expr()->gte('sr.dateRange.end', '?1')
+                ))
             ->leftJoin('sr.role', 'r')
-            ->where('s.id=?1')
-            ->setParameter(1, $id);
+            ->where('s.id=?2')
+            ->setParameter(1, new DateTime)
+            ->setParameter(2, $id);
+
         return $qb->getQuery()->getOneOrNullResult();
     }
 
@@ -104,12 +124,21 @@ class StaffDoctrineRepository implements StaffRepository
         $qb = $this->em->createQueryBuilder();
         $qb->select('s, sig, g, sr, r')
             ->from(Staff::class, 's')
-            ->leftJoin('s.staffInGroups', 'sig')
+            ->leftJoin('s.staffInGroups', 'sig', \Doctrine\ORM\Query\Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->lte('sig.dateRange.start', '?1'),
+                    $qb->expr()->gte('sig.dateRange.end', '?1')
+                ))
             ->leftJoin('sig.group', 'g')
-            ->leftJoin('s.staffRoles', 'sr')
+            ->leftJoin('s.staffRoles', 'sr', Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->lte('sr.dateRange.start', '?1'),
+                    $qb->expr()->gte('sr.dateRange.end', '?1')
+                ))
             ->leftJoin('sr.role', 'r')
-            ->where('s.email=?1')
-            ->setParameter(1, $email);
+            ->where('s.email=?2')
+            ->setParameter(1, new DateTime)
+            ->setParameter(2, $email);
         return $qb->getQuery()->getOneOrNullResult();
     }
 
@@ -118,21 +147,31 @@ class StaffDoctrineRepository implements StaffRepository
      *
      * @param Uuid $id
      * @return Student
+     * @throws StaffNotFoundException
      */
     public function get(Uuid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('s, sig, g, sr, r')
             ->from(Staff::class, 's')
-            ->leftJoin('s.staffInGroups', 'sig')
+            ->leftJoin('s.staffInGroups', 'sig', \Doctrine\ORM\Query\Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->lte('sig.dateRange.start', '?1'),
+                    $qb->expr()->gte('sig.dateRange.end', '?1')
+                ))
             ->leftJoin('sig.group', 'g')
-            ->leftJoin('s.staffRoles', 'sr')
+            ->leftJoin('s.staffRoles', 'sr', Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->lte('sr.dateRange.start', '?1'),
+                    $qb->expr()->gte('sr.dateRange.end', '?1')
+                ))
             ->leftJoin('sr.role', 'r')
-            ->where('s.id=?1')
-            ->setParameter(1, $id);
+            ->where('s.id=?2')
+            ->setParameter(1, new DateTime)
+            ->setParameter(2, $id);
         $staff = $qb->getQuery()->getOneOrNullResult();
 
-        if($staff == null) {
+        if ($staff == null) {
             throw new StaffNotFoundException($id);
         }
 
@@ -147,7 +186,9 @@ class StaffDoctrineRepository implements StaffRepository
      */
     public function insert(Staff $staff)
     {
-        // TODO: Implement insert() method.
+        $this->em->persist($staff);
+        $this->em->flush();
+        return $staff->getId();
     }
 
     /**
@@ -158,7 +199,9 @@ class StaffDoctrineRepository implements StaffRepository
      */
     public function update(Staff $staff)
     {
-        // TODO: Implement update() method.
+        $this->em->persist($staff);
+        $this->em->flush();
+        return 1;
     }
 
     /**
@@ -169,7 +212,10 @@ class StaffDoctrineRepository implements StaffRepository
      */
     public function delete(Uuid $id)
     {
-        // TODO: Implement delete() method.
+        $staff = $this->get($id);
+        $this->em->remove($staff);
+        $this->em->flush();
+        return 1;
     }
 
 
