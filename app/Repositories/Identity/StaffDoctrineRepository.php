@@ -11,6 +11,7 @@ namespace App\Repositories\Identity;
 
 use App\Domain\Model\Identity\Collection;
 use App\Domain\Model\Identity\DateTime;
+use App\Domain\Model\Identity\Exceptions\StaffNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\Staff;
@@ -120,7 +121,22 @@ class StaffDoctrineRepository implements StaffRepository
      */
     public function get(Uuid $id)
     {
-        // TODO: Implement get() method.
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('s, sig, g, sr, r')
+            ->from(Staff::class, 's')
+            ->leftJoin('s.staffInGroups', 'sig')
+            ->leftJoin('sig.group', 'g')
+            ->leftJoin('s.staffRoles', 'sr')
+            ->leftJoin('sr.role', 'r')
+            ->where('s.id=?1')
+            ->setParameter(1, $id);
+        $staff = $qb->getQuery()->getOneOrNullResult();
+
+        if($staff == null) {
+            throw new StaffNotFoundException($id);
+        }
+
+        return $staff;
     }
 
     /**

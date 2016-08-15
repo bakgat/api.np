@@ -1,4 +1,5 @@
 <?php
+use App\Domain\Model\Identity\Exceptions\StaffNotFoundException;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Uuid;
@@ -91,7 +92,7 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
      * @test
      * @group staff
      * @group staffrepo
-     * @gropu find
+     * @group find
      */
     public function should_return_null_when_no_staff_found()
     {
@@ -112,5 +113,36 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
         $karl = $this->staffRepo->findByEmail($this->emailKarl);
         $roles = $karl->getRoles();
         $this->assertCount(2, $roles);
+    }
+
+    /**
+     * @test
+     * @group staff
+     * @group staffrepo
+     * @group get
+     */
+    public function should_get_staff_by_its_id() {
+        $staff = $this->staffRepo->all();
+
+        $id = $staff[0]->getId();
+
+        $this->em->clear();
+
+        $staff = $this->staffRepo->get($id);
+
+        $this->assertInstanceOf(Staff::class, $staff);
+        $this->assertEquals($staff->getId(), $id);
+    }
+
+    /**
+     * @test
+     * @group staff
+     * @group staffrepo
+     * @group get
+     */
+    public function should_throw_exception_when_get_staff_fails() {
+        $this->setExpectedException(StaffNotFoundException::class);
+        $fakeId = Uuid::generate(4);
+        $staff = $this->staffRepo->get($fakeId);
     }
 }
