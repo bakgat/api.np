@@ -48,6 +48,14 @@ interface StaffRepository
     public function find(Uuid $id);
 
     /**
+     * Finds a staff member by its email-address, if not returns null.
+     *
+     * @param $email
+     * @return Staff|null
+     */
+    public function findByEmail($email);
+
+    /**
      * Gets an existing staff member by its id.
      *
      * @param Uuid $id

@@ -84,6 +84,26 @@ class StaffDoctrineRepository implements StaffRepository
     }
 
     /**
+     * Finds a staff member by its email address, if not returns null.
+     *
+     * @param $email
+     * @return Staff|null
+     */
+    public function findByEmail($email)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('s, sig, g, sr, r')
+            ->from(Staff::class, 's')
+            ->leftJoin('s.staffInGroups', 'sig')
+            ->leftJoin('sig.group', 'g')
+            ->leftJoin('s.staffRoles', 'sr')
+            ->leftJoin('sr.role', 'r')
+            ->where('s.email=?1')
+            ->setParameter(1, $email);
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * Gets an existing staff member by its id.
      *
      * @param Uuid $id
@@ -126,4 +146,6 @@ class StaffDoctrineRepository implements StaffRepository
     {
         // TODO: Implement delete() method.
     }
+
+
 }
