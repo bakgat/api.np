@@ -27,11 +27,13 @@ class RoleSeeder extends Seeder
         $r_manager = new Role('MANAGER');
         $r_teacher = new Role('TEACHER');
         $r_secretary = new Role('SECRETARY');
+        $r_caremanager = new Role('CAREMANAGER');
 
         EntityManager::persist($r_admin);
         EntityManager::persist($r_manager);
         EntityManager::persist($r_teacher);
         EntityManager::persist($r_secretary);
+        EntityManager::persist($r_caremanager);
 
         $karl = new Staff(
             'Karl',
@@ -41,6 +43,8 @@ class RoleSeeder extends Seeder
             new DateTime()
         );
         $karl->assignRole($r_admin);
+        $karl->assignRole($r_caremanager);
+
         EntityManager::persist($karl);
         EntityManager::flush();
         EntityManager::clear();
