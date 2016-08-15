@@ -11,6 +11,8 @@ namespace App\Domain\Model\Identity;
 
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="staff_in_groups")
@@ -28,6 +30,8 @@ class StaffInGroup extends PersonInGroup
      */
     protected $staff;
     /**
+     * @Groups({"staff_detail"})
+     *
      * @ORM\Column(type="stafftype")
      *
      * @var StaffType

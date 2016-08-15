@@ -32,7 +32,7 @@ abstract class PersonInGroup
 
 
     /**
-     * @Groups({"student_list", "student_detail"})
+     * @Groups({"student_list", "student_detail", "staff_detail"})
      *
      * @ORM\ManyToOne(targetEntity="Group", inversedBy="studentInGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -42,7 +42,7 @@ abstract class PersonInGroup
     protected $group;
 
     /**
-     * @Groups({"student_list", "student_detail"})
+     * @Groups({"student_list", "student_detail", "staff_detail"})
      * @Expose
      *
      * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)

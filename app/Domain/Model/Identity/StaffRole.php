@@ -44,7 +44,7 @@ class StaffRole
     protected $staff;
 
     /**
-     * @Groups({"staff_list"})
+     * @Groups({"staff_list", "staff_detail"})
      *
      * @ORM\ManyToOne(targetEntity="Role", inversedBy="staffRoles")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -54,7 +54,7 @@ class StaffRole
     protected $role;
 
     /**
-     * @Groups({"staff_list"})
+     * @Groups({"staff_list", "staff_detail"})
      *
      * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)
      *
