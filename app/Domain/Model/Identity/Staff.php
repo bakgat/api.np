@@ -138,6 +138,17 @@ class Staff extends Person
         return $roles;
     }
 
+    public function getActiveRoles() {
+        $roles = new ArrayCollection;
+        /** @var StaffRole $staffRole */
+        foreach ($this->staffRoles as $staffRole) {
+            if($staffRole->isActive()) {
+                $roles->add($staffRole->getRole());
+            }
+        }
+        return $roles;
+    }
+
     public function assignRole(Role $role, $start=null,$end=null)
     {
         if($start == null) {
@@ -147,4 +158,6 @@ class Staff extends Person
         $this->staffRoles->add($staffRole);
         return $this;
     }
+
+
 }
