@@ -40,21 +40,8 @@ class StaffDoctrineRepository implements StaffRepository
     public function all()
     {
         $qb = $this->em->createQueryBuilder();
-        $qb->select('s, sig, g, sr, r')
+        $qb->select('s')
             ->from(Staff::class, 's')
-            ->leftJoin('s.staffInGroups', 'sig', Join::WITH,
-                $qb->expr()->andX(
-                    $qb->expr()->lte('sig.dateRange.start', '?1'),
-                    $qb->expr()->gte('sig.dateRange.end', '?1')
-                ))
-            ->leftJoin('sig.group', 'g')
-            ->leftJoin('s.staffRoles', 'sr', Join::WITH,
-                $qb->expr()->andX(
-                    $qb->expr()->lte('sr.dateRange.start', '?1'),
-                    $qb->expr()->gte('sr.dateRange.end', '?1')
-                ))
-            ->leftJoin('sr.role', 'r')
-            ->setParameter(1, new DateTime)
             ->orderBy('s.lastName');
         return $qb->getQuery()->getResult();
     }
