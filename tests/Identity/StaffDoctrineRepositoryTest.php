@@ -1,6 +1,7 @@
 <?php
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRepository;
+use App\Domain\Uuid;
 use App\Repositories\Identity\StaffDoctrineRepository;
 
 /**
@@ -59,11 +60,44 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
     public function should_return_null_when_not_found_through_email()
     {
         // make fake unique email address
-        $fakeMail = \Webpatser\Uuid\Uuid::generate(4) . '@test.com';
+        $fakeMail = Uuid::generate(4) . '@test.com';
 
-        $nullUser  = $this->staffRepo->findByEmail($fakeMail);
+        $nullUser = $this->staffRepo->findByEmail($fakeMail);
 
         $this->assertNull($nullUser);
+    }
+
+    /**
+     * @test
+     * @group staff
+     * @group staffrepo
+     * @group find
+     */
+    public function should_find_by_its_id()
+    {
+        $staff = $this->staffRepo->all();
+
+        $id = $staff[0]->getId();
+
+        $this->em->clear();
+
+        $staff = $this->staffRepo->find($id);
+
+        $this->assertInstanceOf(Staff::class, $staff);
+        $this->assertEquals($staff->getId(), $id);
+    }
+
+    /**
+     * @test
+     * @group staff
+     * @group staffrepo
+     * @gropu find
+     */
+    public function should_return_null_when_no_staff_found()
+    {
+        $fakeId = Uuid::generate(4);
+        $staff = $this->staffRepo->find($fakeId);
+        $this->assertNull($staff);
     }
 
     /**

@@ -80,7 +80,16 @@ class StaffDoctrineRepository implements StaffRepository
      */
     public function find(Uuid $id)
     {
-        // TODO: Implement find() method.
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('s, sig, g, sr, r')
+            ->from(Staff::class, 's')
+            ->leftJoin('s.staffInGroups', 'sig')
+            ->leftJoin('sig.group', 'g')
+            ->leftJoin('s.staffRoles', 'sr')
+            ->leftJoin('sr.role', 'r')
+            ->where('s.id=?1')
+            ->setParameter(1, $id);
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
