@@ -12,7 +12,7 @@ namespace App\Domain\Model\Identity;
 use \DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
-use Webpatser\Uuid\Uuid;
+use App\Domain\Uuid;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\VirtualProperty;
