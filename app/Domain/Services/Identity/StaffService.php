@@ -5,6 +5,7 @@ use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Uuid;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -40,12 +41,38 @@ class StaffService
         $firstName = $request->get('firstName');
         $lastName = $request->get('lastName');
         $email = $request->get('email');
-        $birthday = $request->has('birthday') ? $request->get('birthday') : null;
+        $birthday = null;
+        if($request->has('birthday')) {
+            $birthday = strtotime($request->get('birthday'));
+            if($birthday!==false) {
+                $birthday = new DateTime(date('Y-m-d', $birthday));
+            }
+        }
+
         $gender = new Gender($request->get('gender'));
 
         $staff = new Staff($firstName, $lastName, $email, $gender, $birthday);
         $this->staffRepo->insert($staff);
 
         return $staff;
+    }
+
+    public function update(Request $request) {
+        $id = Uuid::import($request->get('id'));
+        $staff = $this->get($id);
+
+        $firstName = $request->get('firstName');
+        $lastName = $request->get('lastName');
+        $email = $request->get('email');
+        $birthday = null;
+        if($request->has('birthday')) {
+            $birthday = strtotime($request->get('birthday'));
+            if($birthday!==false) {
+                $birthday = new DateTime(date('Y-m-d', $birthday));
+            }
+        }
+
+        $gender = new Gender($request->get('gender'));
+
     }
 }
