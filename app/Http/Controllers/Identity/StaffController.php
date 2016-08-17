@@ -19,29 +19,23 @@ use JMS\Serializer\SerializerInterface;
 
 class StaffController extends Controller
 {
-    /** @var StaffRepository */
-    protected $staffRepo;
     /** @var StaffService */
     protected $staffService;
 
-    public function __construct(StaffRepository $staffRepository, StaffService $staffService, SerializerInterface $serializer)
+    public function __construct(StaffService $staffService, SerializerInterface $serializer)
     {
         parent::__construct($serializer);
-        $this->staffRepo = $staffRepository;
         $this->staffService = $staffService;
     }
 
     public function index()
     {
-        $result = $this->staffRepo->all();
+        $result = $this->staffService->all();
         return $this->response($result, ['staff_list']);
     }
 
     public function show($id) {
-        if(!$id instanceof Uuid) {
-            $id = Uuid::import($id);
-        }
-        $member = $this->staffRepo->get($id);
+        $member = $this->staffService->get($id);
         return $this->response($member, ['staff_detail']);
     }
 
