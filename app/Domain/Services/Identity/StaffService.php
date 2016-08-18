@@ -124,6 +124,8 @@ class StaffService
         if($member && $role) {
             $member->assignRole($role);
         }
+        $this->staffRepo->update($member);
+        return $member;
     }
 
 
@@ -135,7 +137,9 @@ class StaffService
         $role = $this->roleRepo->get($roleId);
 
         if($member && $role) {
-            $member->role
+            $member->removeRole($role);
         }
+        $this->staffRepo->update($member);
+        return $member;
     }
 }
