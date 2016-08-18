@@ -31,6 +31,7 @@ $app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'
     $app->get('/{id}/groups', 'StaffController@allGroups');
     $app->get('/{id}/roles', 'StaffController@allRoles');
     $app->post('/', 'StaffController@store');
+    $app->put('/{id}', 'StaffController@update');
 });
 
 $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {

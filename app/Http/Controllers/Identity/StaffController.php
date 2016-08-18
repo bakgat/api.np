@@ -44,15 +44,32 @@ class StaffController extends Controller
             'firstName' => 'required',
             'lastName' => 'required',
             'email' => 'required|email',
+            'gender' => 'required'
         ]);
 
         if ($validator->fails()) {
             return response($validator->messages(), 422);
         }
 
-        $staff = $this->staffService->create($request);
+        $staff = $this->staffService->create($request->all());
         return $this->response($staff, ['staff_detail']);
 
+    }
+
+    public function update(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'email' => 'required|email',
+            'gender' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->messages(), 422);
+        }
+
+        $staff = $this->staffService->update($request->all());
+        return $this->response($staff, ['staff_detail']);
     }
 
 }

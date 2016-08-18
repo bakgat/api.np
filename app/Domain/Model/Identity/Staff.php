@@ -156,23 +156,24 @@ class Staff extends Person
         return $roles;
     }
 
-    public function getActiveRoles() {
+    public function getActiveRoles()
+    {
         $roles = new ArrayCollection;
         /** @var StaffRole $staffRole */
         foreach ($this->staffRoles as $staffRole) {
-            if($staffRole->isActive()) {
+            if ($staffRole->isActive()) {
                 $roles->add($staffRole->getRole());
             }
         }
         return $roles;
     }
 
-    public function assignRole(Role $role, $start=null,$end=null)
+    public function assignRole(Role $role, $start = null, $end = null)
     {
-        if($start == null) {
+        if ($start == null) {
             $start = new DateTime;
         }
-        $staffRole = new StaffRole($this, $role, ['start' => $start, 'end' => $end] );
+        $staffRole = new StaffRole($this, $role, ['start' => $start, 'end' => $end]);
         $this->staffRoles->add($staffRole);
         return $this;
     }
