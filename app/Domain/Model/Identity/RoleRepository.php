@@ -21,4 +21,12 @@ interface RoleRepository
      */
     public function all();
 
+    /**
+     * Gets an existing role by its id.
+     *
+     * @param Uuid $id
+     * @return Role
+     */
+    public function get(Uuid $id);
+
 }

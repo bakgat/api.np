@@ -65,6 +65,7 @@ $repos = [
     'Identity\Student',
     'Identity\Group',
     'Identity\Staff',
+    'Identity\Role',
     'Education\Branch',
     'Evaluation\Evaluation'
 ];

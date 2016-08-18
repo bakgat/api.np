@@ -48,6 +48,10 @@ $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity
     //$app->get('/{id}/evaluations', 'GroupController@indexEvaluations');
 });
 
+$app->group(['prefix'=>'roles', 'namespace'=>'App\Http\Controllers\Identity'], function() use($app) {
+    $app->get('/', 'RoleController@index');
+});
+
 $app->group(['prefix' => 'majors', 'namespace' => 'App\Http\Controllers\Education'], function () use ($app) {
     $app->get('/', 'BranchController@indexMajors');
 });
