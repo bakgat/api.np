@@ -122,7 +122,6 @@ class StaffServiceTest extends TestCase
     public function should_add_role()
     {
         $role1 = new Role($this->faker->unique()->word);
-        $role2 = new Role($this->faker->unique()->word);
 
         $staff = $this->makeStaff();
 
@@ -137,6 +136,53 @@ class StaffServiceTest extends TestCase
 
         $this->assertCount(1, $member->getRoles());
         $this->assertEquals($member->getId(), $staff->getId());
+    }
+
+    /**
+     * @test
+     * @group staff
+     * @group staffservice
+     */
+    public function should_remove_role()
+    {
+        $role1 = new Role($this->faker->unique()->word);
+        $role2 = new Role($this->faker->unique()->word);
+
+        $staff = $this->makeStaff();
+
+        $this->staffRepo->shouldReceive('get')
+            ->twice()
+            ->andReturn($staff);
+        $this->roleRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($role1);
+        $this->staffRepo->shouldReceive('update')
+            ->andReturn(1);
+
+        //add first role
+        $this->service->assignRole($staff->getId(), $role1->getId());
+
+        //add second role
+        $this->roleRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($role2);
+        $member = $this->service->assignRole($staff->getId(), $role2->getId());
+
+        //now two roles are present
+        $this->assertCount(2, $member->getActiveRoles());
+
+
+        //remove first role
+        //return the updated member with the two roles now
+        $this->staffRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($member);
+        $this->roleRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($role1);
+        $member = $this->service->removeFromRole($member->getId(), $role1->getId());
+
+        $this->assertCount(1, $member->getActiveRoles());
     }
 
     /**
