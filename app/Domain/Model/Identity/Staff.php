@@ -168,6 +168,8 @@ class Staff extends Person
         return $roles;
     }
 
+
+
     public function assignRole(Role $role, $start = null, $end = null)
     {
         if ($start == null) {
@@ -178,5 +180,16 @@ class Staff extends Person
         return $this;
     }
 
+    public function removeRole(Role $role, $end = null)
+    {
+        $id = $role->getId();
+        /** @var StaffRole $staffRole */
+        foreach ($this->staffRoles as $staffRole) {
+            if ($staffRole->getRole()->getId() == $id) {
+                $staffRole->block($end);
+            }
+        }
+        return $this;
+    }
 
 }

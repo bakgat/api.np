@@ -12,6 +12,7 @@ use App\Domain\Model\Time\DateRange;
 use App\Domain\Model\Time\DateRangeTrait;
 use App\Domain\Uuid;
 
+use DateTime;
 use Doctrine\ORM\Mapping AS ORM;
 
 use JMS\Serializer\Annotation\Groups;
@@ -85,5 +86,22 @@ class StaffRole
         return $this->role;
     }
 
+
+    public function block($end = null)
+    {
+        if(!$this->isActive()) {
+            return $this;
+        }
+
+        if($end == null) {
+            $now = new DateTime;
+            $end = $now->modify('-1 day');
+        }
+
+        $dr = ['start'=> $this->dateRange->getStart(), 'end' => $end];
+        $this->dateRange = DateRange::fromData($dr);
+
+        return $this;
+    }
 
 }

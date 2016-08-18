@@ -3,6 +3,10 @@
 namespace App\Domain\Services\Identity;
 
 use App\Domain\Model\Identity\Gender;
+use App\Domain\Model\Identity\Group;
+use App\Domain\Model\Identity\GroupRepository;
+use App\Domain\Model\Identity\Role;
+use App\Domain\Model\Identity\RoleRepository;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Uuid;
@@ -20,10 +24,16 @@ class StaffService
 {
     /** @var  StaffRepository */
     protected $staffRepo;
+    /** @var GroupRepository */
+    protected $groupRepo;
+    /** @var RoleRepository  */
+    protected $roleRepo;
 
-    public function __construct(StaffRepository $staffRepository)
+    public function __construct(StaffRepository $staffRepository, GroupRepository $groupRepository, RoleRepository $roleRepository)
     {
         $this->staffRepo = $staffRepository;
+        $this->groupRepo = $groupRepository;
+        $this->roleRepo = $roleRepository;
     }
 
     public function all()
@@ -81,5 +91,51 @@ class StaffService
         $this->staffRepo->update($staff);
 
         return $staff;
+    }
+
+    public function addToGroup($id, $groupId)
+    {
+        /** @var Staff $member */
+        $member = $this->get($id);
+        /** @var Group $group */
+        $group = $this->groupRepo->get($groupId);
+
+        if ($member && $group) {
+            // TODO: $member->addToGroup($group)
+        }
+    }
+
+    public function removeFromGropu($id, $groupId)
+    {
+        /** @var Staff $member */
+        $member = $this->get($id);
+        /** @var Group $group */
+        $group = $this->groupRepo->get($groupId);
+
+    }
+
+    public function assignRole($id, $roleId)
+    {
+        /** @var Staff $member */
+        $member = $this->get($id);
+        /** @var Role $role */
+        $role = $this->roleRepo->get($roleId);
+
+        if($member && $role) {
+            $member->assignRole($role);
+        }
+    }
+
+
+    public function removeFromRole($id, $roleId)
+    {
+        /** @var Staff $member */
+        $member = $this->get($id);
+        /** @var Role $role */
+        $role = $this->roleRepo->get($roleId);
+
+        if($member && $role) {
+            $member->role
+        }
     }
 }

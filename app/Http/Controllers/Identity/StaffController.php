@@ -34,12 +34,14 @@ class StaffController extends Controller
         return $this->response($result, ['staff_list']);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $member = $this->staffService->get($id);
         return $this->response($member, ['staff_detail']);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'firstName' => 'required',
             'lastName' => 'required',
@@ -56,7 +58,8 @@ class StaffController extends Controller
 
     }
 
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'firstName' => 'required',
             'lastName' => 'required',
@@ -70,6 +73,16 @@ class StaffController extends Controller
 
         $staff = $this->staffService->update($request->all());
         return $this->response($staff, ['staff_detail']);
+    }
+
+    public function addGroup($id, $groupId)
+    {
+        $this->staffService->addToGroup($id, $groupId);
+    }
+
+    public function removeGroup($id, $groupId)
+    {
+        $this->staffService->removeFromGropu($id, $groupId);
     }
 
 }
