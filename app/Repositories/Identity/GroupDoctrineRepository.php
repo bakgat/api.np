@@ -14,6 +14,7 @@ use App\Domain\Model\Identity\Exceptions\NonUniqueGroupNameException;
 use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
+use App\Domain\Model\Identity\StaffInGroup;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\Students;
 use DateTime;
@@ -200,5 +201,33 @@ class GroupDoctrineRepository implements GroupRepository
             ->setParameter(2, new DateTime);
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param Uuid $id
+     * @return StaffInGroup
+     */
+    public function getStaffGroup(Uuid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('sg, g')
+            ->from(StaffInGroup::class, 'sg')
+            ->join('sg.group', 'g')
+            ->where('sg.id=:id')
+            ->setParameter('id', $id);
+
+        // TODO: Throw error because GET must return existing or throw
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param StaffInGroup $staffGroup
+     * @return int Number of affected rows
+     */
+    public function updateStaffGroup(StaffInGroup $staffGroup)
+    {
+        $this->em->persist($staffGroup);
+        $this->em->flush();
+        return 1;
     }
 }

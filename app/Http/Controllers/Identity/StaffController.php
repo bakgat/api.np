@@ -83,8 +83,8 @@ class StaffController extends Controller
     public function allTypes()
     {
         $result = new ArrayCollection;
-        foreach (StaffType::toArray() as $value=>$key) {
-            $result->add(['key'=>$key, 'value'=>$value]);
+        foreach (StaffType::toArray() as $value => $key) {
+            $result->add(['key' => $key, 'value' => $value]);
         }
         return $this->response($result);
     }
@@ -92,7 +92,7 @@ class StaffController extends Controller
     public function allGroups($id)
     {
         $member = $this->staffService->get($id);
-        return $this->response($member->getGroups(), ['staff_groups']);
+        return $this->response($member->allStaffGroups(), ['staff_groups']);
     }
 
     public function addGroup(Request $request, $id)
@@ -110,6 +110,22 @@ class StaffController extends Controller
 
         $staffGroup = $this->staffService->joinGroup($id, $group['id'], $type, $start, $end);
         return $this->response($staffGroup, ['staff_groups']);
+    }
+
+    public function updateGroup(Request $request, $staffGroupId)
+    {
+        $start = $request->get('start');
+        if ($start) {
+            $start = $this->toDate($start);
+        }
+        $end = $request->get('end');
+        if ($end) {
+            $end = $this->toDate($end);
+        }
+        $type = $request->get('type');
+
+        $staffRole = $this->staffService->updateGroup($staffGroupId, $type, $start, $end);
+        return $this->response($staffRole, ['staff_groups']);
     }
 
     public function removeGroup(Request $request, $id, $groupId)

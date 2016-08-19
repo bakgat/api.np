@@ -130,6 +130,22 @@ class StaffService
         return $staffGroup;
     }
 
+    public function updateGroup($staffGroupId, $type, $start, $end)
+    {
+        /** @var StaffInGroup $group */
+        $staffGroup = $this->groupRepo->getStaffGroup(Uuid::import($staffGroupId));
+        $staffGroup->resetStart($start);
+        if($end != null) {
+            $staffGroup->block($end);
+        }
+        if(!$type instanceof StaffType) {
+            $type = new StaffType($type);
+        }
+        $staffGroup->changeType($type);
+        $this->groupRepo->updateStaffGroup($staffGroup);
+        return $staffGroup;
+    }
+
     public function removeFromGroup($id, $groupId)
     {
         /** @var Staff $member */
@@ -199,4 +215,6 @@ class StaffService
         $this->staffRepo->update($member);
         return true;
     }
+
+
 }

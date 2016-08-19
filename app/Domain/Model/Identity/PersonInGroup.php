@@ -103,5 +103,23 @@ abstract class PersonInGroup
         return $this;
     }
 
+    public function resetStart($start )
+    {
+        $dr = ['start' => $start, 'end' => $this->dateRange->getEnd()];
+        $this->dateRange = DateRange::fromData($dr);
+        return $this;
+    }
 
+    public function block($end = null)
+    {
+        if($end == null) {
+            $now = new DateTime;
+            $end = $now->modify('-1 day');
+        }
+
+        $dr = ['start'=> $this->dateRange->getStart(), 'end' => $end];
+        $this->dateRange = DateRange::fromData($dr);
+
+        return $this;
+    }
 }

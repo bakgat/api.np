@@ -30,7 +30,7 @@ class StaffInGroup extends PersonInGroup
      */
     protected $staff;
     /**
-     * @Groups({"staff_detail"})
+     * @Groups({"staff_groups"})
      *
      * @ORM\Column(type="stafftype")
      *
@@ -71,6 +71,12 @@ class StaffInGroup extends PersonInGroup
     }
 
     /**
+     * @param StaffType $newType
+     */
+    public function changeType(StaffType $newType) {
+        $this->type = $newType;
+    }
+    /**
      * @return string
      */
     public function __toString()
@@ -86,4 +92,6 @@ class StaffInGroup extends PersonInGroup
     {
         return $this->__toString();
     }
+
+
 }

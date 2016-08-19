@@ -77,4 +77,16 @@ interface GroupRepository
      * @return ArrayCollection|Students[]
      */
     public function allActiveStudents(Uuid $id);
+
+    /**
+     * @param Uuid $id
+     * @return StaffInGroup
+     */
+    public function getStaffGroup(Uuid $id);
+
+    /**
+     * @param StaffInGroup $staffGroup
+     * @return int Number of affected rows
+     */
+    public function updateStaffGroup(StaffInGroup $staffGroup);
 }

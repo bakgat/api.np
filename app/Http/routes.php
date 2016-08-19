@@ -37,6 +37,7 @@ $app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'
 
     $app->get('/{id}/groups', 'StaffController@allGroups');
     $app->post('/{id}/groups', 'StaffController@addGroup');
+    $app->put('/{id}/groups/{staffGroupId}', 'StaffController@updateGroup');
     $app->delete('/{id}/groups/{groupId}', 'StaffController@removeGroup');
 
     $app->get('/{id}/roles', 'StaffController@allRoles');

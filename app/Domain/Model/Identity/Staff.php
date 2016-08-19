@@ -76,6 +76,13 @@ class Staff extends Person
     }
 
     /**
+     * @return StaffInGroup[]|array
+     */
+    public function allStaffGroups()
+    {
+        return clone $this->staffInGroups;
+    }
+    /**
      *
      * @return Group[]
      */
@@ -139,6 +146,12 @@ class Staff extends Person
         return false;
     }
 
+
+    /*
+     * ROLES
+     */
+
+
     /**
      * @VirtualProperty
      *
@@ -166,10 +179,11 @@ class Staff extends Person
         return $roles;
     }
 
-
-    public function allStaffRoles() {
+    public function allStaffRoles()
+    {
         return clone $this->staffRoles;
     }
+
     /**
      * @param Role $role
      * @param Datetime|null $start
@@ -197,5 +211,6 @@ class Staff extends Person
         }
         return $this;
     }
+
 
 }
