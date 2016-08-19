@@ -9,6 +9,8 @@ use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\RoleRepository;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRepository;
+use App\Domain\Model\Identity\StaffRole;
+use App\Domain\Model\Time\DateRange;
 use App\Domain\Uuid;
 use DateTime;
 use Illuminate\Http\Request;
@@ -114,21 +116,38 @@ class StaffService
 
     }
 
-    public function assignRole($id, $roleId)
+    /**
+     * Assigns a role to a given staff member.
+     *
+     * @param $id
+     * @param $roleId
+     * @param DateTime|null $start
+     * @param DateTime|null $end
+     * @return StaffRole|null
+     */
+    public function assignRole($id, $roleId, $start = null, $end = null)
     {
         /** @var Staff $member */
-        $member = $this->get($id);
+        $member = $this->get(Uuid::import($id));
         /** @var Role $role */
-        $role = $this->roleRepo->get($roleId);
+        $role = $this->roleRepo->get(Uuid::import($roleId));
 
+        $staffRole = null;
         if($member && $role) {
-            $member->assignRole($role);
+            $staffRole  = $member->assignRole($role, $start, $end);
         }
         $this->staffRepo->update($member);
-        return $member;
+        return $staffRole;
     }
 
 
+    /**
+     * Removes an active role for a given staff member.
+     *
+     * @param $id
+     * @param $roleId
+     * @return bool True if succeeded.
+     */
     public function removeFromRole($id, $roleId)
     {
         /** @var Staff $member */
@@ -140,6 +159,6 @@ class StaffService
             $member->removeRole($role);
         }
         $this->staffRepo->update($member);
-        return $member;
+        return true;
     }
 }

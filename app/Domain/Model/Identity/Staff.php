@@ -169,7 +169,12 @@ class Staff extends Person
     }
 
 
-
+    /**
+     * @param Role $role
+     * @param Datetime|null $start
+     * @param DateTime|null $end
+     * @return StaffRole
+     */
     public function assignRole(Role $role, $start = null, $end = null)
     {
         if ($start == null) {
@@ -177,7 +182,7 @@ class Staff extends Person
         }
         $staffRole = new StaffRole($this, $role, ['start' => $start, 'end' => $end]);
         $this->staffRoles->add($staffRole);
-        return $this;
+        return $staffRole;
     }
 
     public function removeRole(Role $role, $end = null)

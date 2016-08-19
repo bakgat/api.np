@@ -15,7 +15,6 @@ use App\Domain\Model\Identity\RoleRepository;
 use App\Domain\Uuid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use DoctrineProxies\__CG__\App\Domain\Model\Identity\Group;
 
 class RoleDoctrineRepository implements RoleRepository
 {
@@ -52,7 +51,7 @@ class RoleDoctrineRepository implements RoleRepository
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('r')
-            ->from(Group::class, 'r')
+            ->from(Role::class, 'r')
             ->where('r.id=:id')
             ->setParameter('id', $id);
 

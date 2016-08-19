@@ -132,10 +132,10 @@ class StaffServiceTest extends TestCase
         $this->staffRepo->shouldReceive('update')
             ->andReturn(1);
 
-        $member = $this->service->assignRole($staff->getId(), $role1->getId());
+        $staffRole = $this->service->assignRole($staff->getId(), $role1->getId());
 
-        $this->assertCount(1, $member->getRoles());
-        $this->assertEquals($member->getId(), $staff->getId());
+        $this->assertEquals($staffRole->getRole()->getId(), $role1->getId());
+        $this->assertCount(1, $staff->getRoles());
     }
 
     /**
@@ -166,23 +166,23 @@ class StaffServiceTest extends TestCase
         $this->roleRepo->shouldReceive('get')
             ->once()
             ->andReturn($role2);
-        $member = $this->service->assignRole($staff->getId(), $role2->getId());
+        $staffRole = $this->service->assignRole($staff->getId(), $role2->getId());
 
         //now two roles are present
-        $this->assertCount(2, $member->getActiveRoles());
+        $this->assertCount(2, $staff->getActiveRoles());
 
 
         //remove first role
         //return the updated member with the two roles now
         $this->staffRepo->shouldReceive('get')
             ->once()
-            ->andReturn($member);
+            ->andReturn($staff);
         $this->roleRepo->shouldReceive('get')
             ->once()
             ->andReturn($role1);
-        $member = $this->service->removeFromRole($member->getId(), $role1->getId());
+        $this->service->removeFromRole($staff->getId(), $role1->getId());
 
-        $this->assertCount(1, $member->getActiveRoles());
+        $this->assertCount(1, $staff->getActiveRoles());
     }
 
     /**

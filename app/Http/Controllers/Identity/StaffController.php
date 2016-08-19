@@ -13,6 +13,7 @@ use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Services\Identity\StaffService;
 use App\Domain\Uuid;
 use App\Http\Controllers\Controller;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use JMS\Serializer\SerializerInterface;
@@ -83,6 +84,31 @@ class StaffController extends Controller
     public function removeGroup($id, $groupId)
     {
         $this->staffService->removeFromGropu($id, $groupId);
+    }
+
+    public function addRole(Request $request, $id)
+    {
+        $start = $request->get('start');
+        if ($start) {
+            $start = $this->toDate($start);
+        }
+        $end = $request->get('end');
+        if ($end) {
+            $end = $this->toDate($end);
+        }
+        $role = $request->get('role');
+
+        $staffRole = $this->staffService->assignRole($id, $role['id'], $start, $end);
+        return $this->response($staffRole, ['staff_detail']);
+    }
+
+    private function toDate($sDate)
+    {
+        $date = strtotime($sDate);
+        if ($date != false) {
+            $date = new DateTime(date('Y-m-d', $date));
+        }
+        return $date;
     }
 
 }

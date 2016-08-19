@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Identity;
 
 use App\Domain\Model\Identity\RoleRepository;
 use App\Http\Controllers\Controller;
+use JMS\Serializer\SerializerInterface;
 
 class RoleController extends Controller
 {
@@ -28,4 +29,5 @@ class RoleController extends Controller
         $result = $this->roleRepo->all();
         return $this->response($result, ['role_list']);
     }
+
 }

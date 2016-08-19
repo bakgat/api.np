@@ -34,8 +34,12 @@ $app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'
     $app->put('/{id}', 'StaffController@update');
 
     $app->get('/{id}/groups', 'StaffController@allGroups');
-    $app->post('/{id}/groups/{groupId}', 'StaffController@addGroup');
+    $app->post('/{id}/groups', 'StaffController@addGroup');
     $app->delete('/{id}/groups/{groupId}', 'StaffController@removeGroup');
+
+    $app->get('/{id}/roles', 'StaffController@allRoles');
+    $app->post('/{id}/roles', 'StaffController@addRole');
+    $app->delete('/{id}/roles/{roleId}', 'StaffController@removeRole');
 });
 
 $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
