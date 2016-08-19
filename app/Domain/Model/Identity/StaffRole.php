@@ -28,6 +28,7 @@ class StaffRole
     use DateRangeTrait;
 
     /**
+     * @Groups({"staff_roles"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -45,7 +46,7 @@ class StaffRole
     protected $staff;
 
     /**
-     * @Groups({"staff_list", "staff_detail"})
+     * @Groups({"staff_roles"})
      *
      * @ORM\ManyToOne(targetEntity="Role", inversedBy="staffRoles")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -55,7 +56,7 @@ class StaffRole
     protected $role;
 
     /**
-     * @Groups({"staff_list", "staff_detail"})
+     * @Groups({"staff_roles"})
      *
      * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)
      *
@@ -89,10 +90,6 @@ class StaffRole
 
     public function block($end = null)
     {
-        if(!$this->isActive()) {
-            return $this;
-        }
-
         if($end == null) {
             $now = new DateTime;
             $end = $now->modify('-1 day');
@@ -101,6 +98,13 @@ class StaffRole
         $dr = ['start'=> $this->dateRange->getStart(), 'end' => $end];
         $this->dateRange = DateRange::fromData($dr);
 
+        return $this;
+    }
+
+    public function resetStart($start)
+    {
+        $dr = ['start' => $start, 'end' => $this->dateRange->getEnd()];
+        $this->dateRange = DateRange::fromData($dr);
         return $this;
     }
 

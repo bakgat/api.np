@@ -26,7 +26,7 @@ use JMS\Serializer\Annotation\Groups;
 class Role
 {
     /**
-     * @Groups({"role_list", "staff_detail"})
+     * @Groups({"role_list", "staff_roles"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -36,7 +36,7 @@ class Role
     protected $id;
 
     /**
-     * @Groups({"role_list", "staff_detail"})
+     * @Groups({"role_list", "staff_roles"})
      *
      * @ORM\Column(type="string")
      *

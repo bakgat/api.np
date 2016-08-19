@@ -41,7 +41,6 @@ class Staff extends Person
     protected $staffInGroups;
 
     /**
-     * @Groups({"staff_detail"})
      *
      * @ORM\OneToMany(targetEntity="StaffRole", mappedBy="staff", cascade={"persist"})
      *
@@ -169,6 +168,9 @@ class Staff extends Person
     }
 
 
+    public function allStaffRoles() {
+        return clone $this->staffRoles;
+    }
     /**
      * @param Role $role
      * @param Datetime|null $start

@@ -12,6 +12,7 @@ namespace App\Repositories\Identity;
 use App\Domain\Model\Identity\Exceptions\RoleNotFoundException;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\RoleRepository;
+use App\Domain\Model\Identity\StaffRole;
 use App\Domain\Uuid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -62,5 +63,28 @@ class RoleDoctrineRepository implements RoleRepository
         }
 
         return $role;
+    }
+
+    public function getStaffRole(Uuid $id) {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('sr, r')
+            ->from(StaffRole::class, 'sr')
+            ->join('sr.role', 'r')
+            ->where('sr.id=:id')
+            ->setParameter('id', $id);
+
+        //TODO : failing get should throw error
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param StaffRole $staffRole
+     * @return int Number of rows affected
+     */
+    public function updateStaffRole(StaffRole $staffRole)
+    {
+        $this->em->persist($staffRole);
+        $this->em->flush();
+        return 1;
     }
 }

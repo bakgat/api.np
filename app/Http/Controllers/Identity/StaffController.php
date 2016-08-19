@@ -81,11 +81,24 @@ class StaffController extends Controller
         $this->staffService->addToGroup($id, $groupId);
     }
 
-    public function removeGroup($id, $groupId)
+    public function removeGroup(Request $request, $id, $groupId)
     {
-        $this->staffService->removeFromGropu($id, $groupId);
+        $start = $request->get('start');
+        if ($start) {
+            $start = $this->toDate($start);
+        }
+        $end = $request->get('end');
+        if ($end) {
+            $end = $this->toDate($end);
+        }
+
+        $this->staffService->removeFromGroup($id, $groupId);
     }
 
+    public function allRoles($id) {
+        $member = $this->staffService->get($id);
+        return $this->response($member->allStaffRoles(), ['staff_roles']);
+    }
     public function addRole(Request $request, $id)
     {
         $start = $request->get('start');
@@ -99,7 +112,31 @@ class StaffController extends Controller
         $role = $request->get('role');
 
         $staffRole = $this->staffService->assignRole($id, $role['id'], $start, $end);
-        return $this->response($staffRole, ['staff_detail']);
+        return $this->response($staffRole, ['staff_roles']);
+    }
+
+    public function updateRole(Request $request, $staffRoleId)
+    {
+        $start = $request->get('start');
+        if ($start) {
+            $start = $this->toDate($start);
+        }
+        $end = $request->get('end');
+        if ($end) {
+            $end = $this->toDate($end);
+        }
+        $staffRole = $this->staffService->updateRole($staffRoleId, $start, $end);
+        return $this->response($staffRole, ['staff_roles']);
+    }
+
+    public function removeRole(Request $request, $id, $roleId)
+    {
+        $end = $request->get('end');
+        if ($end) {
+            $end = $this->toDate($end);
+        }
+
+        return $this->staffService->removeFromRole($id, $roleId, $end);
     }
 
     private function toDate($sDate)

@@ -59,7 +59,7 @@ interface StaffRepository
      * Gets an existing staff member by its id.
      *
      * @param Uuid $id
-     * @return Student
+     * @return Staff
      */
     public function get(Uuid $id);
 

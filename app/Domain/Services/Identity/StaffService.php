@@ -28,7 +28,7 @@ class StaffService
     protected $staffRepo;
     /** @var GroupRepository */
     protected $groupRepo;
-    /** @var RoleRepository  */
+    /** @var RoleRepository */
     protected $roleRepo;
 
     public function __construct(StaffRepository $staffRepository, GroupRepository $groupRepository, RoleRepository $roleRepository)
@@ -43,6 +43,10 @@ class StaffService
         return $this->staffRepo->all();
     }
 
+    /**
+     * @param $id
+     * @return Staff
+     */
     public function get($id)
     {
         if (!$id instanceof Uuid) {
@@ -107,7 +111,7 @@ class StaffService
         }
     }
 
-    public function removeFromGropu($id, $groupId)
+    public function removeFromGroup($id, $groupId)
     {
         /** @var Staff $member */
         $member = $this->get($id);
@@ -133,13 +137,24 @@ class StaffService
         $role = $this->roleRepo->get(Uuid::import($roleId));
 
         $staffRole = null;
-        if($member && $role) {
-            $staffRole  = $member->assignRole($role, $start, $end);
+        if ($member && $role) {
+            $staffRole = $member->assignRole($role, $start, $end);
         }
         $this->staffRepo->update($member);
         return $staffRole;
     }
 
+    public function updateRole($staffRoleId, $start = null, $end = null)
+    {
+        /** @var StaffRole $staffRole */
+        $staffRole = $this->roleRepo->getStaffRole(Uuid::import($staffRoleId));
+        $staffRole->resetStart($start);
+        if($end != null) {
+            $staffRole->block($end);
+        }
+        $this->roleRepo->updateStaffRole($staffRole);
+        return $staffRole;
+    }
 
     /**
      * Removes an active role for a given staff member.
@@ -148,15 +163,15 @@ class StaffService
      * @param $roleId
      * @return bool True if succeeded.
      */
-    public function removeFromRole($id, $roleId)
+    public function removeFromRole($id, $roleId, $end)
     {
         /** @var Staff $member */
         $member = $this->get($id);
         /** @var Role $role */
         $role = $this->roleRepo->get($roleId);
 
-        if($member && $role) {
-            $member->removeRole($role);
+        if ($member && $role) {
+            $member->removeRole($role, $end);
         }
         $this->staffRepo->update($member);
         return true;

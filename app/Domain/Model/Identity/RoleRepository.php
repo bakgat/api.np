@@ -29,4 +29,16 @@ interface RoleRepository
      */
     public function get(Uuid $id);
 
+    /**
+     * @param Uuid $id
+     * @return StaffRole
+     */
+    public function getStaffRole(Uuid $id);
+
+    /**
+     * @param $staffRole
+     * @return int Number of rows affected
+     */
+    public function updateStaffRole(StaffRole $staffRole);
+
 }
