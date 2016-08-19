@@ -27,6 +27,8 @@ $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identi
 
 $app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
     $app->get('/', 'StaffController@index');
+    $app->get('/types', 'StaffController@allTypes');
+
     $app->get('/{id}', 'StaffController@show');
 
     $app->get('/{id}/roles', 'StaffController@allRoles');

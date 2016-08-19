@@ -32,7 +32,6 @@ use JMS\Serializer\Annotation\VirtualProperty;
 class Staff extends Person
 {
     /**
-     * @Groups({"staff_detail"})
      *
      * @ORM\OneToMany(targetEntity="StaffInGroup", mappedBy="staff", cascade={"persist"})
      *
@@ -64,7 +63,7 @@ class Staff extends Person
      * @param StaffType $type
      * @param DateTime|null $start
      * @param DateTime|null $end
-     * @return $this
+     * @return StaffInGroup
      */
     public function joinGroup(Group $group, StaffType $type, $start = null, $end = null)
     {
@@ -73,7 +72,7 @@ class Staff extends Person
         }
         $staffGroup = new StaffInGroup($this, $group, $type, ['start' => $start, 'end' => $end]);
         $this->staffInGroups[] = $staffGroup;
-        return $this;
+        return $staffGroup;
     }
 
     /**

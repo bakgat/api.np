@@ -10,11 +10,15 @@ namespace App\Http\Controllers\Identity;
 
 
 use App\Domain\Model\Identity\StaffRepository;
+use App\Domain\Model\Identity\StaffType;
 use App\Domain\Services\Identity\StaffService;
 use App\Domain\Uuid;
 use App\Http\Controllers\Controller;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use JMS\Serializer\SerializerInterface;
 
@@ -76,9 +80,36 @@ class StaffController extends Controller
         return $this->response($staff, ['staff_detail']);
     }
 
-    public function addGroup($id, $groupId)
+    public function allTypes()
     {
-        $this->staffService->addToGroup($id, $groupId);
+        $result = new ArrayCollection;
+        foreach (StaffType::toArray() as $value=>$key) {
+            $result->add(['key'=>$key, 'value'=>$value]);
+        }
+        return $this->response($result);
+    }
+
+    public function allGroups($id)
+    {
+        $member = $this->staffService->get($id);
+        return $this->response($member->getGroups(), ['staff_groups']);
+    }
+
+    public function addGroup(Request $request, $id)
+    {
+        $start = $request->get('start');
+        if ($start) {
+            $start = $this->toDate($start);
+        }
+        $end = $request->get('end');
+        if ($end) {
+            $end = $this->toDate($end);
+        }
+        $group = $request->get('group');
+        $type = $request->get('type');
+
+        $staffGroup = $this->staffService->joinGroup($id, $group['id'], $type, $start, $end);
+        return $this->response($staffGroup, ['staff_groups']);
     }
 
     public function removeGroup(Request $request, $id, $groupId)
@@ -95,10 +126,12 @@ class StaffController extends Controller
         $this->staffService->removeFromGroup($id, $groupId);
     }
 
-    public function allRoles($id) {
+    public function allRoles($id)
+    {
         $member = $this->staffService->get($id);
         return $this->response($member->allStaffRoles(), ['staff_roles']);
     }
+
     public function addRole(Request $request, $id)
     {
         $start = $request->get('start');

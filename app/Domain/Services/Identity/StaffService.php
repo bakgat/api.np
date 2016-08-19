@@ -8,8 +8,10 @@ use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\RoleRepository;
 use App\Domain\Model\Identity\Staff;
+use App\Domain\Model\Identity\StaffInGroup;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StaffRole;
+use App\Domain\Model\Identity\StaffType;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\Uuid;
 use DateTime;
@@ -99,16 +101,33 @@ class StaffService
         return $staff;
     }
 
-    public function addToGroup($id, $groupId)
+    /* -------------------------------------------
+    * GROUP FUNCTIONS
+    * ----------------------------------------- */
+
+    /**
+     * @param $id
+     * @param $groupId
+     * @param $type
+     * @param DateTime|null $start
+     * @param DateTime|null $end
+     * @return StaffInGroup|null
+     */
+    public function joinGroup($id, $groupId, $type, $start, $end)
     {
         /** @var Staff $member */
-        $member = $this->get($id);
+        $member = $this->get(Uuid::import($id));
         /** @var Group $group */
-        $group = $this->groupRepo->get($groupId);
+        $group = $this->groupRepo->get(Uuid::import($groupId));
 
+        /** @var StaffInGroup $staffGroup */
+        $staffGroup = null;
         if ($member && $group) {
-            // TODO: $member->addToGroup($group)
+            $type = new StaffType($type);
+            $staffGroup = $member->joinGroup($group, $type, $start, $end);
         }
+        $this->staffRepo->update($member);
+        return $staffGroup;
     }
 
     public function removeFromGroup($id, $groupId)
@@ -119,6 +138,10 @@ class StaffService
         $group = $this->groupRepo->get($groupId);
 
     }
+
+    /* -------------------------------------------
+     * ROLE FUNCTIONS
+     * ----------------------------------------- */
 
     /**
      * Assigns a role to a given staff member.
@@ -149,7 +172,7 @@ class StaffService
         /** @var StaffRole $staffRole */
         $staffRole = $this->roleRepo->getStaffRole(Uuid::import($staffRoleId));
         $staffRole->resetStart($start);
-        if($end != null) {
+        if ($end != null) {
             $staffRole->block($end);
         }
         $this->roleRepo->updateStaffRole($staffRole);
