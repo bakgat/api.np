@@ -38,7 +38,7 @@ class PersonSeeder extends Seeder
             $student = new Student(
                 $faker->firstName(),
                 $faker->lastName(),
-                $faker->email(),
+                $faker->unique()->creditCardNumber(),
                 new Gender($faker->randomElement(['M', 'F'])),
                 $faker->dateTimeBetween('-12years', '-3years')
             );
