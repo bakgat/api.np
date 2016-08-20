@@ -23,7 +23,7 @@ abstract class PersonInGroup
     use DateRangeTrait;
 
     /**
-     * @Groups({"staff_groups"})
+     * @Groups({"staff_groups", "student_groups"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -34,7 +34,7 @@ abstract class PersonInGroup
 
 
     /**
-     * @Groups({"student_list", "student_detail", "staff_groups"})
+     * @Groups({"student_list", "student_detail", "staff_groups", "student_groups"})
      *
      * @ORM\ManyToOne(targetEntity="Group", inversedBy="studentInGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -44,7 +44,7 @@ abstract class PersonInGroup
     protected $group;
 
     /**
-     * @Groups({"student_list", "student_detail", "staff_groups"})
+     * @Groups({"student_list", "student_detail", "staff_groups", "student_groups"})
      * @Expose
      *
      * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)

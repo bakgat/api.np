@@ -194,7 +194,7 @@ class StudentDoctrineRepository implements StudentRepository
     }
 
     /**
-     * Gets all 'redicodi' applicale for a given student.
+     * Gets all 'redicodi' applicable for a given student.
      *
      * @param Uuid $id
      * @return RedicodiForStudent[]

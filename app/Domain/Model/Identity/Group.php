@@ -28,7 +28,7 @@ use JMS\Serializer\Annotation\Type;
 class Group
 {
     /**
-     * @Groups({"group", "group_students", "student_list", "student_detail", "staff_groups"})
+     * @Groups({"group", "group_students", "student_list", "student_detail", "staff_groups", "student_groups"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -37,7 +37,7 @@ class Group
      */
     protected $id;
     /**
-     * @Groups({"group", "group_students", "student_list", "student_detail", "staff_groups"})
+     * @Groups({"group", "group_students", "student_list", "student_detail", "staff_groups", "student_groups"})
      *
      * @ORM\Column(type="string", unique=true)
      *
