@@ -89,9 +89,9 @@ class StaffController extends Controller
         return $this->response($result);
     }
 
-    /* -------------------------------------
+    /* ***************************************************
      * GROUPS
-     * ------------------------------------- */
+     * **************************************************/
     public function allGroups($id)
     {
         $member = $this->staffService->get($id);
@@ -145,9 +145,9 @@ class StaffController extends Controller
         $this->staffService->removeFromGroup($id, $groupId);
     }
 
-    /* -------------------------------------
+    /* ***************************************************
      * ROLES
-     * ------------------------------------- */
+     * **************************************************/
     public function allRoles($id)
     {
         $member = $this->staffService->get($id);
