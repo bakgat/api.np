@@ -19,8 +19,7 @@ use JMS\Serializer\Annotation\AccessorOrder;
 use JMS\Serializer\Annotation\VirtualProperty;
 
 /**
- * @ExclusionPolicy("all")
- * @AccessorOrder("custom", custom = {"id", "displayName", "firstName", "lastName", "email", "gender", "birthday", "studentInGroups"})
+ * @AccessorOrder("custom", custom = {"id", "displayName", "firstName", "lastName", "schoolId", "gender", "birthday", "studentInGroups"})
  *
  * @ORM\Entity
  * @ORM\Table(name="students")
@@ -41,7 +40,6 @@ class Student extends Person
 
     /**
      * @Groups({"student_detail"})
-     * @Expose
      *
      * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="student", cascade={"persist"})
      *

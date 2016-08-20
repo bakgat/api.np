@@ -32,6 +32,14 @@ use JMS\Serializer\Annotation\VirtualProperty;
 class Staff extends Person
 {
     /**
+     * @Groups({"staff_list", "staff_detail"})
+     *
+     * @ORM\Column(type="string")
+     * @var string
+     */
+    protected $email;
+
+    /**
      *
      * @ORM\OneToMany(targetEntity="StaffInGroup", mappedBy="staff", cascade={"persist"})
      *
