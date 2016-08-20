@@ -70,6 +70,13 @@ class Student extends Person
     {
         return $this->schoolId;
     }
+
+    public function updateProfile($firstName, $lastName, $schoolId, Gender $gender, DateTime $birthday = null)
+    {
+        parent::updatePersonProfile($firstName, $lastName, $gender, $birthday);
+        $this->schoolId = $schoolId;
+    }
+
     /**
      *
      * @param $group

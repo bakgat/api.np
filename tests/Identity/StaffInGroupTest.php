@@ -85,8 +85,8 @@ class StaffInGroupTest extends TestCase
         $lowerBound = new DateTime('2014-01-01');
         $upperBound = new DateTime('2016-01-01');
 
-        $staff->joinGroup($group1, new StaffType(StaffType::TITULAR), $lowerBound)
-            ->joinGroup($group2, new StaffType(StaffType::TEACHER), $lowerBound, $upperBound);
+        $staff->joinGroup($group1, new StaffType(StaffType::TITULAR), $lowerBound);
+        $staff->joinGroup($group2, new StaffType(StaffType::TEACHER), $lowerBound, $upperBound);
 
         $this->assertTrue($staff->wasActiveInGroupAt($group1, $nearInfinite));
         $this->assertTrue($staff->wasActiveInGroupAt($group1, $lowerBound));
@@ -118,8 +118,8 @@ class StaffInGroupTest extends TestCase
         $lowerBound = new DateTime('2014-01-01');
         $upperBound = new DateTime('2016-01-01');
 
-        $staff->joinGroup($group1, new StaffType(StaffType::TITULAR), $lowerBound)
-            ->joinGroup($group2, new StaffType(StaffType::TEACHER), $lowerBound, $upperBound);
+        $staff->joinGroup($group1, new StaffType(StaffType::TITULAR), $lowerBound);
+        $staff->joinGroup($group2, new StaffType(StaffType::TEACHER), $lowerBound, $upperBound);
 
 
         $this->assertTrue($staff->wasActiveInGroupBetween($group1, new DateRange($lowerBound, $upperBound)));

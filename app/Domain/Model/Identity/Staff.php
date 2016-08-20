@@ -73,7 +73,15 @@ class Staff extends Person
         return $this->email;
     }
 
+    public function updateProfile($firstName, $lastName, $email, Gender $gender, $birthday = null)
+    {
+        parent::updatePersonProfile($firstName, $lastName, $gender, $birthday);
+        $this->email = $email;
+    }
 
+    /* ***************************************************
+     * GROUPS
+     * **************************************************/
     /**
      * @param Group $group
      * @param StaffType $type
@@ -98,6 +106,7 @@ class Staff extends Person
     {
         return clone $this->staffInGroups;
     }
+
     /**
      *
      * @return Group[]
@@ -163,9 +172,9 @@ class Staff extends Person
     }
 
 
-    /*
+    /* ***************************************************
      * ROLES
-     */
+     * **************************************************/
 
 
     /**
@@ -227,6 +236,4 @@ class Staff extends Person
         }
         return $this;
     }
-
-
 }

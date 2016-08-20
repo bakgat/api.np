@@ -137,18 +137,16 @@ abstract class Person
     }
 
     /**
-     * Updating the profile for this student
+     * Updating the profile for this person
      * @param $firstName
      * @param $lastName
-     * @param $email
      * @param DateTime|null $birthday
      * @return Student
      */
-    public function updateProfile($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
+    protected function updatePersonProfile($firstName, $lastName, Gender $gender, DateTime $birthday = null)
     {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
-        $this->email = $email;
         $this->gender = $gender;
         $this->birthday = $birthday;
     }

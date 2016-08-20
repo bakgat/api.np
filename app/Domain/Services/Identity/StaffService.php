@@ -132,10 +132,10 @@ class StaffService
         /** @var StaffInGroup $group */
         $staffGroup = $this->groupRepo->getStaffGroup(Uuid::import($staffGroupId));
         $staffGroup->resetStart($start);
-        if($end != null) {
+        if ($end != null) {
             $staffGroup->block($end);
         }
-        if(!$type instanceof StaffType) {
+        if (!$type instanceof StaffType) {
             $type = new StaffType($type);
         }
         $staffGroup->changeType($type);
@@ -199,7 +199,7 @@ class StaffService
      * @param $roleId
      * @return bool True if succeeded.
      */
-    public function removeFromRole($id, $roleId, $end)
+    public function removeFromRole($id, $roleId, $end = null)
     {
         /** @var Staff $member */
         $member = $this->get($id);
