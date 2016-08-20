@@ -10,6 +10,7 @@ namespace App\Domain\Services\Identity;
 
 
 use App\Domain\Model\Identity\GroupRepository;
+use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Domain\Uuid;
 
@@ -44,7 +45,6 @@ class StudentService
     {
         $firstName = $data['firstName'];
         $lastName = $data['lastName'];
-        $email = $data['email'];
         $birthday = null;
         if (isset($data['birthday'])) {
             $birthday = convert_date_from_string($data['birthday']);
@@ -52,6 +52,9 @@ class StudentService
         $gender = new Gender($data['gender']);
         $schoolId = $data['schoolId'];
 
+        $student = new Student($firstName, $lastName, $schoolId, $gender, $birthday);
+        $this->studentRepo->insert($student);
 
+        return $student;
     }
 }
