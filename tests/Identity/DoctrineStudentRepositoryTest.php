@@ -137,11 +137,11 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
     {
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
-        $email = $this->faker->email;
+        $schoolId = $this->faker->bankAccountNumber;
         $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
 
-        $student = new Student($fn, $ln, $email, $gender);
+        $student = new Student($fn, $ln, $schoolId, $gender);
         $id = $this->studentRepo->insert($student);
 
         $this->em->clear();
@@ -166,17 +166,17 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
     {
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
-        $email = $this->faker->email;
+        $schoolId = $this->faker->bankAccountNumber;
         $gender = new Gender('M');
 
-        $student = new Student($fn, $ln, $email, $gender);
+        $student = new Student($fn, $ln, $schoolId, $gender);
         $id = $this->studentRepo->insert($student);
 
         $this->em->clear();
 
         $dbStudent = $this->studentRepo->get($id);
 
-        $dbStudent->updateProfile('Karl', 'Van Iseghem', 'karl.vaniseghem@klimtoren.be', new Gender('F'), new DateTime('1979-11-30'));
+        $dbStudent->updateProfile('Karl', 'Van Iseghem', '0001122', new Gender('F'), new DateTime('1979-11-30'));
         $count = $this->studentRepo->update($dbStudent);
 
         $this->em->clear();
@@ -190,7 +190,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
 
         $this->assertNotEquals($student->getDisplayName(), $savedStudent->getDisplayName());
         $this->assertNotEquals($student->getBirthday(), $savedStudent->getBirthday());
-        $this->assertNotEquals($student->getEmail(), $savedStudent->getEmail());
+        $this->assertNotEquals($student->getSchoolId(), $savedStudent->getSchoolId());
         $this->assertNotEquals($student->getGender(), $savedStudent->getGender());
 
         $this->assertEquals($student->getId(), $savedStudent->getId());
@@ -199,7 +199,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         $this->assertEquals($dbStudent->getId(), $savedStudent->getId());
         $this->assertEquals($dbStudent->getDisplayName(), $savedStudent->getDisplayName());
         $this->assertEquals($dbStudent->getBirthday(), $savedStudent->getBirthday());
-        $this->assertEquals($dbStudent->getEmail(), $savedStudent->getEmail());
+        $this->assertEquals($dbStudent->getSchoolId(), $savedStudent->getSchoolId());
         $this->assertEquals($dbStudent->getGender(), $savedStudent->getGender());
 
     }
@@ -214,10 +214,10 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
     {
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
-        $email = $this->faker->email;
+        $schoolId = $this->faker->bankAccountNumber;
         $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
-        $student = new Student($fn, $ln, $email, $gender);
+        $student = new Student($fn, $ln, $schoolId, $gender);
         $id = $this->studentRepo->insert($student);
 
         $this->em->clear();
