@@ -89,6 +89,9 @@ class StaffController extends Controller
         return $this->response($result);
     }
 
+    /* -------------------------------------
+     * GROUPS
+     * ------------------------------------- */
     public function allGroups($id)
     {
         $member = $this->staffService->get($id);
@@ -99,11 +102,11 @@ class StaffController extends Controller
     {
         $start = $request->get('start');
         if ($start) {
-            $start = $this->toDate($start);
+            $start = convert_date_from_string($start);
         }
         $end = $request->get('end');
         if ($end) {
-            $end = $this->toDate($end);
+            $end = convert_date_from_string($end);
         }
         $group = $request->get('group');
         $type = $request->get('type');
@@ -116,11 +119,11 @@ class StaffController extends Controller
     {
         $start = $request->get('start');
         if ($start) {
-            $start = $this->toDate($start);
+            $start = convert_date_from_string($start);
         }
         $end = $request->get('end');
         if ($end) {
-            $end = $this->toDate($end);
+            $end = convert_date_from_string($end);
         }
         $type = $request->get('type');
 
@@ -132,16 +135,19 @@ class StaffController extends Controller
     {
         $start = $request->get('start');
         if ($start) {
-            $start = $this->toDate($start);
+            $start = convert_date_from_string($start);
         }
         $end = $request->get('end');
         if ($end) {
-            $end = $this->toDate($end);
+            $end = convert_date_from_string($end);
         }
 
         $this->staffService->removeFromGroup($id, $groupId);
     }
 
+    /* -------------------------------------
+     * ROLES
+     * ------------------------------------- */
     public function allRoles($id)
     {
         $member = $this->staffService->get($id);
@@ -152,11 +158,11 @@ class StaffController extends Controller
     {
         $start = $request->get('start');
         if ($start) {
-            $start = $this->toDate($start);
+            $start = convert_date_from_string($start);
         }
         $end = $request->get('end');
         if ($end) {
-            $end = $this->toDate($end);
+            $end = convert_date_from_string($end);
         }
         $role = $request->get('role');
 
@@ -168,11 +174,11 @@ class StaffController extends Controller
     {
         $start = $request->get('start');
         if ($start) {
-            $start = $this->toDate($start);
+            $start = convert_date_from_string($start);
         }
         $end = $request->get('end');
         if ($end) {
-            $end = $this->toDate($end);
+            $end = convert_date_from_string($end);
         }
         $staffRole = $this->staffService->updateRole($staffRoleId, $start, $end);
         return $this->response($staffRole, ['staff_roles']);
@@ -182,19 +188,9 @@ class StaffController extends Controller
     {
         $end = $request->get('end');
         if ($end) {
-            $end = $this->toDate($end);
+            $end = convert_date_from_string($end);
         }
 
         return $this->staffService->removeFromRole($id, $roleId, $end);
     }
-
-    private function toDate($sDate)
-    {
-        $date = strtotime($sDate);
-        if ($date != false) {
-            $date = new DateTime(date('Y-m-d', $date));
-        }
-        return $date;
-    }
-
 }

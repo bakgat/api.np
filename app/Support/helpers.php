@@ -100,3 +100,14 @@ if (!function_exists('sorted_iterator_on')) {
         return new \ArrayIterator($list);
     }
 }
+
+if (!function_exists('convert_date_from_string')) {
+    function convert_date_from_string($sDate)
+    {
+        $date = strtotime($sDate);
+        if ($date != false) {
+            $date = new DateTime(date('Y-m-d', $date));
+        }
+        return $date;
+    }
+}
