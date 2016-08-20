@@ -65,7 +65,7 @@ class StaffService
         $email = $data['email'];
         $birthday = null;
         if (isset($data['birthday'])) {
-            $birthday = convert_date_from_string($data['birthday'])
+            $birthday = convert_date_from_string($data['birthday']);
         }
         $gender = new Gender($data['gender']);
 
