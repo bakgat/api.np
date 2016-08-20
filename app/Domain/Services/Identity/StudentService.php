@@ -9,6 +9,7 @@
 namespace App\Domain\Services\Identity;
 
 
+use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
