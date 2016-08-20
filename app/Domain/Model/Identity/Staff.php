@@ -50,11 +50,19 @@ class Staff extends Person
 
     public function __construct($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
     {
-        parent::__construct($firstName, $lastName, $email, $gender, $birthday);
-
+        parent::__construct($firstName, $lastName, $gender, $birthday);
+        $this->email = $email;
 
         $this->staffInGroups = [];
         $this->staffRoles = new ArrayCollection;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 
 

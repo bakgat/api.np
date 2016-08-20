@@ -30,6 +30,14 @@ use JMS\Serializer\Annotation\VirtualProperty;
  */
 class Student extends Person
 {
+    /**
+     * @Groups({"student_detail"})
+     *
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    protected $schoolId;
 
     /**
      * @Groups({"student_detail"})
@@ -49,13 +57,21 @@ class Student extends Person
     protected $redicodiForStudents;
 
 
-    public function __construct($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
+    public function __construct($firstName, $lastName, $schoolId, Gender $gender, DateTime $birthday = null)
     {
-        parent::__construct($firstName, $lastName, $email, $gender, $birthday);
+        parent::__construct($firstName, $lastName, $gender, $birthday);
+        $this->schoolId = $schoolId;
 
         $this->studentInGroups = [];
     }
 
+    /**
+     * @return string
+     */
+    public function getSchoolId()
+    {
+        return $this->schoolId;
+    }
     /**
      *
      * @param $group
@@ -149,17 +165,5 @@ class Student extends Person
             }
         }
         return false;
-    }
-
-
-
-
-    private function getStudentInGroups()
-    {
-        $groups = [];
-        foreach ($this->studentInGroups as $studentInGroup) {
-            $groups[] = $studentInGroup;
-        }
-        return $groups;
     }
 }

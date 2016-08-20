@@ -78,12 +78,11 @@ abstract class Person
     protected $birthday;
 
 
-    public function __construct($firstName, $lastName, $email, Gender $gender, DateTime $birthday = null)
+    public function __construct($firstName, $lastName, Gender $gender, DateTime $birthday = null)
     {
         $this->id = Uuid::generate(4);
         $this->firstName = $firstName;
         $this->lastName = $lastName;
-        $this->email = $email;
         $this->gender = $gender;
         $this->birthday = $birthday;
     }
@@ -125,15 +124,6 @@ abstract class Person
     public function getDisplayName()
     {
         return $this->getFirstName() . ' ' . $this->getLastName();
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**
