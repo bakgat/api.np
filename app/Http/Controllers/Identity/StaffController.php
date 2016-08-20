@@ -133,6 +133,7 @@ class StaffController extends Controller
 
     public function removeGroup(Request $request, $id, $groupId)
     {
+        //TODO: start and end
         $start = $request->get('start');
         if ($start) {
             $start = convert_date_from_string($start);
