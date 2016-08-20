@@ -53,7 +53,13 @@ class StudentService
         $gender = new Gender($data['gender']);
         $schoolId = $data['schoolId'];
 
+        $groupId = $data['group']['id'];
+        $group = $this->groupRepo->get(Uuid::import($groupId));
+        $groupNumber = $data['groupNumber'];
+
         $student = new Student($firstName, $lastName, $schoolId, $gender, $birthday);
+        $student->joinGroup($group);
+
         $this->studentRepo->insert($student);
 
         return $student;
