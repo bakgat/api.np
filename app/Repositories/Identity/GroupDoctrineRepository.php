@@ -16,6 +16,7 @@ use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\StaffInGroup;
 use App\Domain\Model\Identity\Student;
+use App\Domain\Model\Identity\StudentInGroup;
 use App\Domain\Model\Identity\Students;
 use DateTime;
 use Doctrine\ORM\EntityManager;
@@ -227,6 +228,34 @@ class GroupDoctrineRepository implements GroupRepository
     public function updateStaffGroup(StaffInGroup $staffGroup)
     {
         $this->em->persist($staffGroup);
+        $this->em->flush();
+        return 1;
+    }
+
+    /**
+     * @param Uuid $id
+     * @return StudentInGroup
+     */
+    public function getStudentGroup(Uuid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('sig, g')
+            ->from(StudentInGroup::class, 'sig')
+            ->join('sig.group', 'g')
+            ->where('sig.id=:id')
+            ->setParameter('id', $id);
+
+        // TODO: Throw error because GET must return existing or throw
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param $studentGroup
+     * @return StudentInGroup
+     */
+    public function updateStudentGroup($studentGroup)
+    {
+        $this->em->persist($studentGroup);
         $this->em->flush();
         return 1;
     }

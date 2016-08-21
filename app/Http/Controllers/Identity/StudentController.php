@@ -105,7 +105,41 @@ class StudentController extends Controller
         if (!$id instanceof Uuid) {
             $id = Uuid::import($id);
         }
+        //TODO GET FROM STUDENT OBJECT
         return $this->response($this->studentRepo->allGroups($id), ['student_groups']);
+    }
+
+    public function joinGroup(Request $request, $id)
+    {
+        $start = $request->get('start');
+        if ($start) {
+            $start = convert_date_from_string($start);
+        }
+        $end = $request->get('end');
+        if ($end) {
+            $end = convert_date_from_string($end);
+        }
+        $group = $request->get('group');
+        $number = $request->get('number');
+
+        $studentGroup = $this->studentService->joinGroup($id, $group['id'], $number, $start, $end);
+        return $this->response($studentGroup, ['student_groups']);
+    }
+
+    public function updateGroup(Request $request, $studentGroupId)
+    {
+        $start = $request->get('start');
+        if ($start) {
+            $start = convert_date_from_string($start);
+        }
+        $end = $request->get('end');
+        if ($end) {
+            $end = convert_date_from_string($end);
+        }
+        $number = $request->get('number');
+
+        $studentGroup = $this->studentService->updateGroup($studentGroupId, $number, $start, $end);
+        return $this->response($studentGroup, ['student_groups']);
     }
 
     /* ***************************************************

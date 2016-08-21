@@ -89,4 +89,16 @@ interface GroupRepository
      * @return int Number of affected rows
      */
     public function updateStaffGroup(StaffInGroup $staffGroup);
+
+    /**
+     * @param Uuid $id
+     * @return StudentInGroup
+     */
+    public function getStudentGroup(Uuid $id);
+
+    /**
+     * @param $studentGroup
+     * @return StudentInGroup
+     */
+    public function updateStudentGroup($studentGroup);
 }

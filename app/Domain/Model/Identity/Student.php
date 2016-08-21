@@ -93,7 +93,7 @@ class Student extends Person
             $studentGroup->setNumber($number);
         }
         $this->studentInGroups[] = $studentGroup;
-        return $this;
+        return $studentGroup;
     }
 
     /**
