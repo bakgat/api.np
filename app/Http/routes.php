@@ -26,6 +26,7 @@ $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identi
     $app->get('/{id}/redicodi', 'StudentController@allRedicodi');
 
     $app->post('/', 'StudentController@store');
+    $app->put('/{id}', 'StudentController@update');
 });
 
 $app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
