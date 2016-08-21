@@ -64,4 +64,26 @@ class StudentService
 
         return $student;
     }
+
+    public function update($data)
+    {
+        $id = Uuid::import($data['id']);
+        $student = $this->get($id);
+
+        $firstName = $data['firstName'];
+        $lastName = $data['lastName'];
+        $birthday = null;
+        if (isset($data['birthday'])) {
+            $birthday = convert_date_from_string($data['birthday']);
+        }
+        $gender = new Gender($data['gender']);
+        $schoolId = $data['schoolId'];
+
+        $student->updateProfile($firstName, $lastName, $schoolId, $gender, $birthday);
+        $this->studentRepo->update($student);
+
+        return $student;
+    }
+
+
 }

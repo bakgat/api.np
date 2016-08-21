@@ -80,6 +80,23 @@ class StudentController extends Controller
         return $this->response($student, ['student_detail']);
     }
 
+    public function update(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'schoolId' => 'required|unique:students,school_id',
+            'gender' => 'required|in:M,F,O',
+            'group.id' => 'required',
+            'groupnumber' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            return response($validator->messages(), 422);
+        }
+
+        $student = $this->studentService->update($request->all());
+        return $this->response($student, ['student_detail']);
+    }
     /* ***************************************************
      * GROUPS
      * **************************************************/
