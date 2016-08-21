@@ -55,7 +55,7 @@ class StudentService
 
         $groupId = $data['group']['id'];
         $group = $this->groupRepo->get(Uuid::import($groupId));
-        $groupNumber = $data['groupNumber'];
+        $groupNumber = $data['groupnumber'];
 
         $student = new Student($firstName, $lastName, $schoolId, $gender, $birthday);
         $student->joinGroup($group);

@@ -11,8 +11,10 @@ namespace App\Http\Controllers\Identity;
 
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\StudentRepository;
+use App\Domain\Services\Identity\StudentService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use JMS\Serializer\SerializerInterface;
 use Webpatser\Uuid\Uuid;
 
@@ -22,12 +24,18 @@ class StudentController extends Controller
     private $studentRepo;
     /** @var GroupRepository */
     private $groupRepo;
+    /** @var StudentService  */
+    private $studentService;
 
-    public function __construct(StudentRepository $studentRepo, GroupRepository $groupRepository, SerializerInterface $serializer)
+    public function __construct(StudentRepository $studentRepo,
+                                GroupRepository $groupRepository,
+                                StudentService $studentService,
+                                SerializerInterface $serializer)
     {
         parent::__construct($serializer);
         $this->studentRepo = $studentRepo;
         $this->groupRepo = $groupRepository;
+        $this->studentService = $studentService;
     }
 
     public function index(Request $request)
@@ -53,6 +61,28 @@ class StudentController extends Controller
         return $this->response($this->studentRepo->find($id), ['student_detail']);
     }
 
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'schoolId' => 'required|unique:students,school_id',
+            'gender' => 'required|in:M,F,O',
+            'group.id' => 'required',
+            'groupnumber' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->messages(), 422);
+        }
+
+        $student = $this->studentService->create($request->all());
+        return $this->response($student, ['student_detail']);
+    }
+
+    /* ***************************************************
+     * GROUPS
+     * **************************************************/
     public function allGroups($id)
     {
         if (!$id instanceof Uuid) {
@@ -61,6 +91,9 @@ class StudentController extends Controller
         return $this->response($this->studentRepo->allGroups($id), ['student_groups']);
     }
 
+    /* ***************************************************
+     * REDICODI
+     * **************************************************/
     public function allRedicodi($id)
     {
         if (!$id instanceof Uuid) {
