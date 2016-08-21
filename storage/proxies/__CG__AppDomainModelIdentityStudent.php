@@ -64,10 +64,10 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'studentInGroups', 'id', 'firstName', 'lastName', 'email', 'gender', 'birthday'];
+            return ['__isInitialized__', 'schoolId', 'studentInGroups', 'redicodiForStudents', 'id', 'firstName', 'lastName', 'gender', 'birthday'];
         }
 
-        return ['__isInitialized__', 'studentInGroups', 'id', 'firstName', 'lastName', 'email', 'gender', 'birthday'];
+        return ['__isInitialized__', 'schoolId', 'studentInGroups', 'redicodiForStudents', 'id', 'firstName', 'lastName', 'gender', 'birthday'];
     }
 
     /**
@@ -176,12 +176,34 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
-    public function joinGroup(\App\Domain\Model\Identity\Group $group, $start = NULL, $end = NULL)
+    public function getSchoolId()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'joinGroup', [$group, $start, $end]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSchoolId', []);
 
-        return parent::joinGroup($group, $start, $end);
+        return parent::getSchoolId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updateProfile($firstName, $lastName, $schoolId, \App\Domain\Model\Identity\Gender $gender, \DateTime $birthday = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'updateProfile', [$firstName, $lastName, $schoolId, $gender, $birthday]);
+
+        return parent::updateProfile($firstName, $lastName, $schoolId, $gender, $birthday);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function joinGroup(\App\Domain\Model\Identity\Group $group, $number = NULL, $start = NULL, $end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'joinGroup', [$group, $number, $start, $end]);
+
+        return parent::joinGroup($group, $number, $start, $end);
     }
 
     /**
@@ -242,17 +264,6 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
-    public function jsonSerialize()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
-
-        return parent::jsonSerialize();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getId()
     {
 
@@ -297,17 +308,6 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
-    public function getEmail()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmail', []);
-
-        return parent::getEmail();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getGender()
     {
 
@@ -325,17 +325,6 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBirthday', []);
 
         return parent::getBirthday();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function updateProfile($firstName, $lastName, $email, \App\Domain\Model\Identity\Gender $gender, \DateTime $birthday = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'updateProfile', [$firstName, $lastName, $email, $gender, $birthday]);
-
-        return parent::updateProfile($firstName, $lastName, $email, $gender, $birthday);
     }
 
 }

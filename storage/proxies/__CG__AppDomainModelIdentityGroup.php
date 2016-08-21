@@ -64,10 +64,10 @@ class Group extends \App\Domain\Model\Identity\Group implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'name', 'studentInGroups', 'branchForGroups'];
+            return ['__isInitialized__', 'id', 'name', 'active', 'studentInGroups', 'branchForGroups'];
         }
 
-        return ['__isInitialized__', 'id', 'name', 'studentInGroups', 'branchForGroups'];
+        return ['__isInitialized__', 'id', 'name', 'active', 'studentInGroups', 'branchForGroups'];
     }
 
     /**
@@ -209,6 +209,39 @@ class Group extends \App\Domain\Model\Identity\Group implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
+    public function isActive()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isActive', []);
+
+        return parent::isActive();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function activate()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'activate', []);
+
+        return parent::activate();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function block()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'block', []);
+
+        return parent::block();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function __toString()
     {
 
@@ -231,12 +264,23 @@ class Group extends \App\Domain\Model\Identity\Group implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
-    public function jsonSerialize()
+    public function getStudentInGroups()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStudentInGroups', []);
 
-        return parent::jsonSerialize();
+        return parent::getStudentInGroups();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBranchForGroups()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBranchForGroups', []);
+
+        return parent::getBranchForGroups();
     }
 
 }

@@ -209,6 +209,17 @@ class StaffInGroup extends \App\Domain\Model\Identity\StaffInGroup implements \D
     /**
      * {@inheritDoc}
      */
+    public function changeType(\App\Domain\Model\Identity\StaffType $newType)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'changeType', [$newType]);
+
+        return parent::changeType($newType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function __toString()
     {
 
@@ -226,6 +237,39 @@ class StaffInGroup extends \App\Domain\Model\Identity\StaffInGroup implements \D
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'toString', []);
 
         return parent::toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function leaveGroup($end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'leaveGroup', [$end]);
+
+        return parent::leaveGroup($end);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function resetStart($start)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'resetStart', [$start]);
+
+        return parent::resetStart($start);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function block($end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'block', [$end]);
+
+        return parent::block($end);
     }
 
     /**
@@ -281,17 +325,6 @@ class StaffInGroup extends \App\Domain\Model\Identity\StaffInGroup implements \D
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'wasActiveBetween', [$dateRange]);
 
         return parent::wasActiveBetween($dateRange);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function leaveGroup($end = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'leaveGroup', [$end]);
-
-        return parent::leaveGroup($end);
     }
 
 }

@@ -64,10 +64,10 @@ class Staff extends \App\Domain\Model\Identity\Staff implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'staffInGroups', 'id', 'firstName', 'lastName', 'email', 'gender', 'birthday'];
+            return ['__isInitialized__', 'email', 'staffInGroups', 'staffRoles', 'id', 'firstName', 'lastName', 'gender', 'birthday'];
         }
 
-        return ['__isInitialized__', 'staffInGroups', 'id', 'firstName', 'lastName', 'email', 'gender', 'birthday'];
+        return ['__isInitialized__', 'email', 'staffInGroups', 'staffRoles', 'id', 'firstName', 'lastName', 'gender', 'birthday'];
     }
 
     /**
@@ -176,12 +176,45 @@ class Staff extends \App\Domain\Model\Identity\Staff implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
+    public function getEmail()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmail', []);
+
+        return parent::getEmail();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updateProfile($firstName, $lastName, $email, \App\Domain\Model\Identity\Gender $gender, $birthday = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'updateProfile', [$firstName, $lastName, $email, $gender, $birthday]);
+
+        return parent::updateProfile($firstName, $lastName, $email, $gender, $birthday);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function joinGroup(\App\Domain\Model\Identity\Group $group, \App\Domain\Model\Identity\StaffType $type, $start = NULL, $end = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'joinGroup', [$group, $type, $start, $end]);
 
         return parent::joinGroup($group, $type, $start, $end);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function allStaffGroups()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'allStaffGroups', []);
+
+        return parent::allStaffGroups();
     }
 
     /**
@@ -231,6 +264,61 @@ class Staff extends \App\Domain\Model\Identity\Staff implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
+    public function getRoles()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRoles', []);
+
+        return parent::getRoles();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getActiveRoles()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActiveRoles', []);
+
+        return parent::getActiveRoles();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function allStaffRoles()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'allStaffRoles', []);
+
+        return parent::allStaffRoles();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function assignRole(\App\Domain\Model\Identity\Role $role, $start = NULL, $end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'assignRole', [$role, $start, $end]);
+
+        return parent::assignRole($role, $start, $end);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeRole(\App\Domain\Model\Identity\Role $role, $end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeRole', [$role, $end]);
+
+        return parent::removeRole($role, $end);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getId()
     {
 
@@ -275,17 +363,6 @@ class Staff extends \App\Domain\Model\Identity\Staff implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
-    public function getEmail()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmail', []);
-
-        return parent::getEmail();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getGender()
     {
 
@@ -303,17 +380,6 @@ class Staff extends \App\Domain\Model\Identity\Staff implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBirthday', []);
 
         return parent::getBirthday();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function updateProfile($firstName, $lastName, $email, \App\Domain\Model\Identity\Gender $gender, \DateTime $birthday = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'updateProfile', [$firstName, $lastName, $email, $gender, $birthday]);
-
-        return parent::updateProfile($firstName, $lastName, $email, $gender, $birthday);
     }
 
 }
