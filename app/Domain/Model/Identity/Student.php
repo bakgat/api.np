@@ -84,12 +84,15 @@ class Student extends Person
      * @param DateTime $end
      * @return $this
      */
-    public function joinGroup(Group $group, $start = null, $end = null)
+    public function joinGroup(Group $group, $number = null, $start = null, $end = null)
     {
         if ($start == null) {
             $start = new DateTime;
         }
         $studentGroup = new StudentInGroup($this, $group, ['start' => $start, 'end' => $end]);
+        if($number != null) {
+            $studentGroup->setNumber($number);
+        }
         $this->studentInGroups[] = $studentGroup;
         return $this;
     }

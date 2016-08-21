@@ -58,7 +58,7 @@ class StudentService
         $groupNumber = $data['groupnumber'];
 
         $student = new Student($firstName, $lastName, $schoolId, $gender, $birthday);
-        $student->joinGroup($group);
+        $student->joinGroup($group, $groupNumber);
 
         $this->studentRepo->insert($student);
 

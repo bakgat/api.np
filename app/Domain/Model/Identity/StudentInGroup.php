@@ -34,6 +34,15 @@ class StudentInGroup extends PersonInGroup
      */
     protected $student;
 
+    /**
+     * @Groups({"student_list", "student_detail"})
+     *
+     * @Column(type="smallint")
+     *
+     * @var int
+     */
+    protected $number;
+
     public function __construct(Student $student, Group $group, $daterange)
     {
         parent::__construct($group, $daterange);
@@ -48,6 +57,22 @@ class StudentInGroup extends PersonInGroup
     public function getStudent()
     {
         return $this->student;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param $number
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
     }
 
 
