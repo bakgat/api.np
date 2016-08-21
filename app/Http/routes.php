@@ -30,7 +30,7 @@ $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identi
 
     $app->get('/{id}/groups', 'StudentController@allGroups');
     $app->post('/{id}/groups', 'StudentController@joinGroup');
-    $app->post('/{id}/groups/{studentGroupId}', 'StudentController@updateGroup');
+    $app->put('/{id}/groups/{studentGroupId}', 'StudentController@updateGroup');
 });
 
 $app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
