@@ -9,6 +9,10 @@
 namespace App\Domain\Services\Identity;
 
 
+use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\BranchRepository;
+use App\Domain\Model\Education\Redicodi;
+use App\Domain\Model\Evaluation\RedicodiForStudent;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
@@ -23,11 +27,14 @@ class StudentService
     protected $studentRepo;
     /** @var GroupRepository */
     protected $groupRepo;
+    /** @var BranchRepository */
+    protected $branchRepo;
 
-    public function __construct(StudentRepository $studentRepository, GroupRepository $groupRepository)
+    public function __construct(StudentRepository $studentRepository, GroupRepository $groupRepository, BranchRepository $branchRepository)
     {
         $this->studentRepo = $studentRepository;
         $this->groupRepo = $groupRepository;
+        $this->branchRepo = $branchRepository;
     }
 
     public function all()
@@ -117,6 +124,26 @@ class StudentService
         $this->groupRepo->updateStudentGroup($studentGroup);
 
         return $studentGroup;
+    }
+
+    /* ***************************************************
+     * REDICODI
+     * **************************************************/
+    public function addRedicodi($id, $branchId, $redicodi, $content, $start, $end)
+    {
+        /** @var Student $student */
+        $student = $this->get(Uuid::import($id));
+        /** @var Branch $branch */
+        $branch = $this->branchRepo->getBranch(Uuid::import($branchId));
+
+        /** @var RedicodiForStudent $studentRedicodi */
+        $studentRedicodi = null;
+        if ($student && $branch) {
+            $redicodi = new Redicodi($redicodi);
+            $studentRedicodi = $student->addRedicodi($redicodi, $branch, $content, $start, $end);
+        }
+        $this->studentRepo->update($student);
+        return $studentRedicodi;
     }
 
 

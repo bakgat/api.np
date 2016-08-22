@@ -32,6 +32,8 @@ class RedicodiForStudent
     use DateRangeTrait;
 
     /**
+     * @Groups({"student_redicodi"})
+     *
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -70,7 +72,7 @@ class RedicodiForStudent
     /**
      * @Groups({"student_redicodi"})
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string
      */

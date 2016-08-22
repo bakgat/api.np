@@ -8,6 +8,8 @@
 
 namespace App\Domain\Model\Identity;
 
+use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Evaluation\RedicodiForStudent;
 use App\Domain\Model\Time\DateRange;
 use \DateTime;
@@ -76,6 +78,9 @@ class Student extends Person
         $this->schoolId = $schoolId;
     }
 
+    /* ***************************************************
+     * GROUPS
+     * **************************************************/
     /**
      *
      * @param $group
@@ -89,7 +94,7 @@ class Student extends Person
             $start = new DateTime;
         }
         $studentGroup = new StudentInGroup($this, $group, ['start' => $start, 'end' => $end]);
-        if($number != null) {
+        if ($number != null) {
             $studentGroup->setNumber($number);
         }
         $this->studentInGroups[] = $studentGroup;
@@ -172,5 +177,29 @@ class Student extends Person
             }
         }
         return false;
+    }
+
+
+    /* ***************************************************
+     * REDICODI
+     * **************************************************/
+    /**
+     * @param Redicodi $redicodi
+     * @param Branch $branch
+     * @param $content
+     * @param null $start
+     * @param null $end
+     * @return RedicodiForStudent
+     */
+    public function addRedicodi(Redicodi $redicodi, Branch $branch, $content, $start = null, $end = null)
+    {
+        if ($start == null) {
+            $start = new DateTime;
+        }
+        $dr = ['start' => $start, 'end' => $end];
+        $studentRedicodi = new RedicodiForStudent($this, $redicodi, $branch, $content, $dr);
+        $this->redicodiForStudents[] = $studentRedicodi;
+
+        return $studentRedicodi;
     }
 }
