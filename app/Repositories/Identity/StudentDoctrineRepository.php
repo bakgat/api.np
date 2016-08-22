@@ -193,6 +193,11 @@ class StudentDoctrineRepository implements StudentRepository
         return $qb->getQuery()->getResult();
     }
 
+
+    /* ***************************************************
+     * REDICODI
+     * **************************************************/
+
     /**
      * Gets all 'redicodi' applicable for a given student.
      *
@@ -211,6 +216,35 @@ class StudentDoctrineRepository implements StudentRepository
             ->setParameter(1, $id);
 
         return $qb->getQuery()->getResult();
+    }
+
+
+    /**
+     * @param Uuid $id
+     * @return RedicodiForStudent
+     */
+    public function getStudentRedicodi(Uuid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('rfs')
+            ->from(RedicodiForStudent::class, 'rfs')
+            ->where('rfs.id=:id')
+            ->setParameter('id', $id);
+
+        //TODO: throw error because of get function
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     *
+     * @param RedicodiForStudent $studentRedicodi
+     * @return int
+     */
+    public function updateRedicodi(RedicodiForStudent $studentRedicodi)
+    {
+        $this->em->persist($studentRedicodi);
+        $this->em->flush();
+        return 1;
     }
 
 

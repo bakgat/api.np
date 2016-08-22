@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Identity;
 
 
+use App\Domain\Model\Evaluation\RedicodiForStudent;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Webpatser\Uuid\Uuid;
@@ -64,13 +65,7 @@ interface StudentRepository
      */
     public function allGroups(Uuid $id);
 
-    /**
-     * Gets all 'redicodi' applicale for a given student.
-     *
-     * @param Uuid $id
-     * @return RedicodiForStudent[]
-     */
-    public function allRedicodi(Uuid $id);
+
 
     /**
      * Saves a new student.
@@ -95,6 +90,31 @@ interface StudentRepository
      * @return int Number of affected rows.
      */
     public function delete(Uuid $id);
+
+    /* ***************************************************
+     * REDICODI
+     * **************************************************/
+
+    /**
+     * Gets all 'redicodi' applicale for a given student.
+     *
+     * @param Uuid $id
+     * @return RedicodiForStudent[]
+     */
+    public function allRedicodi(Uuid $id);
+
+    /**
+     * @param Uuid $id
+     * @return RedicodiForStudent
+     */
+    public function getStudentRedicodi(Uuid $id);
+
+    /**
+     *
+     * @param RedicodiForStudent $studentRedicodi
+     * @return int
+     */
+    public function updateRedicodi(RedicodiForStudent $studentRedicodi);
 
 
 }

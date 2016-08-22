@@ -155,6 +155,7 @@ class StudentController extends Controller
 
     public function addRedicodi(Request $request, $id)
     {
+        //TODO: validation !
         //TODO: move to service with all this data !!!
         //TODO: same for other add / update functions
         $start = $request->get('start');
@@ -175,6 +176,19 @@ class StudentController extends Controller
 
     public function updateRedicodi(Request $request, $studentRedicodiId)
     {
+        $start = $request->get('start');
+        if ($start) {
+            $start = convert_date_from_string($start);
+        }
+        $end = $request->get('end');
+        if ($end) {
+            $end = convert_date_from_string($end);
+        }
+        $redicodi = $request->get('redicodi')['id'];
+        $branchId = $request->get('branch')['id'];
+        $content = $request->get('content');
 
+        $studentRedicodi = $this->studentService->updateRedicodi($studentRedicodiId, $branchId, $redicodi, $content, $start, $end);
+        return $this->response($studentRedicodi, ['student_redicodi']);
     }
 }

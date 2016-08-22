@@ -126,6 +126,12 @@ class RedicodiForStudent
         return $this->content;
     }
 
+    public function resetStart($start)
+    {
+        $dr = ['start' => $start, 'end' => $this->dateRange->getEnd()];
+        $this->dateRange = DateRange::fromData($dr);
+        return $this;
+    }
     /**
      * Stops the redicodi for a given student and branch at a certain date
      *
@@ -134,11 +140,6 @@ class RedicodiForStudent
      */
     public function stopRedicodi($end = null)
     {
-        //redicodi already stopped
-        if (!$this->isActive()) {
-            return $this;
-        }
-
         if ($end == null) {
             $now = new DateTime;
             $end = $now->modify('-1 day');
@@ -149,4 +150,13 @@ class RedicodiForStudent
 
         return $this;
     }
+
+    public function update(Branch $branch, Redicodi $redicodi, $content)
+    {
+        $this->branch = $branch;
+        $this->redicodi = $redicodi;
+        $this->content = $content;
+    }
+
+
 }

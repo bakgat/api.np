@@ -146,5 +146,23 @@ class StudentService
         return $studentRedicodi;
     }
 
+    public function updateRedicodi($studentRedicodiId, $branchId, $redicodi, $content, $start, $end)
+    {
+        /** @var RedicodiForStudent $studentRedicodi */
+        $studentRedicodi = $this->studentRepo->getStudentRedicodi(Uuid::import($studentRedicodiId));
+        /** @var Branch $branch */
+        $branch = $this->branchRepo->getBranch(Uuid::import($branchId));
+
+        $studentRedicodi->resetStart($start);
+        if($end != null) {
+            $studentRedicodi->stopRedicodi($end);
+        }
+
+        $redicodi = new Redicodi($redicodi);
+        $studentRedicodi->update($branch, $redicodi, $content);
+        $this->studentRepo->updateRedicodi($studentRedicodi);
+        return $studentRedicodi;
+    }
+
 
 }
