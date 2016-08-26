@@ -27,7 +27,7 @@ use JMS\Serializer\Annotation\Groups;
 class Branch implements \JsonSerializable
 {
     /**
-     * @Groups({"major_list", "branch_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
+     * @Groups({"group_branches", "major_list", "branch_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -37,7 +37,7 @@ class Branch implements \JsonSerializable
     private $id;
 
     /**
-     * @Groups({"major_list", "branch_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
+     * @Groups({"group_branches", "major_list", "branch_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
      *
      * @ORM\Column(type="string")
      *
@@ -46,7 +46,7 @@ class Branch implements \JsonSerializable
     private $name;
 
     /**
-     * @Groups({"branch_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
+     * @Groups({"group_branches", "branch_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
      *
      * @ORM\ManyToOne(targetEntity="Major", inversedBy="branches")
      * @ORM\JoinColumn(onDelete="CASCADE")

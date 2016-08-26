@@ -71,6 +71,7 @@ $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity
     $app->post('/', 'GroupController@store');
     $app->put('/{id}', 'GroupController@update');
 
+    $app->get('/{id}/branches', 'GroupController@allBranches');
     //$app->get('/{id}/evaluations', 'GroupController@indexEvaluations');
 });
 /* ***************************************************
@@ -95,4 +96,7 @@ $app->group(['prefix' => 'branches', 'namespace' => 'App\Http\Controllers\Educat
 $app->group(['prefix'=>'evaluations', 'namespace' => 'App\Http\Controllers\Evaluation'], function() use($app) {
     $app->get('/', 'EvaluationController@index');
     $app->get('/{id}', 'EvaluationController@show');
+
+    $app->post('/', 'EvaluationController@store');
+    $app->put('/{id}', 'EvaluationController@update');
 });

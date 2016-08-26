@@ -48,6 +48,12 @@ interface BranchRepository
     public function allBranches(Group $group, Major $major);
 
     /**
+     * @param Group $group
+     * @return ArrayColleciton
+     */
+    public function allBranchesInGroup(Group $group);
+
+    /**
      * Gets all the active major in a group.
      *
      * @param Group $group
@@ -109,4 +115,10 @@ interface BranchRepository
      * @return int Number of affected rows.
      */
     public function deleteMajor(Uuid $id);
+
+    /**
+     * @param $branchForGroupId
+     * @return BranchForGroup
+     */
+    public function getBranchForGroup($branchForGroupId);
 }

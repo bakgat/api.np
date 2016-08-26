@@ -30,13 +30,17 @@ class Controller extends BaseController
         }
     }
 
-    public function response($data, $groups= null)
+    public function response($data, $groups = null, $serializeNull = false)
     {
+        $context = new SerializationContext();
+        $context->setSerializeNull($serializeNull);
+
+
         if (is_array($groups) && count($groups) > 0) {
-            return $this->serializer->serialize($data, 'json', SerializationContext::create()->setGroups($groups));
+            $context->setGroups($groups);
         }
 
-        $result = $this->serializer->serialize($data, 'json');
+        $result = $this->serializer->serialize($data, 'json', $context);
         return $result;
     }
 }

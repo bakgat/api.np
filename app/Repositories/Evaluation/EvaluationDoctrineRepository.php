@@ -56,4 +56,18 @@ class EvaluationDoctrineRepository implements EvaluationRepository
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    public function insert(Evaluation $evaluation)
+    {
+        $this->em->persist($evaluation);
+        $this->em->flush();
+        return $evaluation->getId();
+    }
+
+    public function update(Evaluation $evaluation)
+    {
+        $this->em->persist($evaluation);
+        $this->em->flush();
+        return 1;
+    }
 }

@@ -9,8 +9,10 @@
 namespace App\Repositories\Education;
 
 
+use App\Domain\Model\Education\ArrayColleciton;
 use App\Domain\Model\Education\ArrayCollection;
 use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\BranchForGroup;
 use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Education\Exceptions\BranchNotFoundException;
@@ -110,6 +112,23 @@ class BranchDoctrineRepository implements BranchRepository
     }
 
     /**
+     * @param Group $group
+     * @return ArrayColleciton
+     */
+    public function allBranchesInGroup(Group $group)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('bfg, m, b')
+            ->from(BranchForGroup::class, 'bfg')
+            ->join('bfg.branch', 'b')
+            ->join('b.major', 'm')
+            ->andWhere('bfg.group=:group')
+            ->setParameter('group', $group->getId());
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * Gets all the active major in a group.
      *
      * @param Group $group
@@ -174,11 +193,13 @@ class BranchDoctrineRepository implements BranchRepository
      * @param Major $major
      * @return Uuid
      */
-    public function insertMajor(Major $major) {
+    public function insertMajor(Major $major)
+    {
         $this->em->persist($major);
         $this->em->flush();
         return $major->getId();
     }
+
     /**
      * Saves a new Branch
      *
@@ -231,4 +252,20 @@ class BranchDoctrineRepository implements BranchRepository
         $this->em->flush();
         return 1;
     }
+
+    /**
+     * @param $branchForGroupId
+     * @return BranchForGroup
+     */
+    public function getBranchForGroup($branchForGroupId)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('bfg')
+            ->from(BranchForGroup::class, 'bfg')
+            ->where('bfg.id=:id')
+            ->setParameter('id', $branchForGroupId);
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+
 }

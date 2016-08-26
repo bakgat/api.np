@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Evaluation;
 
 
+use App\Domain\Model\Identity\Student;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use App\Domain\Model\Education\BranchForGroup;
@@ -84,7 +85,6 @@ class Evaluation
      * @var int
      */
     protected $max;
-
 
 
     /**
@@ -171,13 +171,38 @@ class Evaluation
     {
         return collection_median($this->results, 'score');
     }
+
     /** ArrayCollection is not accessible */
-    public function getResults() {
+    public function getResults()
+    {
         return clone $this->results;
     }
+
     public function addResult(PointResult $result)
     {
         $this->results->add($result);
         $result->setEvaluation($this);
+    }
+
+    public function updateResult(Student $student, $score, $redicodi)
+    {
+        /** @var PointResult $result */
+        foreach ($this->results as $result) {
+            if ($result->getStudent()->getId() == $student->getId()) {
+                $result->update($score, $redicodi);
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    public function update($title, $branchForGroup, $date, $max)
+    {
+        $this->title = $title;
+        $this->branchForGroup = $branchForGroup;
+        $this->date = $date;
+        $this->max = $max;
+        return $this;
     }
 }

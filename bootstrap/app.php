@@ -131,6 +131,7 @@ $app->singleton(JMS\Serializer\Serializer::class, function ($app) {
     /** @var \Illuminate\Config\Repository $config */
     $config = $app->make('Illuminate\Config\Repository');
 
+
     return JMS\Serializer\SerializerBuilder
         ::create()
         ->setCacheDir(storage_path('cache/serializer'))

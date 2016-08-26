@@ -113,4 +113,10 @@ class PointResult
     {
         $this->redicodi = implode(',', $redicodi);
     }
+
+    public function update($score, $redicodi)
+    {
+        $this->score = $score;
+        $this->setRedicodi($redicodi);
+    }
 }

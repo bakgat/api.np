@@ -21,4 +21,16 @@ interface EvaluationRepository
      * @return Evaluation
      */
     public function get(Uuid $id);
+
+    /**
+     * @param $evaluation
+     * @return int
+     */
+    public function update(Evaluation $evaluation);
+
+    /**
+     * @param $evaluation
+     * @return Uuid
+     */
+    public function insert(Evaluation $evaluation);
 }

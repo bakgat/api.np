@@ -28,6 +28,7 @@ use JMS\Serializer\Annotation\Groups;
 class BranchForGroup
 {
     /**
+     * @Groups({"evaluation_detail", "group_branches"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -37,7 +38,7 @@ class BranchForGroup
     private $id;
 
     /**
-     * @Groups({"group_evaluations", "evaluation_detail"})
+     * @Groups({"group_evaluations", "evaluation_detail", "group_branches"})
      * @ORM\ManyToOne(targetEntity="Branch", inversedBy="branchForGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *

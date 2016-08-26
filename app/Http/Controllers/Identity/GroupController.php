@@ -9,26 +9,27 @@
 namespace App\Http\Controllers\Identity;
 
 
-use App\Domain\Model\Evaluation\EvaluationRepository;
+use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
-use Webpatser\Uuid\Uuid;
+use App\Domain\Uuid;
 
 class GroupController extends Controller
 {
     /** @var GroupRepository */
     private $groupRepo;
+    /** @var  BranchRepository */
+    private $branchRepo;
 
-    public function __construct(GroupRepository $groupRepository, SerializerInterface $serializer)
+    public function __construct(GroupRepository $groupRepository, BranchRepository $branchRepository, SerializerInterface $serializer)
     {
         parent::__construct($serializer);
         $this->groupRepo = $groupRepository;
-
+        $this->branchRepo = $branchRepository;
     }
 
 
@@ -115,4 +116,10 @@ class GroupController extends Controller
     }
 
 
+    public function allBranches($id)
+    {
+        $group = $this->groupRepo->get(Uuid::import($id));
+        $branches = $this->branchRepo->allBranchesInGroup($group);
+        return $this->response($branches, ['group_branches']);
+    }
 }
