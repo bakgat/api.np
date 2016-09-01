@@ -35,31 +35,65 @@ class EducationSeeder extends Seeder
 
         $faker = Faker\Factory::create('nl_BE');
 
-        $majors = [];
-        $branches = [];
-        foreach (range(1, 10) as $index) {
-            $major = new Major('major_' . $faker->unique()->company());
+        $majors = [
+            'wiskunde' => [
+                'getallenkennis',
+                'hoofdrekenen',
+                'cijferen',
+                'meten en metend rekenen',
+                'meetkunde',
+                'toepassingen'
+            ],
+            'Nederlands' => [
+                'taalbeschouwing',
+                'spelling',
+                'lezen',
+                'spreken',
+                'schrijven'
 
-            $majors[] = $major;
+            ],
+            'wereldoriëntatie' => [
+                'kennis',
+                'vaardigheden & attitudes'
+            ], 'godsdienst' => [
+                'kennis',
+                'vaardigheden & attitudes'
+            ], 'Frans' => [
+                'schrijven',
+                'spreken',
+                'communicatieve vaardigheden'
+            ],
+            'muzische vorming' => [
+                'muzikale opvoeding',
+                'lichamelijke opvoeding',
+                'bewegingsexpressie',
+                'dramatische expressie'
+            ]];
+        foreach ($majors as $key => $value) {
+            $major = new Major($key);
 
-            foreach (range(1, 5) as $index) {
-                $branch = new Branch('branch_' . $faker->unique()->company());
+            foreach ($value as $b) {
+                $branch = new Branch($b);
                 $major->addBranch($branch);
-
                 $branches[] = $branch;
-
             }
+
             EntityManager::persist($major);
         }
 
         foreach ($groups as $group) {
-            $faker->unique(true)->randomElement($branches);
-            foreach (range(1, $faker->biasedNumberBetween(10, 16)) as $index) {
-                $branch = $faker->unique()->randomElement($branches);
 
-                $evType = $faker->randomElement($evaluationTypes);
-                $max = $evType->getValue() === EvaluationType::POINT ? $faker->biasedNumberBetween(0, 100) : null;
-                $lower = $faker->dateTimeBetween('-9years', '-1year');
+            /** @var Branch $branch */
+            foreach ($branches as $branch) {
+                $major = $branch->getMajor();
+                $evType = null;
+                if($major->getName()=='wiskunde'||$major->getName()=='Nederlands'||$branch->getName()=='kennis'||$major->getName()=='Frans') {
+                    $max = $faker->biasedNumberBetween(0, 100);
+                    $evType = new EvaluationType(EvaluationType::POINT);
+                } else {
+                    $evType = new EvaluationType(EvaluationType::COMPREHENSIVE);
+                }
+                $lower = new DateTime;
 
                 $branch->joinGroup($group, $evType, $max, $lower);
                 EntityManager::persist($branch);

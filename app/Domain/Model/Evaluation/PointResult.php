@@ -54,7 +54,7 @@ class PointResult
     /**
      * @Groups({"evaluation_detail"})
      *
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      *
      * @var float
      */

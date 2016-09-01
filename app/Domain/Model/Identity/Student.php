@@ -11,11 +11,10 @@ namespace App\Domain\Model\Identity;
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Evaluation\RedicodiForStudent;
+use App\Domain\Model\Evaluation\StudentIAC;
 use App\Domain\Model\Time\DateRange;
 use \DateTime;
 use Doctrine\ORM\Mapping AS ORM;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\AccessorOrder;
 use JMS\Serializer\Annotation\VirtualProperty;
@@ -54,6 +53,7 @@ class Student extends Person
      * @var RedicodiForStudent[]
      */
     protected $redicodiForStudents;
+
 
 
     public function __construct($firstName, $lastName, $schoolId, Gender $gender, DateTime $birthday = null)

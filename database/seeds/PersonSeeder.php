@@ -35,6 +35,7 @@ class PersonSeeder extends Seeder
 
         $faker = Faker\Factory::create('nl_BE');
         foreach (range(1, 440) as $index) {
+            /** @var Student $student */
             $student = new Student(
                 $faker->firstName(),
                 $faker->lastName(),
@@ -46,7 +47,7 @@ class PersonSeeder extends Seeder
             for ($i = 0; $i < $faker->biasedNumberBetween(1, 10); $i++) {
                 $lower = $faker->dateTimeBetween('-9years', '-1year');
                 $upper = $faker->dateTimeBetween($lower, 'now');
-                $student->joinGroup($faker->unique()->randomElement($groups), $lower, $upper);
+                $student->joinGroup($faker->unique()->randomElement($groups), null, $lower, $upper);
             }
 
             EntityManager::persist($student);

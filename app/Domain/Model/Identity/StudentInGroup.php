@@ -37,7 +37,7 @@ class StudentInGroup extends PersonInGroup
     /**
      * @Groups({"student_groups"})
      *
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="smallint", nullable=true)
      *
      * @var int
      */
