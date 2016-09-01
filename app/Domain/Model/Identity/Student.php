@@ -110,6 +110,7 @@ class Student extends Person
     public function leaveGroup(Group $group, $end = null)
     {
         $id = $group->getId();
+        /** @var StudentInGroup $studentInGroup */
         foreach ($this->studentInGroups as $studentInGroup) {
             if ($studentInGroup->getGroup()->getId() == $id) {
                 $studentInGroup->leaveGroup($end);
