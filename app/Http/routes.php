@@ -11,10 +11,6 @@
 |
  */
 
-$app->get('/', function () use ($app) {
-    return phpinfo();
-});
-
 $app->group(['prefix' => 'users', 'namespace' => 'App\Http\Controllers\Identity'], function() use($app) {
     $app->post('/login', 'UserController@login');
 });
