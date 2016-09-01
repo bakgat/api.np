@@ -43,7 +43,7 @@ class ResultSeeder extends Seeder
         $i = 0;
         foreach ($groups as $group) {
             $i++;
-            if ($i == 21) {
+            if ($i == 10) {
                 break;
             }
             foreach ($group->getBranchForGroups() as $branchForGroup) {
