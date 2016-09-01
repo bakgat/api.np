@@ -30,13 +30,19 @@ class StudentInGroupTest extends TestCase
         $gender = new Gender($this->faker->randomElement(['F', 'M']));
 
         $student = new Student($fn, $ln, $email, $gender);
+        $number = $this->faker->biasedNumberBetween(1, 28);
 
-        $student->joinGroup($group1);
+        $studGroup1 = $student->joinGroup($group1, $number);
         $this->assertCount(1, $student->getGroups());
 
-        $student->joinGroup($group2);
+        $studGroup2 = $student->joinGroup($group2);
         $this->assertCount(2, $student->getGroups());
         $this->assertCount(2, $student->getActiveGroups());
+
+        $this->assertEquals($student, $studGroup1->getStudent());
+        $this->assertEquals($group1, $studGroup1->getGroup());
+        $this->assertEquals($number, $studGroup1->getNumber());
+
     }
 
     /**

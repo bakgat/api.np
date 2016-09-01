@@ -88,7 +88,7 @@ class Student extends Person
      * @param $group
      * @param DateTime $start
      * @param DateTime $end
-     * @return $this
+     * @return StudentInGroup
      */
     public function joinGroup(Group $group, $number = null, $start = null, $end = null)
     {
