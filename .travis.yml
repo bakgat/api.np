@@ -7,7 +7,12 @@ cache: bundler
 services:
   - mysql
 
+
+install:
+  - composer require satooshi/php-coveralls
+
 before_script:
+  - mkdir -p build/logs
   - composer self-update
   - composer install --no-interaction --prefer-source
   - cp .travis.env .env
@@ -17,4 +22,7 @@ before_script:
 
 
 script:
-  - phpunit
+  - phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php vendor/bin/coveralls -v; fi;'
