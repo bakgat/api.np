@@ -61,7 +61,7 @@ class Staff extends Person
         parent::__construct($firstName, $lastName, $gender, $birthday);
         $this->email = $email;
 
-        $this->staffInGroups = [];
+        $this->staffInGroups = new ArrayCollection;
         $this->staffRoles = new ArrayCollection;
     }
 
@@ -95,7 +95,7 @@ class Staff extends Person
             $start = new DateTime;
         }
         $staffGroup = new StaffInGroup($this, $group, $type, ['start' => $start, 'end' => $end]);
-        $this->staffInGroups[] = $staffGroup;
+        $this->staffInGroups->add($staffGroup);
         return $staffGroup;
     }
 

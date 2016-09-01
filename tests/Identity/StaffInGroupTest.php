@@ -2,6 +2,7 @@
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Staff;
+use App\Domain\Model\Identity\StaffInGroup;
 use App\Domain\Model\Identity\StaffType;
 use App\Domain\Model\Time\DateRange;
 use Carbon\Carbon;
@@ -31,11 +32,39 @@ class StaffInGroupTest extends TestCase
         $staff = new Staff($fn, $ln, $email, $gender);
 
         $staff->joinGroup($group1, new StaffType(StaffType::TITULAR));
+
         $this->assertCount(1, $staff->getGroups());
+        $this->assertInstanceOf(Group::class, $staff->getGroups()[0]);
 
         $staff->joinGroup($group2, new StaffType(StaffType::TEACHER), $this->faker->dateTimeBetween('-1day', '2years'));
         $this->assertCount(2, $staff->getGroups());
         $this->assertCount(1, $staff->getActiveGroups());
+
+
+    }
+
+    /**
+     * @test
+     * @group staff
+     * @group group
+     */
+    public function should_get_all_staff_groups()
+    {
+        $group1 = new Group($this->faker->unique()->word());
+        $group2 = new Group($this->faker->unique()->word());
+
+        $fn = $this->faker->firstName();
+        $ln = $this->faker->lastName();
+        $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
+
+        $staff = new Staff($fn, $ln, $email, $gender);
+
+        $staff->joinGroup($group1, new StaffType(StaffType::TITULAR));
+        $staff->joinGroup($group2, new StaffType(StaffType::TEACHER), $this->faker->dateTimeBetween('-1day', '2years'));
+
+        $this->assertCount(2, $staff->allStaffGroups());
+        $this->assertInstanceOf(StaffInGroup::class, $staff->allStaffGroups()[0]);
     }
 
     /**
