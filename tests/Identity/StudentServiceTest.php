@@ -16,14 +16,17 @@ class StudentServiceTest extends TestCase
     protected $studentRepo;
     /** @var  MockInterface */
     protected $groupRepo;
+    /** @var  MockInterface */
+    protected $branchRepo;
 
     public function setUp() {
         parent::setUp();
 
         $this->studentRepo = $this->mock(App\Domain\Model\Identity\StudentRepository::class);
         $this->groupRepo = $this->mock(App\Domain\Model\Identity\GroupRepository::class);
+        $this->branchRepo = $this->mock(App\Domain\Model\Education\Branch::class);
 
-        $this->studentService = new StudentService($this->studentRepo, $this->groupRepo);
+        $this->studentService = new StudentService($this->studentRepo, $this->groupRepo, $this->branchRepo);
     }
 
     /**

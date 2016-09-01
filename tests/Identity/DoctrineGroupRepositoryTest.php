@@ -31,11 +31,11 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
      * @group grouprepo
      * @group all
      */
-    public function should_return_20_active_5_blocked_groups()
+    public function should_return_20_active()
     {
         $groups = $this->groupRepo->all();
         $active = $this->groupRepo->allActive();
-        $this->assertCount(25, $groups);
+        $this->assertCount(20, $groups);
         $this->assertCount(20, $active);
     }
 

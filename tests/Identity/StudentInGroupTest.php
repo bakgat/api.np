@@ -60,7 +60,7 @@ class StudentInGroupTest extends TestCase
         $this->assertCount(1, $student->getGroups());
 
         $now = new DateTime;
-        $student->joinGroup($group2, null, $now->modify('-1 day'));
+        $student->joinGroup($group2, null, null, $now->modify('-1 day'));
         $this->assertCount(2, $student->getGroups());
         $this->assertCount(1, $student->getActiveGroups());
     }
@@ -84,8 +84,8 @@ class StudentInGroupTest extends TestCase
 
         $now = new DateTime;
 
-        $student->joinGroup($group1)
-            ->joinGroup($group2, null, $now->modify('-1 day')); //once was in group2
+        $student->joinGroup($group1);
+        $student->joinGroup($group2, null, null, $now->modify('-1 day')); //once was in group2
         $this->assertCount(1, $student->getActiveGroups());
 
         $student->joinGroup($group2); //again in group2
@@ -118,8 +118,8 @@ class StudentInGroupTest extends TestCase
         $lowerBound = new DateTime('2014-01-01');
         $upperBound = new DateTime('2016-01-01');
 
-        $student->joinGroup($group1, $lowerBound)
-            ->joinGroup($group2, $lowerBound, $upperBound);
+        $student->joinGroup($group1, null, $lowerBound);
+        $student->joinGroup($group2, null, $lowerBound, $upperBound);
 
 
         $this->assertTrue($student->wasActiveInGroupAt($group1, $nearInfinite));
@@ -153,8 +153,8 @@ class StudentInGroupTest extends TestCase
         $lowerBound = new DateTime('2014-01-01');
         $upperBound = new DateTime('2016-01-01');
 
-        $student->joinGroup($group1, $lowerBound)
-            ->joinGroup($group2, $lowerBound, $upperBound);
+        $student->joinGroup($group1, null, $lowerBound);
+        $student->joinGroup($group2, null, $lowerBound, $upperBound);
 
 
         $this->assertTrue($student->wasActiveInGroupBetween($group1, new DateRange($lowerBound, $upperBound)));
