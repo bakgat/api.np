@@ -14,7 +14,8 @@ class UuidTest extends TestCase
      * @test
      * @group uuid
      */
-    public function should_create_new() {
+    public function should_create_new()
+    {
         $uuid = Uuid::generate(4);
 
         $this->assertInstanceOf(Uuid::class, $uuid);
@@ -25,9 +26,12 @@ class UuidTest extends TestCase
      * @test
      * @group uuid
      */
-    public function should_serialize_to_json() {
+    public function should_serialize_to_json()
+    {
         $serializer = \JMS\Serializer\SerializerBuilder::create()->build();
 
+        // Use Group class that make use of UUID.
+        // Because Uuid must have a root object to serialize on.
         $group = new Group($this->faker->word);
 
         $serialized = $serializer->serialize($group, 'json');
