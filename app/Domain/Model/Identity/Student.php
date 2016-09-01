@@ -201,7 +201,7 @@ class Student extends Person
         }
         $dr = ['start' => $start, 'end' => $end];
         $studentRedicodi = new RedicodiForStudent($this, $redicodi, $branch, $content, $dr);
-        $this->redicodiForStudents[] = $studentRedicodi;
+        $this->redicodiForStudents->add($studentRedicodi);
 
         return $studentRedicodi;
     }

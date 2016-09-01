@@ -30,6 +30,8 @@ class BranchTest extends TestCase
         $this->assertInstanceOf(Uuid::class, $major->getId());
         $this->assertEquals($major_name, $major->getName());
 
+        $this->assertEquals($major, $branch->getMajor());
+
         $this->assertInstanceOf(Uuid::class, $branch->getId());
         $this->assertEquals($branch_name, $branch->getName());
     }
