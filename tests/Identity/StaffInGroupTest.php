@@ -42,6 +42,8 @@ class StaffInGroupTest extends TestCase
 
         $this->assertEquals($group1, $staffInGroup1->getGroup());
         $this->assertEquals($staff, $staffInGroup1->getStaff());
+        $this->assertEquals($group2, $staffInGroup2->getGroup());
+        $this->assertEquals($staff, $staffInGroup2->getStaff());
     }
 
     /**
