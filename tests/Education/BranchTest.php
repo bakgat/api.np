@@ -26,6 +26,7 @@ class BranchTest extends TestCase
 
         $branch_name = $this->faker->word();
         $branch = new Branch($branch_name);
+        $major->addBranch($branch);
 
         $this->assertInstanceOf(Uuid::class, $major->getId());
         $this->assertEquals($major_name, $major->getName());
