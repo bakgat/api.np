@@ -59,13 +59,47 @@ class DateRangeTest extends TestCase
     public function should_create_from_data_object()
     {
         $obj = new stdClass;
-        $obj->start = '2015-09-01';
+        $obj->start = new DateTime('2015-09-01');
         $obj->end = new DateTime('2016-06-30');
 
         $dr = DateRange::fromData($obj);
 
         $this->assertEquals(new DateTime('2015-09-01'), $dr->getStart());
         $this->assertEquals(new DateTime('2016-06-30'), $dr->getEnd());
+    }
+
+    /**
+     * @test
+     * @group time
+     * @group daterange
+     */
+    public function should_create_from_data_strings()
+    {
+        $obj = new stdClass;
+        $obj->start = '2015-09-01';
+        $obj->end = '2016-06-30';
+
+        $dr = DateRange::fromData($obj);
+
+        $this->assertEquals(new DateTime('2015-09-01'), $dr->getStart());
+        $this->assertEquals(new DateTime('2016-06-30'), $dr->getEnd());
+    }
+
+    /**
+     * @test
+     * @group time
+     * @group daterange
+     */
+    public function should_make_infinite_from_null_range()
+    {
+        $obj = new stdClass();
+        $obj->start = null;
+        $obj->end = null;
+
+        $dr = DateRange::fromData($obj);
+
+        $this->assertEquals(new DateTime(DateRange::PAST), $dr->getStart());
+        $this->assertEquals(new DateTime(DateRange::FUTURE), $dr->getEnd());
     }
 
     /**
@@ -166,6 +200,20 @@ class DateRangeTest extends TestCase
         $this->assertTrue($dr4->isPast(), $dr4->toString());
         $this->assertTrue($dr4->isFuture(), $dr4->toString());
         $this->assertTrue($dr4->isInfinite(), $dr4->toString());
+    }
+
+    /**
+     * @test
+     * @group time
+     * @group daterange
+     */
+    public function should_fail_on_invalid_data()
+    {
+
+        $this->setExpectedException(InvalidArgumentException::class);
+        $fake = $this->faker->word;
+
+        $dr = DateRange::fromData($fake);
     }
 
 }
