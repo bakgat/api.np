@@ -1,5 +1,7 @@
 <?php
+use App\Domain\Model\Identity\Group;
 use App\Domain\Services\Identity\StudentService;
+use App\Domain\Uuid;
 use Mockery\MockInterface;
 
 /**
@@ -24,7 +26,7 @@ class StudentServiceTest extends TestCase
 
         $this->studentRepo = $this->mock(App\Domain\Model\Identity\StudentRepository::class);
         $this->groupRepo = $this->mock(App\Domain\Model\Identity\GroupRepository::class);
-        $this->branchRepo = $this->mock(App\Domain\Model\Education\Branch::class);
+        $this->branchRepo = $this->mock(App\Domain\Model\Education\BranchRepository::class);
 
         $this->studentService = new StudentService($this->studentRepo, $this->groupRepo, $this->branchRepo);
     }
@@ -35,20 +37,28 @@ class StudentServiceTest extends TestCase
      * @group studentservice
      */
     public function should_create_new() {
+        $group = new Group($this->faker->word, true);
+
         $this->studentRepo->shouldReceive('insert')->once();
+        $this->groupRepo->shouldReceive('get')->once()->andReturn($group);
 
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
         $schoolId = $this->faker->bankAccountNumber;
         $birthday = $this->faker->date;
         $gender = 'M';
+        $groupnumber=  $this->faker->biasedNumberBetween(0, 30);
 
         $data = [
             'firstName' => $fn,
             'lastName' => $ln,
             'schoolId' => $schoolId,
             'birthday' => $birthday,
-            'gender' => $gender
+            'gender' => $gender,
+            'group' => [
+                'id' => $group->getId()
+            ],
+            'groupnumber' => $groupnumber
         ];
 
         $student = $this->studentService->create($data);
@@ -58,5 +68,6 @@ class StudentServiceTest extends TestCase
         $this->assertEquals($data['schoolId'], $student->getSchoolId());
         $this->assertEquals(new DateTime($data['birthday']), $student->getBirthday());
         $this->assertEquals($data['gender'], $student->getGender());
+        $this->assertCount(1, $student->getActiveGroups());
     }
 }
