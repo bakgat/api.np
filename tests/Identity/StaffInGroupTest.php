@@ -160,4 +160,29 @@ class StaffInGroupTest extends TestCase
         $this->assertTrue($staff->wasActiveInGroupBetween($group2, new DateRange($lowerBound, $upperBound)));
         $this->assertFalse($staff->wasActiveInGroupBetween($group2, new DateRange($lowerBound, $nearInfinite)));
     }
+
+    /**
+     * @test
+     * @group staff
+     * @group group
+     */
+    public function should_change_type() {
+        $group1 = new Group($this->faker->unique()->word());
+
+        $fn = $this->faker->firstName();
+        $ln = $this->faker->lastName();
+        $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
+
+        $staff = new Staff($fn, $ln, $email, $gender);
+
+        $titular = new StaffType(StaffType::TITULAR);
+        $teacher = new StaffType(StaffType::TEACHER);
+
+        $staffInGroup1 = $staff->joinGroup($group1, $titular);
+        $this->assertEquals($titular, $staffInGroup1->getType());
+
+        $staffInGroup1->changeType($teacher);
+        $this->assertEquals($teacher, $staffInGroup1->getType());
+    }
 }
