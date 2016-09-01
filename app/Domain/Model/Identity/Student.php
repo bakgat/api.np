@@ -14,6 +14,7 @@ use App\Domain\Model\Evaluation\RedicodiForStudent;
 use App\Domain\Model\Evaluation\StudentIAC;
 use App\Domain\Model\Time\DateRange;
 use \DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\AccessorOrder;
@@ -43,14 +44,14 @@ class Student extends Person
      *
      * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="student", cascade={"persist"})
      *
-     * @var StudentInGroup[]
+     * @var ArrayCollection
      */
     protected $studentInGroups;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\RedicodiForStudent", mappedBy="student", cascade={"persist"})
      *
-     * @var RedicodiForStudent[]
+     * @var ArrayCollection
      */
     protected $redicodiForStudents;
 
@@ -61,7 +62,8 @@ class Student extends Person
         parent::__construct($firstName, $lastName, $gender, $birthday);
         $this->schoolId = $schoolId;
 
-        $this->studentInGroups = [];
+        $this->studentInGroups = new ArrayCollection;
+        $this->redicodiForStudents = new ArrayCollection;
     }
 
     /**
@@ -97,7 +99,7 @@ class Student extends Person
         if ($number != null) {
             $studentGroup->setNumber($number);
         }
-        $this->studentInGroups[] = $studentGroup;
+        $this->studentInGroups->add($studentGroup);
         return $studentGroup;
     }
 

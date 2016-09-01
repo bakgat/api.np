@@ -31,16 +31,17 @@ class StaffInGroupTest extends TestCase
 
         $staff = new Staff($fn, $ln, $email, $gender);
 
-        $staff->joinGroup($group1, new StaffType(StaffType::TITULAR));
+        $staffInGroup1 = $staff->joinGroup($group1, new StaffType(StaffType::TITULAR));
 
         $this->assertCount(1, $staff->getGroups());
         $this->assertInstanceOf(Group::class, $staff->getGroups()[0]);
 
-        $staff->joinGroup($group2, new StaffType(StaffType::TEACHER), $this->faker->dateTimeBetween('-1day', '2years'));
+        $staffInGroup2 = $staff->joinGroup($group2, new StaffType(StaffType::TEACHER), $this->faker->dateTimeBetween('-1day', '2years'));
         $this->assertCount(2, $staff->getGroups());
         $this->assertCount(1, $staff->getActiveGroups());
 
-
+        $this->assertEquals($group1, $staffInGroup1->getGroup());
+        $this->assertEquals($staff, $staffInGroup1->getStaff());
     }
 
     /**

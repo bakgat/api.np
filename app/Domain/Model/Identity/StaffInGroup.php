@@ -76,22 +76,6 @@ class StaffInGroup extends PersonInGroup
     public function changeType(StaffType $newType) {
         $this->type = $newType;
     }
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->staff->getDisplayName() . ' - ' . $this->group->getName()
-        . ': ' . $this->dateRange;
-    }
-
-    /**
-     * @return string
-     */
-    public function toString()
-    {
-        return $this->__toString();
-    }
 
 
 }

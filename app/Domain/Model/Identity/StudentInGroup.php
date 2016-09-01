@@ -76,22 +76,4 @@ class StudentInGroup extends PersonInGroup
     }
 
 
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->student->getDisplayName() . ' - ' . $this->group->getName()
-        . ': ' . $this->dateRange;
-    }
-
-    /**
-     * @return string
-     */
-    public function toString()
-    {
-        return $this->__toString();
-    }
-
-
 }

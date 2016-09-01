@@ -114,26 +114,13 @@ class Group
     }
 
 
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->name;
-    }
-
-    public function toString()
-    {
-        return $this->__toString();
-    }
-
     public function getStudentInGroups()
     {
-        return $this->studentInGroups;
+        return clone $this->studentInGroups;
     }
 
     public function getBranchForGroups()
     {
-        return $this->branchForGroups;
+        return clone $this->branchForGroups;
     }
 }

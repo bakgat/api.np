@@ -97,6 +97,7 @@ class StudentInGroupTest extends TestCase
         $this->assertCount(1, $student->getActiveGroups());
     }
 
+
     /**
      * @test
      * @group student
