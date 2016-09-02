@@ -17,6 +17,9 @@
     <filter>
         <whitelist>
             <directory suffix=".php">app/</directory>
+            <exclude>
+                <directory>app/Console</directory>
+            </exclude>
         </whitelist>
     </filter>
     <php>
