@@ -22,6 +22,7 @@
                 <directory>app/Events</directory>
                 <directory>app/Exceptions</directory>
                 <directory>app/Http/Middleware</directory>
+                <directory>app/Providers</directory>
             </exclude>
         </whitelist>
     </filter>
