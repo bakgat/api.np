@@ -1,5 +1,7 @@
 <?php
+use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
+use App\Domain\Model\Identity\Student;
 use App\Domain\Services\Identity\StudentService;
 use App\Domain\Uuid;
 use Mockery\MockInterface;
@@ -69,5 +71,45 @@ class StudentServiceTest extends TestCase
         $this->assertEquals(new DateTime($data['birthday']), $student->getBirthday());
         $this->assertEquals($data['gender'], $student->getGender());
         $this->assertCount(1, $student->getActiveGroups());
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group studentservice
+     */
+    public function should_update_existing() {
+        $newStudent = new Student('Karl', 'Van Iseghem', '001001001', new Gender('M'), new DateTime);
+
+        $this->studentRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($newStudent);
+
+        $this->studentRepo->shouldReceive('update')
+            ->once();
+
+        $fn = $this->faker->firstName;
+        $ln = $this->faker->lastName;
+        $schoolId = $this->faker->bankAccountNumber;
+        $birthday = $this->faker->date;
+        $gender = 'F';
+
+        $data = [
+            'id' => $newStudent->getId(),
+            'firstName' => $fn,
+            'lastName'=> $ln,
+            'schoolId' => $schoolId,
+            'birthday' => $birthday,
+            'gender'=> $gender,
+        ];
+
+        $student = $this->studentService->update($data);
+
+        $this->assertInstanceOf(Student::class, $student);
+        $this->assertEquals($data['id'], $student->getId());
+        $this->assertEquals($data['firstName'], $student->getFirstName());
+        $this->assertEquals($data['lastName'], $student->getLastName());
+        $this->assertEquals(new DateTime($data['birthday']), $student->getBirthday());
+        $this->assertEquals($data['gender'], $student->getGender());
     }
 }
