@@ -97,7 +97,7 @@ class StudentService
     /* ***************************************************
      * GROUPS
      * **************************************************/
-    public function joinGroup($id, $groupId, $number, $start, $end)
+    public function joinGroup($id, $groupId, $number, $start = null, $end = null)
     {
         /** @var Student $student */
         $student = $this->get(Uuid::import($id));

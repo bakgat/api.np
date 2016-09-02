@@ -2,6 +2,7 @@
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
+use App\Domain\Model\Identity\StudentInGroup;
 use App\Domain\Services\Identity\StudentService;
 use App\Domain\Uuid;
 use Mockery\MockInterface;
@@ -111,5 +112,48 @@ class StudentServiceTest extends TestCase
         $this->assertEquals($data['lastName'], $student->getLastName());
         $this->assertEquals(new DateTime($data['birthday']), $student->getBirthday());
         $this->assertEquals($data['gender'], $student->getGender());
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group studentservice
+     */
+    public function should_join_group() {
+        $group1 = new Group($this->faker->unique(true)->word);
+        $number= $this->faker->biasedNumberBetween(1, 30);
+
+        $student = $this->makeStudent();
+
+        $this->studentRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($student);
+
+        $this->groupRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($group1);
+
+        $this->studentRepo->shouldReceive('update')
+            ->once()
+            ->andReturn(1);
+
+        $studentGroup = $this->studentService->joinGroup($student->getId(), $group1->getId(), $number);
+
+        $this->assertInstanceOf(StudentInGroup::class, $studentGroup);
+        $this->assertCount(1, $student->getGroups());
+    }
+
+    /**
+     * @return Student
+     */
+    private function makeStudent() {
+        $fn = $this->faker->firstName;
+        $ln = $this->faker->lastName;
+        $schoolId = $this->faker->bankAccountNumber;
+        $birthday = new DateTime($this->faker->date);
+
+        $gender = $this->faker->randomElement(Gender::values());
+
+        return new Student($fn, $ln, $schoolId, $gender, $birthday);
     }
 }
