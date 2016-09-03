@@ -39,21 +39,16 @@ class StaffRoleTest extends TestCase
     }
 
     /**
- * @test
- * @group staff
- * @group role
- */
+     * @test
+     * @group staff
+     * @group role
+     */
     public function should_end_active_group_for_staff()
     {
-        $role1 = new Role($this->faker->unique()->word());
-        $role2 = new Role($this->faker->unique()->word());
+        $role1 = new Role($this->faker->unique(true)->word);
+        $role2 = new Role($this->faker->unique()->word);
 
-        $fn = $this->faker->firstName();
-        $ln = $this->faker->lastName();
-        $email = $this->faker->email();
-        $gender = new Gender($this->faker->randomElement(['F', 'M']));
-
-        $staff = new Staff($fn, $ln, $email, $gender);
+        $staff = $this->makeStaff();
 
         $staff->assignRole($role1);
         $this->assertCount(1, $staff->getRoles());
@@ -62,6 +57,48 @@ class StaffRoleTest extends TestCase
         $staff->assignRole($role2, null, $now->modify("-1 day"));
         $this->assertCount(2, $staff->getRoles());
         $this->assertCount(1, $staff->getActiveRoles());
+    }
+
+    /**
+     * @test
+     * @group staff
+     * @group role
+     */
+    public function should_reset_start_for_staffrole()
+    {
+        $role1 = new Role($this->faker->unique(true)->word);
+
+        $staff = $this->makeStaff();
+
+        $now = new DateTime();
+        $staffRole = $staff->assignRole($role1, $now);
+
+        $this->assertTrue($staffRole->isActive());
+
+        $twoDays = $now->modify("-2 days");
+        $staffRole->resetStart($twoDays);
+        $this->assertTrue($staffRole->isActive());
+        $this->assertEquals($twoDays->format('Y-M-d'), $staffRole->isActiveSince()->format('Y-M-d'));
+    }
+    /**
+     * @test
+     * @group staff
+     * @group role
+     */
+    public function should_block_staffrole()
+    {
+        $role1 = new Role($this->faker->unique(true)->word);
+
+        $staff = $this->makeStaff();
+
+        $now = new DateTime();
+        $staffRole = $staff->assignRole($role1, $now);
+
+        $this->assertTrue($staffRole->isActive());
+
+        $staffRole->block();
+        $this->assertFalse($staffRole->isActive());
+        $this->assertEquals($now->modify("-1 day")->format('Y-M-d'), $staffRole->isActiveUntil()->format('Y-M-d'));
     }
 
     /**
@@ -89,5 +126,16 @@ class StaffRoleTest extends TestCase
 
         $this->assertCount(2, $staff->allStaffRoles());
         $this->assertInstanceOf(StaffRole::class, $staff->allStaffRoles()[0]);
+    }
+
+    private function makeStaff() {
+        $fn = $this->faker->firstName();
+        $ln = $this->faker->lastName();
+        $email = $this->faker->email();
+        $gender = new Gender($this->faker->randomElement(['F', 'M']));
+
+        $staff = new Staff($fn, $ln, $email, $gender);
+
+        return $staff;
     }
 }
