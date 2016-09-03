@@ -3,6 +3,7 @@ use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Services\Identity\StaffService;
 use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Support\Facades\Validator;
 use Mockery\MockInterface;
 
 /**
@@ -89,7 +90,46 @@ class StaffControllerTest extends TestCase
             ]);
     }
 
+    /**
+     * @test
+     * @group StaffController
+     */
+    public function should_store_success()
+    {
+        $data = [
+            'firstName' => $this->faker->firstName,
+            'lastName' => $this->faker->lastName,
+            'email' => $this->faker->email,
+            'birthday' => $this->faker->date,
+            'gender' => 'M'
+        ];
 
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => false]));
+
+        $this->staffRepo->shouldReceive('insert')
+            ->once()
+            ->andReturn();
+
+        $this->post('staff', $data)
+            ->seeJsonStructure([
+                'id',
+                'displayName',
+                'firstName',
+                'lastName',
+                'email',
+                'gender',
+                'birthday'
+            ])
+            ->seeJson([
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'email' => $data['email'],
+                'gender' => $data['gender'],
+                'birthday' => $data['birthday']
+            ]);
+    }
 
 
     private function makeStaffCollection()
