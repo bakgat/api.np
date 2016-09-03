@@ -1,5 +1,6 @@
 <?php
 use App\Domain\Model\Identity\Group;
+use App\Domain\Uuid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
@@ -169,12 +170,33 @@ class GroupControllerTest extends TestCase
             ->once()
             ->andReturn(1);
 
-        $this->put('/groups/' . (string)$group->getId(), $data) //new Data
-            ->seeJson([
-                'id' => (string)$group->getId(),
-                'name' => $newGroup->getName(),
-                'active' => $newGroup->isActive()
-            ]);
+        $this->put('/groups/' . (string)$group->getId(), $data)//new Data
+        ->seeJson([
+            'id' => (string)$group->getId(),
+            'name' => $newGroup->getName(),
+            'active' => $newGroup->isActive()
+        ]);
+    }
+
+    /**
+     * @test
+     * @group GroupController
+     */
+    public function should_return_422_when_update_fails()
+    {
+        $data = [
+            'id' => (string)Uuid::generate(4),
+            'active' => true
+        ];
+
+        $message_bag = new MessageBag(['name is required']);
+
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => true, 'messages' => $message_bag]));
+
+        $this->put('/groups/' . $data['id'], $data);
+        $this->assertResponseStatus(422);
     }
 
 

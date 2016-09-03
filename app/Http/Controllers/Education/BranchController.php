@@ -20,7 +20,7 @@ class BranchController extends Controller
 {
     /** @var BranchRepository */
     private $branchRepo;
-
+    /** @var GroupRepository */
     private $groupRepo;
 
     public function __construct(BranchRepository $branchRepository, GroupRepository $groupRepository, SerializerInterface $serializer)
@@ -34,13 +34,11 @@ class BranchController extends Controller
     {
         if ($request->has('group')) {
             $groupId = Uuid::import($request->get('group'));
+        } else {
+            return response('Group must be given.', 500);
         }
 
         $group = $this->groupRepo->get($groupId);
-        if ($group) {
-            return $this->response($this->branchRepo->all($group), ['major_list']);
-        } else {
-            return null;
-        }
+        return $this->response($this->branchRepo->all($group), ['major_list']);
     }
 }
