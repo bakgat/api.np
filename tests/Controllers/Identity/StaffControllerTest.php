@@ -4,6 +4,7 @@ use App\Domain\Model\Identity\Staff;
 use App\Domain\Services\Identity\StaffService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 use Mockery\MockInterface;
 
 /**
@@ -129,6 +130,22 @@ class StaffControllerTest extends TestCase
                 'gender' => $data['gender'],
                 'birthday' => $data['birthday']
             ]);
+    }
+
+    /**
+     * @test
+     * @group StaffController
+     */
+    public function should_store_fail()
+    {
+
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => false, 'messages' => new MessageBag()]));
+
+        $this->post('staff', [])
+            ->assertResponseStatus(422);
+
     }
 
 
