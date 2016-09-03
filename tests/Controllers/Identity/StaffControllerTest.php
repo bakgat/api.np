@@ -138,10 +138,10 @@ class StaffControllerTest extends TestCase
      */
     public function should_store_fail()
     {
-
+        $message_bag = new MessageBag(['firstName is required']);
         Validator::shouldReceive('make')
             ->once()
-            ->andReturn(Mockery::mock(['fails' => false, 'messages' => new MessageBag()]));
+            ->andReturn(Mockery::mock(['fails' => true, 'messages' => $message_bag]));
 
         $this->post('staff', [])
             ->assertResponseStatus(422);
