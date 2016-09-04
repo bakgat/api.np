@@ -187,6 +187,22 @@ class StaffControllerTest extends TestCase
                 'gender' => $data['gender'],
                 'birthday' => $data['birthday']
             ]);
+    }
+
+    /**
+     * @test
+     * @group StaffController
+     */
+    public function should_update_fail()
+    {
+        $message_bag = new MessageBag(['firstName is required']);
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => true, 'messages' => $message_bag]));
+
+        $fakeId = (string)\App\Domain\Uuid::generate(4);
+        $this->put('/staff/' . $fakeId, [])
+            ->assertResponseStatus(422);
 
     }
 
