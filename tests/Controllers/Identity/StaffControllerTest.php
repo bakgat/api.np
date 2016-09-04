@@ -148,6 +148,48 @@ class StaffControllerTest extends TestCase
 
     }
 
+    /**
+     * @test
+     * @group StaffController
+     */
+    public function should_update_existing()
+    {
+        $staff = $this->makeStaff();
+        $newStaff = $this->makeStaff();
+
+        $data = [
+            'id' => (string)$staff->getId(),
+            'firstName' => $newStaff->getFirstName(),
+            'lastName' => $newStaff->getLastName(),
+            'email' => $newStaff->getEmail(),
+            'birthday' => $newStaff->getBirthday()->format('Y-m-d'),
+            'gender' => $newStaff->getGender()
+        ];
+
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => false]));
+
+        $this->staffRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($staff);
+
+        $this->staffRepo->shouldReceive('update')
+            ->once()
+            ->andReturn();
+
+        $this->put('/staff/' . $data['id'], $data)
+            ->seeJson([
+                'id' => $data['id'],
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'email' => $data['email'],
+                'gender' => $data['gender'],
+                'birthday' => $data['birthday']
+            ]);
+
+    }
+
 
     private function makeStaffCollection()
     {
