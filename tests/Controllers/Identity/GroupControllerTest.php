@@ -182,6 +182,41 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
+    public function should_block_existing()
+    {
+        $group = $this->makeGroup();
+
+        $newGroup = $this->makeGroup();
+        $data = [
+            'id' => (string)$group->getId(),
+            'name' => $newGroup->getName(),
+            'active' => false
+        ];
+
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => false]));
+
+        $this->groupRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($group); //old group
+
+        $this->groupRepo->shouldReceive('update')
+            ->once()
+            ->andReturn(1);
+
+        $this->put('/groups/' . (string)$group->getId(), $data)//new Data
+        ->seeJson([
+            'id' => (string)$group->getId(),
+            'name' => $newGroup->getName(),
+            'active' => false
+        ]);
+    }
+
+    /**
+     * @test
+     * @group GroupController
+     */
     public function should_return_422_when_update_fails()
     {
         $data = [
