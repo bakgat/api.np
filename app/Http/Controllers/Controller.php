@@ -21,14 +21,6 @@ class Controller extends BaseController
         $this->serializer = $serializer;
     }
 
-    public function validateRequest(FormRequest $formRequest)
-    {
-        $this->validator = Validator::make($formRequest->request()->all(), $formRequest->rules());
-
-        if ($this->validator->fails()) {
-            throw new \Exception("ValidationException");
-        }
-    }
 
     public function response($data, $groups = null, $serializeNull = false)
     {
