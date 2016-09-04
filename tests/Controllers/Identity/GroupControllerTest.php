@@ -186,10 +186,9 @@ class GroupControllerTest extends TestCase
     {
         $group = $this->makeGroup();
 
-        $newGroup = $this->makeGroup();
         $data = [
             'id' => (string)$group->getId(),
-            'name' => $newGroup->getName(),
+            'name' => $group->getName(),
             'active' => false
         ];
 
@@ -208,7 +207,7 @@ class GroupControllerTest extends TestCase
         $this->put('/groups/' . (string)$group->getId(), $data)//new Data
         ->seeJson([
             'id' => (string)$group->getId(),
-            'name' => $newGroup->getName(),
+            'name' => $group->getName(),
             'active' => false
         ]);
     }
