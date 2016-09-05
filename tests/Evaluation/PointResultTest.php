@@ -54,6 +54,26 @@ class PointResultTest extends TestCase
         $this->assertEquals($evType, $evaluation->getEvaluationType());
         $this->assertEquals($branch, $evaluation->getBranch());
         $this->assertEquals($group, $evaluation->getGroup());
+
+        //Add an test for median with odd number of evaluations
+        foreach (range(1, 9) as $index) {
+            $fn = $this->faker->firstName();
+            $ln = $this->faker->lastName();
+            $email = $this->faker->email();
+            $gender = new Gender(Gender::MALE);
+
+            $student = new Student($fn, $ln, $email, $gender);
+            $result = new PointResult($student, $index * 10);
+            $evaluation->addResult($result);
+        }
+
+
+        $this->assertEquals(52.631578947368418, $evaluation->getAverage());
+        $this->assertEquals(50, $evaluation->getMedian());
+        $this->assertEquals(100, $evaluation->getMax());
+        $this->assertEquals($evType, $evaluation->getEvaluationType());
+        $this->assertEquals($branch, $evaluation->getBranch());
+        $this->assertEquals($group, $evaluation->getGroup());
     }
 
 }
