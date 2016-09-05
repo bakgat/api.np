@@ -350,6 +350,52 @@ class StudentControllerTest extends TestCase
 
     }
 
+    /**
+     * @test
+     * @group StudentController
+     */
+    public function should_update_student_group()
+    {
+        $student = $this->makeStudent();
+        $group = $this->makeGroup();
+
+        $id = $student->getId()->toString();
+
+        $oldNumber = $this->faker->biasedNumberBetween(1, 10);
+        $studentGroup = $student->joinGroup($group);
+        $studentGroupId = $studentGroup->getId()->toString();
+
+        $now = new DateTime;
+        $start = clone $now->modify('-1 month');
+        $end = clone $now->modify('+ 1 year');
+        $data = [
+            'start' => $start->format('Y-m-d'),
+            'end' => $end->format('Y-m-d'),
+            'group' => ['id' => (string)$group->getId()],
+            'number' => $this->faker->biasedNumberBetween(11, 20)
+        ];
+
+        $this->groupRepo->shouldReceive('getStudentGroup')
+            ->once()
+            ->andReturn($studentGroup);
+
+        $this->groupRepo->shouldReceive('updateStudentGroup')
+            ->once()
+            ->andReturn(1);
+
+        $this->put('/students/' . $id . '/groups/' . $studentGroupId, $data)
+            ->seeJson([
+                'id' => $studentGroupId,
+                'group' => [
+                    'id' => $group->getId()->toString(),
+                    'name' => $group->getName()
+                ],
+                'start' => $start->format('Y-m-d'),
+                'end' => $end->format('Y-m-d'),
+                'number' => $data['number']
+            ]);
+    }
+
 
     /*
     * PRIVATE METHODS
