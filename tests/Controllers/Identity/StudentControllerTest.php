@@ -257,6 +257,23 @@ class StudentControllerTest extends TestCase
             ]);
     }
 
+    /**
+     * @test
+     * @group StudentController
+     */
+    public function should_update_fail()
+    {
+        $message_bag = new MessageBag(['firstName is required']);
+        $fakeId= (string)\App\Domain\Uuid::generate(4);
+
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => true, 'messages' => $message_bag]));
+
+        $this->put('students/' . $fakeId, [])
+            ->assertResponseStatus(422);
+    }
+
 
     /*
     * PRIVATE METHODS
