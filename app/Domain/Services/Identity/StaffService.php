@@ -12,7 +12,6 @@ use App\Domain\Model\Identity\StaffInGroup;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StaffRole;
 use App\Domain\Model\Identity\StaffType;
-use App\Domain\Model\Time\DateRange;
 use App\Domain\Uuid;
 use DateTime;
 use Illuminate\Http\Request;
@@ -197,19 +196,19 @@ class StaffService
      * @param $roleId
      * @return bool True if succeeded.
      */
-//    public function removeFromRole($id, $roleId, $end = null)
-//    {
-//        /** @var Staff $member */
-//        $member = $this->get($id);
-//        /** @var Role $role */
-//        $role = $this->roleRepo->get($roleId);
-//
-//        if ($member && $role) {
-//            $member->removeRole($role, $end);
-//        }
-//        $this->staffRepo->update($member);
-//        return true;
-//    }
+    public function removeFromRole($id, $roleId, $end = null)
+    {
+        /** @var Staff $member */
+        $member = $this->get($id);
+        /** @var Role $role */
+        $role = $this->roleRepo->get($roleId);
+
+        if ($member && $role) {
+            $member->removeRole($role, $end);
+        }
+        $this->staffRepo->update($member);
+        return true;
+    }
 
 
 }
