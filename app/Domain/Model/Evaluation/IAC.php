@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Evaluation;
 
 
+use App\Domain\Model\Education\Goal;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\Model\Time\DateRangeTrait;
@@ -62,12 +63,9 @@ class IAC
     public function __construct(Student $student, $dateRange)
     {
         $this->id = Uuid::generate(4);
+        $this->student = $student;
         $this->iacGoals = new ArrayCollection;
-        if ($dateRange instanceof DateRange) {
-            $this->dateRange = $dateRange;
-        } else {
-            $this->dateRange = DateRange::fromData($dateRange);
-        }
+        $this->dateRange = DateRange::fromData($dateRange);
     }
 
     public function getId()
@@ -80,9 +78,15 @@ class IAC
         return $this->student;
     }
 
-    public function addGoal(Goal $goal, $date = null) {
+    public function addGoal(Goal $goal, $date = null)
+    {
         $iacGoal = new IACGoal($this, $goal, $date);
         $this->iacGoals->add($iacGoal);
         return $iacGoal;
+    }
+
+    public function allIACGoals()
+    {
+        return clone $this->iacGoals;
     }
 }
