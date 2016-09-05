@@ -69,12 +69,8 @@ class StaffRole
         $this->id = Uuid::generate(4);
         $this->staff = $staff;
         $this->role = $role;
+        $this->dateRange = DateRange::fromData($dateRange);
 
-        if ($dateRange instanceof DateRange) {
-            $this->dateRange = $dateRange;
-        } else {
-            $this->dateRange = DateRange::fromData($dateRange);
-        }
     }
 
     public function getId()
