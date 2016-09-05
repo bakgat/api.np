@@ -42,8 +42,6 @@ $app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'
     $app->get('/types', 'StaffController@allTypes');
 
     $app->get('/{id}', 'StaffController@show');
-
-    $app->get('/{id}/roles', 'StaffController@allRoles');
     $app->post('/', 'StaffController@store');
     $app->put('/{id}', 'StaffController@update');
 
