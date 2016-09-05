@@ -4,6 +4,8 @@ use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Services\Identity\StudentService;
 use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 use Mockery\MockInterface;
 
 /**
@@ -129,13 +131,129 @@ class StudentControllerTest extends TestCase
 
         $this->get('students/' . $id)
             ->seeJson([
-                'id' =>  $id,
+                'id' => $id,
                 'displayName' => $student->getDisplayName(),
                 'firstName' => $student->getFirstName(),
                 'lastName' => $student->getLastName(),
                 'schoolId' => $student->getSchoolId(),
                 'gender' => $student->getGender(),
                 'birthday' => $student->getBirthday()->format('Y-m-d'),
+            ]);
+    }
+
+    /**
+     * @test
+     * @group StudentController
+     */
+    public function should_store_success()
+    {
+        $group = $this->makeGroup();
+        $data = [
+            'firstName' => $this->faker->firstName,
+            'lastName' => $this->faker->lastName,
+            'schoolId' => $this->faker->bankAccountNumber,
+            'birthday' => $this->faker->date,
+            'gender' => 'M',
+            'group' => ['id' => (string)$group->getId()],
+            'groupnumber' => $this->faker->biasedNumberBetween(1, 30),
+        ];
+
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => false]));
+
+        $this->groupRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($group);
+
+        $this->studentRepo->shouldReceive('insert')
+            ->once()
+            ->andReturn();
+
+        $this->post('students', $data)
+            ->seeJsonStructure([
+                'id',
+                'displayName',
+                'firstName',
+                'lastName',
+                'schoolId',
+                'gender',
+                'birthday',
+                'activeGroups' => [
+                    '*' => [
+                        'id',
+                        'name'
+                    ]
+                ]
+            ])
+            ->seeJson([
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'schoolId' => $data['schoolId'],
+                'gender' => $data['gender'],
+                'birthday' => $data['birthday'],
+                'activeGroups' => [
+                    [
+                        'id' => (string)$group->getId(),
+                        'name' => $group->getName()
+                    ]
+                ]
+            ]);
+    }
+
+    /**
+     * @test
+     * @group StudentController
+     */
+    public function should_store_fail()
+    {
+        $message_bag = new MessageBag(['firstName is required']);
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => true, 'messages' => $message_bag]));
+
+        $this->post('students', [])
+            ->assertResponseStatus(422);
+    }
+
+    /**
+     * @test
+     * @group StudentController
+     */
+    public function should_update_existing()
+    {
+        $student = $this->makeStudent();
+        $newStudent = $this->makeStudent();
+
+        $data = [
+            'id' => (string)$student->getId(),
+            'firstName' => $newStudent->getFirstName(),
+            'lastName' => $newStudent->getLastName(),
+            'schoolId' => $newStudent->getSchoolId(),
+            'gender' => $newStudent->getGender(),
+            'birthday' => $newStudent->getBirthday()->format('Y-m-d'),
+        ];
+
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => false]));
+
+        $this->studentRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($student);
+
+        $this->studentRepo->shouldReceive('update')
+            ->once()
+            ->andReturn(1);
+
+        $this->put('students/' . $data['id'], $data)
+            ->seeJson([
+                'id' => $data['id'],
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'schoolId' => $data['schoolId'],
+                'gender' => $data['gender'],
+                'birthday' => $data['birthday']
             ]);
     }
 
