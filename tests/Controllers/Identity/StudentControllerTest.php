@@ -264,7 +264,7 @@ class StudentControllerTest extends TestCase
     public function should_update_fail()
     {
         $message_bag = new MessageBag(['firstName is required']);
-        $fakeId= (string)\App\Domain\Uuid::generate(4);
+        $fakeId = (string)\App\Domain\Uuid::generate(4);
 
         Validator::shouldReceive('make')
             ->once()
@@ -278,7 +278,8 @@ class StudentControllerTest extends TestCase
      * @test
      * @group StudentController
      */
-    public function should_get_all_groups_by_id() {
+    public function should_get_all_groups_by_id()
+    {
         $student = $this->makeStudent();
         $id = (string)$student->getId();
 
@@ -305,7 +306,49 @@ class StudentControllerTest extends TestCase
             ]);
     }
 
+    /**
+     * @test
+     * @group StudentController
+     */
+    public function should_add_student_to_group()
+    {
+        $now = new DateTime;
 
+        $group = $this->makeGroup();
+        $student = $this->makeStudent();
+        $id = (string)$student->getId();
+
+        $data = [
+            'start' => $now->format('Y-m-d'),
+            'end' => $now->modify('+ 1 year')->format('Y-m-d'),
+            'group' => ['id' => (string)$group->getId()],
+            'number' => $this->faker->biasedNumberBetween(1, 30)
+        ];
+
+        $this->studentRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($student);
+
+        $this->groupRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($group);
+
+        $this->studentRepo->shouldReceive('update')
+            ->once()
+            ->andReturn(1);
+
+        $this->post('/students/' . $id . '/groups', $data)
+            ->seeJsonStructure([
+                'id',
+                'group' => [
+                    'id',
+                    'name'
+                ],
+                'start',
+                'end'
+            ]);
+
+    }
 
 
     /*
