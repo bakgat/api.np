@@ -274,6 +274,39 @@ class StudentControllerTest extends TestCase
             ->assertResponseStatus(422);
     }
 
+    /**
+     * @test
+     * @group StudentController
+     */
+    public function should_get_all_groups_by_id() {
+        $student = $this->makeStudent();
+        $id = (string)$student->getId();
+
+        $groups = $this->makeGroupCollection();
+        foreach ($groups as $group) {
+            $student->joinGroup($group);
+        }
+
+        $this->studentRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($student);
+
+        $this->get('/students/' . $id . '/groups')
+            ->seeJsonStructure([
+                '*' => [
+                    'id',
+                    'group' => [
+                        'id',
+                        'name'
+                    ],
+                    'start',
+                    'end'
+                ]
+            ]);
+    }
+
+
+
 
     /*
     * PRIVATE METHODS

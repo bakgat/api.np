@@ -205,4 +205,9 @@ class Student extends Person
 
         return $studentRedicodi;
     }
+
+    public function allStudentGroups()
+    {
+        return clone $this->studentInGroups;
+    }
 }

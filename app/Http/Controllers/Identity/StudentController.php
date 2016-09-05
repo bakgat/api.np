@@ -103,11 +103,8 @@ class StudentController extends Controller
      * **************************************************/
     public function allGroups($id)
     {
-        if (!$id instanceof Uuid) {
-            $id = Uuid::import($id);
-        }
-        //TODO GET FROM STUDENT OBJECT
-        return $this->response($this->studentRepo->allGroups($id), ['student_groups']);
+        $student = $this->studentService->get($id);
+        return $this->response($student->allStudentGroups(), ['student_groups']);
     }
 
     public function joinGroup(Request $request, $id)
