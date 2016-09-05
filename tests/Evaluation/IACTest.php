@@ -45,7 +45,7 @@ class IACTest extends TestCase
         $iac = new IAC($student, ['start' => $now]);
 
         $text = $this->faker->text;
-        $branch = new Branch($this->faker->word);
+        $branch = $this->makeBranch();
         $goal = new Goal($branch, $text);
 
         $iacGoal = $iac->addGoal($goal, $now);
@@ -67,6 +67,15 @@ class IACTest extends TestCase
         $gender = $this->faker->randomElement(Gender::values());
         $student = new Student($fn, $ln, $schoolid, $gender);
         return $student;
+    }
+
+    /**
+     * @return Branch
+     */
+    private function makeBranch()
+    {
+        $branch = new Branch($this->faker->word);
+        return $branch;
     }
 
 

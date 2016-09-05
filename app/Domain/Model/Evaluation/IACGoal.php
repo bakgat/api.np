@@ -121,6 +121,11 @@ class IACGoal
         return $this->date;
     }
 
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
     public function setAchieved($comment = null)
     {
         $this->achieved = true;
@@ -132,7 +137,7 @@ class IACGoal
     }
     public function setPractice($comment = null) {
         $this->achieved = false;
-        $this->practice = false;
+        $this->practice = true;
         $this->comment = $comment;
         $this->date = new DateTime();
 
