@@ -487,10 +487,61 @@ class StudentControllerTest extends TestCase
         $this->assertEquals($count + 1, count($student->allStudentRedicodi()));
     }
 
+    /**
+     * @test
+     * @group StudentController
+     */
     public function should_update_student_redicodi()
     {
         $student = $this->makeStudent();
+        $id = $student->getId()->toString();
+        $branch = $this->makeBranch();
+        $newBranch = $this->makeBranch();
+        $redicodi = new Redicodi(Redicodi::BASIC);
+        $content = $this->faker->text(100);
 
+        $studentRedicodi = $student->addRedicodi($redicodi, $branch, $content);
+        $studentRedicodiId = $studentRedicodi->getId()->toString();
+
+        $now = new DateTime;
+        $start = clone $now->modify('-1 month');
+        $end = clone $now->modify('+1 year');
+        $data = [
+            'start' => $start->format('Y-m-d'),
+            'end' => $end->format('Y-m-d'),
+            'branch' => ['id' => $newBranch->getId()->toString()],
+            'redicodi' => ['id' => 'C'],
+            'content' => $this->faker->text(120)
+        ];
+
+        $this->studentRepo->shouldReceive('getStudentRedicodi')
+            ->once()
+            ->andReturn($studentRedicodi);
+
+        $this->branchRepo->shouldReceive('getBranch')
+            ->once()
+            ->andReturn($newBranch);
+
+        $this->studentRepo->shouldReceive('updateRedicodi')
+            ->once()
+            ->andReturn(1);
+
+        $this->put('/students/' . $id . '/redicodi/' . $studentRedicodiId, $data)
+            ->seeJson([
+                'id' => $studentRedicodiId,
+                'redicodi' => 'C',
+                'branch' => [
+                    'id' => $newBranch->getId()->toString(),
+                    'name' => $newBranch->getName(),
+                    'major' => [
+                        'id' => $newBranch->getMajor()->getId()->toString(),
+                        'name' => $newBranch->getMajor()->getName()
+                    ]
+                ],
+                'content' => $data['content'],
+                'start' => $data['start'],
+                'end' => $data['end']
+            ]);
     }
 
 

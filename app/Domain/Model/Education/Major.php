@@ -10,7 +10,7 @@ namespace App\Domain\Model\Education;
 
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Webpatser\Uuid\Uuid;
+use App\Domain\Uuid;
 use Doctrine\ORM\Mapping AS ORM;
 
 use JMS\Serializer\Annotation\Groups;
