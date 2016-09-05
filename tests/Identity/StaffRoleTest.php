@@ -3,6 +3,8 @@ use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRole;
+use App\Domain\Model\Time\DateRange;
+use App\Domain\Uuid;
 
 /**
  * Created by PhpStorm.
@@ -30,12 +32,20 @@ class StaffRoleTest extends TestCase
 
         $staff = new Staff($fn, $ln, $email, $gender);
 
-        $staff->assignRole($role1);
+        $staffRole = $staff->assignRole($role1);
         $this->assertCount(1, $staff->getRoles());
 
         $staff->assignRole($group2, $this->faker->dateTimeBetween('-1day', '2years'));
         $this->assertCount(2, $staff->getRoles());
         $this->assertCount(1, $staff->getActiveRoles());
+
+        $this->assertInstanceOf(Uuid::class, $staffRole->getId());
+        $this->assertEquals($staff, $staffRole->getStaff());
+        $this->assertEquals($role1, $staffRole->getRole());
+        $now = new DateTime;
+
+        $this->assertEquals($now->format('Y-m-d'), $staffRole->isActiveSince()->format('Y-m-d'));
+        $this->assertEquals(DateRange::FUTURE, $staffRole->isActiveUntil()->format('Y-m-d'));
     }
 
     /**
