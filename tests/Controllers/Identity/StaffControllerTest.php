@@ -33,8 +33,6 @@ class StaffControllerTest extends TestCase
         $this->staffRepo = $this->mock(App\Domain\Model\Identity\StaffRepository::class);
         $this->groupRepo = $this->mock(App\Domain\Model\Identity\GroupRepository::class);
         $this->roleRepo = $this->mock(App\Domain\Model\Identity\RoleRepository::class);
-
-        //$this->staffService = new StaffService($this->staffRepo, $this->groupRepo, $this->roleRepo);
     }
 
     /**
