@@ -210,4 +210,9 @@ class Student extends Person
     {
         return clone $this->studentInGroups;
     }
+
+    public function allStudentRedicodi()
+    {
+        return clone $this->redicodiForStudents;
+    }
 }

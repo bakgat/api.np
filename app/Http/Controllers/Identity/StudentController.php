@@ -145,10 +145,9 @@ class StudentController extends Controller
      * **************************************************/
     public function allRedicodi($id)
     {
-        if (!$id instanceof Uuid) {
-            $id = Uuid::import($id);
-        }
-        return $this->response($this->studentRepo->allRedicodi($id), ['student_redicodi']);
+        $student = $this->studentService->get($id);
+
+        return $this->response($student->allStudentRedicodi(), ['student_redicodi']);
     }
 
     public function addRedicodi(Request $request, $id)

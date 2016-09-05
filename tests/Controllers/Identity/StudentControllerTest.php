@@ -1,4 +1,7 @@
 <?php
+use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\Major;
+use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
@@ -362,7 +365,7 @@ class StudentControllerTest extends TestCase
         $id = $student->getId()->toString();
 
         $oldNumber = $this->faker->biasedNumberBetween(1, 10);
-        $studentGroup = $student->joinGroup($group);
+        $studentGroup = $student->joinGroup($group, $oldNumber);
         $studentGroupId = $studentGroup->getId()->toString();
 
         $now = new DateTime;
@@ -396,6 +399,39 @@ class StudentControllerTest extends TestCase
             ]);
     }
 
+    /**
+     * @test
+     * @group StudentController
+     */
+    public function should_return_all_redicodi()
+    {
+        $student = $this->makeStudent();
+        $id = $student->getId()->toString();
+
+        $this->studentRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($student);
+
+        $this->get('/students/' . $id . '/redicodi')
+            ->seeJsonStructure([
+                '*' => [
+                    'id',
+                    'redicodi',
+                    'branch' => [
+                        'id',
+                        'name',
+                        'major' => [
+                            'id',
+                            'name'
+                        ]
+                    ],
+                    'content',
+                    'start',
+                    'end'
+                ]
+            ]);
+    }
+
 
     /*
     * PRIVATE METHODS
@@ -419,6 +455,15 @@ class StudentControllerTest extends TestCase
         $gender = $this->faker->randomElement(Gender::values());
 
         $student = new Student($fn, $ln, $schoolId, $gender, $birthday);
+
+        foreach (range(1, 3) as $item) {
+            $r = $this->faker->randomElement(Redicodi::values());
+            $b = new Branch($this->faker->word);
+            $m = new Major($this->faker->word);
+            $m->addBranch($b);
+            $student->addRedicodi($r, $b, $this->faker->text(120));
+        }
+
         return $student;
     }
 
@@ -443,4 +488,6 @@ class StudentControllerTest extends TestCase
         $group = new Group($this->faker->word);
         return $group;
     }
+
+
 }
