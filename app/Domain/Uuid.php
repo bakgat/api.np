@@ -29,4 +29,8 @@ class Uuid extends \Webpatser\Uuid\Uuid
     {
         $visitor->addData('id', $this->__toString());
     }
+
+    public function toString() {
+        return $this->__toString();
+    }
 }
