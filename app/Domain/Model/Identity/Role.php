@@ -72,12 +72,4 @@ class Role
     {
         return $this->name;
     }
-
-
-
-    public function addStaff(Staff $staff)
-    {
-        $this->staff->add($staff);
-    }
-
 }
