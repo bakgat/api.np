@@ -70,4 +70,36 @@ trait DateRangeTrait
     {
         return $this->dateRange->includes($dateRange);
     }
+
+    /**
+     * Resets the start in daterange
+     *
+     * @param $start
+     * @return $this
+     */
+    public function resetStart($start)
+    {
+        $dr = ['start' => $start, 'end' => $this->dateRange->getEnd()];
+        $this->dateRange = DateRange::fromData($dr);
+        return $this;
+    }
+
+    /**
+     * Sets the end in the daterange. Because 'now' is included, end a day before.
+     *
+     * @param null $end
+     * @return $this
+     */
+    public function block($end = null)
+    {
+        if($end == null) {
+            $now = new DateTime;
+            $end = $now->modify('-1 day');
+        }
+
+        $dr = ['start'=> $this->dateRange->getStart(), 'end' => $end];
+        $this->dateRange = DateRange::fromData($dr);
+
+        return $this;
+    }
 }
