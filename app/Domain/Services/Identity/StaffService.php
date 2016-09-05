@@ -127,6 +127,13 @@ class StaffService
         return $staffGroup;
     }
 
+    /**
+     * @param $staffGroupId
+     * @param $type
+     * @param $start
+     * @param $end
+     * @return StaffInGroup
+     */
     public function updateGroup($staffGroupId, $type, $start, $end)
     {
         /** @var StaffInGroup $group */
@@ -150,6 +157,8 @@ class StaffService
         /** @var Group $group */
         $group = $this->groupRepo->get($groupId);
 
+
+        //TODO remove from group ?
     }
 
     /* -------------------------------------------

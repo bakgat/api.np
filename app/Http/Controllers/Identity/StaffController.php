@@ -127,8 +127,8 @@ class StaffController extends Controller
         }
         $type = $request->get('type');
 
-        $staffRole = $this->staffService->updateGroup($staffGroupId, $type, $start, $end);
-        return $this->response($staffRole, ['staff_groups']);
+        $staffGroup = $this->staffService->updateGroup($staffGroupId, $type, $start, $end);
+        return $this->response($staffGroup, ['staff_groups']);
     }
 
     public function removeGroup(Request $request, $id, $groupId)

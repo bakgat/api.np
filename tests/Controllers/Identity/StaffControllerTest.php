@@ -1,6 +1,9 @@
 <?php
 use App\Domain\Model\Identity\Gender;
+use App\Domain\Model\Identity\Group;
+use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\Staff;
+use App\Domain\Model\Identity\StaffType;
 use App\Domain\Services\Identity\StaffService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Illuminate\Support\Facades\Validator;
@@ -206,7 +209,177 @@ class StaffControllerTest extends TestCase
 
     }
 
+    /**
+     * @test
+     * @group StaffController
+     */
+    public function should_return_all_types()
+    {
 
+        $this->get('/staff/types')
+            ->seeJsonStructure([
+                '*' => [
+                    'key', 'value'
+                ]
+            ]);
+    }
+
+    /**
+     * @test
+     * @group StaffController
+     */
+    public function should_return_staff_groups()
+    {
+        $staff = $this->makeStaff();
+        $groups = $this->makeGroupCollection();
+
+        $id = (string)$staff->getId();
+
+        foreach ($groups as $group) {
+            $staff->joinGroup($group, new StaffType(StaffType::TEACHER));
+        }
+
+        $this->staffRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($staff);
+
+        $this->get('/staff/' . $id . '/groups')
+            ->seeJsonStructure([
+                '*' => [
+                    'id',
+                    'group' => [
+                        'id',
+                        'name'
+                    ],
+                    'start',
+                    'end',
+                    'type'
+                ]
+            ]);
+    }
+
+    /**
+     * @test
+     * @group StaffController
+     */
+    public function should_add_group_to_staff()
+    {
+        $now = new DateTime;
+        $group = $this->makeGroup();
+        $staff = $this->makeStaff();
+        $id = (string)$staff->getId();
+
+        $data = [
+            'start' => $now->format('Y-m-d'),
+            'end' => $now->modify('+1 year')->format('Y-m-d'),
+            'group' => ['id' => (string)$group->getId()],
+            'type' => StaffType::TITULAR
+        ];
+
+        $this->staffRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($staff);
+
+        $this->groupRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($group);
+
+        $this->staffRepo->shouldReceive('update')
+            ->once()
+            ->andReturn(1);
+
+        $this->post('/staff/' . $id . '/groups', $data)
+            ->seeJsonStructure([
+                'id',
+                'group' => [
+                    'id',
+                    'name'
+                ],
+                'start',
+                'end',
+                'type'
+            ]);
+    }
+
+    /**
+     * @test
+     * @group StaffController
+     */
+    public function should_update_staff_group()
+    {
+        $staff = $this->makeStaff();
+        $group = $this->makeGroup();
+
+        $id = (string)$staff->getId();
+
+        $staffGroup = $staff->joinGroup($group, new StaffType(StaffType::TITULAR));
+        $staffGroupId = (string)$staffGroup->getId();
+
+        $now = new DateTime;
+        $start = clone $now->modify('-1 month');
+        $end = clone $now->modify('+1 year');
+        $data = [
+            'start' => $start->format('Y-m-d'),
+            'end' => $end->format('Y-m-d'),
+            'group' => ['id' => (string)$group->getId()],
+            'type' => StaffType::TEACHER
+        ];
+
+        $this->groupRepo->shouldReceive('getStaffGroup')
+            ->once()
+            ->andReturn($staffGroup);
+        $this->groupRepo->shouldReceive('updateStaffGroup')
+            ->once()
+            ->andReturn(1);
+
+        $this->put('/staff/' . $id . '/groups/' . $staffGroupId, $data)
+            ->seeJson([
+                'id' => $staffGroupId,
+                'group' => [
+                    'id' => (string)$group->getId(),
+                    'name' => $group->getName()
+                ],
+                'start' => $start->format('Y-m-d'),
+                'end' => $end->format('Y-m-d'),
+                'type' => $data['type']
+            ]);
+    }
+
+    /**
+     * @test
+     * @group StaffController
+     */
+    public function should_return_staff_roles()
+    {
+        $staff = $this->makeStaff();
+        $roles = $this->makeRoleCollection();
+        $id = (string)$staff->getId();
+
+        foreach ($roles as $role) {
+            $staff->assignRole($role);
+        }
+
+        $this->staffRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($staff);
+
+        $this->get('/staff/' . $id . '/roles')
+            ->seeJsonStructure([
+                '*' => [
+                    'id',
+                    'role' => [
+                        'id',
+                        'name'
+                    ],
+                    'start',
+                    'end'
+                ]
+            ]);
+    }
+
+    /*
+     * PRIVATE METHODS
+     */
     private function makeStaffCollection()
     {
         $collection = new ArrayCollection();
@@ -250,5 +423,28 @@ class StaffControllerTest extends TestCase
         $group = new Group($this->faker->word);
         return $group;
     }
+
+    /**
+     * @return Role
+     */
+    private function makeRole()
+    {
+        $role = new Role($this->faker->unique()->word);
+        return $role;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    private function makeRoleCollection()
+    {
+        $collection = new ArrayCollection();
+        foreach (range(1, 5) as $item) {
+            $role = $this->makeRole();
+            $collection->add($role);
+        }
+        return $collection;
+    }
+
 
 }

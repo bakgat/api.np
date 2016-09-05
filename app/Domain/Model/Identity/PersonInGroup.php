@@ -13,7 +13,7 @@ use App\Domain\Model\Time\DateRangeTrait;
 use Doctrine\ORM\Mapping AS ORM;
 use App\Domain\Model\Time\DateRange;
 use DateTime;
-use Webpatser\Uuid\Uuid;
+use App\Domain\Uuid;
 
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Expose;
@@ -60,6 +60,11 @@ abstract class PersonInGroup
 
         $this->dateRange = DateRange::fromData($dateRange);
 
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
