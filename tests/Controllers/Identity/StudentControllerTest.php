@@ -23,6 +23,8 @@ class StudentControllerTest extends TestCase
     protected $groupRepo;
     /** @var MockInterface */
     protected $studentRepo;
+    /** @var MockInterface */
+    protected $branchRepo;
     /** @var StudentService */
     protected $studentService;
 
@@ -31,6 +33,7 @@ class StudentControllerTest extends TestCase
         parent::setUp();
         $this->studentRepo = $this->mock(App\Domain\Model\Identity\StudentRepository::class);
         $this->groupRepo = $this->mock(App\Domain\Model\Identity\GroupRepository::class);
+        $this->branchRepo = $this->mock(App\Domain\Model\Education\BranchRepository::class);
     }
 
     /**
@@ -432,6 +435,64 @@ class StudentControllerTest extends TestCase
             ]);
     }
 
+    /**
+     * @test
+     * @group StudentController
+     */
+    public function should_add_redicodi()
+    {
+        $now = new DateTime;
+        $student = $this->makeStudent();
+        $id = $student->getId()->toString();
+        $branch = $this->makeBranch();
+
+        $count = count($student->allStudentRedicodi());
+        $data = [
+            'start' => $now->format('Y-m-d'),
+            'end' => $now->modify('+1 year')->format('Y-m-d'),
+            'redicodi' => ['id' => 'C'],
+            'branch' => ['id' => $branch->getId()->toString()],
+            'content' => $this->faker->text(100)
+        ];
+
+        $this->studentRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($student);
+
+        $this->branchRepo->shouldReceive('getBranch')
+            ->once()
+            ->andReturn($branch);
+
+        $this->studentRepo->shouldReceive('update')
+            ->once()
+            ->andReturn(1);
+
+        $this->post('/students/' . $id . '/redicodi', $data)
+            ->seeJsonStructure([
+                'id',
+                'redicodi',
+                'branch' => [
+                    'id',
+                    'name',
+                    'major' => [
+                        'id',
+                        'name'
+                    ]
+                ],
+                'content',
+                'start',
+                'end'
+            ]);
+
+        $this->assertEquals($count + 1, count($student->allStudentRedicodi()));
+    }
+
+    public function should_update_student_redicodi()
+    {
+        $student = $this->makeStudent();
+
+    }
+
 
     /*
     * PRIVATE METHODS
@@ -458,9 +519,7 @@ class StudentControllerTest extends TestCase
 
         foreach (range(1, 3) as $item) {
             $r = $this->faker->randomElement(Redicodi::values());
-            $b = new Branch($this->faker->word);
-            $m = new Major($this->faker->word);
-            $m->addBranch($b);
+            $b = $this->makeBranch();
             $student->addRedicodi($r, $b, $this->faker->text(120));
         }
 
@@ -487,6 +546,14 @@ class StudentControllerTest extends TestCase
     {
         $group = new Group($this->faker->word);
         return $group;
+    }
+
+    private function makeBranch()
+    {
+        $branch = new Branch($this->faker->word);
+        $major = new Major($this->faker->word);
+        $major->addBranch($branch);
+        return $branch;
     }
 
 

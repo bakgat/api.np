@@ -12,7 +12,7 @@ namespace App\Domain\Model\Education;
 use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Identity\Group;
 use DateTime;
-use Webpatser\Uuid\Uuid;
+use App\Domain\Uuid;
 use Doctrine\ORM\Mapping AS ORM;
 
 use JMS\Serializer\Annotation\Groups;
