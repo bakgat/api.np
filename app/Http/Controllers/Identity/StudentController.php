@@ -51,7 +51,7 @@ class StudentController extends Controller
             return $this->response($this->studentRepo->allActiveInGroup($group), ['student_list']);
         }
 
-        return $this->response($this->studentRepo->all(), ['student_list']);
+        return $this->response($this->studentService->all(), ['student_list']);
     }
 
     public function show($id)
