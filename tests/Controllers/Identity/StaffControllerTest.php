@@ -349,6 +349,89 @@ class StaffControllerTest extends TestCase
      * @test
      * @group StaffController
      */
+    public function should_add_role_to_staff()
+    {
+        $now = new DateTime;
+        $role = $this->makeRole();
+        $staff = $this->makeStaff();
+        $id = (string)$staff->getId();
+
+        $data = [
+            'start' => $now->format('Y-m-d'),
+            'end' => $now->modify('+1 year')->format('Y-m-d'),
+            'role' => ['id' => (string)$role->getId()]
+        ];
+
+        $this->staffRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($staff);
+
+        $this->roleRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($role);
+
+        $this->staffRepo->shouldReceive('update')
+            ->once()
+            ->andReturn(1);
+
+        $this->post('/staff/' . $id . '/roles', $data)
+            ->seeJsonStructure([
+                'id',
+                'role' => [
+                    'id',
+                    'name'
+                ],
+                'start',
+                'end'
+            ]);
+    }
+
+    /**
+     * @test
+     * @group StaffController
+     */
+    public function should_update_staff_role()
+    {
+        $staff = $this->makeStaff();
+        $role = $this->makeRole();
+
+        $id = (string)$staff->getId();
+
+        $staffRole = $staff->assignRole($role);
+        $staffRoleId = (string)$staffRole->getId();
+
+        $now = new DateTime;
+        $start = clone $now->modify('-1 month');
+        $end = clone $now->modify('+1 year');
+        $data = [
+            'start' => $start->format('Y-m-d'),
+            'end' => $end->format('Y-m-d'),
+            'group' => ['id' => (string)$role->getId()]
+        ];
+
+        $this->roleRepo->shouldReceive('getStaffRole')
+            ->once()
+            ->andReturn($staffRole);
+        $this->roleRepo->shouldReceive('updateStaffRole')
+            ->once()
+            ->andReturn(1);
+
+        $this->put('/staff/' . $id . '/roles/' . $staffRoleId, $data)
+            ->seeJson([
+                'id' => $staffRoleId,
+                'role' => [
+                    'id' => (string)$role->getId(),
+                    'name' => $role->getName()
+                ],
+                'start' => $start->format('Y-m-d'),
+                'end' => $end->format('Y-m-d')
+            ]);
+    }
+
+    /**
+     * @test
+     * @group StaffController
+     */
     public function should_return_staff_roles()
     {
         $staff = $this->makeStaff();

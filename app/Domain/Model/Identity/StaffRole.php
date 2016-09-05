@@ -77,6 +77,11 @@ class StaffRole
         }
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function getStaff()
     {
         return $this->staff;
