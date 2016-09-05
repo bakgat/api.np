@@ -131,6 +131,7 @@ class StaffController extends Controller
         return $this->response($staffGroup, ['staff_groups']);
     }
 
+    /*
     public function removeGroup(Request $request, $id, $groupId)
     {
         //TODO: start and end
@@ -144,7 +145,7 @@ class StaffController extends Controller
         }
 
         $this->staffService->removeFromGroup($id, $groupId);
-    }
+    }*/
 
     /* ***************************************************
      * ROLES
@@ -185,6 +186,7 @@ class StaffController extends Controller
         return $this->response($staffRole, ['staff_roles']);
     }
 
+    /*
     public function removeRole(Request $request, $id, $roleId)
     {
         $end = $request->get('end');
@@ -193,5 +195,5 @@ class StaffController extends Controller
         }
 
         return $this->staffService->removeFromRole($id, $roleId, $end);
-    }
+    }*/
 }

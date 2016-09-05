@@ -150,17 +150,6 @@ class StaffService
         return $staffGroup;
     }
 
-    public function removeFromGroup($id, $groupId)
-    {
-        /** @var Staff $member */
-        $member = $this->get($id);
-        /** @var Group $group */
-        $group = $this->groupRepo->get($groupId);
-
-
-        //TODO remove from group ?
-    }
-
     /* -------------------------------------------
      * ROLE FUNCTIONS
      * ----------------------------------------- */
@@ -208,19 +197,19 @@ class StaffService
      * @param $roleId
      * @return bool True if succeeded.
      */
-    public function removeFromRole($id, $roleId, $end = null)
-    {
-        /** @var Staff $member */
-        $member = $this->get($id);
-        /** @var Role $role */
-        $role = $this->roleRepo->get($roleId);
-
-        if ($member && $role) {
-            $member->removeRole($role, $end);
-        }
-        $this->staffRepo->update($member);
-        return true;
-    }
+//    public function removeFromRole($id, $roleId, $end = null)
+//    {
+//        /** @var Staff $member */
+//        $member = $this->get($id);
+//        /** @var Role $role */
+//        $role = $this->roleRepo->get($roleId);
+//
+//        if ($member && $role) {
+//            $member->removeRole($role, $end);
+//        }
+//        $this->staffRepo->update($member);
+//        return true;
+//    }
 
 
 }
