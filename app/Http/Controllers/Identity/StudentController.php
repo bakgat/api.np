@@ -42,7 +42,8 @@ class StudentController extends Controller
     {
         if ($request->has('flat')) {
             $field = $request->get('flat');
-            return $this->response($this->studentRepo->flat($field));
+            $col = $this->studentRepo->flat($field);
+            return $this->response($col);
         }
         if ($request->has('group')) {
             $groupId = Uuid::import($request->get('group'));
