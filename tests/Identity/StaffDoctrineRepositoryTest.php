@@ -172,6 +172,12 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
         $this->assertEquals($staff->getBirthday()->format('Y-m-d'), $dbStaff->getBirthday()->format('Y-m-d'));
     }
 
+    /**
+     * @test
+     * @group staff
+     * @group staffrepo
+     * @group update
+     */
     public function should_update_existing_staff()
     {
         $staff = $this->makeStaff();
@@ -202,6 +208,31 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
         $this->assertEquals($dbStaff->getBirthday(), $savedStaff->getBirthday());
         $this->assertEquals($dbStaff->getEmail(), $savedStaff->getEmail());
         $this->assertEquals($dbStaff->getGender(), $savedStaff->getGender());
+    }
+
+    /**
+     * @test
+     * @group staff
+     * @group staffrepo
+     * @group delete
+     */
+    public function should_delete_existing_staff() {
+        $staff = $this->makeStaff();
+        $id = $this->staffRepo->insert($staff);
+
+        $this->em->clear();
+
+        $savedStaff = $this->staffRepo->get($id);
+
+        $count = $this->staffRepo->delete($id);
+
+        $this->em->clear();
+
+        $removedStaff = $this->staffRepo->find($id);
+
+        $this->assertEquals($id, $savedStaff->getId());
+        $this->assertEquals(1, $count);
+        $this->assertNull($removedStaff);
     }
 
     /**
