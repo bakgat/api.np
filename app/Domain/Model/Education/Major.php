@@ -81,12 +81,6 @@ class Major
         return $this;
     }
 
-    public function removeBranch($id)
-    {
-        $this->branches->remove($id);
-        return $this;
-    }
-
 
     public function getBranches()
     {
