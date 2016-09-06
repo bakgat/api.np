@@ -23,6 +23,10 @@
                 <directory>app/Exceptions</directory>
                 <directory>app/Http/Middleware</directory>
                 <directory>app/Providers</directory>
+                <file>app/Domain/Model/Education/EnumRedicodiType.php</file>
+                <file>app/Domain/Model/Identity/EnumGenderType.php</file>
+                <file>app/Domain/Model/Identity/EnumStaffType.php</file>
+                <file>app/Domain/Model/Evaluation/EnumEvaluationType.php</file>
             </exclude>
         </whitelist>
     </filter>
