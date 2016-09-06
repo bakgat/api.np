@@ -88,11 +88,7 @@ class BranchForGroup
             $this->max = $max;
         }
 
-        if ($daterange instanceof DateRange) {
-            $this->dateRange = $daterange;
-        } else {
-            $this->dateRange = DateRange::fromData($daterange);
-        }
+        $this->dateRange = DateRange::fromData($daterange);
     }
 
     public function getId()
