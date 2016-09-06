@@ -164,8 +164,33 @@ class BranchForGroupTest extends TestCase
 
         //far must not be the new end date
         //group was already left
-        $this->assertNotEquals($far->format('Y-m-d'),$bfg->isActiveUntil()->format('Y-m-d'));
+        $this->assertNotEquals($far->format('Y-m-d'), $bfg->isActiveUntil()->format('Y-m-d'));
         $this->assertEquals($end->format('Y-m-d'), $bfg->isActiveUntil()->format('Y-m-d'));
+    }
+
+    /**
+     * @test
+     * @group education
+     * @group branch
+     * @group group
+     */
+    public function should_leave_group_at_certain_date()
+    {
+        $now = new DateTime;
+        $end = clone $now->modify('-1 year');
+
+        $branch = $this->makeBranch();
+        $group = $this->makeGroup();
+
+        $daterange = ['start' => new DateTime];
+        $evaluationType = new EvaluationType(EvaluationType::COMPREHENSIVE);
+
+        $bfg = new BranchForGroup($branch, $group, $daterange, $evaluationType);
+
+        $this->assertEquals(DateRange::FUTURE, $bfg->isActiveUntil()->format('Y-m-d'));
+        $bfg->leaveGroup($end);
+        $this->assertEquals($end->format('Y-m-d'), $bfg->isActiveUntil()->format('Y-m-d'));
+
     }
 
 
