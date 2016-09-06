@@ -35,17 +35,6 @@ class RoleSeeder extends Seeder
         EntityManager::persist($r_secretary);
         EntityManager::persist($r_caremanager);
 
-        $karl = new Staff(
-            'Karl',
-            'Van Iseghem',
-            'karl.vaniseghem@klimtoren.be',
-            new Gender(Gender::MALE),
-            new DateTime()
-        );
-        $karl->assignRole($r_admin);
-        $karl->assignRole($r_caremanager);
-
-        EntityManager::persist($karl);
         EntityManager::flush();
         EntityManager::clear();
     }

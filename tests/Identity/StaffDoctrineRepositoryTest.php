@@ -108,12 +108,12 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
      * @group staffrepo
      * @group staffrole
      */
-    public function should_get_2_roles_for_karl()
+    public function should_get_1_roles_for_staff()
     {
-        /** @var Staff $karl */
-        $karl = $this->staffRepo->findByEmail($this->emailKarl);
-        $roles = $karl->getRoles();
-        $this->assertCount(2, $roles);
+        /** @var Staff $staff */
+        $staff = $this->staffRepo->all()[0];
+        $roles = $staff->getRoles();
+        $this->assertCount(1, $roles);
     }
 
     /**
