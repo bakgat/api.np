@@ -22,24 +22,6 @@ interface StaffRepository
     public function all();
 
     /**
-     * Get all active staff members in a role.
-     *
-     * @param Role $group
-     * @param DateTime|null $date
-     * @return ArrayCollection
-     */
-    public function allActiveInRole(Role $group, $date=null);
-
-    /**
-     * Gets all the active staff members in a group.
-     *
-     * @param Group $group
-     * @param DateTime|null $date
-     * @return Collection
-     */
-    public function allActiveInGroup(Group $group, $date=null);
-
-    /**
      * Finds a staff member by its id, if not returns null.
      *
      * @param Uuid $id

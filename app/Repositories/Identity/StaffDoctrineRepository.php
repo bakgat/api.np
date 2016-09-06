@@ -47,30 +47,6 @@ class StaffDoctrineRepository implements StaffRepository
     }
 
     /**
-     * Get all active staff members in a role.
-     *
-     * @param Role $group
-     * @param DateTime|null $date
-     * @return ArrayCollection
-     */
-    public function allActiveInRole(Role $group, $date = null)
-    {
-        // TODO: Implement allActiveInRole() method.
-    }
-
-    /**
-     * Gets all the active staff members in a group.
-     *
-     * @param Group $group
-     * @param DateTime|null $date
-     * @return Collection
-     */
-    public function allActiveInGroup(Group $group, $date = null)
-    {
-        // TODO: Implement allActiveInGroup() method.
-    }
-
-    /**
      * Finds a staff member by its id, if not returns null.
      *
      * @param Uuid $id
