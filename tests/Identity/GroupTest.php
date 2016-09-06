@@ -46,4 +46,5 @@ class GroupTest extends TestCase
         $this->assertTrue($group->isActive());
     }
 
+
 }

@@ -24,13 +24,13 @@ class EvaluationTest extends TestCase
         $dr = ['start' => $now];
 
         $branch = $this->makeBranch();
-        $group  = $this->makeGroup();
+        $group = $this->makeGroup();
         $evType = new EvaluationType(EvaluationType::POINT);
         $maxForBranch = $this->faker->biasedNumberBetween(20, 50);
         $branchForGroup = new BranchForGroup($branch, $group, $dr, $evType, $maxForBranch);
 
         $title = $this->faker->word;
-        $max = $this->faker->biasedNumberBetween(10,100);
+        $max = $this->faker->biasedNumberBetween(10, 100);
 
         $evaluation = new Evaluation($branchForGroup, $title, $now, $max);
 
@@ -47,6 +47,36 @@ class EvaluationTest extends TestCase
         $this->assertEquals($max, $evaluation->getMax());
 
         $this->assertEquals($now, $evaluation->getDate());
+    }
+
+    /**
+     * @test
+     * @group evaluation
+     */
+    public function should_create_new_comprehensive_evaluation()
+    {
+        $now = new DateTime;
+        $dr = ['start' => $now];
+
+        $branch = $this->makeBranch();
+        $group = $this->makeGroup();
+        $evType = new EvaluationType(EvaluationType::COMPREHENSIVE);
+        $branchForGroup = new BranchForGroup($branch, $group, $dr, $evType);
+
+        $title = $this->faker->word;
+        $evaluation = new Evaluation($branchForGroup, $title);
+
+        $this->assertInstanceOf(Evaluation::class, $evaluation);
+        $this->assertInstanceOf(Uuid::class, $evaluation->getId());
+
+        $this->assertInstanceOf(Branch::class, $evaluation->getBranch());
+        $this->assertEquals($branch, $evaluation->getBranch());
+
+        $this->assertInstanceOf(EvaluationType::class, $evaluation->getEvaluationType());
+        $this->assertEquals($evType, $evaluation->getEvaluationType());
+
+        $this->assertEquals($title, $evaluation->getTitle());
+        $this->assertEquals($now->format('Y-m-d'), $evaluation->getDate()->format('Y-m-d'));
     }
 
     /* ***************************************************
