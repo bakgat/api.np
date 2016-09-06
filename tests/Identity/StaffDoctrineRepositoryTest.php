@@ -1,5 +1,6 @@
 <?php
 use App\Domain\Model\Identity\Exceptions\StaffNotFoundException;
+use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Uuid;
@@ -121,7 +122,8 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
      * @group staffrepo
      * @group get
      */
-    public function should_get_staff_by_its_id() {
+    public function should_get_staff_by_its_id()
+    {
         $staff = $this->staffRepo->all();
 
         $id = $staff[0]->getId();
@@ -140,9 +142,79 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
      * @group staffrepo
      * @group get
      */
-    public function should_throw_exception_when_get_staff_fails() {
+    public function should_throw_exception_when_get_staff_fails()
+    {
         $this->setExpectedException(StaffNotFoundException::class);
         $fakeId = Uuid::generate(4);
         $staff = $this->staffRepo->get($fakeId);
+    }
+
+    /**
+     * @test
+     * @group staff
+     * @group staffrepo
+     * @group insert
+     */
+    public function should_insert_new_staff()
+    {
+        $staff = $this->makeStaff();
+
+        $id = $this->staffRepo->insert($staff);
+        $this->em->clear();
+
+        $dbStaff = $this->staffRepo->get($id);
+
+        $this->assertInstanceOf(Staff::class, $dbStaff);
+        $this->assertEquals($staff->getId(), $dbStaff->getId());
+        $this->assertEquals($staff->getDisplayName(), $dbStaff->getDisplayName());
+        $this->assertEquals($staff->getEmail(), $dbStaff->getEmail());
+        $this->assertEquals($staff->getGender(), $dbStaff->getGender());
+        $this->assertEquals($staff->getBirthday()->format('Y-m-d'), $dbStaff->getBirthday()->format('Y-m-d'));
+    }
+
+    public function should_update_existing_staff()
+    {
+        $staff = $this->makeStaff();
+        $id = $this->staffRepo->insert($staff);
+
+        $this->em->clear();
+
+        $dbStaff = $this->staffRepo->get($id);
+
+        $dbStaff->updateProfile('Karl', 'Van Iseghem', 'karl.vaniseghem@klimtoren.be', new Gender('M'), new DateTime('1979-11-30'));
+        $count = $this->staffRepo->update($dbStaff);
+
+        $this->em->clear();
+
+        $savedStaff = $this->staffRepo->get($id);
+
+        $this->assertInstanceOf(Staff::class, $savedStaff);
+        $this->assertEquals(1, $count);
+
+        $this->assertNotEquals($staff->getDisplayName(), $savedStaff->getDisplayName());
+        $this->assertNotEquals($staff->getBirthday(), $savedStaff->getBirthday());
+        $this->assertNotEquals($staff->getEmail(), $savedStaff->getEmail());
+        $this->assertNotEquals($staff->getGender(), $savedStaff->getGender());
+
+        $this->assertEquals($staff->getId(), $savedStaff->getId());
+        $this->assertEquals($dbStaff->getId(), $savedStaff->getId());
+        $this->assertEquals($dbStaff->getDisplayName(), $savedStaff->getDisplayName());
+        $this->assertEquals($dbStaff->getBirthday(), $savedStaff->getBirthday());
+        $this->assertEquals($dbStaff->getEmail(), $savedStaff->getEmail());
+        $this->assertEquals($dbStaff->getGender(), $savedStaff->getGender());
+    }
+
+    /**
+     * @return Staff
+     */
+    private function makeStaff()
+    {
+        $fn = $this->faker->firstName;
+        $ln = $this->faker->lastName;
+        $email = $this->faker->email;
+        $gender = $this->faker->randomElement(Gender::values());
+        $birthday = $this->faker->dateTime;
+        $staff = new Staff($fn, $ln, $email, $gender, $birthday);
+        return $staff;
     }
 }
