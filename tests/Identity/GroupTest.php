@@ -1,6 +1,7 @@
 <?php
 
 use App\Domain\Model\Identity\Group;
+use Doctrine\Common\Collections\ArrayCollection;
 use Webpatser\Uuid\Uuid;
 
 /**
@@ -44,6 +45,20 @@ class GroupTest extends TestCase
 
         $group->activate();
         $this->assertTrue($group->isActive());
+    }
+
+    /**
+     * @test
+     * @group group
+     */
+    public function dummy_test_form_seed_functions()
+    {
+        //TODO: how can we avoid these functions only needed for seeding???
+        $group = new Group($this->faker->word);
+        $this->assertInstanceOf(ArrayCollection::class, $group->getStudentInGroups());
+        $this->assertCount(0, $group->getStudentInGroups());
+        $this->assertInstanceOf(ArrayCollection::class, $group->getBranchForGroups());
+        $this->assertCount(0, $group->getBranchForGroups());
     }
 
 
