@@ -63,7 +63,10 @@ interface StudentRepository
      * @param Uuid $id
      * @return array
      */
-    public function allGroups(Uuid $id);
+
+    // TODO Unused
+
+    //public function allGroups(Uuid $id);
 
 
 
@@ -101,7 +104,8 @@ interface StudentRepository
      * @param Uuid $id
      * @return RedicodiForStudent[]
      */
-    public function allRedicodi(Uuid $id);
+    //TODO UNUSED
+    //public function allRedicodi(Uuid $id);
 
     /**
      * @param Uuid $id

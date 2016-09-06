@@ -180,6 +180,10 @@ class StudentDoctrineRepository implements StudentRepository
      * @param Uuid $id
      * @return array
      */
+
+    // TODO: unused
+
+    /*
     public function allGroups(Uuid $id)
     {
         $qb = $this->em->createQueryBuilder();
@@ -191,12 +195,15 @@ class StudentDoctrineRepository implements StudentRepository
             ->setParameter(1, $id);
 
         return $qb->getQuery()->getResult();
-    }
+    }*/
 
 
     /* ***************************************************
      * REDICODI
      * **************************************************/
+
+    // TODO Unused
+
 
     /**
      * Gets all 'redicodi' applicable for a given student.
@@ -204,7 +211,7 @@ class StudentDoctrineRepository implements StudentRepository
      * @param Uuid $id
      * @return RedicodiForStudent[]
      */
-    public function allRedicodi(Uuid $id)
+    /*public function allRedicodi(Uuid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('rfs')
@@ -216,7 +223,7 @@ class StudentDoctrineRepository implements StudentRepository
             ->setParameter(1, $id);
 
         return $qb->getQuery()->getResult();
-    }
+    }*/
 
 
     /**
