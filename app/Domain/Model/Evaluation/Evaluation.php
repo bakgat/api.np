@@ -178,6 +178,15 @@ class Evaluation
         return clone $this->results;
     }
 
+    public function update($title, $branchForGroup, $date, $max)
+    {
+        $this->title = $title;
+        $this->branchForGroup = $branchForGroup;
+        $this->date = $date;
+        $this->max = $max;
+        return $this;
+    }
+
     public function addResult(PointResult $result)
     {
         $this->results->add($result);
@@ -197,12 +206,5 @@ class Evaluation
         return $this;
     }
 
-    public function update($title, $branchForGroup, $date, $max)
-    {
-        $this->title = $title;
-        $this->branchForGroup = $branchForGroup;
-        $this->date = $date;
-        $this->max = $max;
-        return $this;
-    }
+
 }

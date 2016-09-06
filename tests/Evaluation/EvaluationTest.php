@@ -89,6 +89,44 @@ class EvaluationTest extends TestCase
      * @test
      * @group evaluation
      */
+    public function should_update()
+    {
+        $now = new DateTime;
+        $dr = ['start' => $now];
+
+        $branch = $this->makeBranch();
+        $group = $this->makeGroup();
+        $evType = new EvaluationType(EvaluationType::COMPREHENSIVE);
+        $branchForGroup = new BranchForGroup($branch, $group, $dr, $evType);
+
+        $title = $this->faker->unique()->word;
+        $evaluation = new Evaluation($branchForGroup, $title);
+
+
+        $max = 20;
+        $newBranch = $this->makeBranch();
+        $newGroup = $this->makeGroup();
+        $newEvType = new EvaluationType(EvaluationType::POINT);
+        $newBranchForGroup = new BranchForGroup($newBranch, $newGroup, $dr, $newEvType, $max);
+
+        $newTitle = $this->faker->unique()->word;
+
+        $past = clone $now->modify('-1 year');
+        $evaluation->update($newTitle, $newBranchForGroup, $past, $max);
+
+        $this->assertEquals($newBranch, $evaluation->getBranch());
+        $this->assertEquals($newEvType, $evaluation->getEvaluationType());
+        $this->assertEquals($newTitle, $evaluation->getTitle());
+        $this->assertEquals($past->format('Y-m-d'), $evaluation->getDate()->format('Y-m-d'));
+        $this->assertEquals($max, $evaluation->getMax());
+        $this->assertTrue($evaluation->isPermanent());
+    }
+
+
+    /**
+     * @test
+     * @group evaluation
+     */
     public function should_update_result()
     {
         $now = new DateTime;
@@ -116,6 +154,7 @@ class EvaluationTest extends TestCase
         $evaluation->updateResult($student, 30, []);
         $this->assertEquals(30, $result->getScore());
     }
+
 
 
     /* ***************************************************
@@ -152,7 +191,8 @@ class EvaluationTest extends TestCase
         return $student;
     }
 
-    private function makePointResult() {
+    private function makePointResult()
+    {
         $pr = new PointResult($this->makeStudent(), 20);
         return $pr;
     }
