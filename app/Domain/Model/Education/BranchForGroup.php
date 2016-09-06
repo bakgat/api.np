@@ -13,6 +13,7 @@ use App\Domain\Model\Education\Exceptions\MaxNullException;
 use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\Model\Identity\Group;
+use App\Domain\Model\Time\DateRangeTrait;
 use DateTime;
 use Webpatser\Uuid\Uuid;
 use Doctrine\ORM\Mapping AS ORM;
@@ -27,6 +28,8 @@ use JMS\Serializer\Annotation\Groups;
  */
 class BranchForGroup
 {
+    use DateRangeTrait;
+
     /**
      * @Groups({"evaluation_detail", "group_branches"})
      *
@@ -116,24 +119,9 @@ class BranchForGroup
         return $this->max;
     }
 
-    public function isActive()
-    {
-        return $this->dateRange->includes(new DateTime);
-    }
-
-    public function isActiveSince()
-    {
-        return $this->dateRange->getStart();
-    }
-
-    public function isActiveUntil()
-    {
-        return $this->dateRange->getEnd();
-    }
-
     public function changeMax($max)
     {
-        if ($this->evaluationType === EvaluationType::POINT) {
+        if ($this->evaluationType == EvaluationType::POINT) {
             $this->max = $max;
         }
         return $this;
