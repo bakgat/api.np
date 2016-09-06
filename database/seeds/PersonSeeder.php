@@ -33,6 +33,12 @@ class PersonSeeder extends Seeder
 
         $groups = $qb->getQuery()->getResult();
 
+        $qbR = EntityManager::createQueryBuilder();
+        $qbR->select('r')
+            ->from('App\Domain\Model\Identity\Role', 'r');
+
+        $roles = $qbR->getQuery()->getResult();
+
         $faker = Faker\Factory::create('nl_BE');
         foreach (range(1, 440) as $index) {
             /** @var Student $student */
@@ -63,7 +69,7 @@ class PersonSeeder extends Seeder
                 $faker->dateTimeBetween('-60years', '-21years')
             );
             $staff->joinGroup($faker->unique(true)->randomElement($groups), new StaffType(StaffType::TEACHER));
-
+            $staff->assignRole($faker->randomElement($roles));
             EntityManager::persist($staff);
         }
 
