@@ -4,8 +4,6 @@ use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
-use App\Repositories\Identity\GropuDoctrineRepository;
-use App\Repositories\Identity\DoctrineStudentRepository;
 use App\Repositories\Identity\GroupDoctrineRepository;
 use App\Repositories\Identity\StudentDoctrineRepository;
 use Doctrine\ORM\EntityNotFoundException;
