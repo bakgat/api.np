@@ -10,17 +10,17 @@ namespace App\Domain\Model\Evaluation;
 
 
 use App\Domain\Model\Identity\Group;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 interface EvaluationRepository
 {
     public function allEvaluationsForGroup(Group $group);
 
     /**
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Evaluation
      */
-    public function get(Uuid $id);
+    public function get(NtUid $id);
 
     /**
      * @param $evaluation
@@ -30,7 +30,7 @@ interface EvaluationRepository
 
     /**
      * @param $evaluation
-     * @return Uuid
+     * @return NtUid
      */
     public function insert(Evaluation $evaluation);
 }

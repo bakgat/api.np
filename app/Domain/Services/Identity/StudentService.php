@@ -19,7 +19,7 @@ use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentInGroup;
 use App\Domain\Model\Identity\StudentRepository;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 class StudentService
 {
@@ -44,8 +44,8 @@ class StudentService
 
     public function get($id)
     {
-        if (!$id instanceof Uuid) {
-            $id = Uuid::import($id);
+        if (!$id instanceof NtUid) {
+            $id = NtUid::import($id);
         }
         $student = $this->studentRepo->get($id);
         return $student;
@@ -63,7 +63,7 @@ class StudentService
         $schoolId = $data['schoolId'];
 
         $groupId = $data['group']['id'];
-        $group = $this->groupRepo->get(Uuid::import($groupId));
+        $group = $this->groupRepo->get(NtUid::import($groupId));
         $groupNumber = $data['groupnumber'];
 
         $student = new Student($firstName, $lastName, $schoolId, $gender, $birthday);
@@ -76,7 +76,7 @@ class StudentService
 
     public function update($data)
     {
-        $id = Uuid::import($data['id']);
+        $id = NtUid::import($data['id']);
         $student = $this->get($id);
 
         $firstName = $data['firstName'];
@@ -100,9 +100,9 @@ class StudentService
     public function joinGroup($id, $groupId, $number, $start = null, $end = null)
     {
         /** @var Student $student */
-        $student = $this->get(Uuid::import($id));
+        $student = $this->get(NtUid::import($id));
         /** @var Group $group */
-        $group = $this->groupRepo->get(Uuid::import($groupId));
+        $group = $this->groupRepo->get(NtUid::import($groupId));
         /** @var StudentInGroup $studentGroup */
         $studentGroup = null;
         if ($student && $group) {
@@ -114,7 +114,7 @@ class StudentService
 
     public function updateGroup($studentGroupId, $number, $start, $end)
     {
-        $studentGroup = $this->groupRepo->getStudentGroup(Uuid::import($studentGroupId));
+        $studentGroup = $this->groupRepo->getStudentGroup(NtUid::import($studentGroupId));
 
         $studentGroup->resetStart($start);
         if ($end != null) {
@@ -132,9 +132,9 @@ class StudentService
     public function addRedicodi($id, $branchId, $redicodi, $content, $start, $end)
     {
         /** @var Student $student */
-        $student = $this->get(Uuid::import($id));
+        $student = $this->get(NtUid::import($id));
         /** @var Branch $branch */
-        $branch = $this->branchRepo->getBranch(Uuid::import($branchId));
+        $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
 
         /** @var RedicodiForStudent $studentRedicodi */
         $studentRedicodi = null;
@@ -149,9 +149,9 @@ class StudentService
     public function updateRedicodi($studentRedicodiId, $branchId, $redicodi, $content, $start, $end)
     {
         /** @var RedicodiForStudent $studentRedicodi */
-        $studentRedicodi = $this->studentRepo->getStudentRedicodi(Uuid::import($studentRedicodiId));
+        $studentRedicodi = $this->studentRepo->getStudentRedicodi(NtUid::import($studentRedicodiId));
         /** @var Branch $branch */
-        $branch = $this->branchRepo->getBranch(Uuid::import($branchId));
+        $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
 
         $studentRedicodi->resetStart($start);
         if($end != null) {

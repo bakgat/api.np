@@ -13,7 +13,7 @@ use App\Domain\Model\Education\Goal;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\Model\Time\DateRangeTrait;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 
 
@@ -34,7 +34,7 @@ class IAC
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     protected $id;
 
@@ -62,7 +62,7 @@ class IAC
 
     public function __construct(Student $student, $dateRange)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->student = $student;
         $this->iacGoals = new ArrayCollection;
         $this->dateRange = DateRange::fromData($dateRange);

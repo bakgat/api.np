@@ -5,7 +5,7 @@ use App\Domain\Model\Evaluation\IAC;
 use App\Domain\Model\Evaluation\IACGoal;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Student;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 /**
  * Created by PhpStorm.
@@ -31,7 +31,7 @@ class IACGoalTest extends TestCase
         $iacGoal = new IACGoal($iac, $goal, $now->modify('+1 day'));
 
         $this->assertInstanceOf(IACGoal::class, $iacGoal);
-        $this->assertInstanceOf(Uuid::class, $iacGoal->getId());
+        $this->assertInstanceOf(NtUid::class, $iacGoal->getId());
 
         $this->assertInstanceOf(IAC::class, $iacGoal->getIac());
         $this->assertEquals($iac, $iacGoal->getIac());

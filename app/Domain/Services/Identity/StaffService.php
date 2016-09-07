@@ -12,7 +12,7 @@ use App\Domain\Model\Identity\StaffInGroup;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StaffRole;
 use App\Domain\Model\Identity\StaffType;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -50,8 +50,8 @@ class StaffService
      */
     public function get($id)
     {
-        if (!$id instanceof Uuid) {
-            $id = Uuid::import($id);
+        if (!$id instanceof NtUid) {
+            $id = NtUid::import($id);
         }
         $member = $this->staffRepo->get($id);
         return $member;
@@ -76,7 +76,7 @@ class StaffService
 
     public function update($data)
     {
-        $id = Uuid::import($data['id']);
+        $id = NtUid::import($data['id']);
         $staff = $this->get($id);
 
         $firstName = $data['firstName'];
@@ -112,9 +112,9 @@ class StaffService
     public function joinGroup($id, $groupId, $type, $start, $end)
     {
         /** @var Staff $member */
-        $member = $this->get(Uuid::import($id));
+        $member = $this->get(NtUid::import($id));
         /** @var Group $group */
-        $group = $this->groupRepo->get(Uuid::import($groupId));
+        $group = $this->groupRepo->get(NtUid::import($groupId));
 
         /** @var StaffInGroup $staffGroup */
         $staffGroup = null;
@@ -136,7 +136,7 @@ class StaffService
     public function updateGroup($staffGroupId, $type, $start, $end)
     {
         /** @var StaffInGroup $group */
-        $staffGroup = $this->groupRepo->getStaffGroup(Uuid::import($staffGroupId));
+        $staffGroup = $this->groupRepo->getStaffGroup(NtUid::import($staffGroupId));
         $staffGroup->resetStart($start);
         if ($end != null) {
             $staffGroup->block($end);
@@ -165,9 +165,9 @@ class StaffService
     public function assignRole($id, $roleId, $start = null, $end = null)
     {
         /** @var Staff $member */
-        $member = $this->get(Uuid::import($id));
+        $member = $this->get(NtUid::import($id));
         /** @var Role $role */
-        $role = $this->roleRepo->get(Uuid::import($roleId));
+        $role = $this->roleRepo->get(NtUid::import($roleId));
 
         $staffRole = null;
         if ($member && $role) {
@@ -180,7 +180,7 @@ class StaffService
     public function updateRole($staffRoleId, $start = null, $end = null)
     {
         /** @var StaffRole $staffRole */
-        $staffRole = $this->roleRepo->getStaffRole(Uuid::import($staffRoleId));
+        $staffRole = $this->roleRepo->getStaffRole(NtUid::import($staffRoleId));
         $staffRole->resetStart($start);
         if ($end != null) {
             $staffRole->block($end);

@@ -13,7 +13,7 @@ use App\Domain\Model\Time\DateRangeTrait;
 use Doctrine\ORM\Mapping AS ORM;
 use App\Domain\Model\Time\DateRange;
 use DateTime;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Expose;
@@ -28,7 +28,7 @@ abstract class PersonInGroup
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     protected $id;
 
@@ -55,7 +55,7 @@ abstract class PersonInGroup
 
     public function __construct(Group $group, $dateRange)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->group = $group;
 
         $this->dateRange = DateRange::fromData($dateRange);

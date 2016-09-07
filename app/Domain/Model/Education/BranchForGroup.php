@@ -15,7 +15,7 @@ use App\Domain\Model\Time\DateRange;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Time\DateRangeTrait;
 use DateTime;
-use Webpatser\Uuid\Uuid;
+use App\Domain\NtUid;
 use Doctrine\ORM\Mapping AS ORM;
 use JMS\Serializer\Annotation\Groups;
 
@@ -36,7 +36,7 @@ class BranchForGroup
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     private $id;
 
@@ -80,7 +80,7 @@ class BranchForGroup
 
     public function __construct(Branch $branch, Group $group, $daterange, EvaluationType $evaluationType, $max = null)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->branch = $branch;
         $this->group = $group;
         $this->evaluationType = $evaluationType;
@@ -99,6 +99,9 @@ class BranchForGroup
         return $this->id;
     }
 
+    /**
+     * @return Branch
+     */
     public function getBranch()
     {
         return $this->branch;

@@ -5,7 +5,7 @@ use App\Domain\Model\Identity\RoleRepository;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StaffRole;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use App\Repositories\Identity\RoleDoctrineRepository;
 use App\Repositories\Identity\StaffDoctrineRepository;
 
@@ -58,7 +58,7 @@ class RoleDoctrineRepositoryTest extends DoctrineTestCase
 
         $this->em->clear();
 
-        $role = $this->roleRepo->get(Uuid::import($id));
+        $role = $this->roleRepo->get(NtUid::import($id));
         $this->assertInstanceOf(Role::class, $role);
         $this->assertEquals($id, $role->getId());
     }
@@ -72,8 +72,8 @@ class RoleDoctrineRepositoryTest extends DoctrineTestCase
     public function should_throw_error_when_role_not_found()
     {
         $this->setExpectedException(RoleNotFoundException::class);
-        $fakeId = Uuid::generate(4);
-        $this->roleRepo->get(Uuid::import($fakeId));
+        $fakeId = NtUid::generate(4);
+        $this->roleRepo->get(NtUid::import($fakeId));
     }
 
     /**
@@ -94,7 +94,7 @@ class RoleDoctrineRepositoryTest extends DoctrineTestCase
 
         $this->em->clear();
 
-        $staffRole = $this->roleRepo->getStaffRole(Uuid::import($srId));
+        $staffRole = $this->roleRepo->getStaffRole(NtUid::import($srId));
 
         $this->assertInstanceOf(StaffRole::class, $staffRole);
         $this->assertInstanceOf(Role::class, $staffRole->getRole());
@@ -124,7 +124,7 @@ class RoleDoctrineRepositoryTest extends DoctrineTestCase
 
         $now = new DateTime;
 
-        $staffRole = $this->roleRepo->getStaffRole(Uuid::import($srId));
+        $staffRole = $this->roleRepo->getStaffRole(NtUid::import($srId));
         $this->assertTrue($staffRole->isActive());
         $staffRole->block();
 
@@ -132,7 +132,7 @@ class RoleDoctrineRepositoryTest extends DoctrineTestCase
 
         $this->em->clear();
 
-        $dbStaffRole = $this->roleRepo->getStaffRole(Uuid::import($srId));
+        $dbStaffRole = $this->roleRepo->getStaffRole(NtUid::import($srId));
         $this->assertFalse($staffRole->isActive());
     }
 

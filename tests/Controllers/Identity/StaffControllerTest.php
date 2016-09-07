@@ -201,7 +201,7 @@ class StaffControllerTest extends TestCase
             ->once()
             ->andReturn(Mockery::mock(['fails' => true, 'messages' => $message_bag]));
 
-        $fakeId = (string)\App\Domain\Uuid::generate(4);
+        $fakeId = (string)\App\Domain\NtUid::generate(4);
         $this->put('/staff/' . $fakeId, [])
             ->assertResponseStatus(422);
 

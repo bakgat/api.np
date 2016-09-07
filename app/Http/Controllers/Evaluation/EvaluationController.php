@@ -12,7 +12,7 @@ namespace App\Http\Controllers\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Services\Evaluation\EvaluationService;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -40,14 +40,15 @@ class EvaluationController extends Controller
         //TODO: check for existence
         $groupId = $request->get('group');
 
-        $group = $this->groupRepo->get(Uuid::import($groupId));
-        return $this->response($this->evaluationRepo->allEvaluationsForGroup($group), ['group_evaluations']);
+        $group = $this->groupRepo->get(NtUid::import($groupId));
+        $evaluations = $this->evaluationRepo->allEvaluationsForGroup($group);
+        return $this->response($evaluations, ['group_evaluations']);
     }
 
     public function show($id)
     {
-        if (!$id instanceof Uuid) {
-            $id = Uuid::import($id);
+        if (!$id instanceof NtUid) {
+            $id = NtUid::import($id);
         }
         $evaluation = $this->evaluationRepo->get($id);
         return $this->response($evaluation, ['evaluation_detail'], true);

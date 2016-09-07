@@ -3,7 +3,7 @@ use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Services\Identity\StaffService;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Mockery\MockInterface;
 
 /**

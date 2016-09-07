@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use JMS\Serializer\SerializerInterface;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 class GroupController extends Controller
 {
@@ -44,16 +44,16 @@ class GroupController extends Controller
 
     public function show($id)
     {
-        if (!$id instanceof Uuid) {
-            $id = Uuid::import($id);
+        if (!$id instanceof NtUid) {
+            $id = NtUid::import($id);
         }
         return $this->response($this->groupRepo->find($id), ['group']);
     }
 
     public function allActiveStudents($id)
     {
-        if (!$id instanceof Uuid) {
-            $id = Uuid::import($id);
+        if (!$id instanceof NtUid) {
+            $id = NtUid::import($id);
         }
         $activeStudents = $this->groupRepo->allActiveStudents($id);
 
@@ -71,7 +71,7 @@ class GroupController extends Controller
             return response($validator->messages(), 422);
         }
 
-        $id = Uuid::import($request->get('id'));
+        $id = NtUid::import($request->get('id'));
         $group = $this->groupRepo->get($id);
 
         $group->updateName($request->get('name'));
@@ -118,7 +118,7 @@ class GroupController extends Controller
 
     public function allBranches($id)
     {
-        $group = $this->groupRepo->get(Uuid::import($id));
+        $group = $this->groupRepo->get(NtUid::import($id));
         $branches = $this->branchRepo->allBranchesInGroup($group);
         return $this->response($branches, ['group_branches']);
     }

@@ -1,6 +1,6 @@
 <?php
 use App\Domain\Model\Identity\Group;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
@@ -219,7 +219,7 @@ class GroupControllerTest extends TestCase
     public function should_return_422_when_update_fails()
     {
         $data = [
-            'id' => (string)Uuid::generate(4),
+            'id' => (string)NtUid::generate(4),
             'active' => true
         ];
 

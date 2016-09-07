@@ -9,11 +9,12 @@
 namespace App\Domain\Model\Evaluation;
 
 
+use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Identity\Student;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 use App\Domain\Model\Education\BranchForGroup;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use DateTime;
 
 use JMS\Serializer\Annotation\Groups;
@@ -36,7 +37,7 @@ class Evaluation
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     protected $id;
 
@@ -98,7 +99,7 @@ class Evaluation
 
     public function __construct(BranchForGroup $branchForGroup, $title, $date = null, $max = null, $permanent = true)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->branchForGroup = $branchForGroup;
         $this->title = $title;
         $this->permanent = $permanent;
@@ -115,6 +116,9 @@ class Evaluation
         return $this->id;
     }
 
+    /**
+     * @return Branch
+     */
     public function getBranch()
     {
         return $this->branchForGroup->getBranch();

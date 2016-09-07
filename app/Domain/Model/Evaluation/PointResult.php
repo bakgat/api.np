@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Identity\Student;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Accessor;
 
@@ -30,7 +30,7 @@ class PointResult
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     protected $id;
 
@@ -72,7 +72,7 @@ class PointResult
 
     public function __construct(Student $student, $score, $redicodi = [])
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->student = $student;
         $this->score = $score;
         $this->redicodi = implode(',', $redicodi);

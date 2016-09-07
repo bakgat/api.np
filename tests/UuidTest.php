@@ -1,6 +1,6 @@
 <?php
 use App\Domain\Model\Identity\Group;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 /**
  * Created by PhpStorm.
@@ -16,9 +16,9 @@ class UuidTest extends TestCase
      */
     public function should_create_new()
     {
-        $uuid = Uuid::generate(4);
+        $uuid = NtUid::generate(4);
 
-        $this->assertInstanceOf(Uuid::class, $uuid);
+        $this->assertInstanceOf(NtUid::class, $uuid);
         $this->assertCount(5, explode('-', (string)$uuid));
     }
 

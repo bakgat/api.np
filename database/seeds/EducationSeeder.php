@@ -3,7 +3,7 @@
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Evaluation\EvaluationType;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Illuminate\Database\Seeder;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 

@@ -4,7 +4,7 @@ use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRole;
 use App\Domain\Model\Time\DateRange;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 /**
  * Created by PhpStorm.
@@ -39,7 +39,7 @@ class StaffRoleTest extends TestCase
         $this->assertCount(2, $staff->getRoles());
         $this->assertCount(1, $staff->getActiveRoles());
 
-        $this->assertInstanceOf(Uuid::class, $staffRole->getId());
+        $this->assertInstanceOf(NtUid::class, $staffRole->getId());
         $this->assertEquals($staff, $staffRole->getStaff());
         $this->assertEquals($role1, $staffRole->getRole());
         $now = new DateTime;

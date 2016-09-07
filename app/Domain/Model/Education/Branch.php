@@ -12,7 +12,7 @@ namespace App\Domain\Model\Education;
 use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Identity\Group;
 use DateTime;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Doctrine\ORM\Mapping AS ORM;
 
 use JMS\Serializer\Annotation\Groups;
@@ -32,7 +32,7 @@ class Branch
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     private $id;
 
@@ -64,7 +64,7 @@ class Branch
 
     public function __construct($name)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->name = $name;
     }
 

@@ -9,7 +9,7 @@
 namespace App\Domain\Model\Identity;
 
 
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 
 interface StaffRepository
@@ -24,10 +24,10 @@ interface StaffRepository
     /**
      * Finds a staff member by its id, if not returns null.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Staff|null
      */
-    public function find(Uuid $id);
+    public function find(NtUid $id);
 
     /**
      * Finds a staff member by its email-address, if not returns null.
@@ -40,16 +40,16 @@ interface StaffRepository
     /**
      * Gets an existing staff member by its id.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Staff
      */
-    public function get(Uuid $id);
+    public function get(NtUid $id);
 
     /**
      * Saves a new staff member.
      *
      * @param Staff $staff
-     * @return Uuid
+     * @return NtUid
      */
     public function insert(Staff $staff);
 
@@ -64,8 +64,8 @@ interface StaffRepository
     /**
      * Deletes an existing staff member.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return int Number of affected rows.
      */
-    public function delete(Uuid $id);
+    public function delete(NtUid $id);
 }

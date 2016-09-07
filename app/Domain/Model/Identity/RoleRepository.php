@@ -9,7 +9,7 @@
 namespace App\Domain\Model\Identity;
 
 
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 
 interface RoleRepository
@@ -24,16 +24,16 @@ interface RoleRepository
     /**
      * Gets an existing role by its id.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Role
      */
-    public function get(Uuid $id);
+    public function get(NtUid $id);
 
     /**
-     * @param Uuid $id
+     * @param NtUid $id
      * @return StaffRole
      */
-    public function getStaffRole(Uuid $id);
+    public function getStaffRole(NtUid $id);
 
     /**
      * @param $staffRole

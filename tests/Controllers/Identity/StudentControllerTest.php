@@ -270,7 +270,7 @@ class StudentControllerTest extends TestCase
     public function should_update_fail()
     {
         $message_bag = new MessageBag(['firstName is required']);
-        $fakeId = (string)\App\Domain\Uuid::generate(4);
+        $fakeId = (string)\App\Domain\NtUid::generate(4);
 
         Validator::shouldReceive('make')
             ->once()

@@ -10,7 +10,7 @@ namespace App\Domain\Model\Evaluation;
 
 
 use App\Domain\Model\Education\Goal;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use DateTime;
 
 
@@ -29,7 +29,7 @@ class IACGoal
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     protected $id;
 
@@ -80,7 +80,7 @@ class IACGoal
 
     public function __construct(IAC $iac, Goal $goal, $date = null)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->iac = $iac;
         $this->goal = $goal;
 

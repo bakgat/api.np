@@ -1,7 +1,7 @@
 <?php
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\Goal;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 /**
  * Created by PhpStorm.
@@ -22,7 +22,7 @@ class GoalTest extends TestCase
         $goal = new Goal($branch, $text);
 
         $this->assertInstanceOf(Goal::class, $goal);
-        $this->assertInstanceOf(Uuid::class, $goal->getId());
+        $this->assertInstanceOf(NtUid::class, $goal->getId());
         $this->assertEquals($branch , $goal->getBranch());
         $this->assertEquals($text, $goal->getText());
     }

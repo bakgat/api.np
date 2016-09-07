@@ -13,7 +13,7 @@ use App\Domain\Model\Identity\Exceptions\RoleNotFoundException;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\RoleRepository;
 use App\Domain\Model\Identity\StaffRole;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 
@@ -44,11 +44,11 @@ class RoleDoctrineRepository implements RoleRepository
     /**
      * Gets an existing role by its id.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Role
      * @throws RoleNotFoundException
      */
-    public function get(Uuid $id)
+    public function get(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('r')
@@ -65,7 +65,7 @@ class RoleDoctrineRepository implements RoleRepository
         return $role;
     }
 
-    public function getStaffRole(Uuid $id) {
+    public function getStaffRole(NtUid $id) {
         $qb = $this->em->createQueryBuilder();
         $qb->select('sr, r')
             ->from(StaffRole::class, 'sr')

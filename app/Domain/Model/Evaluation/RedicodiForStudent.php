@@ -13,7 +13,7 @@ use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\Model\Time\DateRangeTrait;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use \DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,7 +37,7 @@ class RedicodiForStudent
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     protected $id;
 
@@ -88,7 +88,7 @@ class RedicodiForStudent
 
     public function __construct(Student $student, Redicodi $redicodi, Branch $branch, $content = '', $dateRange)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->student = $student;
         $this->redicodi = $redicodi;
         $this->branch = $branch;

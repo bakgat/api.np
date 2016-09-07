@@ -9,7 +9,7 @@
 namespace App\Domain\Model\Identity;
 
 
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Doctrine\ORM\Mapping AS ORM;
@@ -31,7 +31,7 @@ class Role
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     protected $id;
 
@@ -58,7 +58,7 @@ class Role
 
     public function __construct($name)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->name = $name;
         $this->staffRoles = new ArrayCollection;
     }

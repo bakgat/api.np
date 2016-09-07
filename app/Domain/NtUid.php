@@ -12,7 +12,7 @@ namespace App\Domain;
 use JMS\Serializer\JsonSerializationVisitor;
 use JMS\Serializer\Annotation\HandlerCallback;
 
-class Uuid extends \Webpatser\Uuid\Uuid
+class NtUid extends \Webpatser\Uuid\Uuid
 {
     public function __construct($uuid)
     {
@@ -27,10 +27,10 @@ class Uuid extends \Webpatser\Uuid\Uuid
      */
     public function serializeToJson(JsonSerializationVisitor $visitor)
     {
-        $visitor->addData('id', $this->__toString());
+        $visitor->addData('id', $this->string);
     }
 
     public function toString() {
-        return $this->__toString();
+        return $this->string;
     }
 }

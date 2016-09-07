@@ -2,7 +2,7 @@
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\Staff;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 /**
  * Created by PhpStorm.
@@ -23,7 +23,7 @@ class RoleTest extends TestCase
         $role = new Role($name);
 
         $this->assertInstanceOf(Role::class, $role);
-        $this->assertInstanceOf(Uuid::class, $role->getId());
+        $this->assertInstanceOf(NtUid::class, $role->getId());
         $this->assertEquals($name, $role->getName());
     }
 

@@ -9,7 +9,7 @@
 namespace App\Domain\Model\Education;
 
 
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 use Doctrine\ORM\Mapping AS ORM;
 
@@ -26,7 +26,7 @@ class Goal
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     protected $id;
 
@@ -54,7 +54,7 @@ class Goal
 
     public function __construct(Branch $branch, $text)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->branch = $branch;
         $this->text = $text;
     }

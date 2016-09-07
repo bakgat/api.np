@@ -12,7 +12,7 @@ namespace App\Http\Controllers\Identity;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StaffType;
 use App\Domain\Services\Identity\StaffService;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use App\Http\Controllers\Controller;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;

@@ -12,7 +12,7 @@ namespace App\Domain\Model\Identity;
 use \DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\VirtualProperty;
@@ -30,7 +30,7 @@ abstract class Person
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid id
+     * @var NtUid id
      */
     protected $id;
 
@@ -74,7 +74,7 @@ abstract class Person
 
     public function __construct($firstName, $lastName, Gender $gender, DateTime $birthday = null)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->gender = $gender;
@@ -83,14 +83,14 @@ abstract class Person
 
 
     /**
-     * @return Uuid
+     * @return NtUid
      */
     public function getId()
     {
-        if ($this->id instanceof Uuid) {
+        if ($this->id instanceof NtUid) {
             return $this->id;
         }
-        return Uuid::import($this->id);
+        return NtUid::import($this->id);
     }
 
     /**

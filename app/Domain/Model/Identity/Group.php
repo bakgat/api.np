@@ -11,7 +11,7 @@ namespace App\Domain\Model\Identity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
@@ -33,7 +33,7 @@ class Group
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid id
+     * @var NtUid id
      */
     protected $id;
     /**
@@ -73,7 +73,7 @@ class Group
 
     public function __construct($name, $active = true)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->name = $name;
         $this->active = $active;
         $this->studentInGroups = new ArrayCollection;
@@ -82,10 +82,10 @@ class Group
 
     public function getId()
     {
-        if ($this->id instanceof Uuid) {
+        if ($this->id instanceof NtUid) {
             return $this->id;
         }
-        return Uuid::import($this->id);
+        return NtUid::import($this->id);
     }
 
     public function getName()

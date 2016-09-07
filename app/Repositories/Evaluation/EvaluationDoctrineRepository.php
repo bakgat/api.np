@@ -12,7 +12,7 @@ namespace App\Repositories\Evaluation;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Identity\Group;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Doctrine\ORM\EntityManager;
 
 class EvaluationDoctrineRepository implements EvaluationRepository
@@ -40,7 +40,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function get(Uuid $id)
+    public function get(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('e, bfg, b, m, pr, s')

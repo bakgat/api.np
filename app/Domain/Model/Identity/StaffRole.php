@@ -10,7 +10,7 @@ namespace App\Domain\Model\Identity;
 
 use App\Domain\Model\Time\DateRange;
 use App\Domain\Model\Time\DateRangeTrait;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 use DateTime;
 use Doctrine\ORM\Mapping AS ORM;
@@ -33,7 +33,7 @@ class StaffRole
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
-     * @var Uuid
+     * @var NtUid
      */
     protected $id;
 
@@ -66,7 +66,7 @@ class StaffRole
 
     public function __construct(Staff $staff, Role $role, $dateRange)
     {
-        $this->id = Uuid::generate(4);
+        $this->id = NtUid::generate(4);
         $this->staff = $staff;
         $this->role = $role;
         $this->dateRange = DateRange::fromData($dateRange);

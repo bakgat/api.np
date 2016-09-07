@@ -7,7 +7,7 @@ use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Identity\StudentRepository;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 /**
  * Created by PhpStorm.
@@ -47,7 +47,7 @@ class EvaluationService
 
         foreach ($results as $result) {
             $studentId = $result['student']['id'];
-            $student = $this->studentRepo->get(Uuid::import($studentId));
+            $student = $this->studentRepo->get(NtUid::import($studentId));
 
             $score = $result['score'];
             $redicodi = $result['redicodi'];
@@ -63,7 +63,7 @@ class EvaluationService
 
     public function update($data)
     {
-        $id = Uuid::import($data['id']);
+        $id = NtUid::import($data['id']);
         $title = $data['title'];
         $branchForGroupId = $data['branchForGroup']['id'];
         $branchForGroup = $this->branchRepo->getBranchForGroup($branchForGroupId);
@@ -79,7 +79,7 @@ class EvaluationService
 
         foreach ($results as $result) {
             $studentId = $result['student']['id'];
-            $student = $this->studentRepo->get(Uuid::import($studentId));
+            $student = $this->studentRepo->get(NtUid::import($studentId));
 
             $evaluation->updateResult($student, $result['score'], $result['redicodi']);
         }

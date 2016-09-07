@@ -4,7 +4,7 @@ use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentInGroup;
 use App\Domain\Services\Identity\StudentService;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use Mockery\MockInterface;
 
 /**

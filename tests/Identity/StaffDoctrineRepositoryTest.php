@@ -3,7 +3,7 @@ use App\Domain\Model\Identity\Exceptions\StaffNotFoundException;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRepository;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 use App\Repositories\Identity\StaffDoctrineRepository;
 
 /**
@@ -50,7 +50,7 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
     public function should_return_null_when_not_found_through_email()
     {
         // make fake unique email address
-        $fakeMail = Uuid::generate(4) . '@test.com';
+        $fakeMail = NtUid::generate(4) . '@test.com';
 
         $nullUser = $this->staffRepo->findByEmail($fakeMail);
 
@@ -85,7 +85,7 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
      */
     public function should_return_null_when_no_staff_found()
     {
-        $fakeId = Uuid::generate(4);
+        $fakeId = NtUid::generate(4);
         $staff = $this->staffRepo->find($fakeId);
         $this->assertNull($staff);
     }
@@ -133,7 +133,7 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
     public function should_throw_exception_when_get_staff_fails()
     {
         $this->setExpectedException(StaffNotFoundException::class);
-        $fakeId = Uuid::generate(4);
+        $fakeId = NtUid::generate(4);
         $staff = $this->staffRepo->get($fakeId);
     }
 
@@ -231,7 +231,7 @@ class StaffDoctrineRepositoryTest extends DoctrineTestCase
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
         $email = $this->faker->email;
-        $gender = $this->faker->randomElement(Gender::values());
+        $gender = new Gender('F');
         $birthday = $this->faker->dateTime;
         $staff = new Staff($fn, $ln, $email, $gender, $birthday);
         return $staff;

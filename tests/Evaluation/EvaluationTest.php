@@ -7,7 +7,7 @@ use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 /**
  * Created by PhpStorm.
@@ -38,7 +38,7 @@ class EvaluationTest extends TestCase
         $evaluation = new Evaluation($branchForGroup, $title, $now, $max);
 
         $this->assertInstanceOf(Evaluation::class, $evaluation);
-        $this->assertInstanceOf(Uuid::class, $evaluation->getId());
+        $this->assertInstanceOf(NtUid::class, $evaluation->getId());
 
         $this->assertInstanceOf(Branch::class, $evaluation->getBranch());
         $this->assertEquals($branch, $evaluation->getBranch());
@@ -71,7 +71,7 @@ class EvaluationTest extends TestCase
         $evaluation = new Evaluation($branchForGroup, $title);
 
         $this->assertInstanceOf(Evaluation::class, $evaluation);
-        $this->assertInstanceOf(Uuid::class, $evaluation->getId());
+        $this->assertInstanceOf(NtUid::class, $evaluation->getId());
 
         $this->assertInstanceOf(Branch::class, $evaluation->getBranch());
         $this->assertEquals($branch, $evaluation->getBranch());

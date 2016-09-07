@@ -6,7 +6,7 @@ use App\Domain\Model\Evaluation\IACGoal;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Time\DateRange;
-use App\Domain\Uuid;
+use App\Domain\NtUid;
 
 /**
  * Created by PhpStorm.
@@ -28,7 +28,7 @@ class IACTest extends TestCase
 
         $this->assertInstanceOf(IAC::class, $iac);
         $this->assertInstanceOf(Student::class, $iac->getStudent());
-        $this->assertInstanceOf(Uuid::class, $iac->getId());
+        $this->assertInstanceOf(NtUid::class, $iac->getId());
         $this->assertEquals($now, $iac->isActiveSince());
         $this->assertEquals(DateRange::FUTURE, $iac->isActiveUntil()->format('Y-m-d'));
         $this->assertTrue($iac->isActive());
