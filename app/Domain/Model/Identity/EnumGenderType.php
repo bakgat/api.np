@@ -36,6 +36,9 @@ class EnumGenderType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
+        if ($value == null) {
+            return null;
+        }
         if(!static::validate($value)) {
             throw new \InvalidArgumentException('Invalid gender');
         }

@@ -49,8 +49,8 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->join('e.branchForGroup', 'bfg')
             ->join('bfg.branch', 'b')
             ->join('b.major', 'm')
-            ->join('e.results', 'pr')
-            ->join('pr.student', 's')
+            ->leftJoin('e.results', 'pr')
+            ->leftJoin('pr.student', 's')
             ->where('e.id=?1')
             ->setParameter(1, $id)
             ->orderBy('s.lastName');
