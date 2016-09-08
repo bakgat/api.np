@@ -19,8 +19,57 @@ class UuidTest extends TestCase
         $uuid = NtUid::generate(4);
 
         $this->assertInstanceOf(NtUid::class, $uuid);
-        $this->assertCount(5, explode('-', (string)$uuid));
+        $this->assertCount(5, explode('-', $uuid->toString()));
     }
+
+    /**
+     * @test
+     * @group uuid
+     */
+    public function should_import_from_string()
+    {
+        $id = $this->faker->uuid;
+        $uuid = NtUid::import($id);
+
+        $this->assertInstanceOf(NtUid::class, $uuid);
+    }
+
+    /**
+     * @test
+     * @group uuid
+     */
+    public function should_generate_new()
+    {
+        $uuidV1 = NtUid::generate(1);
+        $uuidV3 = NtUid::generate(3, $this->faker->word, NtUid::NS_DNS);
+        $uuidV4 = NtUid::generate(4);
+        $uuidV5 = NtUid::generate(5, $this->faker->word, NtUid::NS_DNS);
+
+        $this->assertInstanceOf(NtUid::class, $uuidV1);
+        $this->assertInstanceOf(NtUid::class, $uuidV3);
+        $this->assertInstanceOf(NtUid::class, $uuidV4);
+        $this->assertInstanceOf(NtUid::class, $uuidV5);
+    }
+
+    /**
+     * @test
+     * @group uuid
+     */
+    public function should_throw_on_version_2()
+    {
+        $this->setExpectedException(Exception::class);
+        $uuidV2 = NtUid::generate(2);
+    }
+    /**
+     * @test
+     * @group uuid
+     */
+    public function should_throw_on_wrong_version()
+    {
+        $this->setExpectedException(Exception::class);
+        $uuidV2 = NtUid::generate(6);
+    }
+
 
     /**
      * @test
