@@ -52,9 +52,7 @@ class GroupController extends Controller
 
     public function allActiveStudents($id)
     {
-        if (!$id instanceof NtUid) {
-            $id = NtUid::import($id);
-        }
+        $id = NtUid::import($id);
         $activeStudents = $this->groupRepo->allActiveStudents($id);
 
         return $this->response($activeStudents, ['group_students']);

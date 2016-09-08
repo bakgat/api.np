@@ -1,5 +1,7 @@
 <?php
+use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
+use App\Domain\Model\Identity\Student;
 use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Illuminate\Support\Facades\Validator;
@@ -216,6 +218,31 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
+    public function should_return_all_active_students_in_group()
+    {
+        $group = $this->makeGroup();
+        $id = $group->getId();
+
+        $students = $this->makeStudentCollection();
+
+        $this->groupRepo->shouldReceive('allActiveStudents')
+            ->once()
+            ->andReturn($students);
+
+        $this->get('/groups/' . $id . '/students?active=true')
+            ->seeJsonStructure([
+                '*' => [
+                    'id',
+                    'displayName',
+                    'gender'
+                ]
+            ]);
+    }
+
+    /**
+     * @test
+     * @group GroupController
+     */
     public function should_return_422_when_update_fails()
     {
         $data = [
@@ -233,6 +260,10 @@ class GroupControllerTest extends TestCase
         $this->assertResponseStatus(422);
     }
 
+
+    /* ***************************************************
+     * PRIVATE FUNCTIONS
+     * **************************************************/
 
     /**
      * @return ArrayCollection
@@ -254,5 +285,28 @@ class GroupControllerTest extends TestCase
     {
         $group = new Group($this->faker->word);
         return $group;
+    }
+
+    private function makeStudentCollection()
+    {
+        $collection = new ArrayCollection();
+        foreach (range(1, 10) as $item) {
+            $student = $this->makeStudent();
+            $collection->add($student);
+        }
+        return $collection;
+    }
+
+    private function makeStudent()
+    {
+        $fn = $this->faker->firstName;
+        $ln = $this->faker->lastName;
+        $schoolId = $this->faker->bankAccountNumber;
+        $birthday = $this->faker->dateTime;
+        $gender = $this->faker->randomElement(Gender::values());
+
+        $student = new Student($fn, $ln, $schoolId, $gender, $birthday);
+
+        return $student;
     }
 }
