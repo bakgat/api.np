@@ -302,9 +302,6 @@ class EvaluationControllerTest extends TestCase
     /* ***************************************************
      * PRIVATE METHODS
      * **************************************************/
-    /*
-    * PRIVATE METHODS
-    */
     private function makeStudentCollection()
     {
         $collection = new ArrayCollection();
