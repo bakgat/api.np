@@ -18,8 +18,8 @@ use App\Domain\Model\Education\Major;
 use App\Domain\Model\Education\Exceptions\BranchNotFoundException;
 use App\Domain\Model\Education\Exceptions\MajorNotFoundException;
 use App\Domain\Model\Identity\Group;
+use App\Domain\NtUid;
 use Doctrine\ORM\EntityManager;
-use Webpatser\Uuid\Uuid;
 
 class BranchDoctrineRepository implements BranchRepository
 {
@@ -54,7 +54,7 @@ class BranchDoctrineRepository implements BranchRepository
      * @param $id
      * @return Branch|null
      */
-    public function findBranch(Uuid $id)
+    public function findBranch(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('b')
@@ -67,12 +67,12 @@ class BranchDoctrineRepository implements BranchRepository
     /**
      * Gets an existing Branch by its id.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Branch
      *
      * @throws BranchNotFoundException
      */
-    public function getBranch(Uuid $id)
+    public function getBranch(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('b')
@@ -128,31 +128,14 @@ class BranchDoctrineRepository implements BranchRepository
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * Gets all the active major in a group.
-     *
-     * @param Group $group
-     * @return ArrayCollection|Major[]
-     */
-    public function allMajors(Group $group)
-    {
-        $qb = $this->em->createQueryBuilder();
-        $qb->select('m,b')
-            ->from(Major::class, 'm')
-            ->join('m.branches', 'b')
-            ->join('b.branchForGroups', 'bfg')
-            ->where('bfg.group=?1')
-            ->setParameter(1, $group->getId());
-        return $qb->getQuery()->getResult();
-    }
 
     /**
      * Finds a major by its id, if not returns null.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Major|null
      */
-    public function findMajor(Uuid $id)
+    public function findMajor(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('m')
@@ -166,11 +149,11 @@ class BranchDoctrineRepository implements BranchRepository
     /**
      * Gets an existing major by its id.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Major
      * @throws MajorNotFoundException
      */
-    public function getMajor(Uuid $id)
+    public function getMajor(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('m')
@@ -191,7 +174,7 @@ class BranchDoctrineRepository implements BranchRepository
      * Saves a new Major
      *
      * @param Major $major
-     * @return Uuid
+     * @return NtUid
      */
     public function insertMajor(Major $major)
     {
@@ -204,7 +187,7 @@ class BranchDoctrineRepository implements BranchRepository
      * Saves a new Branch
      *
      * @param Branch $branch
-     * @return Uuid
+     * @return NtUid
      */
     public function insertBranch(Branch $branch)
     {
@@ -228,10 +211,10 @@ class BranchDoctrineRepository implements BranchRepository
     /**
      * Deletes an existing Branch.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return int Number of affected rows.
      */
-    public function deleteBranch(Uuid $id)
+    public function deleteBranch(NtUid $id)
     {
         $branch = $this->getBranch($id);
         $this->em->remove($branch);
@@ -242,10 +225,10 @@ class BranchDoctrineRepository implements BranchRepository
     /**
      * Deletes an existing Major.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return int Number of affected rows.
      */
-    public function deleteMajor(Uuid $id)
+    public function deleteMajor(NtUid $id)
     {
         $major = $this->getMajor($id);
         $this->em->remove($major);
@@ -254,10 +237,10 @@ class BranchDoctrineRepository implements BranchRepository
     }
 
     /**
-     * @param $branchForGroupId
+     * @param NtUid $branchForGroupId
      * @return BranchForGroup
      */
-    public function getBranchForGroup($branchForGroupId)
+    public function getBranchForGroup(NtUid $branchForGroupId)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('bfg')
@@ -266,6 +249,7 @@ class BranchDoctrineRepository implements BranchRepository
             ->setParameter('id', $branchForGroupId);
         return $qb->getQuery()->getOneOrNullResult();
     }
+
 
 
 }

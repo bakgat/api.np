@@ -10,7 +10,8 @@ namespace App\Domain\Model\Education;
 
 
 use App\Domain\Model\Identity\Group;
-use Webpatser\Uuid\Uuid;
+use App\Domain\NtUid;
+use Doctrine\Common\Collections\ArrayCollection;
 
 interface BranchRepository
 {
@@ -25,18 +26,18 @@ interface BranchRepository
 
     /**
      * Finds a branch by its id, if not returns null.
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Branch|null
      */
-    public function findBranch(Uuid $id);
+    public function findBranch(NtUid $id);
 
     /**
      * Gets an existing Branch by its id.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Branch
      */
-    public function getBranch(Uuid $id);
+    public function getBranch(NtUid $id);
 
     /**
      * Gets all active branches of a major for a group.
@@ -49,46 +50,39 @@ interface BranchRepository
 
     /**
      * @param Group $group
-     * @return ArrayColleciton
+     * @return ArrayCollection
      */
     public function allBranchesInGroup(Group $group);
 
-    /**
-     * Gets all the active major in a group.
-     *
-     * @param Group $group
-     * @return ArrayCollection|Major[]
-     */
-    public function allMajors(Group $group);
 
     /**
      * Finds a major by its id, if not returns null.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Major|null
      */
-    public function findMajor(Uuid $id);
+    public function findMajor(NtUid $id);
 
     /**
      * Gets an existing major by its id.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Major
      */
-    public function getMajor(Uuid $id);
+    public function getMajor(NtUid $id);
 
     /**
      * Saves a new Major
      *
      * @param Major $major
-     * @return Uuid
+     * @return NtUid
      */
     public function insertMajor(Major $major);
     /**
      * Saves a new Branch
      *
      * @param Branch $branch
-     * @return Uuid
+     * @return NtUid
      */
     public function insertBranch(Branch $branch);
 
@@ -103,22 +97,22 @@ interface BranchRepository
     /**
      * Deletes an existing Branch.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return int Number of affected rows.
      */
-    public function deleteBranch(Uuid $id);
+    public function deleteBranch(NtUid $id);
 
     /**
      * Deletes an existing Major.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return int Number of affected rows.
      */
-    public function deleteMajor(Uuid $id);
+    public function deleteMajor(NtUid $id);
 
     /**
-     * @param $branchForGroupId
+     * @param NtUid $branchForGroupId
      * @return BranchForGroup
      */
-    public function getBranchForGroup($branchForGroupId);
+    public function getBranchForGroup(NtUid $branchForGroupId);
 }

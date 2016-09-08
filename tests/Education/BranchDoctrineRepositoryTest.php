@@ -1,13 +1,15 @@
 <?php
 use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\BranchForGroup;
 use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Education\Exceptions\BranchNotFoundException;
 use App\Domain\Model\Education\Exceptions\MajorNotFoundException;
 use App\Domain\Model\Education\Major;
+use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
+use App\Domain\NtUid;
 use App\Repositories\Education\BranchDoctrineRepository;
 use App\Repositories\Identity\GroupDoctrineRepository;
-use Webpatser\Uuid\Uuid;
 
 /**
  * Created by PhpStorm.
@@ -31,7 +33,6 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
     }
 
 
-
     /**
      * @test
      * @group group
@@ -43,7 +44,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
         $groups = $this->groupRepo->all();
         $majors = $this->branchRepo->all($groups[0]);
         $branches = $majors[0]->getBranches();
-        $id = Uuid::import($branches[0]->getId());
+        $id = NtUid::import($branches[0]->getId());
         $this->em->clear();
 
         $branch = $this->branchRepo->findBranch($id);
@@ -59,7 +60,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
      */
     public function should_return_null_when_no_branch_found()
     {
-        $fakeId = Uuid::generate(4);
+        $fakeId = NtUid::generate(4);
         $branch = $this->branchRepo->findBranch($fakeId);
         $this->assertNull($branch);
     }
@@ -75,7 +76,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
         $groups = $this->groupRepo->all();
         $majors = $this->branchRepo->all($groups[0]);
         $branches = $majors[0]->getBranches();
-        $id = Uuid::import($branches[0]->getId());
+        $id = NtUid::import($branches[0]->getId());
         $this->em->clear();
 
         $branch = $this->branchRepo->getBranch($id);
@@ -92,7 +93,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
     public function should_throw_when_get_branch_fails()
     {
         $this->setExpectedException(BranchNotFoundException::class);
-        $fakeId = Uuid::generate(4);
+        $fakeId = NtUid::generate(4);
         $this->branchRepo->getBranch($fakeId);
     }
 
@@ -106,7 +107,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
     {
         $groups = $this->groupRepo->all();
         $majors = $this->branchRepo->all($groups[0]);
-        $id = Uuid::import($majors[0]->getId());
+        $id = NtUid::import($majors[0]->getId());
 
         $this->em->clear();
 
@@ -124,7 +125,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
      */
     public function should_return_null_when_no_major_is_found()
     {
-        $fakeId = Uuid::generate(4);
+        $fakeId = NtUid::generate(4);
         $major = $this->branchRepo->findMajor($fakeId);
         $this->assertNull($major);
     }
@@ -140,7 +141,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
     {
         $groups = $this->groupRepo->all();
         $majors = $this->branchRepo->all($groups[0]);
-        $id = Uuid::import($majors[0]->getId());
+        $id = NtUid::import($majors[0]->getId());
 
         $this->em->clear();
 
@@ -158,7 +159,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
     public function should_throw_when_get_major_fails()
     {
         $this->setExpectedException(MajorNotFoundException::class);
-        $fakeId = Uuid::generate(4);
+        $fakeId = NtUid::generate(4);
         $this->branchRepo->getMajor($fakeId);
     }
 
@@ -205,7 +206,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
         /** @var Major $major */
         $major = $majors[0];
 
-        $major_id = Uuid::import($major->getId());
+        $major_id = NtUid::import($major->getId());
         $branch_count = count($major->getBranches());
 
         $branch_name = 'fake_unique_branch_' . $this->faker->uuid;
@@ -219,7 +220,7 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
         $dbMajor = $this->branchRepo->getMajor($major_id);
         $dbBranch = null;
         foreach ($dbMajor->getBranches() as $branch) {
-            if($branch->getName() == $branch_name) {
+            if ($branch->getName() == $branch_name) {
                 $dbBranch = $branch;
             }
         }
@@ -229,6 +230,52 @@ class BranchDoctrineRepositoryTest extends DoctrineTestCase
         $this->assertInstanceOf(Branch::class, $dbBranch);
         //TODO: fix this !
         //$this->assertEquals($branch_count + 1, count($dbMajor->getBranches()));
+    }
+
+    /**
+     * @test
+     * @group branch
+     * @group group
+     * @group get
+     */
+    public function should_get_all_branches_in_group()
+    {
+        $groups = $this->groupRepo->allActive();
+        /** @var Group $group */
+        $group = $groups[0];
+
+        $branches = $this->branchRepo->allBranchesInGroup($group);
+        $this->assertGreaterThan(0, count($branches));
+
+        /** @var BranchForGroup $first */
+        $first = $branches[0];
+        $this->assertInstanceOf(BranchForGroup::class, $first);
+        $this->assertEquals($group, $first->getGroup());
+    }
+
+    /**
+     * @test
+     * @group branch
+     * @group group
+     * @group get
+     */
+    public function should_get_branch_for_group()
+    {
+        $groups = $this->groupRepo->allActive();
+        /** @var Group $group */
+        $group = $groups[0];
+
+        $branches = $this->branchRepo->allBranchesInGroup($group);
+
+        /** @var BranchForGroup $first */
+        $first = $branches[0];
+        $id = $first->getId();
+
+        $this->em->clear();
+
+        $branchForGroup = $this->branchRepo->getBranchForGroup(NtUid::import($id));
+        $this->assertInstanceOf(BranchForGroup::class, $branchForGroup);
+        $this->assertEquals($id, $branchForGroup->getId());
     }
 
 
