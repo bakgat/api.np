@@ -11,6 +11,7 @@ namespace App\Repositories\Evaluation;
 
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
+use App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\NtUid;
 use Doctrine\ORM\EntityManager;
@@ -54,7 +55,11 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->setParameter(1, $id)
             ->orderBy('s.lastName');
 
-        return $qb->getQuery()->getOneOrNullResult();
+        $evaluation = $qb->getQuery()->getOneOrNullResult();
+        if ($evaluation == null) {
+            throw new EvaluationNotFoundException($id);
+        }
+        return $evaluation;
     }
 
     public function insert(Evaluation $evaluation)
