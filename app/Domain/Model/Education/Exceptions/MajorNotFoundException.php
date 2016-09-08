@@ -16,7 +16,7 @@ class MajorNotFoundException extends Exception
 
     /**
      * MajorNotFoundException constructor.
-     * @param Uuid $id
+     * @param NtUid $id
      */
     public function __construct($id)
     {

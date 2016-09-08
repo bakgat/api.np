@@ -4,11 +4,9 @@ use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
+use App\Domain\NtUid;
 use App\Repositories\Identity\GroupDoctrineRepository;
 use App\Repositories\Identity\StudentDoctrineRepository;
-use Doctrine\ORM\EntityNotFoundException;
-use Webpatser\Uuid\Uuid;
-
 
 /**
  * Created by PhpStorm.
@@ -87,7 +85,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      */
     public function should_return_null_when_no_student_found()
     {
-        $fakeId = Uuid::generate(4);
+        $fakeId = NtUid::generate(4);
         $student = $this->studentRepo->find($fakeId);
         $this->assertNull($student);
     }
@@ -121,7 +119,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
     public function should_throw_exception_when_get_student_fails()
     {
         $this->setExpectedException(StudentNotFoundException::class);
-        $fakeId = Uuid::generate(4);
+        $fakeId = NtUid::generate(4);
         $student = $this->studentRepo->get($fakeId);
     }
 

@@ -10,9 +10,9 @@ namespace App\Domain\Model\Identity;
 
 
 use App\Domain\Model\Evaluation\RedicodiForStudent;
+use App\Domain\NtUid;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
-use Webpatser\Uuid\Uuid;
 
 interface StudentRepository
 {
@@ -44,29 +44,29 @@ interface StudentRepository
     /**
      * Finds a student by its id, if not returns null.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Student|null
      */
-    public function find(Uuid $id);
+    public function find(NtUid $id);
 
     /**
      * Gets an existing student by its id.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Student
      */
-    public function get(Uuid $id);
+    public function get(NtUid $id);
 
     /**
      * Gets all groups where a student was member of.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return array
      */
 
     // TODO Unused
 
-    //public function allGroups(Uuid $id);
+    //public function allGroups(NtUid $id);
 
 
 
@@ -74,7 +74,7 @@ interface StudentRepository
      * Saves a new student.
      *
      * @param Student $student
-     * @return Uuid
+     * @return NtUid
      */
     public function insert(Student $student);
 
@@ -92,7 +92,7 @@ interface StudentRepository
      * @param $id
      * @return int Number of affected rows.
      */
-    public function delete(Uuid $id);
+    public function delete(NtUid $id);
 
     /* ***************************************************
      * REDICODI
@@ -101,17 +101,17 @@ interface StudentRepository
     /**
      * Gets all 'redicodi' applicale for a given student.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return RedicodiForStudent[]
      */
     //TODO UNUSED
-    //public function allRedicodi(Uuid $id);
+    //public function allRedicodi(NtUid $id);
 
     /**
-     * @param Uuid $id
+     * @param NtUid $id
      * @return RedicodiForStudent
      */
-    public function getStudentRedicodi(Uuid $id);
+    public function getStudentRedicodi(NtUid $id);
 
     /**
      *

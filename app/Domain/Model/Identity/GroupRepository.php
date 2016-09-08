@@ -9,7 +9,8 @@
 namespace App\Domain\Model\Identity;
 
 
-use Webpatser\Uuid\Uuid;
+use App\Domain\NtUid;
+use Doctrine\Common\Collections\ArrayCollection;
 
 interface GroupRepository
 {
@@ -31,18 +32,18 @@ interface GroupRepository
     /**
      * Finds a group by its id, if not returns null.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Group|null
      */
-    public function find(Uuid $id);
+    public function find(NtUid $id);
 
     /**
      * Gets an existing group by its id.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Group
      */
-    public function get(Uuid $id);
+    public function get(NtUid $id);
 
     /**
      * Saves a new group.
@@ -50,7 +51,7 @@ interface GroupRepository
      * Note: the name of the group must be unique.
      *
      * @param Group $group
-     * @return Uuid
+     * @return NtUid
      */
     public function insert(Group $group);
 
@@ -68,21 +69,21 @@ interface GroupRepository
      * @param $id
      * @return int Number of affected rows.
      */
-    public function delete(Uuid $id);
+    public function delete(NtUid $id);
 
     /**
      * Gets all the active students in a group.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return ArrayCollection|Students[]
      */
-    public function allActiveStudents(Uuid $id);
+    public function allActiveStudents(NtUid $id);
 
     /**
-     * @param Uuid $id
+     * @param NtUid $id
      * @return StaffInGroup
      */
-    public function getStaffGroup(Uuid $id);
+    public function getStaffGroup(NtUid $id);
 
     /**
      * @param StaffInGroup $staffGroup
@@ -91,10 +92,10 @@ interface GroupRepository
     public function updateStaffGroup(StaffInGroup $staffGroup);
 
     /**
-     * @param Uuid $id
+     * @param NtUid $id
      * @return StudentInGroup
      */
-    public function getStudentGroup(Uuid $id);
+    public function getStudentGroup(NtUid $id);
 
     /**
      * @param $studentGroup

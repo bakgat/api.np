@@ -10,16 +10,15 @@ namespace App\Repositories\Identity;
 
 
 use App\Domain\Model\Evaluation\RedicodiForStudent;
-use App\Domain\Model\Identity\ArrayCollection;
 use App\Domain\Model\Identity\Exceptions\StudentNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
-use App\Domain\Model\Identity\StudentInGroup;
 use App\Domain\Model\Identity\StudentRepository;
+use App\Domain\NtUid;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
-use Webpatser\Uuid\Uuid;
 
 class StudentDoctrineRepository implements StudentRepository
 {
@@ -97,10 +96,10 @@ class StudentDoctrineRepository implements StudentRepository
     /**
      * Finds a student by its id, if not returns null
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Student|null
      */
-    public function find(Uuid $id)
+    public function find(NtUid $id)
     {
         $query = $this->em->createQuery('SELECT s FROM ' . Student::class . ' s WHERE s.id=?1')
             ->setParameter(1, $id);
@@ -110,12 +109,12 @@ class StudentDoctrineRepository implements StudentRepository
     /**
      * Gets an existing student by its id
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Student
      * @throws StudentNotFoundException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function get(Uuid $id)
+    public function get(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('s')
@@ -137,7 +136,7 @@ class StudentDoctrineRepository implements StudentRepository
      * Saves a new student.
      *
      * @param Student $student
-     * @return Uuid
+     * @return NtUid
      */
     public function insert(Student $student)
     {
@@ -166,7 +165,7 @@ class StudentDoctrineRepository implements StudentRepository
      * @return int Number of affected rows.
      * @throws StudentNotFoundException
      */
-    public function delete(Uuid $id)
+    public function delete(NtUid $id)
     {
         $student = $this->get($id);
         $this->em->remove($student);
@@ -177,14 +176,14 @@ class StudentDoctrineRepository implements StudentRepository
     /**
      * Gets all groups where a student was member of.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return array
      */
 
     // TODO: unused
 
     /*
-    public function allGroups(Uuid $id)
+    public function allGroups(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('sig, g')
@@ -208,10 +207,10 @@ class StudentDoctrineRepository implements StudentRepository
     /**
      * Gets all 'redicodi' applicable for a given student.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return RedicodiForStudent[]
      */
-    /*public function allRedicodi(Uuid $id)
+    /*public function allRedicodi(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('rfs')
@@ -227,10 +226,10 @@ class StudentDoctrineRepository implements StudentRepository
 
 
     /**
-     * @param Uuid $id
+     * @param NtUid $id
      * @return RedicodiForStudent
      */
-    public function getStudentRedicodi(Uuid $id)
+    public function getStudentRedicodi(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('rfs')

@@ -1,6 +1,6 @@
 <?php
 use App\Domain\Model\Education\Major;
-use Webpatser\Uuid\Uuid;
+use App\Domain\NtUid;
 
 /**
  * Created by PhpStorm.
@@ -20,7 +20,7 @@ class MajorTest extends TestCase
         $major_name = $this->faker->word();
         $major = new Major($major_name);
 
-        $this->assertInstanceOf(Uuid::class, $major->getId());
+        $this->assertInstanceOf(NtUid::class, $major->getId());
         $this->assertEquals($major_name, $major->getName());
     }
 

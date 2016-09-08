@@ -11,10 +11,10 @@ namespace App\Http\Controllers\Education;
 
 use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Identity\GroupRepository;
+use App\Domain\NtUid;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use JMS\Serializer\SerializerInterface;
-use Webpatser\Uuid\Uuid;
 
 class BranchController extends Controller
 {
@@ -33,7 +33,7 @@ class BranchController extends Controller
     public function index(Request $request)
     {
         if ($request->has('group')) {
-            $groupId = Uuid::import($request->get('group'));
+            $groupId = NtUid::import($request->get('group'));
         } else {
             return response('Group must be given.', 500);
         }

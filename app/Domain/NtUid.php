@@ -19,6 +19,18 @@ class NtUid extends \Webpatser\Uuid\Uuid
         parent::__construct($uuid);
     }
 
+
+    /**
+     * Import an existing UUID
+     *
+     * @param string $uuid
+     * @return NtUid
+     */
+    public static function import($uuid)
+    {
+        return new static(static::makeBin($uuid, 16));
+    }
+
     /**
      * @HandlerCallback("json",  direction = "serialization")
      *

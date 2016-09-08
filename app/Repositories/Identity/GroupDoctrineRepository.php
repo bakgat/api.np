@@ -18,10 +18,10 @@ use App\Domain\Model\Identity\StaffInGroup;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentInGroup;
 use App\Domain\Model\Identity\Students;
+use App\Domain\NtUid;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Facades\Cache;
-use Webpatser\Uuid\Uuid;
 
 class GroupDoctrineRepository implements GroupRepository
 {
@@ -69,10 +69,10 @@ class GroupDoctrineRepository implements GroupRepository
     /**
      * Finds a group by its id, if not returns null.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Group|null
      */
-    public function find(Uuid $id)
+    public function find(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('g')
@@ -86,7 +86,7 @@ class GroupDoctrineRepository implements GroupRepository
      * Saves a new group.
      *
      * @param Group $group
-     * @return Uuid
+     * @return NtUid
      * @throws NonUniqueGroupNameException
      */
     public function insert(Group $group)
@@ -148,7 +148,7 @@ class GroupDoctrineRepository implements GroupRepository
      * @return int Number of affected rows.
      * @
      */
-    public function delete(Uuid $id)
+    public function delete(NtUid $id)
     {
         $group = $this->get($id);
         $this->em->remove($group);
@@ -161,12 +161,12 @@ class GroupDoctrineRepository implements GroupRepository
     /**
      * Gets an existing group by its id.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return Group
      * @throws GroupNotFoundException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function get(Uuid $id)
+    public function get(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('g')
@@ -186,10 +186,10 @@ class GroupDoctrineRepository implements GroupRepository
     /**
      * Gets all the active students in a group.
      *
-     * @param Uuid $id
+     * @param NtUid $id
      * @return ArrayCollection|Students[]
      */
-    public function allActiveStudents(Uuid $id)
+    public function allActiveStudents(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('s')
@@ -205,10 +205,10 @@ class GroupDoctrineRepository implements GroupRepository
     }
 
     /**
-     * @param Uuid $id
+     * @param NtUid $id
      * @return StaffInGroup
      */
-    public function getStaffGroup(Uuid $id)
+    public function getStaffGroup(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('sg, g')
@@ -233,10 +233,10 @@ class GroupDoctrineRepository implements GroupRepository
     }
 
     /**
-     * @param Uuid $id
+     * @param NtUid $id
      * @return StudentInGroup
      */
-    public function getStudentGroup(Uuid $id)
+    public function getStudentGroup(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('sig, g')

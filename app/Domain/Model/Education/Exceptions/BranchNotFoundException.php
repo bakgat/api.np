@@ -9,6 +9,7 @@
 namespace  App\Domain\Model\Education\Exceptions;
 
 
+use App\Domain\NtUid;
 use \Exception;
 
 class BranchNotFoundException extends Exception
@@ -16,7 +17,7 @@ class BranchNotFoundException extends Exception
 
     /**
      * BranchNotFoundException constructor.
-     * @param Uuid $id
+     * @param NtUid $id
      */
     public function __construct($id)
     {

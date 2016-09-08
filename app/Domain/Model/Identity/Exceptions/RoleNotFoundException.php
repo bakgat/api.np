@@ -9,6 +9,7 @@
 namespace  App\Domain\Model\Identity\Exceptions;
 
 
+use App\Domain\NtUid;
 use \Exception;
 
 class RoleNotFoundException extends Exception
@@ -16,7 +17,7 @@ class RoleNotFoundException extends Exception
 
     /**
      * GroupNotFoundException constructor.
-     * @param Uuid $id
+     * @param NtUid $id
      */
     public function __construct($id)
     {

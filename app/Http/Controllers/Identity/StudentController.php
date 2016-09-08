@@ -11,12 +11,12 @@ namespace App\Http\Controllers\Identity;
 
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\StudentRepository;
+use App\Domain\NtUid;
 use App\Domain\Services\Identity\StudentService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use JMS\Serializer\SerializerInterface;
-use Webpatser\Uuid\Uuid;
 
 class StudentController extends Controller
 {
@@ -46,7 +46,7 @@ class StudentController extends Controller
             return $this->response($col);
         }
         if ($request->has('group')) {
-            $groupId = Uuid::import($request->get('group'));
+            $groupId = NtUid::import($request->get('group'));
             $group = $this->groupRepo->get($groupId);
             return $this->response($this->studentRepo->allActiveInGroup($group), ['student_list']);
         }
@@ -56,8 +56,8 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        if (!$id instanceof Uuid) {
-            $id = Uuid::import($id);
+        if (!$id instanceof NtUid) {
+            $id = NtUid::import($id);
         }
         return $this->response($this->studentRepo->find($id), ['student_detail']);
     }

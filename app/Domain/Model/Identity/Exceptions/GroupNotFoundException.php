@@ -16,7 +16,7 @@ class GroupNotFoundException extends Exception
 
     /**
      * GroupNotFoundException constructor.
-     * @param Uuid $id
+     * @param NtUid $id
      */
     public function __construct($id)
     {

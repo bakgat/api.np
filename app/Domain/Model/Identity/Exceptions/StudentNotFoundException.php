@@ -16,7 +16,7 @@ class StudentNotFoundException extends Exception
 
     /**
      * StudentNotFoundException constructor.
-     * @param Uuid $id
+     * @param NtUid $id
      */
     public function __construct($id)
     {

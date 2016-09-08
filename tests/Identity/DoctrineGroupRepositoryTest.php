@@ -3,9 +3,9 @@ use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Exceptions\NonUniqueGroupNameException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
+use App\Domain\NtUid;
 use App\Repositories\Identity\GropuDoctrineRepository;
 use App\Repositories\Identity\GroupDoctrineRepository;
-use Webpatser\Uuid\Uuid;
 
 /**
  * Created by PhpStorm.
@@ -66,7 +66,7 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
      */
     public function should_return_null_when_no_group_found()
     {
-        $fakeId = Uuid::generate(4);
+        $fakeId = NtUid::generate(4);
         $group = $this->groupRepo->find($fakeId);
         $this->assertNull($group);
     }
@@ -99,7 +99,7 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
     public function should_throw_when_get_group_fails()
     {
         $this->setExpectedException(GroupNotFoundException::class);
-        $fakeId = Uuid::generate(4);
+        $fakeId = NtUid::generate(4);
         $group = $this->groupRepo->get($fakeId);
     }
 
