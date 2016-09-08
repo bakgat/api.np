@@ -182,7 +182,6 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
     }
 
 
-
     /**
      * @test
      * @group group
@@ -208,6 +207,18 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
         $this->assertEquals($savedGroup->getId(), $id);
         $this->assertEquals(1, $count);
         $this->assertNull($removedGroup);
+
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group student
+     * @group grouprepo
+     * @group get
+     */
+    public function should_return_all_active_students()
+    {
 
     }
 }

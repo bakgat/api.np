@@ -75,7 +75,7 @@ interface GroupRepository
      * Gets all the active students in a group.
      *
      * @param NtUid $id
-     * @return ArrayCollection|Students[]
+     * @return ArrayCollection|Student[]
      */
     public function allActiveStudents(NtUid $id);
 

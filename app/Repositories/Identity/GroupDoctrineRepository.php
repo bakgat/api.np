@@ -9,7 +9,6 @@
 namespace App\Repositories\Identity;
 
 
-use App\Domain\Model\Identity\ArrayCollection;
 use App\Domain\Model\Identity\Exceptions\NonUniqueGroupNameException;
 use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Group;
@@ -17,9 +16,9 @@ use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\StaffInGroup;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentInGroup;
-use App\Domain\Model\Identity\Students;
 use App\Domain\NtUid;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Support\Facades\Cache;
 
@@ -187,7 +186,7 @@ class GroupDoctrineRepository implements GroupRepository
      * Gets all the active students in a group.
      *
      * @param NtUid $id
-     * @return ArrayCollection|Students[]
+     * @return ArrayCollection|Student[]
      */
     public function allActiveStudents(NtUid $id)
     {
