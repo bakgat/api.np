@@ -10,6 +10,7 @@ use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Services\Evaluation\EvaluationService;
 use Doctrine\Common\Collections\ArrayCollection;
+use Illuminate\Support\Facades\Validator;
 use Mockery\MockInterface;
 
 /**
@@ -104,6 +105,88 @@ class EvaluationControllerTest extends TestCase
                 'date' => $evaluation->getDate()->format('Y-m-d'),
                 'permanent' => $evaluation->isPermanent(),
                 'max' => $evaluation->getMax()
+            ]);
+    }
+
+    /**
+     * @test
+     * @group EvaluationController
+     */
+    public function should_save_succes()
+    {
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => false]));
+
+        $branch = $this->makeBranch();
+        $group = $this->makeGroup();
+        $branchForGroup = new BranchForGroup($branch, $group, ['start' => new DateTime], new EvaluationType(EvaluationType::POINT), 100);
+
+        $title = $this->faker->word;
+        $date = $this->faker->date;
+        $max = $this->faker->biasedNumberBetween(10, 50);
+
+        $data = [
+            'title' => $title,
+            'max' => $max,
+            'branchForGroup' => [
+                'id' => $branchForGroup->getId()->toString()
+            ],
+            'date' => $date,
+            'results' => []
+        ];
+
+        /** @var Student $student */
+        $i = 0;
+        foreach ($students = $this->makeStudentCollection() as $student) {
+            $data['results'][] = [
+                'student' => [
+                    'id' => $student->getId()->toString()
+                ],
+                'score' => $this->faker->biasedNumberBetween(0, $max),
+                'redicodi' => $this->faker->randomElements(Redicodi::values())
+            ];
+
+
+            $this->studentRepo->shouldReceive('get')
+                ->andReturnUsing(function ($id) use ($students) {
+                    /** @var Student $ls */
+                    foreach ($students as $ls) {
+                        if ($ls->getId()->toString() == $id) {
+                            return $ls;
+                        }
+                    }
+                });
+
+        }
+
+        $this->branchRepo->shouldReceive('getBranchForGroup')
+            ->once()
+            ->andReturn($branchForGroup);
+
+        $this->evaluationRepo->shouldReceive('insert')
+            ->once()
+            ->andReturn();
+
+        $this->post('/evaluations', $data)
+            ->seeJsonStructure([
+                'id',
+                'title',
+                'max',
+                'average',
+                'median',
+                'max',
+                'branchForGroup',
+                'results' => [
+                    '*' => [
+                        'student' => [
+                            'id',
+                            'displayName'
+                        ],
+                        'score',
+                        'redicodi'
+                    ]
+                ]
             ]);
     }
 
