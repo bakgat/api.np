@@ -11,6 +11,8 @@ namespace App\Repositories\Identity;
 
 use App\Domain\Model\Identity\Exceptions\NonUniqueGroupNameException;
 use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
+use App\Domain\Model\Identity\Exceptions\StaffGroupNotFoundException;
+use App\Domain\Model\Identity\Exceptions\StudentGroupNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\StaffInGroup;
@@ -206,6 +208,7 @@ class GroupDoctrineRepository implements GroupRepository
     /**
      * @param NtUid $id
      * @return StaffInGroup
+     * @throws StaffGroupNotFoundException
      */
     public function getStaffGroup(NtUid $id)
     {
@@ -216,8 +219,11 @@ class GroupDoctrineRepository implements GroupRepository
             ->where('sg.id=:id')
             ->setParameter('id', $id);
 
-        // TODO: Throw error because GET must return existing or throw
-        return $qb->getQuery()->getOneOrNullResult();
+        $staffGroup = $qb->getQuery()->getOneOrNullResult();
+        if($staffGroup == null) {
+            throw new StaffGroupNotFoundException($id);
+        }
+        return $staffGroup;
     }
 
     /**
@@ -234,6 +240,7 @@ class GroupDoctrineRepository implements GroupRepository
     /**
      * @param NtUid $id
      * @return StudentInGroup
+     * @throws StudentGroupNotFoundException
      */
     public function getStudentGroup(NtUid $id)
     {
@@ -244,8 +251,11 @@ class GroupDoctrineRepository implements GroupRepository
             ->where('sig.id=:id')
             ->setParameter('id', $id);
 
-        // TODO: Throw error because GET must return existing or throw
-        return $qb->getQuery()->getOneOrNullResult();
+        $studentGroup =  $qb->getQuery()->getOneOrNullResult();
+        if($studentGroup == null) {
+            throw new StudentGroupNotFoundException($id);
+        }
+        return $studentGroup;
     }
 
     /**

@@ -1,12 +1,20 @@
 <?php
 use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Exceptions\NonUniqueGroupNameException;
+use App\Domain\Model\Identity\Exceptions\StaffGroupNotFoundException;
+use App\Domain\Model\Identity\Exceptions\StudentGroupNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
+use App\Domain\Model\Identity\Staff;
+use App\Domain\Model\Identity\StaffInGroup;
+use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\Student;
+use App\Domain\Model\Identity\StudentInGroup;
+use App\Domain\Model\Identity\StudentRepository;
 use App\Domain\NtUid;
-use App\Repositories\Identity\GropuDoctrineRepository;
 use App\Repositories\Identity\GroupDoctrineRepository;
+use App\Repositories\Identity\StaffDoctrineRepository;
+use App\Repositories\Identity\StudentDoctrineRepository;
 
 /**
  * Created by PhpStorm.
@@ -18,12 +26,18 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
 {
     /** @var GroupRepository */
     protected $groupRepo;
+    /** @var  StaffRepository */
+    protected $staffRepo;
+    /** @var  StudentRepository */
+    protected $studentRepo;
 
     public function setUp()
     {
         parent::setUp();
 
         $this->groupRepo = new GroupDoctrineRepository($this->em);
+        $this->staffRepo = new StaffDoctrineRepository($this->em);
+        $this->studentRepo=  new StudentDoctrineRepository($this->em);
     }
 
     /**
@@ -220,9 +234,7 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
      */
     public function should_return_all_active_students()
     {
-        $groups = $this->groupRepo->allActive();
-        /** @var Group $group */
-        $group= $groups[0];
+        $group = $this->getFirstGroup();
         $id = $group->getId();
 
         $students = $this->groupRepo->allActiveStudents(NtUid::import($id));
@@ -239,5 +251,94 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
             $found = $found || ($activeGroup->getId() == $group->getId());
         }
         $this->assertTrue($found);
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group staff
+     * @group grouprepo
+     * @group get
+     */
+    public function should_get_staff_group()
+    {
+        $staff = $this->staffRepo->all();
+        /** @var Staff $member */
+        $member = $staff[0];
+
+        $staffGroup = $member->allStaffGroups()[0];
+        $id = $staffGroup->getId();
+
+        $this->em->clear();
+
+        $dbStaffGroup = $this->groupRepo->getStaffGroup(NtUid::import($id));
+        $this->assertInstanceOf(StaffInGroup::class, $dbStaffGroup);
+        $this->assertEquals($id, $dbStaffGroup->getId());
+
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group staff
+     * @group grouprepo
+     * @group get
+     */
+    public function should_throw_when_no_staff_group_found()
+    {
+        $this->setExpectedException(StaffGroupNotFoundException::class);
+        $fakeId = NtUid::generate(4);
+        $this->groupRepo->getStaffGroup(NtUid::import($fakeId));
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group student
+     * @group grouprepo
+     * @group get
+     */
+    public function should_get_student_group()
+    {
+        /** @var Group $group */
+        $group = $this->getFirstGroup();
+        $students = $this->studentRepo->allActiveInGroup($group);
+
+        /** @var Student $student */
+        $student = $students[0];
+        /** @var StudentInGroup $studentGroup */
+        $studentGroup = $student->allStudentGroups()[0];
+        $id = $studentGroup->getId();
+
+        $this->em->clear();
+
+        $dbStudentGroup = $this->groupRepo->getStudentGroup(NtUid::import($id));
+        $this->assertInstanceOf(StudentInGroup::class, $dbStudentGroup);
+        $this->assertEquals($id, $dbStudentGroup->getId());
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group student
+     * @group grouprepo
+     * @group get
+     */
+    public function should_throw_when_no_student_group_found()
+    {
+        $this->setExpectedException(StudentGroupNotFoundException::class);
+        $fakeId = NtUid::generate(4);
+        $this->groupRepo->getStudentGroup(NtUid::import($fakeId));
+    }
+
+    /**
+     * @return Group
+     */
+    private function getFirstGroup()
+    {
+        $groups = $this->groupRepo->allActive();
+        /** @var Group $group */
+        $group = $groups[0];
+        return $group;
     }
 }

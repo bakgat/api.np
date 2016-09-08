@@ -12,16 +12,16 @@ namespace  App\Domain\Model\Identity\Exceptions;
 use App\Domain\NtUid;
 use \Exception;
 
-class StaffNotFoundException extends Exception
+class StaffGroupNotFoundException extends Exception
 {
 
     /**
-     * StaffNotFoundException constructor.
+     * StudentNotFoundException constructor.
      * @param NtUid $id
      */
     public function __construct($id)
     {
-        $msg = 'Staff member with id (' . $id . ') was not found.';
+        $msg = 'StaffGroup with id (' . $id . ') was not found.';
         parent::__construct($msg);
     }
 }
