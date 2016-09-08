@@ -35,7 +35,7 @@ class EvaluationService
     {
         $title = $data['title'];
         $branchForGroupId = $data['branchForGroup']['id'];
-        $branchForGroup = $this->branchRepo->getBranchForGroup($branchForGroupId);
+        $branchForGroup = $this->branchRepo->getBranchForGroup(NtUid::import($branchForGroupId));
         $date = convert_date_from_string($data['date']);
         $max = $data['max'];
 
@@ -66,7 +66,7 @@ class EvaluationService
         $id = NtUid::import($data['id']);
         $title = $data['title'];
         $branchForGroupId = $data['branchForGroup']['id'];
-        $branchForGroup = $this->branchRepo->getBranchForGroup($branchForGroupId);
+        $branchForGroup = $this->branchRepo->getBranchForGroup(NtUid::import($branchForGroupId));
         $date = convert_date_from_string($data['date']);
         $max = $data['max'];
 
