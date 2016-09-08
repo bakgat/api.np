@@ -3,6 +3,7 @@ use App\Domain\Model\Identity\Exceptions\GroupNotFoundException;
 use App\Domain\Model\Identity\Exceptions\NonUniqueGroupNameException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
+use App\Domain\Model\Identity\Student;
 use App\Domain\NtUid;
 use App\Repositories\Identity\GropuDoctrineRepository;
 use App\Repositories\Identity\GroupDoctrineRepository;
@@ -219,6 +220,24 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
      */
     public function should_return_all_active_students()
     {
+        $groups = $this->groupRepo->allActive();
+        /** @var Group $group */
+        $group= $groups[0];
+        $id = $group->getId();
 
+        $students = $this->groupRepo->allActiveStudents(NtUid::import($id));
+        $this->assertGreaterThan(0, count($students));
+
+        /** @var Student $student */
+        $student = $students[0];
+
+        $this->assertInstanceOf(Student::class, $student);
+        $this->assertGreaterThan(0, $student->getActiveGroups());
+
+        $found = false;
+        foreach ($student->getActiveGroups() as $activeGroup) {
+            $found = $found || ($activeGroup->getId() == $group->getId());
+        }
+        $this->assertTrue($found);
     }
 }
