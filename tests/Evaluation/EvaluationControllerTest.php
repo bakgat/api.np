@@ -11,6 +11,7 @@ use App\Domain\Model\Identity\Student;
 use App\Domain\Services\Evaluation\EvaluationService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 use Mockery\MockInterface;
 
 /**
@@ -190,9 +191,25 @@ class EvaluationControllerTest extends TestCase
             ]);
     }
 
-    /* ***************************************************
-     * PRIVATE METHODS
-     * **************************************************/
+    /**
+     * @test
+     * @group EvaluationController
+     */
+    public function should_save_fail()
+    {
+        $message_bag = new MessageBag(['title is required.']);
+
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => true, 'messages' => $message_bag]));
+
+        $this->post('/evaluations', [])
+            ->assertResponseStatus(422);
+    }
+
+        /* ***************************************************
+         * PRIVATE METHODS
+         * **************************************************/
     /*
     * PRIVATE METHODS
     */
