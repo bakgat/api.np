@@ -5,6 +5,7 @@ use App\Domain\Model\Education\Major;
 use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationType;
+use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
@@ -138,7 +139,6 @@ class EvaluationControllerTest extends TestCase
         ];
 
         /** @var Student $student */
-        $i = 0;
         foreach ($students = $this->makeStudentCollection() as $student) {
             $data['results'][] = [
                 'student' => [
@@ -207,9 +207,88 @@ class EvaluationControllerTest extends TestCase
             ->assertResponseStatus(422);
     }
 
-        /* ***************************************************
-         * PRIVATE METHODS
-         * **************************************************/
+    /**
+     * @test
+     * @group EvaluationController
+     */
+    public function should_update_success()
+    {
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => false]));
+
+        $group = $this->makeGroup();
+
+        $title = $this->faker->word;
+        $date = $this->faker->date;
+        $max = $this->faker->biasedNumberBetween(10, 50);
+
+        $evaluation = $this->makeEvaluation($group);
+
+
+        $data = [
+            'id' => $evaluation->getId()->toString(),
+            'title' => $title,
+            'max' => $max,
+            'branchForGroup' => [
+                'id' => $evaluation->getBranchForGroup()->getId()->toString()
+            ],
+            'date' => $date,
+            'results' => []
+        ];
+
+        /** @var PointResult $result */
+        foreach ($evaluation->getResults() as $result) {
+            $result['score'] = $this->faker->biasedNumberBetween(0, $max);
+            $result['redicodi'] = $this->faker->randomElements(Redicodi::values());
+            $data['results'][] = $result;
+
+            $this->studentRepo->shouldReceive('get')
+                ->andReturnUsing(function ($id) use ($evaluation) {
+                    /** @var PointResult $lr */
+                    foreach ($evaluation->getResults() as $lr) {
+                        if ($lr->getStudent()->getId()->toString() == $id) {
+                            return $lr->getStudent();
+                        }
+                    }
+                });
+        }
+
+
+        $this->branchRepo->shouldReceive('getBranchForGroup')
+            ->once()
+            ->andReturn($evaluation->getBranchForGroup());
+
+        $this->evaluationRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($evaluation);
+
+        $this->evaluationRepo->shouldReceive('update')
+            ->once()
+            ->andReturn();
+
+        $this->put('/evaluations/' . $data['id'], $data)
+            ->seeJsonStructure([
+                'id',
+                'title',
+                'max',
+                'average',
+                'median',
+                'max',
+                'branchForGroup',
+                'results' => [
+                    '*' => []
+                ]
+            ])
+            ->seeJson([
+                'id' => $data['id'],
+                'title' => $data['title']
+            ]);
+    }
+
+    /* ***************************************************
+     * PRIVATE METHODS
+     * **************************************************/
     /*
     * PRIVATE METHODS
     */

@@ -116,6 +116,10 @@ class Evaluation
         return $this->id;
     }
 
+    public function getBranchForGroup()
+    {
+        return $this->branchForGroup;
+    }
     /**
      * @return Branch
      */
