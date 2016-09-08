@@ -286,6 +286,19 @@ class EvaluationControllerTest extends TestCase
             ]);
     }
 
+    public function should_fail_update()
+    {
+        $message_bag = new MessageBag(['title is required.']);
+
+        Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock(['fails' => true, 'messages' => $message_bag]));
+
+        $fakeId = \App\Domain\NtUid::generate(4);
+        $this->put('/evaluations/' . $fakeId, [])
+            ->assertResponseStatus(422);
+    }
+
     /* ***************************************************
      * PRIVATE METHODS
      * **************************************************/
