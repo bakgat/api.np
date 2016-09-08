@@ -286,6 +286,10 @@ class EvaluationControllerTest extends TestCase
             ]);
     }
 
+    /**
+     * @test
+     * @group EvaluationController
+     */
     public function should_fail_update()
     {
         $message_bag = new MessageBag(['title is required.']);
