@@ -297,7 +297,7 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
      * @group group
      * @group staff
      * @group grouprepo
-     * @group get
+     * @group update
      */
     public function should_update_staff_group()
     {
@@ -311,15 +311,13 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
         $type = $staffGroup->getType();
         $active = $staffGroup->isActive();
 
-        $this->assertTrue($staffGroup->isActive());
-
-        if($type == StaffType::TITULAR) {
+        if ($type == StaffType::TITULAR) {
             $staffGroup->changeType(new StaffType(StaffType::TEACHER));
-         } else {
+        } else {
             $staffGroup->changeType(new StaffType(StaffType::TITULAR));
         }
-
         $staffGroup->block();
+
         $count = $this->groupRepo->updateStaffGroup($staffGroup);
 
         $this->em->clear();
@@ -367,9 +365,61 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
      * @group group
      * @group student
      * @group grouprepo
+     * @group update
+     */
+    public function should_update_student_group()
+    {
+        /** @var Group $group */
+        $group = $this->getFirstGroup();
+        $students = $this->studentRepo->allActiveInGroup($group);
+
+        /** @var Student $student */
+        $student = $students[0];
+        $studentGroup = null;
+        /** @var StudentInGroup $studentGroup */
+        foreach ($student->allStudentGroups() as $sg) {
+            if ($sg->isActive()) {
+                $studentGroup = $sg;
+                break;
+            }
+        }
+        //should at least have one active group
+        $this->assertNotNull($studentGroup);
+
+        $id = $studentGroup->getId();
+        $active = $studentGroup->isActive();
+        $number = $studentGroup->getNumber();
+
+        $studentGroup->leaveGroup();
+        $studentGroup->setNumber(9999);
+
+        $count = $this->groupRepo->updateStudentGroup($studentGroup);
+
+        $this->em->clear();
+
+        $dbStudentGroup = $this->groupRepo->getStudentGroup(NtUid::import($id));
+
+        $this->assertEquals(1, $count);
+        $this->assertInstanceOf(StudentInGroup::class, $dbStudentGroup);
+        $this->assertEquals($id, $dbStudentGroup->getId());
+
+        $this->assertNotEquals($number, $dbStudentGroup->getNumber());
+        $this->assertNotEquals($active, $dbStudentGroup->isActive());
+
+        $this->assertEquals(9999, $dbStudentGroup->getNumber());
+
+        $this->assertFalse($dbStudentGroup->isActive());
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group student
+     * @group grouprepo
      * @group get
      */
-    public function should_throw_when_no_student_group_found()
+    public
+    function should_throw_when_no_student_group_found()
     {
         $this->setExpectedException(StudentGroupNotFoundException::class);
         $fakeId = NtUid::generate(4);
@@ -379,7 +429,8 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
     /**
      * @return Group
      */
-    private function getFirstGroup()
+    private
+    function getFirstGroup()
     {
         $groups = $this->groupRepo->allActive();
         /** @var Group $group */
