@@ -1,10 +1,15 @@
 <?php
+use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\BranchRepository;
+use App\Domain\Model\Education\Redicodi;
+use App\Domain\Model\Evaluation\RedicodiForStudent;
 use App\Domain\Model\Identity\Exceptions\StudentNotFoundException;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Domain\NtUid;
+use App\Repositories\Education\BranchDoctrineRepository;
 use App\Repositories\Identity\GroupDoctrineRepository;
 use App\Repositories\Identity\StudentDoctrineRepository;
 
@@ -20,6 +25,8 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
     protected $studentRepo;
     /** @var GroupRepository */
     protected $groupRepo;
+    /** @var  BranchRepository */
+    protected $branchRepo;
 
     public function setUp()
     {
@@ -27,6 +34,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
 
         $this->studentRepo = new StudentDoctrineRepository($this->em);
         $this->groupRepo = new GroupDoctrineRepository($this->em);
+        $this->branchRepo = new BranchDoctrineRepository($this->em);
     }
 
     /**
@@ -325,5 +333,90 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         return $group;
     }
 
-    //TODO: tests for redicodi
+    /* ***************************************************
+     * REDICODI
+     * **************************************************/
+
+    /**
+     * @test
+     * @group student
+     * @group redicodi
+     * @group get
+     */
+    public function should_get_student_redicodi()
+    {
+        list($student, $redicodi) = $this->getRedicodi();
+        $id = $redicodi->getId();
+
+        $this->em->clear();
+
+        $sr = $this->studentRepo->getStudentRedicodi(NtUid::import($id));
+
+        $this->assertInstanceOf(RedicodiForStudent::class, $sr);
+        $this->assertEquals($id, $sr->getId());
+        $this->assertEquals($student->getId(), $sr->getStudent()->getId());
+        $this->assertInstanceOf(Redicodi::class, $sr->getRedicodi());
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group redicodi
+     * @group update
+     */
+    public function should_update_student_redicodi()
+    {
+        /**
+         * @var Student $student
+         * @var RedicodiForStudent $redicodi
+         */
+        list($student, $redicodi) = $this->getRedicodi();
+        $id = $redicodi->getId();
+
+        $this->em->clear();
+
+        $sr = $this->studentRepo->getStudentRedicodi(NtUid::import($id));
+
+        //Ensure it's a new branch
+        $branch = new Branch($this->faker->name);
+        $this->branchRepo->insertBranch($branch);
+
+        $newRed = $sr->getRedicodi() == Redicodi::BASIC ?
+            new Redicodi(Redicodi::CHALLENGE) :
+            new Redicodi(Redicodi::BASIC);
+        $content = $this->faker->text(100);
+
+        $sr->update($branch, $newRed, $content);
+
+        $this->studentRepo->updateRedicodi($sr);
+
+        $this->em->clear();
+
+        $dbSR = $this->studentRepo->getStudentRedicodi(NtUid::import($id));
+        $this->assertInstanceOf(RedicodiForStudent::class, $dbSR);
+        $this->assertEquals($student->getId(), $dbSR->getStudent()->getId());
+        $this->assertEquals($branch->getId(), $dbSR->getBranch()->getId());
+        $this->assertEquals($content, $dbSR->getContent());
+    }
+
+    /**
+     * @return array
+     */
+    private function getRedicodi()
+    {
+        $students = $this->studentRepo->all();
+        $student = null;
+        /** @var Student $student */
+        foreach ($students as $s) {
+            if (count($s->allStudentRedicodi()) > 0) {
+                $student = $s;
+                break;
+            }
+        }
+        $this->assertNotNull($student);
+
+        /** @var RedicodiForStudent $redicodi */
+        $redicodi = $student->allStudentRedicodi()[0];
+        return array($student, $redicodi);
+    }
 }
