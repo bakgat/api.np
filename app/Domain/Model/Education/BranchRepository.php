@@ -39,14 +39,6 @@ interface BranchRepository
      */
     public function getBranch(NtUid $id);
 
-    /**
-     * Gets all active branches of a major for a group.
-     *
-     * @param Group $group
-     * @param Major $major
-     * @return ArrayCollection|Branch[]
-     */
-    public function allBranches(Group $group, Major $major);
 
     /**
      * @param Group $group

@@ -9,8 +9,6 @@
 namespace App\Repositories\Education;
 
 
-use App\Domain\Model\Education\ArrayColleciton;
-use App\Domain\Model\Education\ArrayCollection;
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\BranchForGroup;
 use App\Domain\Model\Education\BranchRepository;
@@ -19,6 +17,7 @@ use App\Domain\Model\Education\Exceptions\BranchNotFoundException;
 use App\Domain\Model\Education\Exceptions\MajorNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\NtUid;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 
 class BranchDoctrineRepository implements BranchRepository
@@ -90,30 +89,8 @@ class BranchDoctrineRepository implements BranchRepository
     }
 
     /**
-     * Gets all active branches of a major for a group.
-     *
      * @param Group $group
-     * @param Major $major
-     * @return ArrayCollection|Branch[]
-     */
-    public function allBranches(Group $group, Major $major)
-    {
-        $qb = $this->em->createQueryBuilder();
-        $qb->select('b')
-            ->from(Branch::class, 'b')
-            ->join('b.branchForGroup', 'bfg')
-            ->where('b.major=?1')
-            ->andWhere('bfg.group=?2')
-            ->setParameter(1, $major->getId())
-            ->setParameter(2, $group->getId());
-
-        return $qb->getQuery()->getResult();
-
-    }
-
-    /**
-     * @param Group $group
-     * @return ArrayColleciton
+     * @return ArrayCollection
      */
     public function allBranchesInGroup(Group $group)
     {
@@ -249,7 +226,6 @@ class BranchDoctrineRepository implements BranchRepository
             ->setParameter('id', $branchForGroupId);
         return $qb->getQuery()->getOneOrNullResult();
     }
-
 
 
 }
