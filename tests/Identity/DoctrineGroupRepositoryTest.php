@@ -8,6 +8,7 @@ use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffInGroup;
 use App\Domain\Model\Identity\StaffRepository;
+use App\Domain\Model\Identity\StaffType;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentInGroup;
 use App\Domain\Model\Identity\StudentRepository;
@@ -37,7 +38,7 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
 
         $this->groupRepo = new GroupDoctrineRepository($this->em);
         $this->staffRepo = new StaffDoctrineRepository($this->em);
-        $this->studentRepo=  new StudentDoctrineRepository($this->em);
+        $this->studentRepo = new StudentDoctrineRepository($this->em);
     }
 
     /**
@@ -289,6 +290,50 @@ class DoctrineGroupRepositoryTest extends DoctrineTestCase
         $this->setExpectedException(StaffGroupNotFoundException::class);
         $fakeId = NtUid::generate(4);
         $this->groupRepo->getStaffGroup(NtUid::import($fakeId));
+    }
+
+    /**
+     * @test
+     * @group group
+     * @group staff
+     * @group grouprepo
+     * @group get
+     */
+    public function should_update_staff_group()
+    {
+        $staff = $this->staffRepo->all();
+        /** @var Staff $member */
+        $member = $staff[0];
+
+        $staffGroup = $member->allStaffGroups()[0];
+
+        $id = $staffGroup->getId();
+        $type = $staffGroup->getType();
+        $active = $staffGroup->isActive();
+
+        $this->assertTrue($staffGroup->isActive());
+
+        if($type == StaffType::TITULAR) {
+            $staffGroup->changeType(new StaffType(StaffType::TEACHER));
+         } else {
+            $staffGroup->changeType(new StaffType(StaffType::TITULAR));
+        }
+
+        $staffGroup->block();
+        $count = $this->groupRepo->updateStaffGroup($staffGroup);
+
+        $this->em->clear();
+
+        $dbStaffGroup = $this->groupRepo->getStaffGroup(NtUid::import($id));
+
+        $this->assertEquals(1, $count);
+        $this->assertInstanceOf(StaffInGroup::class, $dbStaffGroup);
+        $this->assertEquals($staffGroup->getId(), $dbStaffGroup->getId());
+
+        $this->assertNotEquals($type, $dbStaffGroup->getType());
+        $this->assertNotEquals($active, $dbStaffGroup->isActive());
+
+        $this->assertFalse($dbStaffGroup->isActive());
     }
 
     /**
