@@ -59,7 +59,7 @@ class GroupControllerTest extends TestCase
     public function should_serialize_all_active()
     {
         $collection = $this->makeGroupCollection();
-        $this->groupRepo->shouldReceive('all')
+        $this->groupRepo->shouldReceive('allActive')
             ->andReturn($collection);
 
         $this->get('/groups?active=true')
