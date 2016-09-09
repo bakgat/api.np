@@ -41,6 +41,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
 
         $this->assertCount(440, $students);
     }
+
     /**
      * @test
      * @group student
@@ -49,11 +50,31 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      */
     public function should_return_some_students_in_group()
     {
-        $groups = $this->groupRepo->allActive();
-        $group = $groups[0];
+        $group = $this->getFirstGroup();
 
         $students = $this->studentRepo->allActiveInGroup($group);
         $this->assertGreaterThan(1, count($students));
+    }
+
+    /**
+     * @test
+     * @group student
+     * @group studentrepo
+     * @group flat
+     */
+    public function should_return_flat_list()
+    {
+        //flatten school id because this should be unique
+        // and thus returns 440 results
+        $students = $this->studentRepo->flat('schoolId');
+        $this->assertCount(440, $students);
+
+        $student1 = $students[0];
+
+        $this->assertArrayHasKey('id', $student1);
+        $this->assertArrayHasKey('schoolId', $student1);
+        $this->assertArrayNotHasKey('displayName', $student1);
+
     }
 
     /**
@@ -292,6 +313,16 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
 
         $student = $this->studentRepo->get($id);
         $this->assertCount(0, $student->getActiveGroups());
+    }
+
+    /**
+     * @return \App\Domain\Model\Identity\Group|mixed|null
+     */
+    private function getFirstGroup()
+    {
+        $groups = $this->groupRepo->allActive();
+        $group = $groups[0];
+        return $group;
     }
 
     //TODO: tests for redicodi
