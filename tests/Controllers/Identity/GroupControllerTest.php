@@ -56,7 +56,26 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
-    public function should_serialize_show()
+    public function should_serialize_all_active()
+    {
+        $collection = $this->makeGroupCollection();
+        $this->groupRepo->shouldReceive('all')
+            ->andReturn($collection);
+
+        $this->get('/groups?active=true')
+            ->seeJsonStructure([
+                '*' => [
+                    'id', 'name', 'active'
+                ]
+            ]);
+    }
+
+    /**
+     * @test
+     * @group GroupController
+     */
+    public
+    function should_serialize_show()
     {
         $group = $this->makeGroup();
 
@@ -74,7 +93,8 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
-    public function should_store_success_with_active()
+    public
+    function should_store_success_with_active()
     {
 
         $data = [
@@ -106,7 +126,8 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
-    public function should_store_success_without_active()
+    public
+    function should_store_success_without_active()
     {
 
         $data = [
@@ -136,7 +157,8 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
-    public function should_return_422_when_store_fail()
+    public
+    function should_return_422_when_store_fail()
     {
 
         $data = [
@@ -157,7 +179,8 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
-    public function should_update_existing()
+    public
+    function should_update_existing()
     {
         $group = $this->makeGroup();
         $newGroup = $this->makeGroup();
@@ -191,7 +214,8 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
-    public function should_block_existing()
+    public
+    function should_block_existing()
     {
         $group = $this->makeGroup();
 
@@ -225,7 +249,8 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
-    public function should_return_all_active_students_in_group()
+    public
+    function should_return_all_active_students_in_group()
     {
         $group = $this->makeGroup();
         $id = $group->getId();
@@ -250,7 +275,8 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
-    public function should_return_all_branches_in_group()
+    public
+    function should_return_all_branches_in_group()
     {
         $group = $this->makeGroup();
         $id = $group->getId();
@@ -291,7 +317,8 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
-    public function should_return_422_when_update_fails()
+    public
+    function should_return_422_when_update_fails()
     {
         $data = [
             'id' => (string)NtUid::generate(4),
@@ -316,7 +343,8 @@ class GroupControllerTest extends TestCase
     /**
      * @return ArrayCollection
      */
-    private function makeGroupCollection()
+    private
+    function makeGroupCollection()
     {
         $collection = new ArrayCollection();
         foreach (range(1, 10) as $item) {
@@ -329,13 +357,15 @@ class GroupControllerTest extends TestCase
     /**
      * @return Group
      */
-    private function makeGroup()
+    private
+    function makeGroup()
     {
         $group = new Group($this->faker->word);
         return $group;
     }
 
-    private function makeStudentCollection()
+    private
+    function makeStudentCollection()
     {
         $collection = new ArrayCollection();
         foreach (range(1, 10) as $item) {
@@ -345,7 +375,8 @@ class GroupControllerTest extends TestCase
         return $collection;
     }
 
-    private function makeStudent()
+    private
+    function makeStudent()
     {
         $fn = $this->faker->firstName;
         $ln = $this->faker->lastName;
@@ -359,7 +390,8 @@ class GroupControllerTest extends TestCase
     }
 
 
-    private function makeBranch()
+    private
+    function makeBranch()
     {
         $branch = new Branch($this->faker->word);
         $major = new Major($this->faker->word);
