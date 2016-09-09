@@ -7,6 +7,7 @@ use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
+use App\Domain\NtUid;
 
 /**
  * Created by PhpStorm.
@@ -29,7 +30,7 @@ class PointResultTest extends TestCase
         $evType = new EvaluationType(EvaluationType::POINT);
         $max = 20;
 
-        $branchForGroup= new BranchForGroup($branch, $group, ['start'=> new DateTime], $evType, $max);
+        $branchForGroup = new BranchForGroup($branch, $group, ['start' => new DateTime], $evType, $max);
 
         $title = $this->faker->words(3);
 
@@ -64,7 +65,12 @@ class PointResultTest extends TestCase
 
             $student = new Student($fn, $ln, $email, $gender);
             $result = new PointResult($student, $index * 10);
+
+            $this->assertInstanceOf(NtUid::class, $result->getId());
             $evaluation->addResult($result);
+
+            $this->assertInstanceOf(Evaluation::class, $result->getEvaluation());
+            $this->assertEquals($evaluation, $result->getEvaluation());
         }
 
 
