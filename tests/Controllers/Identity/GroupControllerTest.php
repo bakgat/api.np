@@ -1,4 +1,8 @@
 <?php
+use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\BranchForGroup;
+use App\Domain\Model\Education\Major;
+use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
@@ -18,12 +22,15 @@ class GroupControllerTest extends TestCase
 {
     /** @var MockInterface */
     protected $groupRepo;
+    /** @var  MockInterface */
+    protected $branchRepo;
 
     public function setUp()
     {
         parent::setUp();
 
         $this->groupRepo = $this->mock(App\Domain\Model\Identity\GroupRepository::class);
+        $this->branchRepo = $this->mock(App\Domain\Model\Education\BranchRepository::class);
     }
 
     /**
@@ -243,6 +250,47 @@ class GroupControllerTest extends TestCase
      * @test
      * @group GroupController
      */
+    public function should_return_all_branches_in_group()
+    {
+        $group = $this->makeGroup();
+        $id = $group->getId();
+
+        $groupBranches = new ArrayCollection;
+        foreach (range(1, 10) as $item) {
+            $branch = $this->makeBranch();
+            $evType = new EvaluationType(EvaluationType::COMPREHENSIVE);
+            $gb = new BranchForGroup($branch, $group, ['start' => new DateTime], $evType);
+            $groupBranches->add($gb);
+        }
+
+        $this->groupRepo->shouldReceive('get')
+            ->once()
+            ->andReturn($group);
+
+        $this->branchRepo->shouldReceive('allBranchesInGroup')
+            ->once()
+            ->andReturn($groupBranches);
+
+        $this->get('/groups/' . $id . '/branches')
+            ->seeJsonStructure([
+                '*' => [
+                    'id',
+                    'branch' => [
+                        'id',
+                        'name',
+                        'major' => [
+                            'id',
+                            'name'
+                        ]
+                    ]
+                ]
+            ]);
+    }
+
+    /**
+     * @test
+     * @group GroupController
+     */
     public function should_return_422_when_update_fails()
     {
         $data = [
@@ -309,4 +357,14 @@ class GroupControllerTest extends TestCase
 
         return $student;
     }
+
+
+    private function makeBranch()
+    {
+        $branch = new Branch($this->faker->word);
+        $major = new Major($this->faker->word);
+        $major->addBranch($branch);
+        return $branch;
+    }
+
 }
