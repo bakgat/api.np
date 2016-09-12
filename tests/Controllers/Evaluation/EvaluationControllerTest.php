@@ -239,9 +239,13 @@ class EvaluationControllerTest extends TestCase
 
         /** @var PointResult $result */
         foreach ($evaluation->getResults() as $result) {
-            $result['score'] = $this->faker->biasedNumberBetween(0, $max);
-            $result['redicodi'] = $this->faker->randomElements(Redicodi::values());
-            $data['results'][] = $result;
+            $data['results'][] = [
+                'student' => [
+                    'id' => $result->getStudent()->getId()->toString()
+                ],
+                'score' => $this->faker->biasedNumberBetween(0, $max),
+                'redicodi' => $this->faker->randomElements(Redicodi::values())
+            ];
 
             $this->studentRepo->shouldReceive('get')
                 ->andReturnUsing(function ($id) use ($evaluation) {
