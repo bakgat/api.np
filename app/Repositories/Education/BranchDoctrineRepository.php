@@ -185,33 +185,7 @@ class BranchDoctrineRepository implements BranchRepository
         return 1;
     }
 
-    /**
-     * Deletes an existing Branch.
-     *
-     * @param NtUid $id
-     * @return int Number of affected rows.
-     */
-    public function deleteBranch(NtUid $id)
-    {
-        $branch = $this->getBranch($id);
-        $this->em->remove($branch);
-        $this->em->flush();
-        return 1;
-    }
 
-    /**
-     * Deletes an existing Major.
-     *
-     * @param NtUid $id
-     * @return int Number of affected rows.
-     */
-    public function deleteMajor(NtUid $id)
-    {
-        $major = $this->getMajor($id);
-        $this->em->remove($major);
-        $this->em->flush();
-        return 1;
-    }
 
     /**
      * @param NtUid $branchForGroupId

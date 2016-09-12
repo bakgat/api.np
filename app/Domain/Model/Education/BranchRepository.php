@@ -86,21 +86,6 @@ interface BranchRepository
      */
     public function update(Major $major);
 
-    /**
-     * Deletes an existing Branch.
-     *
-     * @param NtUid $id
-     * @return int Number of affected rows.
-     */
-    public function deleteBranch(NtUid $id);
-
-    /**
-     * Deletes an existing Major.
-     *
-     * @param NtUid $id
-     * @return int Number of affected rows.
-     */
-    public function deleteMajor(NtUid $id);
 
     /**
      * @param NtUid $branchForGroupId
