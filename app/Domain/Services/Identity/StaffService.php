@@ -210,5 +210,15 @@ class StaffService
         return true;
     }
 
-
+    /**
+     * Finds an account with email address
+     *
+     * @param $email
+     * @return Staff|null
+     */
+    public function findByEmail($email)
+    {
+        $member = $this->staffRepo->findByEmail($email);
+        return $member;
+    }
 }

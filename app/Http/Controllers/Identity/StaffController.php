@@ -186,6 +186,12 @@ class StaffController extends Controller
         return $this->response($staffRole, ['staff_roles']);
     }
 
+
+    public function login(Request $request)
+    {
+        $email = $request->get('email');
+        $this->staffService->findByEmail($email);
+    }
     /*
     public function removeRole(Request $request, $id, $roleId)
     {

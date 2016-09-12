@@ -33,6 +33,24 @@ class StaffServiceTest extends TestCase
         $this->service = new StaffService($this->staffRepo, $this->groupRepo, $this->roleRepo);
     }
 
+    /**
+     * @test
+     * @group staff
+     * @group staffservice
+     */
+    public function should_find_by_email()
+    {
+        $member = $this->makeStaff();
+        $this->staffRepo->shouldReceive('findByEmail')
+            ->once()
+            ->andReturn($member);
+
+        $email = $member->getEmail();
+
+        $found = $this->service->findByEmail($email);
+        $this->assertInstanceOf(Staff::class, $member);
+        $this->assertEquals($email, $found->getEmail());
+    }
 
     /**
      * @test
