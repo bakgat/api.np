@@ -94,11 +94,8 @@ class RedicodiForStudent
         $this->branch = $branch;
         $this->content = $content;
 
-        if ($dateRange instanceof DateRange) {
-            $this->dateRange = $dateRange;
-        } else {
-            $this->dateRange = DateRange::fromData($dateRange);
-        }
+        $this->dateRange = DateRange::fromData($dateRange);
+
     }
 
     public function getId()
@@ -132,6 +129,7 @@ class RedicodiForStudent
         $this->dateRange = DateRange::fromData($dr);
         return $this;
     }
+
     /**
      * Stops the redicodi for a given student and branch at a certain date
      *

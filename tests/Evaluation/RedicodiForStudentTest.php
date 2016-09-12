@@ -53,7 +53,7 @@ class RedicodiForStudentTest extends TestCase
      * @group Branch
      * @group Group
      */
-    public function should_stop_redicodi()
+    public function should_stop_redicodi_at_date()
     {
         $student = $this->makeStudent();
         $branch = $this->makeBranch();
@@ -69,11 +69,40 @@ class RedicodiForStudentTest extends TestCase
         $rfs = new RedicodiForStudent($student, $redicodi, $branch, $content, $dateRange);
         $this->assertTrue($rfs->isActive());
 
-
         $past = clone $now->modify('-1 year');
 
         $rfs->stopRedicodi($past);
         $this->assertFalse($rfs->isActive());
+    }
+
+    /**
+     * @test
+     * @group evaluation
+     * @group Student
+     * @group Redicodi
+     * @group Branch
+     * @group Group
+     */
+    public function should_stop_redicodi_with_no_date()
+    {
+        $student = $this->makeStudent();
+        $branch = $this->makeBranch();
+
+        $redicodi = new Redicodi(Redicodi::BASIC);
+
+        $now = new DateTime;
+
+        $farpast = clone $now;
+        $farpast->modify('-2 year');
+        $dateRange = ['start' => $farpast];
+        $content = $this->faker->text(5);
+
+        $rfs = new RedicodiForStudent($student, $redicodi, $branch, $content, $dateRange);
+        $this->assertTrue($rfs->isActive());
+
+        $rfs->stopRedicodi();
+        $this->assertFalse($rfs->isActive());
+        $this->assertEquals($now->modify('-1 day')->format('Y-m-d'), $rfs->isActiveUntil()->format('Y-m-d'));
     }
 
     private function makeStudent()
