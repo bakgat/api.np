@@ -190,7 +190,11 @@ class StaffController extends Controller
     public function login(Request $request)
     {
         $email = $request->get('email');
-        $this->staffService->findByEmail($email);
+        $member = $this->staffService->findByEmail($email);
+        if($member == null) {
+            return response('User not found', 401); //unauthorized
+        }
+        return $this->response($member->getActiveRoles(), ['staff_roles']);
     }
     /*
     public function removeRole(Request $request, $id, $roleId)

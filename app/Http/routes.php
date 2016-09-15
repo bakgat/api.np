@@ -11,9 +11,7 @@
 |
  */
 
-$app->group(['prefix' => 'users', 'namespace' => 'App\Http\Controllers\Identity'], function() use($app) {
-    $app->post('/login', 'UserController@login');
-});
+$app->get('/bulk', 'Bulk\StudentCSVBulkController@bulkInsert');
 /* ***************************************************
  * STUDENTS
  * **************************************************/
@@ -44,6 +42,8 @@ $app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'
     $app->get('/{id}', 'StaffController@show');
     $app->post('/', 'StaffController@store');
     $app->put('/{id}', 'StaffController@update');
+
+    $app->post('/login', 'StaffController@login');
 
     $app->get('/{id}/groups', 'StaffController@allGroups');
     $app->post('/{id}/groups', 'StaffController@addGroup');
