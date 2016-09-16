@@ -21,7 +21,7 @@ class GroupSeeder extends Seeder
     {
         DB::table('groups')->delete();
 
-        $groups = ['K1A', 'K1KB', 'K1C', 'K2A', 'K2B', 'K3A', 'K3B',
+        $groups = ['K1A', 'K1B', 'K1C', 'K2A', 'K2B', 'K3A', 'K3B',
             'L1A', 'L1B', 'L1C', 'L2A', 'L2B', 'L3A', 'L3B', 'L4A', 'L4B', 'L5A', 'L5B', 'L6A', 'L6B'];
 
         foreach ($groups as $group) {

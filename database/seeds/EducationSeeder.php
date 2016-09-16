@@ -50,7 +50,6 @@ class EducationSeeder extends Seeder
                 'lezen',
                 'spreken',
                 'schrijven'
-
             ],
             'wereldoriëntatie' => [
                 'kennis',
@@ -87,7 +86,10 @@ class EducationSeeder extends Seeder
             foreach ($branches as $branch) {
                 $major = $branch->getMajor();
                 $evType = null;
-                if($major->getName()=='wiskunde'||$major->getName()=='Nederlands'||$branch->getName()=='kennis'||$major->getName()=='Frans') {
+                if ($major->getName() == 'wiskunde' ||
+                    $major->getName() == 'Nederlands' ||
+                    $branch->getName() == 'kennis' ||
+                    $major->getName() == 'Frans') {
                     $max = $faker->biasedNumberBetween(0, 100);
                     $evType = new EvaluationType(EvaluationType::POINT);
                 } else {

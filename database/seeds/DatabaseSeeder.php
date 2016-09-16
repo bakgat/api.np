@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
         $this->call('EducationSeeder');
         $this->call('RoleSeeder');
         $this->call('PersonSeeder');
-        $this->call('RedicodiSeeder');
-        $this->call('ResultSeeder');;
+        //$this->call('RedicodiSeeder');
+        //$this->call('ResultSeeder');;
     }
 
 }
