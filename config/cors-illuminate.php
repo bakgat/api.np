@@ -28,6 +28,7 @@ return [
     S::KEY_ALLOWED_ORIGINS      => [
         'http://localhost:3000'         => true,
         'http://evalueren.klimtoren.be' => true,
+        'http://mijn.klimtoren.be'      => true,
         //'http://some.disabled.com' => null,
         // Enabling all origins might be insecure. Consider before using in production.
         S::VALUE_ALLOW_ORIGIN_ALL => null,
