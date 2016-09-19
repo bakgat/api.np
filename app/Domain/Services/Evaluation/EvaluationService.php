@@ -38,12 +38,13 @@ class EvaluationService
         $branchForGroup = $this->branchRepo->getBranchForGroup(NtUid::import($branchForGroupId));
         $date = convert_date_from_string($data['date']);
         $max = $data['max'];
+        $permanent = $data['permanent'];
 
         $results = $data['results'];
 
         //TODO: permanent or end evaluation
         //TODO: other types of evaluations ????
-        $evaluation = new Evaluation($branchForGroup, $title, $date, $max);
+        $evaluation = new Evaluation($branchForGroup, $title, $date, $max, $permanent);
 
         foreach ($results as $result) {
             $studentId = $result['student']['id'];
@@ -69,13 +70,14 @@ class EvaluationService
         $branchForGroup = $this->branchRepo->getBranchForGroup(NtUid::import($branchForGroupId));
         $date = convert_date_from_string($data['date']);
         $max = $data['max'];
+        $permanent = $data['permanent'];
 
         $results = $data['results'];
 
         /** @var Evaluation $evaluation */
         $evaluation = $this->evaluationRepo->get($id);
 
-        $evaluation->update($title, $branchForGroup, $date, $max);
+        $evaluation->update($title, $branchForGroup, $date, $max, $permanent);
 
         foreach ($results as $result) {
             $studentId = $result['student']['id'];

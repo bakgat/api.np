@@ -186,12 +186,13 @@ class Evaluation
         return clone $this->results;
     }
 
-    public function update($title, $branchForGroup, $date, $max)
+    public function update($title, $branchForGroup, $date, $max, $permanent)
     {
         $this->title = $title;
         $this->branchForGroup = $branchForGroup;
         $this->date = $date;
         $this->max = $max;
+        $this->permanent = $permanent;
         return $this;
     }
 
