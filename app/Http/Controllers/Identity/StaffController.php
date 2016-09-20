@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Identity;
 
 
+use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StaffType;
 use App\Domain\Services\Identity\StaffService;
@@ -191,10 +192,19 @@ class StaffController extends Controller
     {
         $email = $request->get('email');
         $member = $this->staffService->findByEmail($email);
-        if($member == null) {
+        if ($member == null) {
             return response('User not found', 401); //unauthorized
         }
-        return $this->response($member->getActiveRoles(), ['staff_roles']);
+        $auth = [
+            'auth_token' => $member->getId()->toString(),
+            'roles' => []
+        ];
+        /** @var Role $activeRole */
+        foreach ($member->getActiveRoles() as $activeRole) {
+            $auth['roles'][] = ['id' => $activeRole->getId(), 'name' => $activeRole->getName()];
+        }
+
+        return response($auth);
     }
     /*
     public function removeRole(Request $request, $id, $roleId)
