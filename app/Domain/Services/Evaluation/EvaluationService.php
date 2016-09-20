@@ -6,6 +6,8 @@ use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\PointResult;
+use App\Domain\Model\Events\EventTracking;
+use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Domain\NtUid;
 
@@ -17,22 +19,30 @@ use App\Domain\NtUid;
  */
 class EvaluationService
 {
-    /** @var EvaluationRepository  */
+    /** @var EvaluationRepository */
     protected $evaluationRepo;
     /** @var BranchRepository */
     protected $branchRepo;
-    /** @var StudentRepository  */
+    /** @var StudentRepository */
     protected $studentRepo;
+    /** @var EventTrackingRepository */
+    protected $trackRepo;
 
-    public function __construct(EvaluationRepository $evaluationRepository, BranchRepository $branchRepository, StudentRepository $studentRepository)
+    public function __construct(EvaluationRepository $evaluationRepository,
+                                EventTrackingRepository $eventTrackingRepository,
+                                BranchRepository $branchRepository,
+                                StudentRepository $studentRepository)
     {
         $this->evaluationRepo = $evaluationRepository;
         $this->branchRepo = $branchRepository;
         $this->studentRepo = $studentRepository;
+        $this->trackRepo = $eventTrackingRepository;
     }
 
     public function create($data)
     {
+
+
         $title = $data['title'];
         $branchForGroupId = $data['branchForGroup']['id'];
         $branchForGroup = $this->branchRepo->getBranchForGroup(NtUid::import($branchForGroupId));
@@ -42,7 +52,6 @@ class EvaluationService
 
         $results = $data['results'];
 
-        //TODO: permanent or end evaluation
         //TODO: other types of evaluations ????
         $evaluation = new Evaluation($branchForGroup, $title, $date, $max, $permanent);
 
@@ -58,6 +67,10 @@ class EvaluationService
         }
 
         $this->evaluationRepo->insert($evaluation);
+
+        $userId = $data['auth_token'];
+        $track = new EventTracking('staff', $userId, 'evaluation', 'insert', $evaluation->getId());
+        $this->trackRepo->save($track);
 
         return $evaluation;
     }
@@ -86,6 +99,10 @@ class EvaluationService
             $evaluation->updateResult($student, $result['score'], $result['redicodi']);
         }
         $this->evaluationRepo->update($evaluation);
+
+        $userId = $data['auth_token'];
+        $track = new EventTracking('staff', $userId, 'evaluation', 'update', $evaluation->getId());
+        $this->trackRepo->save($track);
 
         return $evaluation;
 

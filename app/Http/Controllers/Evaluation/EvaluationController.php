@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Evaluation;
 
 
 use App\Domain\Model\Evaluation\EvaluationRepository;
+use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Services\Evaluation\EvaluationService;
 use App\Domain\NtUid;
@@ -27,7 +28,11 @@ class EvaluationController extends Controller
     /** @var EvaluationService */
     private $evaluationService;
 
-    public function __construct(EvaluationService $evaluationService, GroupRepository $groupRepository, EvaluationRepository $evaluationRepository, SerializerInterface $serializer)
+
+    public function __construct(EvaluationService $evaluationService,
+                                GroupRepository $groupRepository,
+                                EvaluationRepository $evaluationRepository,
+                                SerializerInterface $serializer)
     {
         parent::__construct($serializer);
         $this->evaluationService = $evaluationService;

@@ -68,7 +68,8 @@ $repos = [
     'Identity\Staff',
     'Identity\Role',
     'Education\Branch',
-    'Evaluation\Evaluation'
+    'Evaluation\Evaluation',
+    'Events\EventTracking',
 ];
 
 foreach ($repos as $idx => $repo) {
