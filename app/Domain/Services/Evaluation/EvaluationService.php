@@ -100,7 +100,7 @@ class EvaluationService
         }
         $this->evaluationRepo->update($evaluation);
 
-        $userId = $data['auth_token'];
+        $userId = NtUid::import($data['auth_token']);
         $track = new EventTracking('staff', $userId, 'evaluation', 'update', $evaluation->getId());
         $this->trackRepo->save($track);
 
