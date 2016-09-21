@@ -197,6 +197,7 @@ class StaffController extends Controller
         }
         $auth = [
             'auth_token' => $member->getId()->toString(),
+            'given_name' => $member->getFirstName(),
             'roles' => []
         ];
         /** @var Role $activeRole */
