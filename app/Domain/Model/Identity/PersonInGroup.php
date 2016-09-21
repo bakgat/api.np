@@ -34,7 +34,7 @@ abstract class PersonInGroup
 
 
     /**
-     * @Groups({"staff_groups", "student_groups"})
+     * @Groups({"student_list", "staff_groups", "student_groups"})
      *
      * @ORM\ManyToOne(targetEntity="Group", inversedBy="studentInGroups")
      * @ORM\JoinColumn(onDelete="CASCADE")

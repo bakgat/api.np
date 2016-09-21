@@ -51,9 +51,10 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->join('b.major', 'm')
             ->leftJoin('e.results', 'pr')
             ->leftJoin('pr.student', 's')
+            ->leftJoin('s.studentInGroups', 'sig')
             ->where('e.id=?1')
             ->setParameter(1, $id)
-            ->orderBy('s.lastName');
+            ->orderBy('sig.number');
 
         $evaluation = $qb->getQuery()->getOneOrNullResult();
         if ($evaluation == null) {

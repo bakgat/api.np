@@ -35,7 +35,7 @@ class StudentInGroup extends PersonInGroup
     protected $student;
 
     /**
-     * @Groups({"student_groups"})
+     * @Groups({"student_list", "student_groups"})
      *
      * @ORM\Column(type="smallint", nullable=true)
      *

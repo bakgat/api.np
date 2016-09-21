@@ -41,9 +41,13 @@ class StudentDoctrineRepository implements StudentRepository
         $qb = $this->em->createQueryBuilder();
         $qb->select('s, sig, g')
             ->from(Student::class, 's')
-            ->join('s.studentInGroups', 'sig')
+            ->join('s.studentInGroups', 'sig', Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->lte('sig.dateRange.start', '?1'),
+                    $qb->expr()->gte('sig.dateRange.end', '?1')
+                ))
             ->join('sig.group', 'g')
-            ->orderBy('s.lastName');
+            ->orderBy('sig.number');
         return $qb->getQuery()->getResult();
     }
 
@@ -68,11 +72,13 @@ class StudentDoctrineRepository implements StudentRepository
             ->where($qb->expr()->andX(
                 $qb->expr()->lte('sig.dateRange.start', '?1'),
                 $qb->expr()->gte('sig.dateRange.end', '?1'),
-                $qb->expr()->eq('sig.group', '?2')
+                $qb->expr()->eq('sig.group', '?2'),
+                $qb->expr()->gt('sig.number', '?3')
             ))
             ->setParameter(1, $date)
             ->setParameter(2, $group->getId())
-            ->orderBy('s.lastName');
+            ->setParameter(3, 0)
+            ->orderBy('sig.number');
 
         return $qb->getQuery()->getResult();
     }

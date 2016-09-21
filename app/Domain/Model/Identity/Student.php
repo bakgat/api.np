@@ -41,6 +41,7 @@ class Student extends Person
     protected $schoolId;
 
     /**
+     * @Groups({"student_list"})
      *
      * @ORM\OneToMany(targetEntity="StudentInGroup", mappedBy="student", cascade={"persist"})
      *
