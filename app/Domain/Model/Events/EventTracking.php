@@ -66,12 +66,6 @@ class EventTracking
      */
     protected $actionId;
 
-    /**
-     * @ORM\Column(type="datetime")
-     *
-     * @var DateTime
-     */
-    protected $dateTime;
 
     public function __construct($userTable, $userId, $actionTable, $action, $actionId)
     {
@@ -81,7 +75,6 @@ class EventTracking
         $this->actionTable = $actionTable;
         $this->action = $action;
         $this->actionId = $actionId;
-        $this->dateTime = new DateTime;
     }
 
     public function getId()
@@ -114,8 +107,4 @@ class EventTracking
         return $this->actionId;
     }
 
-    public function getDateTime()
-    {
-        return $this->dateTime;
-    }
 }
