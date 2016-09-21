@@ -10,6 +10,7 @@ namespace App\Domain\Model\Events;
 
 
 use App\Domain\NtUid;
+use DateTime;
 use Doctrine\ORM\Mapping AS ORM;
 
 
@@ -65,6 +66,13 @@ class EventTracking
      */
     protected $actionId;
 
+    /**
+     * @ORM\Column(type="datetime")
+     *
+     * @var DateTime
+     */
+    protected $dateTime;
+
     public function __construct($userTable, $userId, $actionTable, $action, $actionId)
     {
         $this->id = NtUid::generate(4);
@@ -73,6 +81,7 @@ class EventTracking
         $this->actionTable = $actionTable;
         $this->action = $action;
         $this->actionId = $actionId;
+        $this->dateTime = new DateTime;
     }
 
     public function getId()
@@ -103,5 +112,10 @@ class EventTracking
     public function getActionId()
     {
         return $this->actionId;
+    }
+
+    public function getDateTime()
+    {
+        return $this->dateTime;
     }
 }
