@@ -207,6 +207,25 @@ class GroupDoctrineRepository implements GroupRepository
 
     /**
      * @param NtUid $id
+     * @return mixed
+     */
+    public function allActiveForStaff(NtUid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('g')
+            ->from(Group::class, 'g')
+            ->join('g.staffInGroups', 'sig')
+            ->where('sig.dateRange.start<=?1')
+            ->andWhere('sig.dateRange.end>=?1')
+            ->andWhere('sig.staff = ?2')
+            ->setParameter(1, new DateTime)
+            ->setParameter(2, $id);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param NtUid $id
      * @return StaffInGroup
      * @throws StaffGroupNotFoundException
      */
@@ -268,4 +287,6 @@ class GroupDoctrineRepository implements GroupRepository
         $this->em->flush();
         return 1;
     }
+
+
 }

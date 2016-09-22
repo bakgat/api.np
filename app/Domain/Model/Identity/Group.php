@@ -64,6 +64,15 @@ class Group
     protected $studentInGroups;
 
     /**
+     * @Groups({"group_staff"})
+     *
+     * @ORM\OneToMany(targetEntity="StaffInGroup", mappedBy="group", cascade={"persist"})
+     *
+     * @var ArrayCollection
+     */
+    protected $staffInGroups;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Domain\Model\Education\BranchForGroup", mappedBy="group", cascade={"persist"})
      *
      * @var ArrayCollection
@@ -117,6 +126,14 @@ class Group
     public function getStudentInGroups()
     {
         return clone $this->studentInGroups;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getStaffInGroups()
+    {
+        return clone $this->staffInGroups;
     }
 
     public function getBranchForGroups()

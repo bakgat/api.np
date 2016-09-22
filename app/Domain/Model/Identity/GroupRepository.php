@@ -81,6 +81,12 @@ interface GroupRepository
 
     /**
      * @param NtUid $id
+     * @return mixed
+     */
+    public function allActiveForStaff(NtUid $id);
+
+    /**
+     * @param NtUid $id
      * @return StaffInGroup
      */
     public function getStaffGroup(NtUid $id);
@@ -102,4 +108,5 @@ interface GroupRepository
      * @return StudentInGroup
      */
     public function updateStudentGroup($studentGroup);
+
 }
