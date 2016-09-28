@@ -13,6 +13,8 @@ use App\Domain\NtUid;
 use DateTime;
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity
@@ -32,6 +34,7 @@ class EventTracking
     protected $id;
 
     /**
+     * @Groups({"track_list"})
      * @ORM\Column(type="string")
      *
      * @var string
@@ -39,6 +42,7 @@ class EventTracking
     protected $userTable;
 
     /**
+     * @Groups({"track_list"})
      * @ORM\Column(type="guid")
      *
      * @var NtUid
@@ -46,6 +50,7 @@ class EventTracking
     protected $userId;
 
     /**
+     * @Groups({"track_list"})
      * @ORM\Column(type="guid", nullable=true)
      *
      * @var string
@@ -53,6 +58,7 @@ class EventTracking
     protected $actionTable;
 
     /**
+     * @Groups({"track_list"})
      * @ORM\Column(type="string", nullable=true)
      *
      * @var string
@@ -60,6 +66,8 @@ class EventTracking
     protected $action;
 
     /**
+     * @Groups({"track_list"})
+     *
      * @ORM\Column(type="guid", nullable=true)
      *
      * @var NtUid

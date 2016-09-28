@@ -9,7 +9,28 @@
 namespace App\Domain\Model\Events;
 
 
+use App\Domain\NtUid;
+use Doctrine\Common\Collections\ArrayCollection;
+
 interface EventTrackingRepository
 {
+    /**
+     * @param EventTracking $tracking
+     * @return mixed
+     */
     public function save(EventTracking $tracking);
+    
+
+    /**
+     * @param $type
+     * @return ArrayCollection
+     */
+    public function allOfType($type);
+
+    /**
+     * @param NtUid $id
+     * @param $userTable
+     * @return ArrayCollection
+     */
+    public function allOfUser(NtUid $id, $userTable);
 }

@@ -14,6 +14,7 @@ use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\NtUid;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 
 class EvaluationDoctrineRepository implements EvaluationRepository
@@ -26,18 +27,23 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $this->em = $entityManager;
     }
 
-    public function allEvaluationsForGroup(Group $group)
+    public function allEvaluationsForGroup(Group $group, DateTime $start, DateTime $end)
     {
         $qb = $this->em->createQueryBuilder();
+
         $qb->select('e, bfg, b, m, pr')
             ->from(Evaluation::class, 'e')
             ->join('e.branchForGroup', 'bfg')
             ->join('bfg.branch', 'b')
             ->join('b.major', 'm')
             ->join('e.results', 'pr')
-            ->where('bfg.group=?1')
-            ->setParameter(1, $group->getId());
-
+            ->where('bfg.group= :groupId')
+            ->andWhere('e.date >= :start')
+            ->andWhere('e.date <= :end')
+            ->setParameter('groupId', $group->getId())
+            ->setParameter('start', $start)
+            ->setParameter('end', $end);
+        
         return $qb->getQuery()->getResult();
     }
 

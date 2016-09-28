@@ -11,10 +11,11 @@ namespace App\Domain\Model\Evaluation;
 
 use App\Domain\Model\Identity\Group;
 use App\Domain\NtUid;
+use DateTime;
 
 interface EvaluationRepository
 {
-    public function allEvaluationsForGroup(Group $group);
+    public function allEvaluationsForGroup(Group $group, DateTime $start, DateTime $end);
 
     /**
      * @param NtUid $id

@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Identity;
 
 
+use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StaffType;
@@ -27,11 +28,14 @@ class StaffController extends Controller
 {
     /** @var StaffService */
     protected $staffService;
+    /** @var EventTrackingRepository */
+    protected $trackingRepo;
 
-    public function __construct(StaffService $staffService, SerializerInterface $serializer)
+    public function __construct(StaffService $staffService, EventTrackingRepository $eventTrackingRepository, SerializerInterface $serializer)
     {
         parent::__construct($serializer);
         $this->staffService = $staffService;
+        $this->trackingRepo = $eventTrackingRepository;
     }
 
     public function index()
@@ -217,4 +221,9 @@ class StaffController extends Controller
 
         return $this->staffService->removeFromRole($id, $roleId, $end);
     }*/
+    public function actions($id) {
+        $id = NtUid::import($id);
+        $tracks = $this->trackingRepo->allOfUser($id, 'staff');
+        return $this->response($tracks, ['track_list']);
+    }
 }

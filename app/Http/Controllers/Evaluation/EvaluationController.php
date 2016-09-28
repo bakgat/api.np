@@ -12,9 +12,11 @@ namespace App\Http\Controllers\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\GroupRepository;
+use App\Domain\Model\Time\DateRange;
 use App\Domain\Services\Evaluation\EvaluationService;
 use App\Domain\NtUid;
 use App\Http\Controllers\Controller;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use JMS\Serializer\SerializerInterface;
@@ -44,9 +46,19 @@ class EvaluationController extends Controller
     {
         //TODO: check for existence
         $groupId = $request->get('group');
+        if ($request->has('start')) {
+            $start = DateTime::createFromFormat('Y-m-d', $request->get('start'));
+        } else {
+            $start = DateTime::createFromFormat('Y-m-d', DateRange::PAST);
+        }
+        if ($request->has('end')) {
+            $end = DateTime::createFromFormat('Y-m-d', $request->get('end'));
+        } else {
+            $end = DateTime::createFromFormat('Y-m-d', DateRange::PAST);
+        }
 
         $group = $this->groupRepo->get(NtUid::import($groupId));
-        $evaluations = $this->evaluationRepo->allEvaluationsForGroup($group);
+        $evaluations = $this->evaluationRepo->allEvaluationsForGroup($group, $start, $end);
         return $this->response($evaluations, ['group_evaluations']);
     }
 
@@ -75,7 +87,8 @@ class EvaluationController extends Controller
         return $this->response($evaluation, ['evaluation_detail']);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'max' => 'numeric',

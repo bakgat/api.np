@@ -12,6 +12,9 @@
  */
 
 $app->get('/bulk', 'Bulk\StudentCSVBulkController@bulkInsert');
+$app->get('/ntuid', function() {
+   return \App\Domain\NtUid::generate(4);
+});
 /* ***************************************************
  * STUDENTS
  * **************************************************/
@@ -54,6 +57,8 @@ $app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'
     $app->post('/{id}/roles', 'StaffController@addRole');
     $app->put('/{id}/roles/{staffRoleId}', 'StaffController@updateRole');
     $app->delete('/{id}/roles/{staffRoleId}', 'StaffController@removeRole');
+
+    $app->get('/{id}/actions', 'StaffController@actions');
 });
 /* ***************************************************
  * GROUPS

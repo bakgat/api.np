@@ -40,10 +40,10 @@ class GroupController extends Controller
         }
 
         if($request->has('owner') && $request->get('owner') == 'true') {
-            $auth_token = NtUid::import($request->get('auth_token'));
+            $auth_token = NtUid::import($request->header('Auth'));
             return $this->response($this->groupRepo->allActiveForStaff($auth_token), ['group']);
         }
-        
+
         return $this->response($this->groupRepo->all(), ['group']);
     }
 

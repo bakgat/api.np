@@ -72,6 +72,7 @@ return [
     S::KEY_ALLOWED_HEADERS      => [
         'content-type'             => true,
         'accept'                   => true,
+        'auth'                     => true,
         'x-custom-request-header'  => null,
         // Enabling all headers might be insecure. Not recommended to use in production.
         S::VALUE_ALLOW_ALL_HEADERS => null,
