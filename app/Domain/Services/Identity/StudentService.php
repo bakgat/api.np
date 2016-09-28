@@ -209,6 +209,7 @@ class StudentService
             $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
         }
 
+        $trackDone = false;
         $studentRedicodi->resetStart($start);
         if ($end != null) {
             $studentRedicodi->stopRedicodi($end);
