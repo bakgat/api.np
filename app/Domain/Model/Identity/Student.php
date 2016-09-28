@@ -195,7 +195,7 @@ class Student extends Person
      * @param null $end
      * @return RedicodiForStudent
      */
-    public function addRedicodi(Redicodi $redicodi, Branch $branch, $content, $start = null, $end = null)
+    public function addRedicodi(Redicodi $redicodi, $branch, $content, $start = null, $end = null)
     {
         if ($start == null) {
             $start = new DateTime;

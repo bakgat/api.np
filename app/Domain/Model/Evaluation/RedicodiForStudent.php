@@ -86,7 +86,7 @@ class RedicodiForStudent
      */
     protected $dateRange;
 
-    public function __construct(Student $student, Redicodi $redicodi, Branch $branch, $content = '', $dateRange)
+    public function __construct(Student $student, Redicodi $redicodi, $branch, $content = '', $dateRange)
     {
         $this->id = NtUid::generate(4);
         $this->student = $student;
@@ -149,7 +149,7 @@ class RedicodiForStudent
         return $this;
     }
 
-    public function update(Branch $branch, Redicodi $redicodi, $content)
+    public function update($branch, Redicodi $redicodi, $content)
     {
         $this->branch = $branch;
         $this->redicodi = $redicodi;

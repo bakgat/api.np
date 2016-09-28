@@ -141,7 +141,7 @@ class StudentService
 
         /** @var RedicodiForStudent $studentRedicodi */
         $studentRedicodi = null;
-        if ($student && $branch) {
+        if ($student) {
             $redicodi = new Redicodi($redicodi);
             $studentRedicodi = $student->addRedicodi($redicodi, $branch, $content, $start, $end);
         }
