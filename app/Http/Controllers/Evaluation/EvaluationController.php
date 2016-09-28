@@ -83,7 +83,10 @@ class EvaluationController extends Controller
         if ($validator->fails()) {
             return response($validator->messages(), 422);
         }
-        $evaluation = $this->evaluationService->create($request->all());
+
+        $data = $request->all();
+        $data['auth_token']= $request->header('Auth');
+        $evaluation = $this->evaluationService->create($data);
         return $this->response($evaluation, ['evaluation_detail']);
     }
 
@@ -99,7 +102,10 @@ class EvaluationController extends Controller
         if ($validator->fails()) {
             return response($validator->messages(), 422);
         }
-        $evaluation = $this->evaluationService->update($request->all());
+
+        $data = $request->all();
+        $data['auth_token']= $request->header('Auth');
+        $evaluation = $this->evaluationService->update($data);
         return $this->response($evaluation, ['evaluation_detail']);
     }
 }
