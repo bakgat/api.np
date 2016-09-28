@@ -134,7 +134,10 @@ class StudentService
         /** @var Student $student */
         $student = $this->get(NtUid::import($id));
         /** @var Branch $branch */
-        $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
+        $branch = null;
+        if ($branchId != null) {
+            $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
+        }
 
         /** @var RedicodiForStudent $studentRedicodi */
         $studentRedicodi = null;
@@ -151,10 +154,13 @@ class StudentService
         /** @var RedicodiForStudent $studentRedicodi */
         $studentRedicodi = $this->studentRepo->getStudentRedicodi(NtUid::import($studentRedicodiId));
         /** @var Branch $branch */
-        $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
+        $branch = null;
+        if ($branchId != null) {
+            $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
+        }
 
         $studentRedicodi->resetStart($start);
-        if($end != null) {
+        if ($end != null) {
             $studentRedicodi->stopRedicodi($end);
         }
 

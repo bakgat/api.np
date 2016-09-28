@@ -164,7 +164,10 @@ class StudentController extends Controller
             $end = convert_date_from_string($end);
         }
         $redicodi = $request->get('redicodi')['id'];
-        $branchId = $request->get('branch')['id'];
+        $branchId = null;
+        if ($request->has('branch')) {
+            $branchId = $request->get('branch')['id'];
+        }
         $content = $request->get('content');
 
         $studentRedicodi = $this->studentService->addRedicodi($id, $branchId, $redicodi, $content, $start, $end);
@@ -182,7 +185,10 @@ class StudentController extends Controller
             $end = convert_date_from_string($end);
         }
         $redicodi = $request->get('redicodi')['id'];
-        $branchId = $request->get('branch')['id'];
+        $branchId = null;
+        if ($request->has('branch')) {
+            $branchId = $request->get('branch')['id'];
+        }
         $content = $request->get('content');
 
         $studentRedicodi = $this->studentService->updateRedicodi($studentRedicodiId, $branchId, $redicodi, $content, $start, $end);
