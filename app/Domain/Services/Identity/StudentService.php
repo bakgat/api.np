@@ -13,6 +13,8 @@ use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Evaluation\RedicodiForStudent;
+use App\Domain\Model\Events\EventTracking;
+use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
@@ -29,12 +31,18 @@ class StudentService
     protected $groupRepo;
     /** @var BranchRepository */
     protected $branchRepo;
+    /** @var EventTrackingRepository */
+    protected $trackRepo;
 
-    public function __construct(StudentRepository $studentRepository, GroupRepository $groupRepository, BranchRepository $branchRepository)
+    public function __construct(StudentRepository $studentRepository,
+                                GroupRepository $groupRepository,
+                                BranchRepository $branchRepository,
+                                EventTrackingRepository $eventTrackingRepository)
     {
         $this->studentRepo = $studentRepository;
         $this->groupRepo = $groupRepository;
         $this->branchRepo = $branchRepository;
+        $this->trackRepo = $eventTrackingRepository;
     }
 
     public function all()
@@ -71,6 +79,11 @@ class StudentService
 
         $this->studentRepo->insert($student);
 
+        $userId = $data['auth_token'];
+        $track = new EventTracking('staff', $userId, 'students', 'insert', $student->getId());
+        $this->trackRepo->save($track);
+
+
         return $student;
     }
 
@@ -90,6 +103,10 @@ class StudentService
 
         $student->updateProfile($firstName, $lastName, $schoolId, $gender, $birthday);
         $this->studentRepo->update($student);
+
+        $userId = $data['auth_token'];
+        $track = new EventTracking('staff', $userId, 'students', 'update', $student->getId());
+        $this->trackRepo->save($track);
 
         return $student;
     }
@@ -129,8 +146,23 @@ class StudentService
     /* ***************************************************
      * REDICODI
      * **************************************************/
-    public function addRedicodi($id, $branchId, $redicodi, $content, $start, $end)
+    public function addRedicodi($id, $data)
     {
+        $start = $data['start'];
+        if ($start) {
+            $start = convert_date_from_string($start);
+        }
+        $end = $data['end'];
+        if ($end) {
+            $end = convert_date_from_string($end);
+        }
+        $redicodi = $data['redicodi']['id'];
+        $branchId = null;
+        if (isset($data['branch'])) {
+            $branchId = $data['branch']['id'];
+        }
+        $content = $data['content'];
+
         /** @var Student $student */
         $student = $this->get(NtUid::import($id));
         /** @var Branch $branch */
@@ -146,11 +178,29 @@ class StudentService
             $studentRedicodi = $student->addRedicodi($redicodi, $branch, $content, $start, $end);
         }
         $this->studentRepo->update($student);
+
+        $this->insertTracking($data, 'redicodi_for_students', 'insert', $studentRedicodi->getId());
+
         return $studentRedicodi;
     }
 
-    public function updateRedicodi($studentRedicodiId, $branchId, $redicodi, $content, $start, $end)
+    public function updateRedicodi($studentRedicodiId, $data)
     {
+        $start = $data['start'];
+        if ($start) {
+            $start = convert_date_from_string($start);
+        }
+        $end = $data['end'];
+        if ($end) {
+            $end = convert_date_from_string($end);
+        }
+        $redicodi = $data['redicodi']['id'];
+        $branchId = null;
+        if (isset($data['branch'])) {
+            $branchId = $data['branch']['id'];
+        }
+        $content = $data['content'];
+
         /** @var RedicodiForStudent $studentRedicodi */
         $studentRedicodi = $this->studentRepo->getStudentRedicodi(NtUid::import($studentRedicodiId));
         /** @var Branch $branch */
@@ -162,12 +212,27 @@ class StudentService
         $studentRedicodi->resetStart($start);
         if ($end != null) {
             $studentRedicodi->stopRedicodi($end);
+            $trackDone = $this->insertTracking($data, 'redicodi_for_students', 'stopped', $studentRedicodiId);
         }
 
         $redicodi = new Redicodi($redicodi);
         $studentRedicodi->update($branch, $redicodi, $content);
         $this->studentRepo->updateRedicodi($studentRedicodi);
+
+        if(!$trackDone) {
+            $this->insertTracking($data, 'redicodi_for_students', 'update', $studentRedicodiId);
+        }
+
         return $studentRedicodi;
+    }
+
+
+    private function insertTracking($data, $table, $action, $id)
+    {
+        $userId = $data['auth_token'];
+        $track = new EventTracking('staff', $userId, $table, $action, $id);
+        $this->trackRepo->save($track);
+        return true;
     }
 
 
