@@ -49,11 +49,12 @@ class EvaluationService
         $date = convert_date_from_string($data['date']);
         $max = $data['max'];
         $permanent = $data['permanent'];
+        $final = $data['final'];
 
         $results = $data['results'];
 
         //TODO: other types of evaluations ????
-        $evaluation = new Evaluation($branchForGroup, $title, $date, $max, $permanent);
+        $evaluation = new Evaluation($branchForGroup, $title, $date, $max, $permanent, $final);
 
         foreach ($results as $result) {
             $studentId = $result['student']['id'];
@@ -84,13 +85,14 @@ class EvaluationService
         $date = convert_date_from_string($data['date']);
         $max = $data['max'];
         $permanent = $data['permanent'];
+        $final = $data['final'];
 
         $results = $data['results'];
 
         /** @var Evaluation $evaluation */
         $evaluation = $this->evaluationRepo->get($id);
 
-        $evaluation->update($title, $branchForGroup, $date, $max, $permanent);
+        $evaluation->update($title, $branchForGroup, $date, $max, $permanent, $final);
 
         foreach ($results as $result) {
             $studentId = $result['student']['id'];

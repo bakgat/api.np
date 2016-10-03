@@ -77,7 +77,15 @@ class Evaluation
      *
      * @var bool
      */
-    protected $permanent; //permanent or end
+    protected $permanent;
+
+    /**
+     * @Groups({"group_evaluations", "evaluation_detail"})
+     * @ORM\Column(type="boolean")
+     *
+     * @var bool
+     */
+    protected $final;
 
     /**
      * @Groups({"group_evaluations", "evaluation_detail"})
@@ -97,12 +105,13 @@ class Evaluation
     protected $results;
 
 
-    public function __construct(BranchForGroup $branchForGroup, $title, $date = null, $max = null, $permanent = true)
+    public function __construct(BranchForGroup $branchForGroup, $title, $date = null, $max = null, $permanent = true, $final = false)
     {
         $this->id = NtUid::generate(4);
         $this->branchForGroup = $branchForGroup;
         $this->title = $title;
         $this->permanent = $permanent;
+        $this->final = $final;
         $this->max = $max;
         if ($date == null) {
             $date = new DateTime;
@@ -120,6 +129,7 @@ class Evaluation
     {
         return $this->branchForGroup;
     }
+
     /**
      * @return Branch
      */
@@ -151,6 +161,11 @@ class Evaluation
     public function isPermanent()
     {
         return $this->permanent;
+    }
+
+    public function isFinal()
+    {
+        return $this->final;
     }
 
     public function getMax()
@@ -186,13 +201,14 @@ class Evaluation
         return clone $this->results;
     }
 
-    public function update($title, $branchForGroup, $date, $max, $permanent)
+    public function update($title, $branchForGroup, $date, $max, $permanent, $final)
     {
         $this->title = $title;
         $this->branchForGroup = $branchForGroup;
         $this->date = $date;
         $this->max = $max;
         $this->permanent = $permanent;
+        $this->final = $final;
         return $this;
     }
 
