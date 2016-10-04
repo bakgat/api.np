@@ -82,11 +82,10 @@ $app->group(['prefix'=>'roles', 'namespace'=>'App\Http\Controllers\Identity'], f
 /* ***************************************************
  * BRANCHES
  * **************************************************/
-$app->group(['prefix' => 'majors', 'namespace' => 'App\Http\Controllers\Education'], function () use ($app) {
-    $app->get('/', 'BranchController@indexMajors');
-});
+
 $app->group(['prefix' => 'branches', 'namespace' => 'App\Http\Controllers\Education'], function () use ($app) {
     $app->get('/', 'BranchController@index');
+    $app->get('/majors', 'BranchController@indexMajors');
 });
 
 /* ***************************************************

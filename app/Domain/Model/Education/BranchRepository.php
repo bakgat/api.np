@@ -92,4 +92,9 @@ interface BranchRepository
      * @return BranchForGroup
      */
     public function getBranchForGroup(NtUid $branchForGroupId);
+
+    /**
+     * @return ArrayCollection
+     */
+    public function allMajors();
 }

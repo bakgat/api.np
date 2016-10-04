@@ -41,4 +41,9 @@ class BranchController extends Controller
         $group = $this->groupRepo->get($groupId);
         return $this->response($this->branchRepo->all($group), ['major_list']);
     }
+
+    public function indexMajors(Request $request) {
+        $majors = $this->branchRepo->allMajors();
+        return $this->response($majors, ['major_list']);
+    }
 }

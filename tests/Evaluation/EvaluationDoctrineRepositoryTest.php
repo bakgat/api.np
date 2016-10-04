@@ -157,7 +157,7 @@ class EvaluationDoctrineRepositoryTest extends DoctrineTestCase
         foreach (range(1, 3) as $item) {
             $r = $this->faker->randomElement(Redicodi::values());
             $b = $this->makeBranch();
-            $student->addRedicodi($r, $b, $this->faker->text(120));
+            $student->addRedicodi($r, $b, null, $this->faker->text(120));
         }
 
         return $student;

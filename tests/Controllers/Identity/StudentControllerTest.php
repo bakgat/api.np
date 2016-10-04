@@ -500,7 +500,7 @@ class StudentControllerTest extends TestCase
         $redicodi = new Redicodi(Redicodi::BASIC);
         $content = $this->faker->text(100);
 
-        $studentRedicodi = $student->addRedicodi($redicodi, $branch, $content);
+        $studentRedicodi = $student->addRedicodi($redicodi, $branch, null, $content);
         $studentRedicodiId = $studentRedicodi->getId()->toString();
 
         $now = new DateTime;
@@ -571,7 +571,7 @@ class StudentControllerTest extends TestCase
         foreach (range(1, 3) as $item) {
             $r = $this->faker->randomElement(Redicodi::values());
             $b = $this->makeBranch();
-            $student->addRedicodi($r, $b, $this->faker->text(120));
+            $student->addRedicodi($r, $b, null, $this->faker->text(120));
         }
 
         return $student;

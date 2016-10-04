@@ -146,6 +146,11 @@ class StudentService
     /* ***************************************************
      * REDICODI
      * **************************************************/
+    /**
+     * @param $id
+     * @param $data
+     * @return RedicodiForStudent
+     */
     public function addRedicodi($id, $data)
     {
         $start = $data['start'];
@@ -161,6 +166,10 @@ class StudentService
         if (isset($data['branch'])) {
             $branchId = $data['branch']['id'];
         }
+        $majorId = null;
+        if(isset($data['major'])) {
+            $majorId = $data['major']['id'];
+        }
         $content = $data['content'];
 
         /** @var Student $student */
@@ -170,12 +179,16 @@ class StudentService
         if ($branchId != null) {
             $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
         }
+        $major = null;
+        if($majorId != null) {
+            $major = $this->branchRepo->getMajor(NtUid::import($majorId));
+        }
 
         /** @var RedicodiForStudent $studentRedicodi */
         $studentRedicodi = null;
         if ($student) {
             $redicodi = new Redicodi($redicodi);
-            $studentRedicodi = $student->addRedicodi($redicodi, $branch, $content, $start, $end);
+            $studentRedicodi = $student->addRedicodi($redicodi, $branch, $major, $content, $start, $end);
         }
         $this->studentRepo->update($student);
 
@@ -199,6 +212,10 @@ class StudentService
         if (isset($data['branch'])) {
             $branchId = $data['branch']['id'];
         }
+        $majorId = null;
+        if(isset($data['major'])) {
+            $majorId = $data['major']['id'];
+        }
         $content = $data['content'];
 
         /** @var RedicodiForStudent $studentRedicodi */
@@ -207,6 +224,10 @@ class StudentService
         $branch = null;
         if ($branchId != null) {
             $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
+        }
+        $major = null;
+        if($majorId != null) {
+            $major = $this->branchRepo->getMajor(NtUid::import($majorId));
         }
 
         $trackDone = false;
@@ -217,7 +238,7 @@ class StudentService
         }
 
         $redicodi = new Redicodi($redicodi);
-        $studentRedicodi->update($branch, $redicodi, $content);
+        $studentRedicodi->update($branch, $major, $redicodi, $content);
         $this->studentRepo->updateRedicodi($studentRedicodi);
 
         if(!$trackDone) {

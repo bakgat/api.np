@@ -105,6 +105,21 @@ class BranchDoctrineRepository implements BranchRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Returns all the majors.
+     *
+     * @return ArrayCollection
+     */
+    public function allMajors()
+    {
+        //TODO: format this function
+        //put in right place
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('m')
+            ->from(Major::class, 'm');
+        return $qb->getQuery()->getResult();
+    }
+
 
     /**
      * Finds a major by its id, if not returns null.
@@ -200,6 +215,7 @@ class BranchDoctrineRepository implements BranchRepository
             ->setParameter('id', $branchForGroupId);
         return $qb->getQuery()->getOneOrNullResult();
     }
+
 
 
 }

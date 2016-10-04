@@ -27,7 +27,7 @@ use JMS\Serializer\Annotation\Groups;
 class Branch
 {
     /**
-     * @Groups({"group_branches", "major_list", "branch_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
+     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -37,7 +37,7 @@ class Branch
     private $id;
 
     /**
-     * @Groups({"group_branches", "major_list", "branch_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
+     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
      *
      * @ORM\Column(type="string")
      *

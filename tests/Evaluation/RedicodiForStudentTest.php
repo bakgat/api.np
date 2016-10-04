@@ -24,15 +24,17 @@ class RedicodiForStudentTest extends TestCase
      */
     public function should_create_new()
     {
+        //TODO add major in test
         $student = $this->makeStudent();
         $branch = $this->makeBranch();
+        $major = null;
 
         $redicodi = new Redicodi(Redicodi::BASIC);
 
         $dateRange = ['start' => new DateTime];
         $content = $this->faker->text(5);
 
-        $rfs = new RedicodiForStudent($student, $redicodi, $branch, $content, $dateRange);
+        $rfs = new RedicodiForStudent($student, $redicodi, $branch, $major, $content, $dateRange);
 
         $this->assertInstanceOf(RedicodiForStudent::class, $rfs);
         $this->assertInstanceOf(NtUid::class, $rfs->getId());
@@ -57,6 +59,7 @@ class RedicodiForStudentTest extends TestCase
     {
         $student = $this->makeStudent();
         $branch = $this->makeBranch();
+        $major = null;
 
         $redicodi = new Redicodi(Redicodi::BASIC);
 
@@ -66,7 +69,7 @@ class RedicodiForStudentTest extends TestCase
         $dateRange = ['start' => $farpast];
         $content = $this->faker->text(5);
 
-        $rfs = new RedicodiForStudent($student, $redicodi, $branch, $content, $dateRange);
+        $rfs = new RedicodiForStudent($student, $redicodi, $branch, $major, $content, $dateRange);
         $this->assertTrue($rfs->isActive());
 
         $past = clone $now->modify('-1 year');
@@ -87,6 +90,7 @@ class RedicodiForStudentTest extends TestCase
     {
         $student = $this->makeStudent();
         $branch = $this->makeBranch();
+        $major = null;
 
         $redicodi = new Redicodi(Redicodi::BASIC);
 
@@ -97,7 +101,7 @@ class RedicodiForStudentTest extends TestCase
         $dateRange = ['start' => $farpast];
         $content = $this->faker->text(5);
 
-        $rfs = new RedicodiForStudent($student, $redicodi, $branch, $content, $dateRange);
+        $rfs = new RedicodiForStudent($student, $redicodi, $branch, $major, $content, $dateRange);
         $this->assertTrue($rfs->isActive());
 
         $rfs->stopRedicodi();

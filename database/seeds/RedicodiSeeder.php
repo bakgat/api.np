@@ -48,7 +48,7 @@ class RedicodiSeeder extends Seeder
 
             $lower = $faker->dateTimeBetween('-9years', '-1day');
 
-            $rfs = new RedicodiForStudent($student, $redicodi, $branch, $content, ['start' => $lower]);
+            $rfs = new RedicodiForStudent($student, $redicodi, $branch, null, $content, ['start' => $lower]);
             EntityManager::persist($rfs);
         }
 

@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Evaluation;
 
 use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\Major;
 use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Time\DateRange;
@@ -32,7 +33,7 @@ class RedicodiForStudent
     use DateRangeTrait;
 
     /**
-     * @Groups({"student_redicodi"})
+     * @Groups({"student_redicodi", "student_list"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -52,7 +53,7 @@ class RedicodiForStudent
     protected $student;
 
     /**
-     * @Groups({"student_redicodi"})
+     * @Groups({"student_redicodi", "student_list"})
      * @ORM\Column(type="redicoditype")
      *
      * @var Redicodi
@@ -60,7 +61,17 @@ class RedicodiForStudent
     protected $redicodi;
 
     /**
-     * @Groups({"student_redicodi"})
+     * @Groups({"student_redicodi", "student_list"})
+     *
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Education\Major")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
+     * @var Major
+     */
+    protected $major;
+
+    /**
+     * @Groups({"student_redicodi", "student_list"})
      *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Education\Branch")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -70,7 +81,7 @@ class RedicodiForStudent
     protected $branch;
 
     /**
-     * @Groups({"student_redicodi"})
+     * @Groups({"student_redicodi", "student_list"})
      *
      * @ORM\Column(type="string", nullable=true)
      *
@@ -86,12 +97,13 @@ class RedicodiForStudent
      */
     protected $dateRange;
 
-    public function __construct(Student $student, Redicodi $redicodi, $branch, $content = '', $dateRange)
+    public function __construct(Student $student, Redicodi $redicodi, $branch, $major, $content = '', $dateRange)
     {
         $this->id = NtUid::generate(4);
         $this->student = $student;
         $this->redicodi = $redicodi;
         $this->branch = $branch;
+        $this->major = $major;
         $this->content = $content;
 
         $this->dateRange = DateRange::fromData($dateRange);
@@ -116,6 +128,11 @@ class RedicodiForStudent
     public function getBranch()
     {
         return $this->branch;
+    }
+
+    public function getMajor()
+    {
+        return $this->major;
     }
 
     public function getContent()
@@ -149,13 +166,13 @@ class RedicodiForStudent
         return $this;
     }
 
-    public function update($branch, Redicodi $redicodi, $content)
+    public function update($branch, $major, Redicodi $redicodi, $content)
     {
         $this->branch = $branch;
+        $this->major = $major;
         $this->redicodi = $redicodi;
         $this->content = $content;
     }
-
 
 
 }

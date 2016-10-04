@@ -50,6 +50,8 @@ class Student extends Person
     protected $studentInGroups;
 
     /**
+     * @Groups({"student_list"})
+     *
      * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\RedicodiForStudent", mappedBy="student", cascade={"persist"})
      *
      * @var ArrayCollection
@@ -190,18 +192,19 @@ class Student extends Person
     /**
      * @param Redicodi $redicodi
      * @param Branch $branch
+     * @param $major
      * @param $content
      * @param null $start
      * @param null $end
      * @return RedicodiForStudent
      */
-    public function addRedicodi(Redicodi $redicodi, $branch, $content, $start = null, $end = null)
+    public function addRedicodi(Redicodi $redicodi, $branch, $major, $content, $start = null, $end = null)
     {
         if ($start == null) {
             $start = new DateTime;
         }
         $dr = ['start' => $start, 'end' => $end];
-        $studentRedicodi = new RedicodiForStudent($this, $redicodi, $branch, $content, $dr);
+        $studentRedicodi = new RedicodiForStudent($this, $redicodi, $branch, $major, $content, $dr);
         $this->redicodiForStudents->add($studentRedicodi);
 
         return $studentRedicodi;
