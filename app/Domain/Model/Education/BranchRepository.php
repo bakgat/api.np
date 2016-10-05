@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Education;
 
 
+use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Identity\Group;
 use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -46,6 +47,12 @@ interface BranchRepository
      */
     public function allBranchesInGroup(Group $group);
 
+    /**
+     * @param Group $group
+     * @param EvaluationType $type
+     * @return ArrayCollection
+     */
+    public function allBranchesByType(Group $group, EvaluationType $type);
 
     /**
      * Finds a major by its id, if not returns null.

@@ -15,6 +15,8 @@ use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Education\Exceptions\BranchNotFoundException;
 use App\Domain\Model\Education\Exceptions\MajorNotFoundException;
+use App\Domain\Model\Evaluation\Evaluation;
+use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Identity\Group;
 use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -101,6 +103,26 @@ class BranchDoctrineRepository implements BranchRepository
             ->join('b.major', 'm')
             ->andWhere('bfg.group=:group')
             ->setParameter('group', $group->getId());
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param Group $group
+     * @param EvaluationType $type
+     * @return ArrayCollection
+     */
+    public function allBranchesByType(Group $group, EvaluationType $type)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('bfg, m, b')
+            ->from(BranchForGroup::class, 'bfg')
+            ->join('bfg.branch', 'b')
+            ->join('b.major', 'm')
+            ->where('bfg.group=:group')
+            ->andWhere('bfg.evaluationType=:type')
+            ->setParameter('group', $group->getId())
+            ->setParameter('type', $type);
 
         return $qb->getQuery()->getResult();
     }
@@ -201,7 +223,6 @@ class BranchDoctrineRepository implements BranchRepository
     }
 
 
-
     /**
      * @param NtUid $branchForGroupId
      * @return BranchForGroup
@@ -215,7 +236,6 @@ class BranchDoctrineRepository implements BranchRepository
             ->setParameter('id', $branchForGroupId);
         return $qb->getQuery()->getOneOrNullResult();
     }
-
 
 
 }

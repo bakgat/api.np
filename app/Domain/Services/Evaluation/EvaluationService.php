@@ -41,8 +41,6 @@ class EvaluationService
 
     public function create($data)
     {
-
-
         $title = $data['title'];
         $branchForGroupId = $data['branchForGroup']['id'];
         $branchForGroup = $this->branchRepo->getBranchForGroup(NtUid::import($branchForGroupId));

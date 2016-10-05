@@ -105,6 +105,15 @@ class Evaluation
     protected $results;
 
 
+    /**
+     * Evaluation constructor.
+     * @param BranchForGroup $branchForGroup
+     * @param $title
+     * @param null $date
+     * @param null $max
+     * @param bool $permanent
+     * @param bool $final
+     */
     public function __construct(BranchForGroup $branchForGroup, $title, $date = null, $max = null, $permanent = true, $final = false)
     {
         $this->id = NtUid::generate(4);
@@ -143,6 +152,12 @@ class Evaluation
         return $this->branchForGroup->getGroup();
     }
 
+    /**
+     * @VirtualProperty
+     * @Groups({"group_evaluations", "evaluation_detail"})
+     *
+     * @return EvaluationType
+     */
     public function getEvaluationType()
     {
         return $this->branchForGroup->getEvaluationType();

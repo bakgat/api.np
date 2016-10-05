@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Identity;
 
 
 use App\Domain\Model\Education\BranchRepository;
+use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Http\Controllers\Controller;
@@ -120,10 +121,18 @@ class GroupController extends Controller
     }
 
 
-    public function allBranches($id)
+    public function allBranches(Request $request, $id)
     {
         $group = $this->groupRepo->get(NtUid::import($id));
-        $branches = $this->branchRepo->allBranchesInGroup($group);
+
+        if($request->has('evaluationtype')) {
+            $evType = new EvaluationType($request->get('evaluationtype'));
+            $branches = $this->branchRepo->allBranchesByType($group, $evType);
+        } else {
+            $branches = $this->branchRepo->allBranchesInGroup($group);
+        }
+
+        
         return $this->response($branches, ['group_branches']);
     }
 }

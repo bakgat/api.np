@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Education;
 
 
 use App\Domain\Model\Education\BranchRepository;
+use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\NtUid;
 use App\Http\Controllers\Controller;
@@ -32,12 +33,12 @@ class BranchController extends Controller
 
     public function index(Request $request)
     {
+        /* HAS GROUP */
         if ($request->has('group')) {
             $groupId = NtUid::import($request->get('group'));
         } else {
             return response('Group must be given.', 500);
         }
-
         $group = $this->groupRepo->get($groupId);
         return $this->response($this->branchRepo->all($group), ['major_list']);
     }
