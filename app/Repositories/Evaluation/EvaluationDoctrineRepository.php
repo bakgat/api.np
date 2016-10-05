@@ -36,14 +36,14 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->join('e.branchForGroup', 'bfg')
             ->join('bfg.branch', 'b')
             ->join('b.major', 'm')
-            ->join('e.results', 'pr')
+            ->leftJoin('e.results', 'pr')
             ->where('bfg.group= :groupId')
             ->andWhere('e.date >= :start')
             ->andWhere('e.date <= :end')
             ->setParameter('groupId', $group->getId())
             ->setParameter('start', $start)
             ->setParameter('end', $end);
-        
+
         return $qb->getQuery()->getResult();
     }
 
