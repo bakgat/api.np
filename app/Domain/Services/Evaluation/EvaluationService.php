@@ -42,27 +42,32 @@ class EvaluationService
     public function create($data)
     {
         $title = $data['title'];
+        $date = convert_date_from_string($data['date']);
+
         $branchForGroupId = $data['branchForGroup']['id'];
         $branchForGroup = $this->branchRepo->getBranchForGroup(NtUid::import($branchForGroupId));
-        $date = convert_date_from_string($data['date']);
-        $max = $data['max'];
         $permanent = $data['permanent'];
         $final = $data['final'];
 
-        $results = $data['results'];
+        $type = $branchForGroup->getEvaluationType();
 
-        //TODO: other types of evaluations ????
+        //TODO max must be set type is point
+        $max = isset($data['max']) ? $data['max'] : null;
+        $results = isset($data['results']) ? $data['results'] : null;
+
         $evaluation = new Evaluation($branchForGroup, $title, $date, $max, $permanent, $final);
 
-        foreach ($results as $result) {
-            $studentId = $result['student']['id'];
-            $student = $this->studentRepo->get(NtUid::import($studentId));
+        if ($results) {
+            foreach ($results as $result) {
+                $studentId = $result['student']['id'];
+                $student = $this->studentRepo->get(NtUid::import($studentId));
 
-            $score = $result['score'];
-            $redicodi = $result['redicodi'];
-            $pr = new PointResult($student, $score, $redicodi);
+                $score = $result['score'];
+                $redicodi = $result['redicodi'];
+                $pr = new PointResult($student, $score, $redicodi);
 
-            $evaluation->addResult($pr);
+                $evaluation->addResult($pr);
+            }
         }
 
         $this->evaluationRepo->insert($evaluation);
