@@ -103,8 +103,6 @@ class EvaluationService
         $permanent = $data['permanent'];
         $final = $data['final'];
 
-        $results = $data['results'];
-
         /** @var Evaluation $evaluation */
         $evaluation = $this->evaluationRepo->get($id);
 
@@ -113,6 +111,7 @@ class EvaluationService
         $type = $branchForGroup->getEvaluationType();
         //TODO HOW TO UPDATE FOR INSERT / DELETE OTHER STUDENTS
         if ($type->getValue() == EvaluationType::POINT) {
+            $results = $data['pointResults'];
             foreach ($results as $result) {
                 $studentId = $result['student']['id'];
                 $student = $this->studentRepo->get(NtUid::import($studentId));
