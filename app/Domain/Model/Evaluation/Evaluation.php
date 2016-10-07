@@ -102,7 +102,15 @@ class Evaluation
      *
      * @var ArrayCollection
      */
-    protected $results;
+    protected $pointResults;
+
+    /**
+     * @Groups({"evaluation_detail"})
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\ComprehensiveResult", mappedBy="evaluation", cascade={"persist"})
+     *
+     * @var ArrayCollection
+     */
+    protected $comprehensiveResults;
 
 
     /**
@@ -126,7 +134,8 @@ class Evaluation
             $date = new DateTime;
         }
         $this->date = $date;
-        $this->results = new ArrayCollection;
+        $this->pointResults = new ArrayCollection;
+        $this->comprehensiveResults = new ArrayCollection;
     }
 
     public function getId()
@@ -196,7 +205,7 @@ class Evaluation
      */
     public function getAverage()
     {
-        return collection_average($this->results, 'score');
+        return collection_average($this->pointResults, 'score');
     }
 
     /**
@@ -207,13 +216,18 @@ class Evaluation
      */
     public function getMedian()
     {
-        return collection_median($this->results, 'score');
+        return collection_median($this->pointResults, 'score');
     }
 
     /** ArrayCollection is not accessible */
-    public function getResults()
+    public function getPointResults()
     {
-        return clone $this->results;
+        return clone $this->pointResults;
+    }
+
+    public function getComprehensiveResults()
+    {
+        return clone $this->comprehensiveResults;
     }
 
     public function update($title, $branchForGroup, $date, $max, $permanent, $final)
@@ -227,16 +241,16 @@ class Evaluation
         return $this;
     }
 
-    public function addResult(PointResult $result)
+    public function addPointResult(PointResult $result)
     {
-        $this->results->add($result);
+        $this->pointResults->add($result);
         $result->setEvaluation($this);
     }
 
-    public function updateResult(Student $student, $score, $redicodi)
+    public function updatePointResult(Student $student, $score, $redicodi)
     {
         /** @var PointResult $result */
-        foreach ($this->results as $result) {
+        foreach ($this->pointResults as $result) {
             if ($result->getStudent()->getId() == $student->getId()) {
                 $result->update($score, $redicodi);
                 break;
@@ -246,5 +260,13 @@ class Evaluation
         return $this;
     }
 
+    public function addComprehensiveResult(ComprehensiveResult $result)
+    {
+        $this->comprehensiveResults->add($result);
+        $result->setEvaluation($this);
+    }
+
+
+    //TODO: update comprehensive results
 
 }

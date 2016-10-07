@@ -3,8 +3,10 @@
 namespace App\Domain\Services\Evaluation;
 
 use App\Domain\Model\Education\BranchRepository;
+use App\Domain\Model\Evaluation\ComprehensiveResult;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
+use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Events\EventTracking;
 use App\Domain\Model\Events\EventTrackingRepository;
@@ -53,11 +55,12 @@ class EvaluationService
 
         //TODO max must be set type is point
         $max = isset($data['max']) ? $data['max'] : null;
-        $results = isset($data['results']) ? $data['results'] : null;
+
 
         $evaluation = new Evaluation($branchForGroup, $title, $date, $max, $permanent, $final);
 
-        if ($results) {
+        if ($type->getValue() == EvaluationType::POINT) {
+            $results = $data['pointResults'];
             foreach ($results as $result) {
                 $studentId = $result['student']['id'];
                 $student = $this->studentRepo->get(NtUid::import($studentId));
@@ -66,9 +69,19 @@ class EvaluationService
                 $redicodi = $result['redicodi'];
                 $pr = new PointResult($student, $score, $redicodi);
 
-                $evaluation->addResult($pr);
+                $evaluation->addPointResult($pr);
+            }
+        } else if ($type->getValue() == EvaluationType::COMPREHENSIVE) {
+            $results = $data['comprehensiveResults'];
+            foreach ($results as $result) {
+                $studentId = $result['student']['id'];
+                $student = $this->studentRepo->get(NtUid::import($studentId));
+
+                $cr = new ComprehensiveResult($student);
+                $evaluation->addComprehensiveResult($cr);
             }
         }
+
 
         $this->evaluationRepo->insert($evaluation);
 
@@ -86,7 +99,7 @@ class EvaluationService
         $branchForGroupId = $data['branchForGroup']['id'];
         $branchForGroup = $this->branchRepo->getBranchForGroup(NtUid::import($branchForGroupId));
         $date = convert_date_from_string($data['date']);
-        $max = $data['max'];
+        $max = isset($data['max']) ? $data['max'] : null;
         $permanent = $data['permanent'];
         $final = $data['final'];
 
@@ -97,11 +110,15 @@ class EvaluationService
 
         $evaluation->update($title, $branchForGroup, $date, $max, $permanent, $final);
 
-        foreach ($results as $result) {
-            $studentId = $result['student']['id'];
-            $student = $this->studentRepo->get(NtUid::import($studentId));
+        $type = $branchForGroup->getEvaluationType();
+        //TODO HOW TO UPDATE FOR INSERT / DELETE OTHER STUDENTS
+        if ($type->getValue() == EvaluationType::POINT) {
+            foreach ($results as $result) {
+                $studentId = $result['student']['id'];
+                $student = $this->studentRepo->get(NtUid::import($studentId));
 
-            $evaluation->updateResult($student, $result['score'], $result['redicodi']);
+                $evaluation->updatePointResult($student, $result['score'], $result['redicodi']);
+            }
         }
         $this->evaluationRepo->update($evaluation);
 

@@ -11,7 +11,6 @@ namespace App\Domain\Model\Evaluation;
 
 use Doctrine\ORM\Mapping AS ORM;
 
-use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Identity\Student;
 use App\Domain\NtUid;
 use JMS\Serializer\Annotation\Groups;

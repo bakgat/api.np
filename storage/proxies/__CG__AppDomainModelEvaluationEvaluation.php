@@ -290,23 +290,23 @@ class Evaluation extends \App\Domain\Model\Evaluation\Evaluation implements \Doc
     /**
      * {@inheritDoc}
      */
-    public function getResults()
+    public function getPointResults()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResults', []);
 
-        return parent::getResults();
+        return parent::getPointResults();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function addResult(\App\Domain\Model\Evaluation\PointResult $result)
+    public function addPointResult(\App\Domain\Model\Evaluation\PointResult $result)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'addResult', [$result]);
 
-        return parent::addResult($result);
+        return parent::addPointResult($result);
     }
 
 }

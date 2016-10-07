@@ -238,7 +238,7 @@ class EvaluationControllerTest extends TestCase
         ];
 
         /** @var PointResult $result */
-        foreach ($evaluation->getResults() as $result) {
+        foreach ($evaluation->getPointResults() as $result) {
             $data['results'][] = [
                 'student' => [
                     'id' => $result->getStudent()->getId()->toString()
@@ -250,7 +250,7 @@ class EvaluationControllerTest extends TestCase
             $this->studentRepo->shouldReceive('get')
                 ->andReturnUsing(function ($id) use ($evaluation) {
                     /** @var PointResult $lr */
-                    foreach ($evaluation->getResults() as $lr) {
+                    foreach ($evaluation->getPointResults() as $lr) {
                         if ($lr->getStudent()->getId()->toString() == $id) {
                             return $lr->getStudent();
                         }

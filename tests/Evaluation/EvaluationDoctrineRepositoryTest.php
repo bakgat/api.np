@@ -51,7 +51,7 @@ class EvaluationDoctrineRepositoryTest extends DoctrineTestCase
         $evaluations = $this->evaluationRepo->allEvaluationsForGroup($group);
         /** @var Evaluation $evaluation */
         foreach ($evaluations as $evaluation) {
-            $this->assertCount(count($evaluation->getResults()), $students);
+            $this->assertCount(count($evaluation->getPointResults()), $students);
         }
     }
 

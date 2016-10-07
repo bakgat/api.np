@@ -45,7 +45,7 @@ class PointResultTest extends TestCase
 
             $student = new Student($fn, $ln, $email, $gender);
             $result = new PointResult($student, $index * 10);
-            $evaluation->addResult($result);
+            $evaluation->addPointResult($result);
         }
 
 
@@ -67,7 +67,7 @@ class PointResultTest extends TestCase
             $result = new PointResult($student, $index * 10);
 
             $this->assertInstanceOf(NtUid::class, $result->getId());
-            $evaluation->addResult($result);
+            $evaluation->addPointResult($result);
 
             $this->assertInstanceOf(Evaluation::class, $result->getEvaluation());
             $this->assertEquals($evaluation, $result->getEvaluation());

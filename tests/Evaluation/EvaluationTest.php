@@ -141,17 +141,17 @@ class EvaluationTest extends TestCase
         $evaluation = new Evaluation($branchForGroup, $title);
 
         foreach (range(1, 10) as $item) {
-            $evaluation->addResult($this->makePointResult());
+            $evaluation->addPointResult($this->makePointResult());
         }
         /** @var PointResult $result */
-        $result = $evaluation->getResults()[0];
+        $result = $evaluation->getPointResults()[0];
         $student = $result->getStudent();
 
         $this->assertEquals(20, $result->getScore());
 
 
         /* UPDATE THE RESULT */
-        $evaluation->updateResult($student, 30, []);
+        $evaluation->updatePointResult($student, 30, []);
         $this->assertEquals(30, $result->getScore());
     }
 

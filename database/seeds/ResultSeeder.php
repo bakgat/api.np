@@ -71,7 +71,7 @@ class ResultSeeder extends Seeder
                                 $red = $faker->randomElements(Redicodi::values(), $redCount);
                                 $pr = new PointResult($student, $score, $red);
 
-                                $ev->addResult($pr);
+                                $ev->addPointResult($pr);
                             }
                         }
                         //}
