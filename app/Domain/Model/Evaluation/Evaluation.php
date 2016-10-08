@@ -142,6 +142,7 @@ class Evaluation
         $this->date = $date;
         $this->pointResults = new ArrayCollection;
         $this->comprehensiveResults = new ArrayCollection;
+        $this->spokenResults = new ArrayCollection;
     }
 
     public function getId()
@@ -247,6 +248,9 @@ class Evaluation
         return $this;
     }
 
+    /* ***************************************************
+     * POINT RESULTS
+     * **************************************************/
     public function addPointResult(PointResult $result)
     {
         $this->pointResults->add($result);
@@ -266,6 +270,9 @@ class Evaluation
         return $this;
     }
 
+    /* ***************************************************
+     * COMPREHENSIVE RESULTS
+     * **************************************************/
     public function addComprehensiveResult(ComprehensiveResult $result)
     {
         $this->comprehensiveResults->add($result);
@@ -274,5 +281,13 @@ class Evaluation
 
 
     //TODO: update comprehensive results
+
+    /* ***************************************************
+     * SPOKEN RESULTS
+     * **************************************************/
+    public function addSpokenResult(SpokenResult $result) {
+        $this->spokenResults->add($result);
+        $result->setEvaluation($this);
+    }
 
 }

@@ -55,17 +55,18 @@ class SpokenResult
 
     /**
      * @Groups({"evaluation_detail"})
-     * 
-     * @ORM\Column(type="text")
+     *
+     * @ORM\Column(type="text", nullable=true)
      *
      * @var string
      */
     protected $summary;
 
-    public function __construct(Student $student)
+    public function __construct(Student $student, $summary=null)
     {
         $this->id = NtUid::generate(4);
         $this->student = $student;
+        $this->summary = $summary;
     }
 
     /**
@@ -100,4 +101,15 @@ class SpokenResult
         return $this->student;
     }
 
+    /**
+     * @return string
+     */
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+
+    public function updateSummary($summary) {
+        $this->summary = $summary;
+    }
 }

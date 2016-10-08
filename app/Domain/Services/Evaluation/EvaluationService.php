@@ -8,6 +8,7 @@ use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Evaluation\PointResult;
+use App\Domain\Model\Evaluation\SpokenResult;
 use App\Domain\Model\Events\EventTracking;
 use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\StudentRepository;
@@ -59,6 +60,7 @@ class EvaluationService
 
         $evaluation = new Evaluation($branchForGroup, $title, $date, $max, $permanent, $final);
 
+        //HANDLE EACH KIND OF EVALUATION RESULTS
         if ($type->getValue() == EvaluationType::POINT) {
             $results = $data['pointResults'];
             foreach ($results as $result) {
@@ -79,6 +81,16 @@ class EvaluationService
 
                 $cr = new ComprehensiveResult($student);
                 $evaluation->addComprehensiveResult($cr);
+            }
+        } else if ($type->getValue() == EvaluationType::SPOKEN) {
+            $results = $data['spokenResults'];
+            foreach ($results as $result) {
+                $studentId = $result['student']['id'];
+                $student = $this->studentRepo->get(NtUid::import($studentId));
+
+                $summary = isset($result['summary']) ? $result['summary'] : null;
+                $sr = new SpokenResult($student, $summary);
+                $evaluation->addSpokenResult($result);
             }
         }
 
