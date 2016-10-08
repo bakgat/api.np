@@ -97,7 +97,7 @@ class Evaluation
 
 
     /**
-     * @Groups({"evaluation_detail"})
+     * @Groups({"p_evaluation_detail"})
      * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\PointResult", mappedBy="evaluation", cascade={"persist"})
      *
      * @var ArrayCollection
@@ -105,14 +105,20 @@ class Evaluation
     protected $pointResults;
 
     /**
-     * @Groups({"evaluation_detail"})
+     * @Groups({"c_evaluation_detail"})
      * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\ComprehensiveResult", mappedBy="evaluation", cascade={"persist"})
      *
      * @var ArrayCollection
      */
     protected $comprehensiveResults;
 
-
+    /**
+     * @Groups({"s_evaluation_detail"})
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\ComprehensiveResult", mappedBy="evaluation", cascade={"persist"})
+     *
+     * @var ArrayCollection
+     */
+    protected $spokenResults;
     /**
      * Evaluation constructor.
      * @param BranchForGroup $branchForGroup

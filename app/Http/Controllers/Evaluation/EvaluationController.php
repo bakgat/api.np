@@ -68,7 +68,9 @@ class EvaluationController extends Controller
             $id = NtUid::import($id);
         }
         $evaluation = $this->evaluationRepo->get($id);
-        return $this->response($evaluation, ['evaluation_detail'], true);
+        $evType = $evaluation->getEvaluationType()->getValue();
+        $typeGroup = strtolower($evType) . '_evaluation_detail';
+        return $this->response($evaluation, ['evaluation_detail', $typeGroup], true);
     }
 
     public function store(Request $request)
