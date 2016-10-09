@@ -90,7 +90,7 @@ class EvaluationService
 
                 $summary = isset($result['summary']) ? $result['summary'] : null;
                 $sr = new SpokenResult($student, $summary);
-                $evaluation->addSpokenResult($result);
+                $evaluation->addSpokenResult($sr);
             }
         }
 

@@ -114,7 +114,7 @@ class Evaluation
 
     /**
      * @Groups({"s_evaluation_detail"})
-     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\ComprehensiveResult", mappedBy="evaluation", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\SpokenResult", mappedBy="evaluation", cascade={"persist"})
      *
      * @var ArrayCollection
      */
