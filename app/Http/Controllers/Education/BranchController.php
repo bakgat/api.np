@@ -47,4 +47,6 @@ class BranchController extends Controller
         $majors = $this->branchRepo->allMajors();
         return $this->response($majors, ['major_list']);
     }
+
+    
 }
