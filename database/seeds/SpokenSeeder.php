@@ -37,7 +37,7 @@ class SpokenSeeder extends Seeder
         /** @var \App\Domain\Model\Education\BranchForGroup $bfg */
         foreach ($bfgs as $bfg) {
             $branch = $bfg->getBranch();
-            $branch->joinGroup($bfg->getGroup(), new EvaluationType(EvaluationType::SPOKEN), null, new DateTime);
+            $branch->joinGroup($bfg->getGroup(), new EvaluationType(EvaluationType::MULTIPLECHOICE), null, new DateTime);
             EntityManager::persist($branch);
         }
 

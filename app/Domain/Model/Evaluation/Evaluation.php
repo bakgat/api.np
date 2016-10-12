@@ -88,12 +88,21 @@ class Evaluation
     protected $final;
 
     /**
-     * @Groups({"group_evaluations", "evaluation_detail"})
+     * @Groups({"group_evaluations", "p_evaluation_detail"})
      * @ORM\Column(type="integer", nullable=true)
      *
      * @var int
      */
     protected $max;
+
+    /**
+     * @Groups({"group_evaluations", "mc_evaluation_detail"})
+     * @ORM\Column(type="text", nullable=true)
+     *
+     * @var string
+     */
+    protected $settings;
+
 
 
     /**
@@ -119,6 +128,16 @@ class Evaluation
      * @var ArrayCollection
      */
     protected $spokenResults;
+
+    /**
+     * @Groups({"mc_evaluation_detail"})
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\MultiplechoiceResult", mappedBy="evaluation", cascade={"persist"})
+     *
+     * @var ArrayCollection
+     */
+    protected $multiplechoiceResults;
+
+
     /**
      * Evaluation constructor.
      * @param BranchForGroup $branchForGroup
@@ -143,6 +162,7 @@ class Evaluation
         $this->pointResults = new ArrayCollection;
         $this->comprehensiveResults = new ArrayCollection;
         $this->spokenResults = new ArrayCollection;
+        $this->multiplechoiceResults = new ArrayCollection;
     }
 
     public function getId()
@@ -237,6 +257,10 @@ class Evaluation
         return clone $this->comprehensiveResults;
     }
 
+    public function getMultiplechoiceResults() {
+        return clone $this->multiplechoiceResults;
+    }
+
     public function update($title, $branchForGroup, $date, $max, $permanent, $final)
     {
         $this->title = $title;
@@ -246,6 +270,14 @@ class Evaluation
         $this->permanent = $permanent;
         $this->final = $final;
         return $this;
+    }
+
+    /**
+     * @param string $settings
+     */
+    public function setSettings($settings)
+    {
+        $this->settings = $settings;
     }
 
     /* ***************************************************
@@ -287,6 +319,12 @@ class Evaluation
      * **************************************************/
     public function addSpokenResult(SpokenResult $result) {
         $this->spokenResults->add($result);
+        $result->setEvaluation($this);
+    }
+
+    public function addMultiplechoiceResult(MultiplechoiceResult $result)
+    {
+        $this->multiplechoiceResults->add($result);
         $result->setEvaluation($this);
     }
 

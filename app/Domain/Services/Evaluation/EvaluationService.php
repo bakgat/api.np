@@ -7,6 +7,7 @@ use App\Domain\Model\Evaluation\ComprehensiveResult;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\EvaluationType;
+use App\Domain\Model\Evaluation\MultiplechoiceResult;
 use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Evaluation\SpokenResult;
 use App\Domain\Model\Events\EventTracking;
@@ -91,6 +92,18 @@ class EvaluationService
                 $summary = isset($result['summary']) ? $result['summary'] : null;
                 $sr = new SpokenResult($student, $summary);
                 $evaluation->addSpokenResult($sr);
+            }
+        } else if ($type->getValue() == EvaluationType::MULTIPLECHOICE) {
+            $results = $data['multiplechoiceResults'];
+            $evaluation->setSettings($data['settings']);
+
+            foreach ($results as $result) {
+                $studentId = $result['student']['id'];
+                $student = $this->studentRepo->get(NtUid::import($studentId));
+
+                $selected = isset($result['selected']) ? $result['selected'] : null;
+                $mcr = new MultiplechoiceResult($student, $selected);
+                $evaluation->addMultiplechoiceResult($mcr);
             }
         }
 

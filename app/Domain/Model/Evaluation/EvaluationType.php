@@ -17,6 +17,7 @@ class EvaluationType extends Enum
 {
     const POINT = 'P';
     const COMPREHENSIVE = 'C';
+    const MULTIPLECHOICE = 'MC';
     const SPOKEN = 'S';
     const FEEDBACK = 'F';
 
