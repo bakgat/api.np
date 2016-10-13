@@ -102,9 +102,15 @@ class MultiplechoiceResult
         return $this->selected;
     }
 
+
     public function setEvaluation($evaluation)
     {
         $this->evaluation = $evaluation;
+    }
+
+    public function update($selected)
+    {
+        $this->selected = $selected;
     }
 
 }

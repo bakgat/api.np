@@ -51,7 +51,7 @@ class EvaluationService
         $branchForGroupId = $data['branchForGroup']['id'];
         $branchForGroup = $this->branchRepo->getBranchForGroup(NtUid::import($branchForGroupId));
         $permanent = $data['permanent'];
-        $final = $data['final'];
+
 
         $type = $branchForGroup->getEvaluationType();
 
@@ -59,7 +59,7 @@ class EvaluationService
         $max = isset($data['max']) ? $data['max'] : null;
 
 
-        $evaluation = new Evaluation($branchForGroup, $title, $date, $max, $permanent, $final);
+        $evaluation = new Evaluation($branchForGroup, $title, $date, $max, $permanent);
 
         //HANDLE EACH KIND OF EVALUATION RESULTS
         if ($type->getValue() == EvaluationType::POINT) {
@@ -126,15 +126,17 @@ class EvaluationService
         $date = convert_date_from_string($data['date']);
         $max = isset($data['max']) ? $data['max'] : null;
         $permanent = $data['permanent'];
-        $final = $data['final'];
 
         /** @var Evaluation $evaluation */
         $evaluation = $this->evaluationRepo->get($id);
 
-        $evaluation->update($title, $branchForGroup, $date, $max, $permanent, $final);
+        $evaluation->update($title, $branchForGroup, $date, $max, $permanent);
 
         $type = $branchForGroup->getEvaluationType();
         //TODO HOW TO UPDATE FOR INSERT / DELETE OTHER STUDENTS
+        //TODO fine tune this => lots of selects !!!
+        //Can this be combined into one ?
+        //as in select * from students where id IN(a, b, c)
         if ($type->getValue() == EvaluationType::POINT) {
             $results = $data['pointResults'];
             foreach ($results as $result) {
@@ -142,6 +144,14 @@ class EvaluationService
                 $student = $this->studentRepo->get(NtUid::import($studentId));
 
                 $evaluation->updatePointResult($student, $result['score'], $result['redicodi']);
+            }
+        } else if($type->getValue() == EvaluationType::MULTIPLECHOICE) {
+            $results = $data['multiplechoiceResults'];
+            foreach ($results as $result) {
+                $studentId = $result['student']['id'];
+                $student = $this->studentRepo->get(NtUid::import($studentId));
+
+                $evaluation->updateMultiplechoiceResult($student, $result['selected']);
             }
         }
         $this->evaluationRepo->update($evaluation);

@@ -79,13 +79,6 @@ class Evaluation
      */
     protected $permanent;
 
-    /**
-     * @Groups({"group_evaluations", "evaluation_detail"})
-     * @ORM\Column(type="boolean")
-     *
-     * @var bool
-     */
-    protected $final;
 
     /**
      * @Groups({"group_evaluations", "p_evaluation_detail"})
@@ -145,15 +138,13 @@ class Evaluation
      * @param null $date
      * @param null $max
      * @param bool $permanent
-     * @param bool $final
      */
-    public function __construct(BranchForGroup $branchForGroup, $title, $date = null, $max = null, $permanent = true, $final = false)
+    public function __construct(BranchForGroup $branchForGroup, $title, $date = null, $max = null, $permanent = true)
     {
         $this->id = NtUid::generate(4);
         $this->branchForGroup = $branchForGroup;
         $this->title = $title;
         $this->permanent = $permanent;
-        $this->final = $final;
         $this->max = $max;
         if ($date == null) {
             $date = new DateTime;
@@ -214,11 +205,6 @@ class Evaluation
         return $this->permanent;
     }
 
-    public function isFinal()
-    {
-        return $this->final;
-    }
-
     public function getMax()
     {
         return $this->max;
@@ -261,14 +247,13 @@ class Evaluation
         return clone $this->multiplechoiceResults;
     }
 
-    public function update($title, $branchForGroup, $date, $max, $permanent, $final)
+    public function update($title, $branchForGroup, $date, $max, $permanent)
     {
         $this->title = $title;
         $this->branchForGroup = $branchForGroup;
         $this->date = $date;
         $this->max = $max;
         $this->permanent = $permanent;
-        $this->final = $final;
         return $this;
     }
 
@@ -322,10 +307,26 @@ class Evaluation
         $result->setEvaluation($this);
     }
 
+    /* ***************************************************
+     * MULTIPLE CHOICE
+     * **************************************************/
     public function addMultiplechoiceResult(MultiplechoiceResult $result)
     {
         $this->multiplechoiceResults->add($result);
         $result->setEvaluation($this);
+    }
+
+    public function updateMultiplechoiceResult($student, $selected)
+    {
+        /** @var MultiplechoiceResult $result */
+        foreach ($this->multiplechoiceResults as $result) {
+            if ($result->getStudent()->getId() == $student->getId()) {
+                $result->update($selected);
+                break;
+            }
+        }
+
+        return $this;
     }
 
 }
