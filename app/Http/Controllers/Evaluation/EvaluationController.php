@@ -164,8 +164,8 @@ class EvaluationController extends Controller
 
             call_user_func_array([$fpdf, 'SetTextColor'], $orange);
             $fpdf->SetFontSize(60);
-            $fpdf->ShadowCell(0, 25, $item->getDisplayName(), 0, 1, '', false, '', $blue, 1, .12);
-            
+            $fpdf->ShadowFittCell(0, 25, utf8_decode($item->getDisplayName()), 0, 1, '', false, '', $blue, 1, .12);
+
             $fpdf->AddPage();
             $fpdf->AcceptPageBreak();
             $fpdf->SetFont('Roboto', '', 12);
