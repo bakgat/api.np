@@ -97,21 +97,20 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('s', 'first_name', 'firstName')
             ->addFieldResult('s', 'last_name', 'lastName');
         $rsm->addJoinedEntityResult(StudentResultsDTO::class, 'sr', 's', 'results');
-        $rsm->addFieldResult('sr', 'pr_id', 'id');
+        $rsm->addFieldResult('sr', 'rr_id', 'id');
         $rsm->addFieldResult('sr', 'branch', 'branch');
         $rsm->addFieldResult('sr', 'permanent', 'permanent');
         $rsm->addFieldResult('sr', 'result', 'result');
         $rsm->addFieldResult('sr', 'max', 'max');
  
         $sql = "SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
-              pr.id as pr_id, b.name as branch, e.permanent as permanent,
-             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
-            FROM point_results pr
-            INNER JOIN evaluations e ON e.id = pr.evaluation_id
-            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+              rr.id as rr_id, b.name as branch, rr.permanent as permanent,
+             rr.raw_score as result, rr.raw_max as max
+            FROM range_results rr
+            INNER JOIN branch_for_groups bfg ON bfg.id = rr.branch_for_group_id
             INNER JOIN branches b ON b.id = bfg.branch_id
-            INNER JOIN students s ON s.id = pr.student_id
-            GROUP BY pr.student_id, e.permanent, b.id";
+            INNER JOIN students s ON s.id = rr.student_id
+            GROUP BY rr.student_id, rr.permanent, b.id";
 
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getResult();

@@ -18,6 +18,7 @@ use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\Services\Evaluation\EvaluationService;
 use App\Domain\NtUid;
+use App\Domain\Services\Pdf\Ntpdf;
 use App\Http\Controllers\Controller;
 use DateTime;
 use Dompdf\Dompdf;
@@ -129,7 +130,7 @@ class EvaluationController extends Controller
          return $pdf->stream();*/
         $result = $this->evaluationRepo->getSummary();
 
-        $fpdf = new Fpdf();
+        $fpdf = new Ntpdf();
 
         $fpdf->SetAutoPageBreak(false, 7);
         /** @var StudentDTO $item */
@@ -155,6 +156,7 @@ class EvaluationController extends Controller
             call_user_func_array([$fpdf, 'SetTextColor'], $orange);
             $fpdf->Cell($wKl, 5, $klimtoren, 0, 1);
 
+
             $fpdf->SetY(-42);
             call_user_func_array([$fpdf, 'SetTextColor'], $blue);
             $fpdf->SetFontSize(35);
@@ -162,12 +164,13 @@ class EvaluationController extends Controller
 
             call_user_func_array([$fpdf, 'SetTextColor'], $orange);
             $fpdf->SetFontSize(60);
-            $fpdf->Cell(0, 25, $item->getDisplayName(), 0, 1);
-
-
+            $fpdf->ShadowCell(0, 25, $item->getDisplayName(), 0, 1, '', false, '', $blue, 1, .12);
+            
             $fpdf->AddPage();
             $fpdf->AcceptPageBreak();
             $fpdf->SetFont('Roboto', '', 12);
+
+            $fpdf->SetAlpha(.84);
             call_user_func_array([$fpdf, 'SetTextColor'], $blue);
 
             /** @var StudentResultsDTO $result */
@@ -178,6 +181,5 @@ class EvaluationController extends Controller
 
         $fpdf->Output();
         exit;
-
     }
 }

@@ -123,6 +123,7 @@ $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Laravel\Socialite\SocialiteServiceProvider::class);
 $app->register(\Neomerx\CorsIlluminate\Providers\LumenServiceProvider::class);
 $app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
+$app->register(App\Providers\NtpdfServiceProvider::class);
 
 
 //class_alias('LaravelDoctrine\ORM\Facades\EntityManager', 'EntityManager');
