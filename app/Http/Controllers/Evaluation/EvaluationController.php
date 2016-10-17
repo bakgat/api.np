@@ -160,10 +160,10 @@ class EvaluationController extends Controller
             $fpdf->SetY(-42);
             call_user_func_array([$fpdf, 'SetTextColor'], $blue);
             $fpdf->SetFontSize(35);
-            $fpdf->Cell(0, 10, 'EVALUATIES', 0, 1);
+            $fpdf->Cell(0, 9, 'EVALUATIES', 0, 1);
 
             call_user_func_array([$fpdf, 'SetTextColor'], $orange);
-            $fpdf->SetFontSize(60);
+            $fpdf->SetFontSize(50);
             $fpdf->ShadowFittCell(0, 25, utf8_decode($item->getDisplayName()), 0, 1, '', false, '', $blue, 1, .12);
 
             $fpdf->AddPage();
