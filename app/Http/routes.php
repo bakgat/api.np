@@ -93,8 +93,11 @@ $app->group(['prefix' => 'branches', 'namespace' => 'App\Http\Controllers\Educat
  * **************************************************/
 $app->group(['prefix'=>'evaluations', 'namespace' => 'App\Http\Controllers\Evaluation'], function() use($app) {
     $app->get('/', 'EvaluationController@index');
+    $app->get('/summary', 'EvaluationController@getSummary');
     $app->get('/{id}', 'EvaluationController@show');
 
     $app->post('/', 'EvaluationController@store');
     $app->put('/{id}', 'EvaluationController@update');
+
+
 });

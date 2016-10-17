@@ -1,0 +1,1061 @@
+[2016-10-16 08:39:30] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "----" [0.053436040878296] 
+[2016-10-16 08:39:30] lumen.ERROR: exception 'App\Domain\Model\Identity\Exceptions\GroupNotFoundException' with message 'Group with id (----) was not found.' in /Users/karlvaniseghem/BakGat/api.np/app/Repositories/Identity/GroupDoctrineRepository.php:181
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(60): App\Repositories\Identity\GroupDoctrineRepository->get(Object(App\Domain\NtUid))
+#1 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->index(Object(Illuminate\Http\Request))
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#4 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'index', Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#9 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#12 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#13 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#14 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#15 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#16 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#17 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#21 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#22 {main}  
+[2016-10-16 08:40:22] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, s5_.school_id AS school_id_18, s5_.id AS id_19, s5_.first_name AS first_name_20, s5_.last_name AS last_name_21, s5_.gender AS gender_22, s5_.birthday AS birthday_23, e0_.branch_for_group_id AS branch_for_group_id_24, b1_.branch_id AS branch_id_25, b1_.group_id AS group_id_26, b2_.major_id AS major_id_27, p4_.evaluation_id AS evaluation_id_28, p4_.student_id AS student_id_29 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id LEFT JOIN students s5_ ON p4_.student_id = s5_.id LEFT JOIN student_in_groups s6_ ON s5_.id = s6_.student_id WHERE e0_.id = "----" ORDER BY s6_.number ASC [0.023058176040649] 
+[2016-10-16 08:40:22] lumen.ERROR: exception 'App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException' with message 'Evaluation with id (----) was not found.' in /Users/karlvaniseghem/BakGat/api.np/app/Repositories/Evaluation/EvaluationDoctrineRepository.php:67
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(75): App\Repositories\Evaluation\EvaluationDoctrineRepository->get(Object(App\Domain\NtUid))
+#1 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->show('summary')
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#4 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'show', Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(466): Laravel\Lumen\Application->handleFoundRoute(Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(398): Laravel\Lumen\Application->handleDispatcherResponse(Array)
+#10 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#12 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#15 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#16 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#17 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#22 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#23 {main}  
+[2016-10-16 08:40:23] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, s5_.school_id AS school_id_18, s5_.id AS id_19, s5_.first_name AS first_name_20, s5_.last_name AS last_name_21, s5_.gender AS gender_22, s5_.birthday AS birthday_23, e0_.branch_for_group_id AS branch_for_group_id_24, b1_.branch_id AS branch_id_25, b1_.group_id AS group_id_26, b2_.major_id AS major_id_27, p4_.evaluation_id AS evaluation_id_28, p4_.student_id AS student_id_29 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id LEFT JOIN students s5_ ON p4_.student_id = s5_.id LEFT JOIN student_in_groups s6_ ON s5_.id = s6_.student_id WHERE e0_.id = "----" ORDER BY s6_.number ASC [0.0012941360473633] 
+[2016-10-16 08:40:23] lumen.ERROR: exception 'App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException' with message 'Evaluation with id (----) was not found.' in /Users/karlvaniseghem/BakGat/api.np/app/Repositories/Evaluation/EvaluationDoctrineRepository.php:67
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(75): App\Repositories\Evaluation\EvaluationDoctrineRepository->get(Object(App\Domain\NtUid))
+#1 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->show('summary')
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#4 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'show', Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(466): Laravel\Lumen\Application->handleFoundRoute(Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(398): Laravel\Lumen\Application->handleDispatcherResponse(Array)
+#10 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#12 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#15 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#16 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#17 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#22 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#23 {main}  
+[2016-10-16 08:44:07] lumen.ERROR: exception 'Doctrine\Common\Persistence\Mapping\MappingException' with message 'Class 'App\Domain\DTO\StudentDTO' does not exist' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Persistence/Mapping/MappingException.php:96
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Persistence/Mapping/RuntimeReflectionService.php(41): Doctrine\Common\Persistence\Mapping\MappingException::nonExistingClass('App\\Domain\\DTO\\...')
+#1 /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Persistence/Mapping/AbstractClassMetadataFactory.php(281): Doctrine\Common\Persistence\Mapping\RuntimeReflectionService->getParentClasses('App\\Domain\\DTO\\...')
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Persistence/Mapping/AbstractClassMetadataFactory.php(311): Doctrine\Common\Persistence\Mapping\AbstractClassMetadataFactory->getParentClasses('App\\Domain\\DTO\\...')
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/ClassMetadataFactory.php(78): Doctrine\Common\Persistence\Mapping\AbstractClassMetadataFactory->loadMetadata('App\\Domain\\DTO\\...')
+#4 /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Persistence/Mapping/AbstractClassMetadataFactory.php(216): Doctrine\ORM\Mapping\ClassMetadataFactory->loadMetadata('App\\Domain\\DTO\\...')
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/orm/lib/Doctrine/ORM/EntityManager.php(281): Doctrine\Common\Persistence\Mapping\AbstractClassMetadataFactory->getMetadataFor('App\\Domain\\DTO\\...')
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/orm/lib/Doctrine/ORM/AbstractQuery.php(474): Doctrine\ORM\EntityManager->getClassMetadata('App\\Domain\\DTO\\...')
+#7 [internal function]: Doctrine\ORM\AbstractQuery->Doctrine\ORM\{closure}('App\\Domain\\DTO\\...')
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/orm/lib/Doctrine/ORM/AbstractQuery.php(477): array_map(Object(Closure), Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/orm/lib/Doctrine/ORM/AbstractQuery.php(448): Doctrine\ORM\AbstractQuery->translateNamespaces(Object(Doctrine\ORM\Query\ResultSetMapping))
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/orm/lib/Doctrine/ORM/EntityManager.php(314): Doctrine\ORM\AbstractQuery->setResultSetMapping(Object(Doctrine\ORM\Query\ResultSetMapping))
+#11 /Users/karlvaniseghem/BakGat/api.np/app/Repositories/Evaluation/EvaluationDoctrineRepository.php(115): Doctrine\ORM\EntityManager->createNativeQuery('SELECT s.id as ...', Object(Doctrine\ORM\Query\ResultSetMapping))
+#12 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(126): App\Repositories\Evaluation\EvaluationDoctrineRepository->getSummary()
+#13 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->getSummary()
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#15 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#16 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#17 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'getSummary', Array)
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#21 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#22 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#23 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#24 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#25 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#26 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#27 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#28 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#29 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#30 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#31 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#32 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#33 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#34 {main}  
+[2016-10-16 08:44:24] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.041469812393188] 
+[2016-10-16 11:49:44] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.051953077316284] 
+[2016-10-16 11:49:44] lumen.ERROR: exception 'ErrorException' with message 'include(/Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/font/assets/Roboto-Regualar.ttf): failed to open stream: No such file or directory' in /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php:1145
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(1145): Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(2, 'include(/Users/...', '/Users/karlvani...', 1145, Array)
+#1 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(1145): Anouar\Fpdf\Fpdf::_loadfont()
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(473): Anouar\Fpdf\Fpdf->_loadfont('assets/Roboto-R...')
+#3 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(130): Anouar\Fpdf\Fpdf->AddFont('Roboto', '', 'assets/Roboto-R...')
+#4 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->getSummary()
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'getSummary', Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#12 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#13 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#15 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#16 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#17 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#22 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#23 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#24 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#25 {main}  
+[2016-10-16 11:50:03] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0026888847351074] 
+[2016-10-16 11:50:03] lumen.ERROR: exception 'ReflectionException' with message 'Class path.public does not exist' in /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php:734
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(734): ReflectionClass->__construct('path.public')
+#1 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(629): Illuminate\Container\Container->build('path.public', Array)
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Application.php(206): Illuminate\Container\Container->make('path.public', Array)
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(529): Laravel\Lumen\Application->make('path.public')
+#4 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(130): public_path('assets/Roboto-R...')
+#5 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->getSummary()
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'getSummary', Array)
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#12 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#13 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#15 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#16 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#17 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#18 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#20 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#22 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#23 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#24 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#25 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#26 {main}  
+[2016-10-16 11:50:20] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00082898139953613] 
+[2016-10-16 11:50:20] lumen.ERROR: exception 'ErrorException' with message 'include(/Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/font/public/assets/Roboto-Regualar.ttf): failed to open stream: No such file or directory' in /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php:1145
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(1145): Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(2, 'include(/Users/...', '/Users/karlvani...', 1145, Array)
+#1 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(1145): Anouar\Fpdf\Fpdf::_loadfont()
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(473): Anouar\Fpdf\Fpdf->_loadfont('public/assets/R...')
+#3 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(130): Anouar\Fpdf\Fpdf->AddFont('Roboto', '', 'public/assets/R...')
+#4 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->getSummary()
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'getSummary', Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#12 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#13 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#15 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#16 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#17 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#22 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#23 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#24 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#25 {main}  
+[2016-10-16 11:50:45] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00079894065856934] 
+[2016-10-16 11:50:45] lumen.ERROR: exception 'ErrorException' with message 'include(/Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/font//Users/karlvaniseghem/BakGat/api.np/app/public/assets/Roboto-Regualar.ttf): failed to open stream: No such file or directory' in /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php:1145
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(1145): Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(2, 'include(/Users/...', '/Users/karlvani...', 1145, Array)
+#1 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(1145): Anouar\Fpdf\Fpdf::_loadfont()
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(473): Anouar\Fpdf\Fpdf->_loadfont('/Users/karlvani...')
+#3 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(130): Anouar\Fpdf\Fpdf->AddFont('Roboto', '', '/Users/karlvani...')
+#4 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->getSummary()
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'getSummary', Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#12 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#13 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#15 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#16 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#17 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#22 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#23 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#24 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#25 {main}  
+[2016-10-16 11:56:21] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00089502334594727] 
+[2016-10-16 11:56:32] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00081300735473633] 
+[2016-10-16 11:57:53] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0008089542388916] 
+[2016-10-16 11:57:59] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00083494186401367] 
+[2016-10-16 11:58:38] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0007929801940918] 
+[2016-10-16 11:58:38] lumen.ERROR: exception 'ErrorException' with message 'include(/Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/font/Roboto-Regular.ttf): failed to open stream: No such file or directory' in /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php:1145
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(1145): Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(2, 'include(/Users/...', '/Users/karlvani...', 1145, Array)
+#1 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(1145): Anouar\Fpdf\Fpdf::_loadfont()
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/anouar/fpdf/src/Anouar/Fpdf/Fpdf.php(473): Anouar\Fpdf\Fpdf->_loadfont('Roboto-Regular....')
+#3 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(130): Anouar\Fpdf\Fpdf->AddFont('Roboto', '', 'Roboto-Regular....')
+#4 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->getSummary()
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'getSummary', Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#12 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#13 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#15 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#16 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#17 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#22 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#23 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#24 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#25 {main}  
+[2016-10-16 11:58:53] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0011210441589355] 
+[2016-10-16 11:59:01] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0011818408966064] 
+[2016-10-16 11:59:54] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0007929801940918] 
+[2016-10-16 12:00:01] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00084900856018066] 
+[2016-10-16 12:00:08] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00079488754272461] 
+[2016-10-16 12:00:14] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00082302093505859] 
+[2016-10-16 12:00:28] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.009425163269043] 
+[2016-10-16 12:00:37] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00093698501586914] 
+[2016-10-16 12:02:32] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00079512596130371] 
+[2016-10-16 12:02:39] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0013120174407959] 
+[2016-10-16 12:02:48] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0026669502258301] 
+[2016-10-16 12:02:55] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00094819068908691] 
+[2016-10-16 12:03:00] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00093984603881836] 
+[2016-10-16 12:04:51] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00099301338195801] 
+[2016-10-16 12:04:51] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to a member function SetTextColor() on null' in /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php:132
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-16 12:05:03] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00080299377441406] 
+[2016-10-16 12:05:57] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0010428428649902] 
+[2016-10-16 12:06:07] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0009160041809082] 
+[2016-10-16 12:07:16] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0010969638824463] 
+[2016-10-16 12:07:26] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00085616111755371] 
+[2016-10-16 12:12:30] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00079083442687988] 
+[2016-10-16 12:12:30] lumen.ERROR: exception 'ErrorException' with message 'call_user_func_array() expects parameter 1 to be a valid callback, function '$fpdf->SetTextColor' not found or invalid function name' in /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php:142
+Stack trace:
+#0 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(2, 'call_user_func_...', '/Users/karlvani...', 142, Array)
+#1 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(142): call_user_func_array('$fpdf->SetTextC...', Array)
+#2 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->getSummary()
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#4 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'getSummary', Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#10 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#12 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#15 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#16 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#17 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#22 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#23 {main}  
+[2016-10-16 12:13:21] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00097298622131348] 
+[2016-10-16 12:14:44] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0008389949798584] 
+[2016-10-16 12:15:29] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'syntax error, unexpected '->' (T_OBJECT_OPERATOR)' in /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php:155
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-16 12:15:35] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00091099739074707] 
+[2016-10-16 12:16:58] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0007929801940918] 
+[2016-10-16 12:18:33] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00081110000610352] 
+[2016-10-16 12:18:49] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00079083442687988] 
+[2016-10-16 12:19:36] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0011270046234131] 
+[2016-10-16 12:19:48] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0008690357208252] 
+[2016-10-16 12:20:17] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0011248588562012] 
+[2016-10-16 12:21:44] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00079989433288574] 
+[2016-10-16 12:23:56] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00079512596130371] 
+[2016-10-16 12:37:12] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0010881423950195] 
+[2016-10-16 12:37:33] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00087904930114746] 
+[2016-10-16 12:37:45] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0011241436004639] 
+[2016-10-16 12:40:48] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0017287731170654] 
+[2016-10-17 08:21:52] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.0014688968658447] 
+[2016-10-17 08:56:21] lumen.DEBUG: SELECT s0_.email AS email_0, s0_.id AS id_1, s0_.first_name AS first_name_2, s0_.last_name AS last_name_3, s0_.gender AS gender_4, s0_.birthday AS birthday_5, s1_.type AS type_6, s1_.id AS id_7, s1_.start AS start_8, s1_.end AS end_9, g2_.id AS id_10, g2_.name AS name_11, g2_.active AS active_12, s3_.id AS id_13, s3_.start AS start_14, s3_.end AS end_15, r4_.id AS id_16, r4_.name AS name_17, s1_.staff_id AS staff_id_18, s1_.group_id AS group_id_19, s3_.staff_id AS staff_id_20, s3_.role_id AS role_id_21 FROM staff s0_ LEFT JOIN staff_in_groups s1_ ON s0_.id = s1_.staff_id AND (s1_.start <= "2016-10-17 08:56:20" AND s1_.end >= "2016-10-17 08:56:20") LEFT JOIN groups g2_ ON s1_.group_id = g2_.id LEFT JOIN staff_roles s3_ ON s0_.id = s3_.staff_id AND (s3_.start <= "2016-10-17 08:56:20" AND s3_.end >= "2016-10-17 08:56:20") LEFT JOIN roles r4_ ON s3_.role_id = r4_.id WHERE s0_.email = "karl.vaniseghem@klimtoren.be" [0.027552843093872] 
+[2016-10-17 08:56:21] lumen.ERROR: exception 'Illuminate\Contracts\Container\BindingResolutionException' with message 'Target [Illuminate\Contracts\Routing\ResponseFactory] is not instantiable.' in /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php:748
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(629): Illuminate\Container\Container->build('Illuminate\\Cont...', Array)
+#1 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Application.php(206): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(105): Laravel\Lumen\Application->make('Illuminate\\Cont...', Array)
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(595): app('Illuminate\\Cont...')
+#4 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Identity/StaffController.php(212): response(Array)
+#5 [internal function]: App\Http\Controllers\Identity\StaffController->login(Object(Illuminate\Http\Request))
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Identity\StaffController), 'login', Array)
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#12 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#13 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#15 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(76): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#16 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#17 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#18 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#20 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#22 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#23 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#24 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#25 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#26 {main}  
+[2016-10-17 08:56:49] lumen.DEBUG: SELECT s0_.email AS email_0, s0_.id AS id_1, s0_.first_name AS first_name_2, s0_.last_name AS last_name_3, s0_.gender AS gender_4, s0_.birthday AS birthday_5, s1_.type AS type_6, s1_.id AS id_7, s1_.start AS start_8, s1_.end AS end_9, g2_.id AS id_10, g2_.name AS name_11, g2_.active AS active_12, s3_.id AS id_13, s3_.start AS start_14, s3_.end AS end_15, r4_.id AS id_16, r4_.name AS name_17, s1_.staff_id AS staff_id_18, s1_.group_id AS group_id_19, s3_.staff_id AS staff_id_20, s3_.role_id AS role_id_21 FROM staff s0_ LEFT JOIN staff_in_groups s1_ ON s0_.id = s1_.staff_id AND (s1_.start <= "2016-10-17 08:56:49" AND s1_.end >= "2016-10-17 08:56:49") LEFT JOIN groups g2_ ON s1_.group_id = g2_.id LEFT JOIN staff_roles s3_ ON s0_.id = s3_.staff_id LEFT JOIN roles r4_ ON s3_.role_id = r4_.id WHERE s0_.id = "----" [0.0014030933380127] 
+[2016-10-17 08:56:49] lumen.ERROR: exception 'App\Domain\Model\Identity\Exceptions\StaffNotFoundException' with message 'Staff member with id (----) was not found.' in /Users/karlvaniseghem/BakGat/api.np/app/Repositories/Identity/StaffDoctrineRepository.php:140
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/app/Domain/Services/Identity/StaffService.php(56): App\Repositories\Identity\StaffDoctrineRepository->get(Object(App\Domain\NtUid))
+#1 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Identity/StaffController.php(49): App\Domain\Services\Identity\StaffService->get('login')
+#2 [internal function]: App\Http\Controllers\Identity\StaffController->show('login')
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#4 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Identity\StaffController), 'show', Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(466): Laravel\Lumen\Application->handleFoundRoute(Array)
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(398): Laravel\Lumen\Application->handleDispatcherResponse(Array)
+#11 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#12 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#13 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#14 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#15 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#16 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#17 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#18 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#22 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#23 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#24 {main}  
+[2016-10-17 08:56:56] lumen.DEBUG: SELECT s0_.email AS email_0, s0_.id AS id_1, s0_.first_name AS first_name_2, s0_.last_name AS last_name_3, s0_.gender AS gender_4, s0_.birthday AS birthday_5, s1_.type AS type_6, s1_.id AS id_7, s1_.start AS start_8, s1_.end AS end_9, g2_.id AS id_10, g2_.name AS name_11, g2_.active AS active_12, s3_.id AS id_13, s3_.start AS start_14, s3_.end AS end_15, r4_.id AS id_16, r4_.name AS name_17, s1_.staff_id AS staff_id_18, s1_.group_id AS group_id_19, s3_.staff_id AS staff_id_20, s3_.role_id AS role_id_21 FROM staff s0_ LEFT JOIN staff_in_groups s1_ ON s0_.id = s1_.staff_id AND (s1_.start <= "2016-10-17 08:56:56" AND s1_.end >= "2016-10-17 08:56:56") LEFT JOIN groups g2_ ON s1_.group_id = g2_.id LEFT JOIN staff_roles s3_ ON s0_.id = s3_.staff_id AND (s3_.start <= "2016-10-17 08:56:56" AND s3_.end >= "2016-10-17 08:56:56") LEFT JOIN roles r4_ ON s3_.role_id = r4_.id WHERE s0_.email = "karl.vaniseghem@klimtoren.be" [0.0014569759368896] 
+[2016-10-17 08:56:56] lumen.ERROR: exception 'Illuminate\Contracts\Container\BindingResolutionException' with message 'Target [Illuminate\Contracts\Routing\ResponseFactory] is not instantiable.' in /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php:748
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(629): Illuminate\Container\Container->build('Illuminate\\Cont...', Array)
+#1 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Application.php(206): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(105): Laravel\Lumen\Application->make('Illuminate\\Cont...', Array)
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(595): app('Illuminate\\Cont...')
+#4 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Identity/StaffController.php(212): response(Array)
+#5 [internal function]: App\Http\Controllers\Identity\StaffController->login(Object(Illuminate\Http\Request))
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Identity\StaffController), 'login', Array)
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#12 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#13 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#15 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(76): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#16 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#17 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#18 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#20 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#22 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#23 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#24 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#25 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#26 {main}  
+[2016-10-17 08:59:50] lumen.DEBUG: SELECT s0_.email AS email_0, s0_.id AS id_1, s0_.first_name AS first_name_2, s0_.last_name AS last_name_3, s0_.gender AS gender_4, s0_.birthday AS birthday_5, s1_.type AS type_6, s1_.id AS id_7, s1_.start AS start_8, s1_.end AS end_9, g2_.id AS id_10, g2_.name AS name_11, g2_.active AS active_12, s3_.id AS id_13, s3_.start AS start_14, s3_.end AS end_15, r4_.id AS id_16, r4_.name AS name_17, s1_.staff_id AS staff_id_18, s1_.group_id AS group_id_19, s3_.staff_id AS staff_id_20, s3_.role_id AS role_id_21 FROM staff s0_ LEFT JOIN staff_in_groups s1_ ON s0_.id = s1_.staff_id AND (s1_.start <= "2016-10-17 08:59:50" AND s1_.end >= "2016-10-17 08:59:50") LEFT JOIN groups g2_ ON s1_.group_id = g2_.id LEFT JOIN staff_roles s3_ ON s0_.id = s3_.staff_id AND (s3_.start <= "2016-10-17 08:59:50" AND s3_.end >= "2016-10-17 08:59:50") LEFT JOIN roles r4_ ON s3_.role_id = r4_.id WHERE s0_.email = "karl.vaniseghem@klimtoren.be" [0.0015931129455566] 
+[2016-10-17 08:59:50] lumen.ERROR: exception 'Illuminate\Contracts\Container\BindingResolutionException' with message 'Target [Illuminate\Contracts\Routing\ResponseFactory] is not instantiable.' in /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php:748
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(629): Illuminate\Container\Container->build('Illuminate\\Cont...', Array)
+#1 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Application.php(206): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(105): Laravel\Lumen\Application->make('Illuminate\\Cont...', Array)
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(595): app('Illuminate\\Cont...')
+#4 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Identity/StaffController.php(212): response(Array)
+#5 [internal function]: App\Http\Controllers\Identity\StaffController->login(Object(Illuminate\Http\Request))
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Identity\StaffController), 'login', Array)
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#12 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#13 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#15 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(76): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#16 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#17 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#18 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#20 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#22 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#23 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#24 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#25 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#26 {main}  
+[2016-10-17 09:02:08] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.00091385841369629] 
+[2016-10-17 09:02:14] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ [0.00042581558227539] 
+[2016-10-17 09:03:06] lumen.DEBUG: SELECT s0_.email AS email_0, s0_.id AS id_1, s0_.first_name AS first_name_2, s0_.last_name AS last_name_3, s0_.gender AS gender_4, s0_.birthday AS birthday_5, s1_.type AS type_6, s1_.id AS id_7, s1_.start AS start_8, s1_.end AS end_9, g2_.id AS id_10, g2_.name AS name_11, g2_.active AS active_12, s3_.id AS id_13, s3_.start AS start_14, s3_.end AS end_15, r4_.id AS id_16, r4_.name AS name_17, s1_.staff_id AS staff_id_18, s1_.group_id AS group_id_19, s3_.staff_id AS staff_id_20, s3_.role_id AS role_id_21 FROM staff s0_ LEFT JOIN staff_in_groups s1_ ON s0_.id = s1_.staff_id AND (s1_.start <= "2016-10-17 09:03:06" AND s1_.end >= "2016-10-17 09:03:06") LEFT JOIN groups g2_ ON s1_.group_id = g2_.id LEFT JOIN staff_roles s3_ ON s0_.id = s3_.staff_id AND (s3_.start <= "2016-10-17 09:03:06" AND s3_.end >= "2016-10-17 09:03:06") LEFT JOIN roles r4_ ON s3_.role_id = r4_.id WHERE s0_.email = "karl.vaniseghem@klimtoren.be" [0.0015690326690674] 
+[2016-10-17 09:03:21] lumen.DEBUG: SELECT s0_.email AS email_0, s0_.id AS id_1, s0_.first_name AS first_name_2, s0_.last_name AS last_name_3, s0_.gender AS gender_4, s0_.birthday AS birthday_5, s1_.type AS type_6, s1_.id AS id_7, s1_.start AS start_8, s1_.end AS end_9, g2_.id AS id_10, g2_.name AS name_11, g2_.active AS active_12, s3_.id AS id_13, s3_.start AS start_14, s3_.end AS end_15, r4_.id AS id_16, r4_.name AS name_17, s1_.staff_id AS staff_id_18, s1_.group_id AS group_id_19, s3_.staff_id AS staff_id_20, s3_.role_id AS role_id_21 FROM staff s0_ LEFT JOIN staff_in_groups s1_ ON s0_.id = s1_.staff_id AND (s1_.start <= "2016-10-17 09:03:21" AND s1_.end >= "2016-10-17 09:03:21") LEFT JOIN groups g2_ ON s1_.group_id = g2_.id LEFT JOIN staff_roles s3_ ON s0_.id = s3_.staff_id AND (s3_.start <= "2016-10-17 09:03:21" AND s3_.end >= "2016-10-17 09:03:21") LEFT JOIN roles r4_ ON s3_.role_id = r4_.id WHERE s0_.email = "karl.vaniseghem@klimtoren.be" [0.0014519691467285] 
+[2016-10-17 09:04:24] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ INNER JOIN student_in_groups s1_ ON g0_.id = s1_.group_id WHERE s1_.start <= "2016-10-17 09:04:24" AND s1_.end >= "2016-10-17 09:04:24" [0.028493881225586] 
+[2016-10-17 09:04:24] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00088405609130859] 
+[2016-10-17 09:04:24] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:04:24" AND e0_.date <= "2016-12-31 09:04:24" [0.0084350109100342] 
+[2016-10-17 09:04:24] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:04:25] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00081706047058105] 
+[2016-10-17 09:04:25] lumen.DEBUG: SELECT m0_.id AS id_0, m0_.name AS name_1, b1_.id AS id_2, b1_.name AS name_3, b1_.major_id AS major_id_4 FROM majors m0_ INNER JOIN branches b1_ ON m0_.id = b1_.major_id INNER JOIN branch_for_groups b2_ ON b1_.id = b2_.branch_id WHERE b2_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0263991355896] 
+[2016-10-17 09:05:13] lumen.DEBUG: SELECT s0_.email AS email_0, s0_.id AS id_1, s0_.first_name AS first_name_2, s0_.last_name AS last_name_3, s0_.gender AS gender_4, s0_.birthday AS birthday_5, s1_.type AS type_6, s1_.id AS id_7, s1_.start AS start_8, s1_.end AS end_9, g2_.id AS id_10, g2_.name AS name_11, g2_.active AS active_12, s3_.id AS id_13, s3_.start AS start_14, s3_.end AS end_15, r4_.id AS id_16, r4_.name AS name_17, s1_.staff_id AS staff_id_18, s1_.group_id AS group_id_19, s3_.staff_id AS staff_id_20, s3_.role_id AS role_id_21 FROM staff s0_ LEFT JOIN staff_in_groups s1_ ON s0_.id = s1_.staff_id AND (s1_.start <= "2016-10-17 09:05:13" AND s1_.end >= "2016-10-17 09:05:13") LEFT JOIN groups g2_ ON s1_.group_id = g2_.id LEFT JOIN staff_roles s3_ ON s0_.id = s3_.staff_id AND (s3_.start <= "2016-10-17 09:05:13" AND s3_.end >= "2016-10-17 09:05:13") LEFT JOIN roles r4_ ON s3_.role_id = r4_.id WHERE s0_.email = "karl.vaniseghem@klimtoren.be" [0.0020828247070312] 
+[2016-10-17 09:05:15] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ INNER JOIN student_in_groups s1_ ON g0_.id = s1_.group_id WHERE s1_.start <= "2016-10-17 09:05:15" AND s1_.end >= "2016-10-17 09:05:15" [0.0028269290924072] 
+[2016-10-17 09:05:15] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00076985359191895] 
+[2016-10-17 09:05:15] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:05:15" AND e0_.date <= "2016-12-31 09:05:15" [0.0012619495391846] 
+[2016-10-17 09:05:15] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:05:16] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00076103210449219] 
+[2016-10-17 09:05:16] lumen.DEBUG: SELECT m0_.id AS id_0, m0_.name AS name_1, b1_.id AS id_2, b1_.name AS name_3, b1_.major_id AS major_id_4 FROM majors m0_ INNER JOIN branches b1_ ON m0_.id = b1_.major_id INNER JOIN branch_for_groups b2_ ON b1_.id = b2_.branch_id WHERE b2_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0021560192108154] 
+[2016-10-17 09:05:45] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00074195861816406] 
+[2016-10-17 09:05:45] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:05:45" AND e0_.date <= "2016-12-31 09:05:45" [0.0012760162353516] 
+[2016-10-17 09:05:45] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:05:53] lumen.DEBUG: SELECT s0_.email AS email_0, s0_.id AS id_1, s0_.first_name AS first_name_2, s0_.last_name AS last_name_3, s0_.gender AS gender_4, s0_.birthday AS birthday_5, s1_.type AS type_6, s1_.id AS id_7, s1_.start AS start_8, s1_.end AS end_9, g2_.id AS id_10, g2_.name AS name_11, g2_.active AS active_12, s3_.id AS id_13, s3_.start AS start_14, s3_.end AS end_15, r4_.id AS id_16, r4_.name AS name_17, s1_.staff_id AS staff_id_18, s1_.group_id AS group_id_19, s3_.staff_id AS staff_id_20, s3_.role_id AS role_id_21 FROM staff s0_ LEFT JOIN staff_in_groups s1_ ON s0_.id = s1_.staff_id AND (s1_.start <= "2016-10-17 09:05:53" AND s1_.end >= "2016-10-17 09:05:53") LEFT JOIN groups g2_ ON s1_.group_id = g2_.id LEFT JOIN staff_roles s3_ ON s0_.id = s3_.staff_id AND (s3_.start <= "2016-10-17 09:05:53" AND s3_.end >= "2016-10-17 09:05:53") LEFT JOIN roles r4_ ON s3_.role_id = r4_.id WHERE s0_.email = "karl.vaniseghem@klimtoren.be" [0.0014059543609619] 
+[2016-10-17 09:05:55] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ INNER JOIN student_in_groups s1_ ON g0_.id = s1_.group_id WHERE s1_.start <= "2016-10-17 09:05:55" AND s1_.end >= "2016-10-17 09:05:55" [0.004586935043335] 
+[2016-10-17 09:05:55] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00081896781921387] 
+[2016-10-17 09:05:55] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:05:55" AND e0_.date <= "2016-12-31 09:05:55" [0.0011990070343018] 
+[2016-10-17 09:05:55] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:05:55] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00089216232299805] 
+[2016-10-17 09:05:56] lumen.DEBUG: SELECT m0_.id AS id_0, m0_.name AS name_1, b1_.id AS id_2, b1_.name AS name_3, b1_.major_id AS major_id_4 FROM majors m0_ INNER JOIN branches b1_ ON m0_.id = b1_.major_id INNER JOIN branch_for_groups b2_ ON b1_.id = b2_.branch_id WHERE b2_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0022101402282715] 
+[2016-10-17 09:06:12] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00077104568481445] 
+[2016-10-17 09:06:12] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:06:12" AND e0_.date <= "2016-12-31 09:06:12" [0.001154899597168] 
+[2016-10-17 09:06:12] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:07:13] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00073003768920898] 
+[2016-10-17 09:07:13] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:07:13" AND e0_.date <= "2016-12-31 09:07:13" [0.0011751651763916] 
+[2016-10-17 09:07:13] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:09:14] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00091791152954102] 
+[2016-10-17 09:09:14] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:09:14" AND e0_.date <= "2016-12-31 09:09:14" [0.0012907981872559] 
+[2016-10-17 09:09:14] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:09:15] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0007479190826416] 
+[2016-10-17 09:09:15] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:09:15" AND e0_.date <= "2016-12-31 09:09:15" [0.0014889240264893] 
+[2016-10-17 09:09:15] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:11:06] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00076007843017578] 
+[2016-10-17 09:11:06] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:11:06" AND e0_.date <= "2016-12-31 09:11:06" [0.0027189254760742] 
+[2016-10-17 09:11:06] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:11:51] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0007779598236084] 
+[2016-10-17 09:11:51] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:11:51" AND e0_.date <= "2016-12-31 09:11:51" [0.0010879039764404] 
+[2016-10-17 09:11:51] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:14:33] lumen.DEBUG: SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, b.name as branch, e.permanent as permanent,
+             (SUM(pr.score) / SUM(e.max) * bfg.max) as result, bfg.max as max
+            FROM point_results pr
+            INNER JOIN evaluations e ON e.id = pr.evaluation_id
+            INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+            INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN students s ON s.id = pr.student_id
+            GROUP BY pr.student_id, e.permanent, b.id [0.017642021179199] 
+[2016-10-17 09:14:39] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ [0.020532131195068] 
+[2016-10-17 09:14:39] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ [0.00046110153198242] 
+[2016-10-17 09:14:47] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "e71291fc-043a-440d-aff4-363aa2d50969" [0.00084090232849121] 
+[2016-10-17 09:14:47] lumen.DEBUG: SELECT b0_.id AS id_0, b0_.evaluation_type AS evaluation_type_1, b0_.max AS max_2, b0_.start AS start_3, b0_.end AS end_4, b1_.id AS id_5, b1_.name AS name_6, m2_.id AS id_7, m2_.name AS name_8, b0_.branch_id AS branch_id_9, b0_.group_id AS group_id_10, b1_.major_id AS major_id_11 FROM branch_for_groups b0_ INNER JOIN branches b1_ ON b0_.branch_id = b1_.id INNER JOIN majors m2_ ON b1_.major_id = m2_.id WHERE b0_.group_id = "e71291fc-043a-440d-aff4-363aa2d50969" AND b0_.evaluation_type = "P" [0.028708934783936] 
+[2016-10-17 09:14:55] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00081706047058105] 
+[2016-10-17 09:14:55] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:14:55" AND e0_.date <= "2016-12-31 09:14:55" [0.0088498592376709] 
+[2016-10-17 09:14:55] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:16:02] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0010759830474854] 
+[2016-10-17 09:16:02] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:16:02" AND e0_.date <= "2016-12-31 09:16:02" [0.0011119842529297] 
+[2016-10-17 09:16:02] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:17:07] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00073409080505371] 
+[2016-10-17 09:17:07] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "1000-01-01 09:17:07" AND e0_.date <= "1000-01-01 09:17:07" [0.0017409324645996] 
+[2016-10-17 09:17:29] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, s5_.school_id AS school_id_18, s5_.id AS id_19, s5_.first_name AS first_name_20, s5_.last_name AS last_name_21, s5_.gender AS gender_22, s5_.birthday AS birthday_23, e0_.branch_for_group_id AS branch_for_group_id_24, b1_.branch_id AS branch_id_25, b1_.group_id AS group_id_26, b2_.major_id AS major_id_27, p4_.evaluation_id AS evaluation_id_28, p4_.student_id AS student_id_29 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id LEFT JOIN students s5_ ON p4_.student_id = s5_.id LEFT JOIN student_in_groups s6_ ON s5_.id = s6_.student_id WHERE e0_.id = "b157a19f-03a6-4095-8ac9-353c77968ebf" ORDER BY s6_.number ASC [0.011051177978516] 
+[2016-10-17 09:17:29] lumen.ERROR: exception 'App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException' with message 'Evaluation with id (b157a19f-03a6-4095-8ac9-353c77968ebf) was not found.' in /Users/karlvaniseghem/BakGat/api.np/app/Repositories/Evaluation/EvaluationDoctrineRepository.php:72
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(77): App\Repositories\Evaluation\EvaluationDoctrineRepository->get(Object(App\Domain\NtUid))
+#1 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->show('b157a19f-03a6-4...')
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#4 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'show', Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(466): Laravel\Lumen\Application->handleFoundRoute(Array)
+#9 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(398): Laravel\Lumen\Application->handleDispatcherResponse(Array)
+#10 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#12 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#14 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#15 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#16 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#17 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#21 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#22 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#23 {main}  
+[2016-10-17 09:19:01] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0011599063873291] 
+[2016-10-17 09:19:01] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:19:00" AND e0_.date <= "2016-12-31 09:19:00" [0.0013561248779297] 
+[2016-10-17 09:19:01] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:20:13] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0011410713195801] 
+[2016-10-17 09:20:36] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0014629364013672] 
+[2016-10-17 09:20:36] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:20:36" AND e0_.date <= "2016-12-31 09:20:36" [0.0013220310211182] 
+[2016-10-17 09:20:36] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:20:49] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00091123580932617] 
+[2016-10-17 09:23:28] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:20:49" AND e0_.date <= "2016-12-31 09:20:49" [0.0025269985198975] 
+[2016-10-17 09:23:28] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:30:39] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00075602531433105] 
+[2016-10-17 09:30:39] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:30:39" AND e0_.date <= "2016-12-31 09:30:39" [0.0010700225830078] 
+[2016-10-17 09:30:39] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:30:40] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0012030601501465] 
+[2016-10-17 09:30:40] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:30:40" AND e0_.date <= "2016-12-31 09:30:40" [0.0013267993927002] 
+[2016-10-17 09:30:40] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:30:55] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0011320114135742] 
+[2016-10-17 09:30:55] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:30:55" AND e0_.date <= "2016-12-31 09:30:55" [0.0011000633239746] 
+[2016-10-17 09:30:56] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:34:45] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.0007321834564209] 
+[2016-10-17 09:34:45] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:34:45" AND e0_.date <= "2016-12-31 09:34:45" [0.0010769367218018] 
+[2016-10-17 09:34:45] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  
+[2016-10-17 09:34:55] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "----" [0.00071191787719727] 
+[2016-10-17 09:34:55] lumen.ERROR: exception 'App\Domain\Model\Identity\Exceptions\GroupNotFoundException' with message 'Group with id (----) was not found.' in /Users/karlvaniseghem/BakGat/api.np/app/Repositories/Identity/GroupDoctrineRepository.php:181
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/app/Http/Controllers/Evaluation/EvaluationController.php(60): App\Repositories\Identity\GroupDoctrineRepository->get(Object(App\Domain\NtUid))
+#1 [internal function]: App\Http\Controllers\Evaluation\EvaluationController->index(Object(Illuminate\Http\Request))
+#2 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Container/Container.php(507): call_user_func_array(Array, Array)
+#3 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(603): Illuminate\Container\Container->call(Array, Array)
+#4 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(570): Laravel\Lumen\Application->callControllerCallable(Array, Array)
+#5 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(543): Laravel\Lumen\Application->callLumenController(Object(App\Http\Controllers\Evaluation\EvaluationController), 'index', Array)
+#6 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(511): Laravel\Lumen\Application->callControllerAction(Array)
+#7 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(496): Laravel\Lumen\Application->callActionOnArrayBasedRoute(Array)
+#8 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(393): Laravel\Lumen\Application->handleFoundRoute(Array)
+#9 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}(Object(Illuminate\Http\Request))
+#10 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#11 /Users/karlvaniseghem/BakGat/api.np/vendor/neomerx/cors-illuminate/src/CorsMiddleware.php(67): Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#12 [internal function]: Neomerx\CorsIlluminate\CorsMiddleware->handle(Object(Illuminate\Http\Request), Object(Closure))
+#13 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(136): call_user_func_array(Array, Array)
+#14 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#15 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Routing/Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#16 [internal function]: Laravel\Lumen\Routing\Pipeline->Laravel\Lumen\Routing\{closure}(Object(Illuminate\Http\Request))
+#17 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#18 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(640): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#19 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(399): Laravel\Lumen\Application->sendThroughPipeline(Array, Object(Closure))
+#20 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RoutesRequests.php(340): Laravel\Lumen\Application->dispatch(NULL)
+#21 /Users/karlvaniseghem/BakGat/api.np/public/index.php(28): Laravel\Lumen\Application->run()
+#22 {main}  
+[2016-10-17 09:34:58] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ [0.00043296813964844] 
+[2016-10-17 09:34:58] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ [0.00040602684020996] 
+[2016-10-17 09:35:14] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ [0.00041699409484863] 
+[2016-10-17 09:35:19] lumen.DEBUG: SELECT g0_.id AS id_0, g0_.name AS name_1, g0_.active AS active_2 FROM groups g0_ WHERE g0_.id = "11b393a9-3686-4dee-84d6-53d6156e8c64" [0.00081610679626465] 
+[2016-10-17 09:35:19] lumen.DEBUG: SELECT e0_.id AS id_0, e0_.date AS date_1, e0_.title AS title_2, e0_.permanent AS permanent_3, e0_.max AS max_4, e0_.settings AS settings_5, b1_.id AS id_6, b1_.evaluation_type AS evaluation_type_7, b1_.max AS max_8, b1_.start AS start_9, b1_.end AS end_10, b2_.id AS id_11, b2_.name AS name_12, m3_.id AS id_13, m3_.name AS name_14, p4_.id AS id_15, p4_.score AS score_16, p4_.redicodi AS redicodi_17, e0_.branch_for_group_id AS branch_for_group_id_18, b1_.branch_id AS branch_id_19, b1_.group_id AS group_id_20, b2_.major_id AS major_id_21, p4_.evaluation_id AS evaluation_id_22, p4_.student_id AS student_id_23 FROM evaluations e0_ INNER JOIN branch_for_groups b1_ ON e0_.branch_for_group_id = b1_.id INNER JOIN branches b2_ ON b1_.branch_id = b2_.id INNER JOIN majors m3_ ON b2_.major_id = m3_.id LEFT JOIN point_results p4_ ON e0_.id = p4_.evaluation_id WHERE b1_.group_id = "11b393a9-3686-4dee-84d6-53d6156e8c64" AND e0_.date >= "2016-09-01 09:35:19" AND e0_.date <= "2016-12-31 09:35:19" [0.0011091232299805] 
+[2016-10-17 09:35:19] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Doctrine\Common\Proxy\AbstractProxyFactory::getProxyDefinition(): Failed opening required 'storage/proxies/__CG__AppDomainModelIdentityStudent.php' (include_path='.:/usr/local/Cellar/php56/5.6.15/share/pear:/usr/local/pear/share/pear')' in /Users/karlvaniseghem/BakGat/api.np/vendor/doctrine/common/lib/Doctrine/Common/Proxy/AbstractProxyFactory.php:209
+Stack trace:
+#0 /Users/karlvaniseghem/BakGat/api.np/vendor/laravel/lumen-framework/src/Concerns/RegistersExceptionHandlers.php(55): Laravel\Lumen\Application->handleShutdown()
+#1 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\Concerns\{closure}()
+#2 {main}  

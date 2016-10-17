@@ -12,6 +12,7 @@ namespace App\Domain\Model\Evaluation;
 use App\Domain\Model\Identity\Group;
 use App\Domain\NtUid;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 
 interface EvaluationRepository
 {
@@ -34,4 +35,9 @@ interface EvaluationRepository
      * @return NtUid
      */
     public function insert(Evaluation $evaluation);
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSummary();
 }

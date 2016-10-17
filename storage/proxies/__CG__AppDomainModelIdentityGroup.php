@@ -64,10 +64,10 @@ class Group extends \App\Domain\Model\Identity\Group implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'name', 'active', 'studentInGroups', 'branchForGroups'];
+            return ['__isInitialized__', 'id', 'name', 'active', 'studentInGroups', 'staffInGroups', 'branchForGroups'];
         }
 
-        return ['__isInitialized__', 'id', 'name', 'active', 'studentInGroups', 'branchForGroups'];
+        return ['__isInitialized__', 'id', 'name', 'active', 'studentInGroups', 'staffInGroups', 'branchForGroups'];
     }
 
     /**
@@ -242,34 +242,23 @@ class Group extends \App\Domain\Model\Identity\Group implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
-    public function __toString()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', []);
-
-        return parent::__toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function toString()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'toString', []);
-
-        return parent::toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getStudentInGroups()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStudentInGroups', []);
 
         return parent::getStudentInGroups();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStaffInGroups()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStaffInGroups', []);
+
+        return parent::getStaffInGroups();
     }
 
     /**

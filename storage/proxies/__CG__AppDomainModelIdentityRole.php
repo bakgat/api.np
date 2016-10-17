@@ -199,15 +199,4 @@ class Role extends \App\Domain\Model\Identity\Role implements \Doctrine\ORM\Prox
         return parent::getName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function addStaff(\App\Domain\Model\Identity\Staff $staff)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addStaff', [$staff]);
-
-        return parent::addStaff($staff);
-    }
-
 }

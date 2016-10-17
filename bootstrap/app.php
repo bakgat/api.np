@@ -29,7 +29,9 @@ $app = new Laravel\Lumen\Application(
 $app->withFacades();
 $app->withEloquent();
 
-$app['path.config'] = 'config';
+$app['path.public'] = base_path('public');
+$app['path.config'] = base_path('config');
+$app['path.storage'] = base_path('storage');
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings

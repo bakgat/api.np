@@ -254,4 +254,15 @@ class PointResult extends \App\Domain\Model\Evaluation\PointResult implements \D
         return parent::setRedicodi($redicodi);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function update($score, $redicodi)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'update', [$score, $redicodi]);
+
+        return parent::update($score, $redicodi);
+    }
+
 }

@@ -34,7 +34,7 @@ class PointResult
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Evaluation\Evaluation", inversedBy="results")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Evaluation\Evaluation", inversedBy="pointResults")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
      * @var Evaluation

@@ -276,15 +276,4 @@ class Branch extends \App\Domain\Model\Education\Branch implements \Doctrine\ORM
         return parent::getActiveGroups($evaluationType);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function jsonSerialize()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
-
-        return parent::jsonSerialize();
-    }
-
 }

@@ -15,15 +15,19 @@
     "laravel/socialite": "^2.0",
     "palanik/lumen-cors": "dev-master",
     "neomerx/cors-illuminate": "^1.1",
-    "laravel-doctrine/orm": "1.1.*",
+    "laravel-doctrine/orm": "1.2.*",
     "webpatser/laravel-uuid": "2.*",
     "myclabs/php-enum": "^1.4",
-    "jms/serializer": "^1.1"
+    "jms/serializer": "^1.1",
+    "barryvdh/laravel-dompdf": "^0.7.0",
+    "barryvdh/laravel-snappy": "^0.3.1",
+    "h4cc/wkhtmltopdf-amd64": "0.12.x"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
     "phpunit/phpunit": "~4.0",
-    "mockery/mockery": "^0.9.4"
+    "mockery/mockery": "^0.9.4",
+    "anouar/fpdf": "1.0.2"
   },
   "autoload": {
     "classmap": [

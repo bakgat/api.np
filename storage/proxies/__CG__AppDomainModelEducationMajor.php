@@ -224,34 +224,12 @@ class Major extends \App\Domain\Model\Education\Major implements \Doctrine\ORM\P
     /**
      * {@inheritDoc}
      */
-    public function removeBranch($id)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeBranch', [$id]);
-
-        return parent::removeBranch($id);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getBranches()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBranches', []);
 
         return parent::getBranches();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function jsonSerialize()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'jsonSerialize', []);
-
-        return parent::jsonSerialize();
     }
 
 }

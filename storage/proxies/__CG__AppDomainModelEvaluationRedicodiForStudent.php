@@ -64,10 +64,10 @@ class RedicodiForStudent extends \App\Domain\Model\Evaluation\RedicodiForStudent
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'student', 'redicodi', 'branch', 'content', 'dateRange'];
+            return ['__isInitialized__', 'id', 'student', 'redicodi', 'major', 'branch', 'content', 'dateRange'];
         }
 
-        return ['__isInitialized__', 'id', 'student', 'redicodi', 'branch', 'content', 'dateRange'];
+        return ['__isInitialized__', 'id', 'student', 'redicodi', 'major', 'branch', 'content', 'dateRange'];
     }
 
     /**
@@ -224,6 +224,17 @@ class RedicodiForStudent extends \App\Domain\Model\Evaluation\RedicodiForStudent
     /**
      * {@inheritDoc}
      */
+    public function getMajor()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMajor', []);
+
+        return parent::getMajor();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getContent()
     {
 
@@ -235,12 +246,34 @@ class RedicodiForStudent extends \App\Domain\Model\Evaluation\RedicodiForStudent
     /**
      * {@inheritDoc}
      */
+    public function resetStart($start)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'resetStart', [$start]);
+
+        return parent::resetStart($start);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function stopRedicodi($end = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'stopRedicodi', [$end]);
 
         return parent::stopRedicodi($end);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function update($branch, $major, \App\Domain\Model\Education\Redicodi $redicodi, $content)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'update', [$branch, $major, $redicodi, $content]);
+
+        return parent::update($branch, $major, $redicodi, $content);
     }
 
     /**
@@ -296,6 +329,17 @@ class RedicodiForStudent extends \App\Domain\Model\Evaluation\RedicodiForStudent
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'wasActiveBetween', [$dateRange]);
 
         return parent::wasActiveBetween($dateRange);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function block($end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'block', [$end]);
+
+        return parent::block($end);
     }
 
 }

@@ -197,7 +197,7 @@ class StaffController extends Controller
         $email = $request->get('email');
         $member = $this->staffService->findByEmail($email);
         if ($member == null) {
-            return response('User not found', 401); //unauthorized
+            return $this->response('User not found', 401); //unauthorized
         }
         $auth = [
             'auth_token' => $member->getId()->toString(),
@@ -209,7 +209,7 @@ class StaffController extends Controller
             $auth['roles'][] = ['id' => $activeRole->getId(), 'name' => $activeRole->getName()];
         }
 
-        return response($auth);
+        return $this->response($auth);
     }
     /*
     public function removeRole(Request $request, $id, $roleId)

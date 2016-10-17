@@ -176,6 +176,21 @@ class StaffRole extends \App\Domain\Model\Identity\StaffRole implements \Doctrin
     /**
      * {@inheritDoc}
      */
+    public function getId()
+    {
+        if ($this->__isInitialized__ === false) {
+            return  parent::getId();
+        }
+
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
+
+        return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getStaff()
     {
 
@@ -193,28 +208,6 @@ class StaffRole extends \App\Domain\Model\Identity\StaffRole implements \Doctrin
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRole', []);
 
         return parent::getRole();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function block($end = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'block', [$end]);
-
-        return parent::block($end);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function resetStart($start)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'resetStart', [$start]);
-
-        return parent::resetStart($start);
     }
 
     /**
@@ -270,6 +263,28 @@ class StaffRole extends \App\Domain\Model\Identity\StaffRole implements \Doctrin
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'wasActiveBetween', [$dateRange]);
 
         return parent::wasActiveBetween($dateRange);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function resetStart($start)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'resetStart', [$start]);
+
+        return parent::resetStart($start);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function block($end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'block', [$end]);
+
+        return parent::block($end);
     }
 
 }

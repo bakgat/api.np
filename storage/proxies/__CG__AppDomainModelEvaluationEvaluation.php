@@ -64,10 +64,10 @@ class Evaluation extends \App\Domain\Model\Evaluation\Evaluation implements \Doc
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'branchForGroup', 'date', 'title', 'permanent', 'max', 'results'];
+            return ['__isInitialized__', 'id', 'branchForGroup', 'date', 'title', 'permanent', 'max', 'settings', 'pointResults', 'comprehensiveResults', 'spokenResults', 'multiplechoiceResults'];
         }
 
-        return ['__isInitialized__', 'id', 'branchForGroup', 'date', 'title', 'permanent', 'max', 'results'];
+        return ['__isInitialized__', 'id', 'branchForGroup', 'date', 'title', 'permanent', 'max', 'settings', 'pointResults', 'comprehensiveResults', 'spokenResults', 'multiplechoiceResults'];
     }
 
     /**
@@ -191,6 +191,17 @@ class Evaluation extends \App\Domain\Model\Evaluation\Evaluation implements \Doc
     /**
      * {@inheritDoc}
      */
+    public function getBranchForGroup()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBranchForGroup', []);
+
+        return parent::getBranchForGroup();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getBranch()
     {
 
@@ -293,9 +304,53 @@ class Evaluation extends \App\Domain\Model\Evaluation\Evaluation implements \Doc
     public function getPointResults()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResults', []);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPointResults', []);
 
         return parent::getPointResults();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getComprehensiveResults()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getComprehensiveResults', []);
+
+        return parent::getComprehensiveResults();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMultiplechoiceResults()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMultiplechoiceResults', []);
+
+        return parent::getMultiplechoiceResults();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function update($title, $branchForGroup, $date, $max, $permanent)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'update', [$title, $branchForGroup, $date, $max, $permanent]);
+
+        return parent::update($title, $branchForGroup, $date, $max, $permanent);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSettings($settings)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSettings', [$settings]);
+
+        return parent::setSettings($settings);
     }
 
     /**
@@ -304,9 +359,64 @@ class Evaluation extends \App\Domain\Model\Evaluation\Evaluation implements \Doc
     public function addPointResult(\App\Domain\Model\Evaluation\PointResult $result)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addResult', [$result]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addPointResult', [$result]);
 
         return parent::addPointResult($result);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updatePointResult(\App\Domain\Model\Identity\Student $student, $score, $redicodi)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'updatePointResult', [$student, $score, $redicodi]);
+
+        return parent::updatePointResult($student, $score, $redicodi);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addComprehensiveResult(\App\Domain\Model\Evaluation\ComprehensiveResult $result)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addComprehensiveResult', [$result]);
+
+        return parent::addComprehensiveResult($result);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addSpokenResult(\App\Domain\Model\Evaluation\SpokenResult $result)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addSpokenResult', [$result]);
+
+        return parent::addSpokenResult($result);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addMultiplechoiceResult(\App\Domain\Model\Evaluation\MultiplechoiceResult $result)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addMultiplechoiceResult', [$result]);
+
+        return parent::addMultiplechoiceResult($result);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updateMultiplechoiceResult($student, $selected)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'updateMultiplechoiceResult', [$student, $selected]);
+
+        return parent::updateMultiplechoiceResult($student, $selected);
     }
 
 }

@@ -220,23 +220,16 @@ class StaffInGroup extends \App\Domain\Model\Identity\StaffInGroup implements \D
     /**
      * {@inheritDoc}
      */
-    public function __toString()
+    public function getId()
     {
+        if ($this->__isInitialized__ === false) {
+            return  parent::getId();
+        }
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', []);
 
-        return parent::__toString();
-    }
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
-    /**
-     * {@inheritDoc}
-     */
-    public function toString()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'toString', []);
-
-        return parent::toString();
+        return parent::getId();
     }
 
     /**
@@ -248,28 +241,6 @@ class StaffInGroup extends \App\Domain\Model\Identity\StaffInGroup implements \D
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'leaveGroup', [$end]);
 
         return parent::leaveGroup($end);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function resetStart($start)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'resetStart', [$start]);
-
-        return parent::resetStart($start);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function block($end = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'block', [$end]);
-
-        return parent::block($end);
     }
 
     /**
@@ -325,6 +296,28 @@ class StaffInGroup extends \App\Domain\Model\Identity\StaffInGroup implements \D
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'wasActiveBetween', [$dateRange]);
 
         return parent::wasActiveBetween($dateRange);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function resetStart($start)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'resetStart', [$start]);
+
+        return parent::resetStart($start);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function block($end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'block', [$end]);
+
+        return parent::block($end);
     }
 
 }

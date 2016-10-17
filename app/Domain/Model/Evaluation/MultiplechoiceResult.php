@@ -37,7 +37,7 @@ class MultiplechoiceResult
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Evaluation\Evaluation")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Evaluation\Evaluation", inversedBy="multiplechoiceResults")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
      * @var Evaluation

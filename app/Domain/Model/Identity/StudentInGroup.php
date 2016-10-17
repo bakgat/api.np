@@ -43,9 +43,20 @@ class StudentInGroup extends PersonInGroup
      */
     protected $number;
 
+    /**
+     * @Groups({"student_list", "student_groups"})
+     *
+     * @ORM\ManyToOne(targetEntity="Group", inversedBy="studentInGroups")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
+     * @var Group
+     */
+    protected $group;
+
     public function __construct(Student $student, Group $group, $daterange)
     {
         parent::__construct($group, $daterange);
+        $this->group = $group;
         $this->student = $student;
     }
 
@@ -58,6 +69,17 @@ class StudentInGroup extends PersonInGroup
     {
         return $this->student;
     }
+
+    /**
+     * Accessor that returns the group in this relation
+     *
+     * @return Group
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
 
     /**
      * @return int

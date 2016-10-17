@@ -235,6 +235,28 @@ class BranchForGroup extends \App\Domain\Model\Education\BranchForGroup implemen
     /**
      * {@inheritDoc}
      */
+    public function changeMax($max)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'changeMax', [$max]);
+
+        return parent::changeMax($max);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function leaveGroup($end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'leaveGroup', [$end]);
+
+        return parent::leaveGroup($end);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function isActive()
     {
 
@@ -268,23 +290,45 @@ class BranchForGroup extends \App\Domain\Model\Education\BranchForGroup implemen
     /**
      * {@inheritDoc}
      */
-    public function changeMax($max)
+    public function wasActiveAt(\DateTime $date)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'changeMax', [$max]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'wasActiveAt', [$date]);
 
-        return parent::changeMax($max);
+        return parent::wasActiveAt($date);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function leaveGroup($end = NULL)
+    public function wasActiveBetween(\App\Domain\Model\Time\DateRange $dateRange)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'leaveGroup', [$end]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'wasActiveBetween', [$dateRange]);
 
-        return parent::leaveGroup($end);
+        return parent::wasActiveBetween($dateRange);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function resetStart($start)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'resetStart', [$start]);
+
+        return parent::resetStart($start);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function block($end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'block', [$end]);
+
+        return parent::block($end);
     }
 
 }

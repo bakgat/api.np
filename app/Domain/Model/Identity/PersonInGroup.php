@@ -33,15 +33,7 @@ abstract class PersonInGroup
     protected $id;
 
 
-    /**
-     * @Groups({"student_list", "staff_groups", "student_groups"})
-     *
-     * @ORM\ManyToOne(targetEntity="Group", inversedBy="studentInGroups")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     *
-     * @var Group
-     */
-    protected $group;
+    
 
     /**
      * @Groups({"staff_groups", "student_groups"})
@@ -53,10 +45,9 @@ abstract class PersonInGroup
      */
     protected $dateRange;
 
-    public function __construct(Group $group, $dateRange)
+    public function __construct($dateRange)
     {
         $this->id = NtUid::generate(4);
-        $this->group = $group;
 
         $this->dateRange = DateRange::fromData($dateRange);
 
@@ -67,16 +58,7 @@ abstract class PersonInGroup
         return $this->id;
     }
 
-    /**
-     * Accessor that returns the group in this relation
-     *
-     * @return Group
-     */
-    public function getGroup()
-    {
-        return $this->group;
-    }
-
+    
 
     /**
      * Stops the relation between a student and a group at certain date.

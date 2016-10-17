@@ -36,7 +36,7 @@ class ComprehensiveResult
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Evaluation\Evaluation")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Evaluation\Evaluation", inversedBy="comprehensiveResults")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
      * @var Evaluation

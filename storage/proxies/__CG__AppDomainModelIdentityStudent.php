@@ -264,6 +264,39 @@ class Student extends \App\Domain\Model\Identity\Student implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
+    public function addRedicodi(\App\Domain\Model\Education\Redicodi $redicodi, $branch, $major, $content, $start = NULL, $end = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addRedicodi', [$redicodi, $branch, $major, $content, $start, $end]);
+
+        return parent::addRedicodi($redicodi, $branch, $major, $content, $start, $end);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function allStudentGroups()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'allStudentGroups', []);
+
+        return parent::allStudentGroups();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function allStudentRedicodi()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'allStudentRedicodi', []);
+
+        return parent::allStudentRedicodi();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getId()
     {
 

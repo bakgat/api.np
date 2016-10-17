@@ -38,10 +38,21 @@ class StaffInGroup extends PersonInGroup
      */
     protected $type;
 
+    /**
+     * @Groups({"staff_groups"})
+     *
+     * @ORM\ManyToOne(targetEntity="Group", inversedBy="staffInGroups")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     *
+     * @var Group
+     */
+    protected $group;
+
     public function __construct(Staff $staff, Group $group, StaffType $type, $daterange)
     {
         parent::__construct($group, $daterange);
         $this->staff = $staff;
+        $this->group = $group;
         $this->type = $type;
     }
 
@@ -54,12 +65,15 @@ class StaffInGroup extends PersonInGroup
     }
 
     /**
+     * Accessor that returns the group in this relation
+     *
      * @return Group
      */
     public function getGroup()
     {
         return $this->group;
     }
+
 
     /**
      *
