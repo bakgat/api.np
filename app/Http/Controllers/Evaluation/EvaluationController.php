@@ -9,9 +9,13 @@
 namespace App\Http\Controllers\Evaluation;
 
 
+
 use Anouar\Fpdf\Fpdf;
-use App\Domain\DTO\StudentDTO;
-use App\Domain\DTO\StudentResultsDTO;
+use App\Domain\DTO\Results\BranchResultsDTO;
+use App\Domain\DTO\Results\MajorResultsDTO;
+use App\Domain\DTO\Results\PointResultDTO;
+use App\Domain\DTO\Results\ReportDTO;
+use App\Domain\DTO\Results\StudentResultsDTO;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\GroupRepository;
@@ -19,6 +23,7 @@ use App\Domain\Model\Time\DateRange;
 use App\Domain\Services\Evaluation\EvaluationService;
 use App\Domain\NtUid;
 use App\Domain\Services\Pdf\Ntpdf;
+use App\Domain\Services\Pdf\Report2PdfService;
 use App\Http\Controllers\Controller;
 use DateTime;
 use Dompdf\Dompdf;
@@ -37,16 +42,20 @@ class EvaluationController extends Controller
     private $evaluationRepo;
     /** @var EvaluationService */
     private $evaluationService;
+    /** @var Report2PdfService */
+    private $pdfService;
 
 
     public function __construct(EvaluationService $evaluationService,
                                 GroupRepository $groupRepository,
                                 EvaluationRepository $evaluationRepository,
+                                Report2PdfService $pdfService,
                                 SerializerInterface $serializer)
     {
         parent::__construct($serializer);
         $this->evaluationService = $evaluationService;
         $this->groupRepo = $groupRepository;
+        $this->pdfService = $pdfService;
         $this->evaluationRepo = $evaluationRepository;
     }
 
@@ -119,67 +128,55 @@ class EvaluationController extends Controller
         return $this->response($evaluation, ['evaluation_detail']);
     }
 
+    /**
+     *
+     */
     public function getSummary()
     {
-        //TODO: PDF Report Service
-        //TODO: generate frontpage / leervorderingen / ...
-        /* $
+        return $this->response($this->evaluationRepo->getSummary(), ['result_dto']);
+        /*
+        $range1 = ['start' => '2016-10-01', 'end' => '2016-12-31'];
+        $range2 = ['start' => '2016-04-01', 'end' => '2016-06-30'];
+        $report = new ReportDTO($range1);
 
-         $pdf = App::make('dompdf.wrapper');
-         $pdf->loadView('report', ['students' => $result]);
-         return $pdf->stream();*/
-        $result = $this->evaluationRepo->getSummary();
+        $st1 = new StudentResultsDTO('Karl', 'Van Iseghem', 'L3A', 'juf Ursula Baelde');
+        $st2 = new StudentResultsDTO('Rebekka', 'Buyse', 'L3A', 'juf Ursula Baelde');
 
-        $fpdf = new Ntpdf();
+        $m1 = new MajorResultsDTO('wiskunde');
+        $b1 = new BranchResultsDTO('getallenkennis');
+        $rp1 = new PointResultDTO($range1, 13, 20, false);
+        $re1 = new PointResultDTO($range1, 15, 20, true);
 
-        $fpdf->SetAutoPageBreak(false, 7);
-        /** @var StudentDTO $item */
-        foreach ($result as $item) {
-            $fpdf->AddPage();
+        $rp2 = new PointResultDTO($range2, 10, 20, false);
+        $re2 = new PointResultDTO($range2, 18, 20, true);
+        $b1->addPointResult($rp1)->addPointResult($re1)
+            ->addPointResult($rp2)->addPointResult($re2);
 
-            $fpdf->AddFont('Roboto', '', 'Roboto-Regular.php');
-            $fpdf->AddFont('Roboto', 'bold', 'Roboto-Bold.php');
-            $fpdf->SetFont('Roboto', 'bold', 18);
+        $b2 = new BranchResultsDTO('hoofdrekenen');
+        $rp3 = new PointResultDTO($range1, 10, 20, false);
+        $re3 = new PointResultDTO($range1, 13, 20, true);
 
-            $blue = [41, 51, 119];
-            $orange = [255, 144, 0];
-
-            $vbsde = 'VBS De';
-            $wVBS = $fpdf->GetStringWidth($vbsde) + 2;
-
-            $klimtoren = 'Klimtoren';
-            $wKl = $fpdf->GetStringWidth($klimtoren);
-
-            call_user_func_array([$fpdf, 'SetTextColor'], $blue);
-            $fpdf->Cell($wVBS, 5, $vbsde);
-
-            call_user_func_array([$fpdf, 'SetTextColor'], $orange);
-            $fpdf->Cell($wKl, 5, $klimtoren, 0, 1);
+        $rp4 = new PointResultDTO($range2, 15, 20, false);
+        $re4 = new PointResultDTO($range2, 20, 20, true);
+        $b2->addPointResult($rp3)->addPointResult($re3)
+            ->addPointResult($rp4)->addPointResult($re4);
 
 
-            $fpdf->SetY(-42);
-            call_user_func_array([$fpdf, 'SetTextColor'], $blue);
-            $fpdf->SetFontSize(35);
-            $fpdf->Cell(0, 9, 'EVALUATIES', 0, 1);
+        $m1->addBranchResult($b1)->addBranchResult($b2);
+        $m2 = new MajorResultsDTO('taal');
+        $st1->addMajorResult($m1)->addMajorResult($m2);
 
-            call_user_func_array([$fpdf, 'SetTextColor'], $orange);
-            $fpdf->SetFontSize(50);
-            $fpdf->ShadowFittCell(0, 25, utf8_decode($item->getDisplayName()), 0, 1, '', false, '', $blue, 1, .12);
+        $m3 = new MajorResultsDTO('wiskunde');
+        $m4 = new MajorResultsDTO('taal');
+        $st2->addMajorResult($m3)->addMajorResult($m4);
 
-            $fpdf->AddPage();
-            $fpdf->AcceptPageBreak();
-            $fpdf->SetFont('Roboto', '', 12);
+        $report->addStudentResults($st1)
+            ->addStudentResults($st2);
 
-            $fpdf->SetAlpha(.84);
-            call_user_func_array([$fpdf, 'SetTextColor'], $blue);
-
-            /** @var StudentResultsDTO $result */
-            foreach ($item->getResults() as $result) {
-                $fpdf->Cell(0, 12, $result->branch . ': ' . round($result->result,1) . '/' . $result->max, 0, 1);
-            }
-        }
-
-        $fpdf->Output();
-        exit;
+        $this->pdfService
+            ->report($report)
+            ->withFrontPage()
+            ->build();
+        */
     }
 }

@@ -40,4 +40,10 @@ interface EvaluationRepository
      * @return ArrayCollection
      */
     public function getSummary();
+
+    public function getReportsForStudents($studentIds, $range);
+
+    public function getReportsForGroup(Group $group, $range);
+
+    
 }

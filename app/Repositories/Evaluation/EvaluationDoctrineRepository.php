@@ -9,8 +9,10 @@
 namespace App\Repositories\Evaluation;
 
 
-use App\Domain\DTO\StudentDTO;
-use App\Domain\DTO\StudentResultsDTO;
+use App\Domain\DTO\Results\BranchResultsDTO;
+use App\Domain\DTO\Results\MajorResultsDTO;
+use App\Domain\DTO\Results\PointResultDTO;
+use App\Domain\DTO\Results\StudentResultDTO;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException;
@@ -92,28 +94,59 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     public function getSummary()
     {
         $rsm = new ResultSetMapping;
-        $rsm->addEntityResult(StudentDTO::class, 's')
-            ->addFieldResult('s', 'id', 'id')
-            ->addFieldResult('s', 'first_name', 'firstName')
+
+        $rsm->addEntityResult(StudentResultDTO::class, 's')
+            ->addFieldResult('s', 's_id', 'id')
+            ->addFieldResult('s', 'fist_name', 'firstName')
             ->addFieldResult('s', 'last_name', 'lastName');
-        $rsm->addJoinedEntityResult(StudentResultsDTO::class, 'sr', 's', 'results');
-        $rsm->addFieldResult('sr', 'rr_id', 'id');
-        $rsm->addFieldResult('sr', 'branch', 'branch');
-        $rsm->addFieldResult('sr', 'permanent', 'permanent');
-        $rsm->addFieldResult('sr', 'result', 'result');
-        $rsm->addFieldResult('sr', 'max', 'max');
- 
-        $sql = "SELECT s.id as id, s.first_name as first_name, s.last_name as last_name,
-              rr.id as rr_id, b.name as branch, rr.permanent as permanent,
-             rr.raw_score as result, rr.raw_max as max
-            FROM range_results rr
+
+        $rsm->addJoinedEntityResult(MajorResultsDTO::class, 'm', 's', 'majorResults')
+            ->addFieldResult('m', 'm_id', 'id')
+            ->addFieldResult('m', 'm_name', 'name');
+
+        $rsm->addJoinedEntityResult(BranchResultsDTO::class, 'b', 'm', 'branchResults')
+            ->addFieldResult('b', 'b_id', 'id')
+            ->addFieldResult('b', 'b_name', 'name');
+
+        /*$rsm->addJoinedEntityResult(PointResultDTO::class, 'pr', 'b', 'pointResults')
+            ->addFieldResult('pr', 'rr_id', 'id')
+            ->addFieldResult('pr', 'rr_perm', 'permanentScore');*/
+
+        $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+              rr.id as rr_id, rr.p_raw as rr_perm,
+              m.id as m_id, m.name as m_name, 
+              b.id as b_id, b.name as b_name 
+              FROM students s 
+              INNER JOIN rr rr ON rr.student_id = s.id
+              INNER JOIN branch_for_groups bfg ON bfg.id = rr.branch_for_group_id
+              INNER JOIN branches b ON b.id = bfg.branch_id
+              INNER JOIN majors m ON m.id = b.major_id
+              INNER JOIN graph_ranges gr ON gr.id = rr.graph_range_id
+              GROUP BY s.id, rr.branch_for_group_id, gr.id";
+        /*$sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+              rr.id as rr_id, rr.p_raw as rr_perm,
+              m.id as m_id, m.name as m_name, 
+              b.id as b_id, b.name as b_name 
+            FROM rr rr
             INNER JOIN branch_for_groups bfg ON bfg.id = rr.branch_for_group_id
             INNER JOIN branches b ON b.id = bfg.branch_id
+            INNER JOIN majors m ON m.id = b.major_id
             INNER JOIN students s ON s.id = rr.student_id
-            GROUP BY rr.student_id, rr.permanent, b.id";
+            INNER JOIN graph_ranges gr ON gr.id = rr.graph_range_id
+            GROUP BY s.id, rr.branch_for_group_id, gr.id";*/
 
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getResult();
         return $result;
+    }
+
+    public function getReportsForStudents($studentIds, $range)
+    {
+        // TODO: Implement getReportsForStudents() method.
+    }
+
+    public function getReportsForGroup(Group $group, $range)
+    {
+        // TODO: Implement getReportsForGroup() method.
     }
 }
