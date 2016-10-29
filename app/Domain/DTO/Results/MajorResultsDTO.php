@@ -38,25 +38,5 @@ class MajorResultsDTO
      * @var string
      */
     private $name;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="StudentResultDTO", inversedBy="majorResults")
-     *
-     * @var StudentResultDTO
-     */
-    private $studentResult;
-
-    /**
-     * @Groups({"result_dto"})
-     *
-     * @ORM\OneToMany(targetEntity="BranchResultsDTO", mappedBy="majorResult")
-     *
-     * @var ArrayCollection
-     */
-    private $branchResults;
-
-    public function __construct()
-    {
-        $this->branchResults = new ArrayCollection;
-    }
+    
 }

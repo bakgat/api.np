@@ -72,4 +72,12 @@ class StudentResultDTO
      */
     //private $majorResults;
 
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
 }

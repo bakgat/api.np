@@ -38,9 +38,12 @@ class BranchResultsDTO
      */
     private $name;
 
-    
-    public function __construct()
-    {
-        $this->pointResults = new ArrayCollection;
-    }
+    /**
+     * @Groups({"result_dto"})
+     * @ORM\ManyToOne(targetEntity="MajorResultsDTO")
+     *
+     * @var MajorResultsDTO
+     */
+    private $major;
+
 }

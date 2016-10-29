@@ -100,9 +100,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('s', 'fist_name', 'firstName')
             ->addFieldResult('s', 'last_name', 'lastName');
 
-       /* $rsm->addJoinedEntityResult(MajorResultsDTO::class, 'm', 's', 'majorResults')
-            ->addFieldResult('m', 'm_id', 'id')
-            ->addFieldResult('m', 'm_name', 'name');*/
+       /* ;*/
 
         $rsm->addJoinedEntityResult(PointResultDTO::class, 'pr', 's', 'pointResults')
             ->addFieldResult('pr', 'pr_id', 'id')
@@ -116,6 +114,10 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $rsm->addJoinedEntityResult(BranchResultsDTO::class, 'b', 'pr', 'branch')
             ->addFieldResult('b', 'b_id', 'id')
             ->addFieldResult('b', 'b_name', 'name');
+
+        $rsm->addJoinedEntityResult(MajorResultsDTO::class, 'm', 'b', 'major')
+            ->addFieldResult('m', 'm_id', 'id')
+            ->addFieldResult('m', 'm_name', 'name');
 
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
@@ -148,7 +150,12 @@ class EvaluationDoctrineRepository implements EvaluationRepository
 
         //TODO Remap !!! ???
         //=> Majors / Branch / Range / Result
-        return $result;
+        $arr = [];
+        foreach ($result as $r) {
+            $obj = ['last_name' => $r->getLastName()];
+            $arr[] = $obj;
+        }
+        return $arr;
     }
 
     public function getReportsForStudents($studentIds, $range)

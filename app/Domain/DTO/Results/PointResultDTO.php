@@ -57,6 +57,7 @@ class PointResultDTO
     private $permanentScore;
 
     /**
+     * @Groups({"result_dto"})
      * @ORM\Column(type="float")
      *
      * @var float
