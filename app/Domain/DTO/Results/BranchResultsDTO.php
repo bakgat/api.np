@@ -38,17 +38,9 @@ class BranchResultsDTO
      */
     private $name;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="MajorResultsDTO", inversedBy="branchResults")
-     *
-     * @var MajorResultsDTO
-     */
-    private $majorResult;
-
-    /**
-     * @ORM\OneToMany(targetEntity="PointResultDTO", mappedBy="branchResult")
-     *
-     * @var ArrayCollection
-     */
-    private $pointResults;
+    
+    public function __construct()
+    {
+        $this->pointResults = new ArrayCollection;
+    }
 }

@@ -54,4 +54,9 @@ class MajorResultsDTO
      * @var ArrayCollection
      */
     private $branchResults;
+
+    public function __construct()
+    {
+        $this->branchResults = new ArrayCollection;
+    }
 }

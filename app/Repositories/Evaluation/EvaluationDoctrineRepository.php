@@ -100,29 +100,37 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('s', 'fist_name', 'firstName')
             ->addFieldResult('s', 'last_name', 'lastName');
 
-        $rsm->addJoinedEntityResult(MajorResultsDTO::class, 'm', 's', 'majorResults')
+       /* $rsm->addJoinedEntityResult(MajorResultsDTO::class, 'm', 's', 'majorResults')
             ->addFieldResult('m', 'm_id', 'id')
-            ->addFieldResult('m', 'm_name', 'name');
+            ->addFieldResult('m', 'm_name', 'name');*/
 
-        $rsm->addJoinedEntityResult(BranchResultsDTO::class, 'b', 'm', 'branchResults')
+        $rsm->addJoinedEntityResult(PointResultDTO::class, 'pr', 's', 'pointResults')
+            ->addFieldResult('pr', 'pr_id', 'id')
+            ->addFieldResult('pr', 'pr_perm', 'permanentScore')
+            ->addFieldResult('pr', 'pr_end', 'endScore')
+            ->addFieldResult('pr', 'pr_total', 'totalScore')
+            ->addFieldResult('pr', 'pr_max', 'maxScore')
+            ->addFieldResult('pr', 'start', 'start')
+            ->addFieldResult('pr', 'end', 'end');
+
+        $rsm->addJoinedEntityResult(BranchResultsDTO::class, 'b', 'pr', 'branch')
             ->addFieldResult('b', 'b_id', 'id')
             ->addFieldResult('b', 'b_name', 'name');
 
-        /*$rsm->addJoinedEntityResult(PointResultDTO::class, 'pr', 'b', 'pointResults')
-            ->addFieldResult('pr', 'rr_id', 'id')
-            ->addFieldResult('pr', 'rr_perm', 'permanentScore');*/
-
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
-              rr.id as rr_id, rr.p_raw as rr_perm,
+              pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
+              pr.max as pr_max, gr.start as start, gr.end as end,
               m.id as m_id, m.name as m_name, 
-              b.id as b_id, b.name as b_name 
-              FROM students s 
-              INNER JOIN rr rr ON rr.student_id = s.id
-              INNER JOIN branch_for_groups bfg ON bfg.id = rr.branch_for_group_id
+              b.id as b_id, b.name as b_name,
+              gr.id as gr_id, bfg.id as bfg_id
+              FROM rr pr
+              LEFT JOIN students s ON pr.student_id = s.id
+              INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
-              INNER JOIN graph_ranges gr ON gr.id = rr.graph_range_id
-              GROUP BY s.id, rr.branch_for_group_id, gr.id";
+              INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id";
+
+
         /*$sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               rr.id as rr_id, rr.p_raw as rr_perm,
               m.id as m_id, m.name as m_name, 
@@ -137,6 +145,9 @@ class EvaluationDoctrineRepository implements EvaluationRepository
 
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getResult();
+
+        //TODO Remap !!! ???
+        //=> Majors / Branch / Range / Result
         return $result;
     }
 

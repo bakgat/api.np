@@ -58,10 +58,18 @@ class StudentResultDTO
 
     /**
      * @Groups({"result_dto"})
-     * @ORM\OneToMany(targetEntity="MajorResultsDTO", mappedBy="studentResult")
+     * @ORM\OneToMany(targetEntity="PointResultDTO", mappedBy="studentResult")
      * 
      * @var ArrayCollection
      */
-    private $majorResults;
+    private $pointResults;
+
+    /**
+     * @Groups({"result_dto"})
+     * @ORM\OneToMany(targetEntity="PointResultDTO", mappedBy="studentResult")
+     *
+     * @var ArrayCollection
+     */
+    //private $majorResults;
 
 }
