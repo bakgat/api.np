@@ -80,4 +80,9 @@ class StudentResultDTO
     {
         return $this->lastName;
     }
+
+    public function getPointResults()
+    {
+        return clone $this->pointResults;
+    }
 }

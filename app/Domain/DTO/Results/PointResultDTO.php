@@ -47,6 +47,13 @@ class PointResultDTO
      * @var BranchResultsDTO
      */
     private $branch;
+    /**
+     * @Groups({"result_dto"})
+     * @ORM\OneToOne(targetEntity="MajorResultsDTO")
+     *
+     * @var MajorResultsDTO
+     */
+    private $major;
 
     /**
      * @Groups({"result_dto"})
@@ -100,6 +107,17 @@ class PointResultDTO
      */
     private $end;
 
+    /**
+     * @return BranchResultsDTO
+     */
+    public function getBranch()
+    {
+        return $this->branch;
+    }
 
+    public function getMajor()
+    {
+        return $this->major;
+    }
 
 }

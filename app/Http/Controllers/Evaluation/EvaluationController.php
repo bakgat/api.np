@@ -24,6 +24,7 @@ use App\Domain\Services\Evaluation\EvaluationService;
 use App\Domain\NtUid;
 use App\Domain\Services\Pdf\Ntpdf;
 use App\Domain\Services\Pdf\Report2PdfService;
+use App\Domain\Services\Reporting\ReportingService;
 use App\Http\Controllers\Controller;
 use DateTime;
 use Dompdf\Dompdf;
@@ -44,12 +45,15 @@ class EvaluationController extends Controller
     private $evaluationService;
     /** @var Report2PdfService */
     private $pdfService;
+    /** @var  ReportingService */
+    private $reportingService;
 
 
     public function __construct(EvaluationService $evaluationService,
                                 GroupRepository $groupRepository,
                                 EvaluationRepository $evaluationRepository,
                                 Report2PdfService $pdfService,
+                                ReportingService $reportingService,
                                 SerializerInterface $serializer)
     {
         parent::__construct($serializer);
@@ -57,6 +61,7 @@ class EvaluationController extends Controller
         $this->groupRepo = $groupRepository;
         $this->pdfService = $pdfService;
         $this->evaluationRepo = $evaluationRepository;
+        $this->reportingService = $reportingService;
     }
 
     public function index(Request $request)
@@ -133,7 +138,9 @@ class EvaluationController extends Controller
      */
     public function getSummary()
     {
-        return $this->response($this->evaluationRepo->getSummary(), ['result_dto']);
+        $report = $this->reportingService->getReport();
+        return $this->response($report, ['result_dto']);
+        //return $this->response($this->evaluationRepo->getSummary(), ['result_dto']);
         /*
         $range1 = ['start' => '2016-10-01', 'end' => '2016-12-31'];
         $range2 = ['start' => '2016-04-01', 'end' => '2016-06-30'];

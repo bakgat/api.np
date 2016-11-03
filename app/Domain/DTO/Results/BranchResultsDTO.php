@@ -38,12 +38,13 @@ class BranchResultsDTO
      */
     private $name;
 
-    /**
-     * @Groups({"result_dto"})
-     * @ORM\ManyToOne(targetEntity="MajorResultsDTO")
-     *
-     * @var MajorResultsDTO
-     */
-    private $major;
+
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+
 
 }

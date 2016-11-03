@@ -19,6 +19,7 @@ use App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException;
 use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
+use App\Domain\Model\Reporting\FlatReport;
 use App\Domain\NtUid;
 use DateTime;
 use Doctrine\ORM\EntityManager;
@@ -95,29 +96,22 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     {
         $rsm = new ResultSetMapping;
 
-        $rsm->addEntityResult(StudentResultDTO::class, 's')
-            ->addFieldResult('s', 's_id', 'id')
-            ->addFieldResult('s', 'fist_name', 'firstName')
-            ->addFieldResult('s', 'last_name', 'lastName');
+        $rsm->addEntityResult(FlatReport::class, 'fr')
+            ->addFieldResult('fr', 's_id', 'sId')
+            ->addFieldResult('fr', 'first_name', 'sFirstName')
+            ->addFieldResult('fr', 'last_name', 'sLastName')
+            ->addFieldResult('fr', 'pr_id', 'prId')
+            ->addFieldResult('fr', 'pr_perm', 'prPerm')
+            ->addFieldResult('fr', 'pr_end', 'prEnd')
+            ->addFieldResult('fr', 'pr_total', 'prTotal')
+            ->addFieldResult('fr', 'pr_max', 'prMax')
+            ->addFieldResult('fr', 'start', 'grStart')
+            ->addFieldResult('fr', 'end', 'grEnd')
+            ->addFieldResult('fr', 'b_id', 'bId')
+            ->addFieldResult('fr', 'b_name', 'bName')
+            ->addFieldResult('fr', 'm_id', 'mId')
+            ->addFieldResult('fr', 'm_name', 'mName');
 
-       /* ;*/
-
-        $rsm->addJoinedEntityResult(PointResultDTO::class, 'pr', 's', 'pointResults')
-            ->addFieldResult('pr', 'pr_id', 'id')
-            ->addFieldResult('pr', 'pr_perm', 'permanentScore')
-            ->addFieldResult('pr', 'pr_end', 'endScore')
-            ->addFieldResult('pr', 'pr_total', 'totalScore')
-            ->addFieldResult('pr', 'pr_max', 'maxScore')
-            ->addFieldResult('pr', 'start', 'start')
-            ->addFieldResult('pr', 'end', 'end');
-
-        $rsm->addJoinedEntityResult(BranchResultsDTO::class, 'b', 'pr', 'branch')
-            ->addFieldResult('b', 'b_id', 'id')
-            ->addFieldResult('b', 'b_name', 'name');
-
-        $rsm->addJoinedEntityResult(MajorResultsDTO::class, 'm', 'b', 'major')
-            ->addFieldResult('m', 'm_id', 'id')
-            ->addFieldResult('m', 'm_name', 'name');
 
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
@@ -146,16 +140,18 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             GROUP BY s.id, rr.branch_for_group_id, gr.id";*/
 
         $query = $this->em->createNativeQuery($sql, $rsm);
-        $result = $query->getResult();
+        $result = $query->getArrayResult();
+        return $result;
 
-        //TODO Remap !!! ???
-        //=> Majors / Branch / Range / Result
-        $arr = [];
-        foreach ($result as $r) {
-            $obj = ['last_name' => $r->getLastName()];
-            $arr[] = $obj;
+    }
+
+    private function getByKey($arr, $key)
+    {
+        foreach ($arr as $item) {
+            if (isset($arr[$key])) {
+                return $arr[$key];
+            }
         }
-        return $arr;
     }
 
     public function getReportsForStudents($studentIds, $range)
