@@ -82,6 +82,7 @@ class Report2PdfService
                     $this->blue();
                     $this->pdf->SetFont('Roboto', '', 12);
                     $this->pdf->SetAlpha(.84);
+                    $this->pdf->y += 3;
                     $this->pdf->Cell(50, 10, utf8_decode(ucfirst($branchResult->getName())));
 
                     $history = $branchResult->getHistory();
@@ -110,13 +111,13 @@ class Report2PdfService
 
         if ($rangeResult->getPermanent()) {
             $text = 'permanent: ' . $rangeResult->getPermanent() . '/' . $rangeResult->getMax();
-            $this->pdf->y += 3;
+            $this->pdf->y += 0;
             $this->pdf->Cell(0, 5, $text, 0, 1);
         } else {
             $this->pdf->y += 5;
         }
 
-        if ($rangeResult->getFinal()) {
+        if ($rangeResult->getFinal() && $rangeResult->getPermanent()) {
             $this->pdf->SetX(92);
             $text = 'eindtoets: ' . $rangeResult->getFinal() . '/' . $rangeResult->getMax();
             $this->pdf->Cell(0, 5, $text, 0, 1);
