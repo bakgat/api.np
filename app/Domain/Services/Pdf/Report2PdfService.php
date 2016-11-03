@@ -68,7 +68,7 @@ class Report2PdfService
 
             $this->pdf->AddPage();
             $this->Header($result);
-            $this->pdf->AcceptPageBreak();
+            $this->pdf->SetAutoPageBreak(true);
             /** @var MajorResult $majorResult */
             foreach ($result->getMajorResults() as $majorResult) {
                 $this->pdf->SetX(42);
