@@ -17,7 +17,6 @@ use JMS\Serializer\Annotation\Groups;
 class MajorResult
 {
     /**
-     * @Groups({"result_dto"})
      * @var NtUid
      */
     private $id;

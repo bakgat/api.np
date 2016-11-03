@@ -29,7 +29,8 @@ class ReportingService
         foreach ($data as $item) {
             $report->intoStudent($item)
                 ->intoMajor($item)
-                ->intoBranch($item);
+                ->intoBranch($item)
+                ->intoHistory($item);
         }
         return $report;
     }

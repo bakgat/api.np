@@ -19,7 +19,6 @@ use JMS\Serializer\Annotation\VirtualProperty;
 class StudentResult
 {
     /**
-     * @Groups({"result_dto"})
      * @var NtUid
      */
     private $id;

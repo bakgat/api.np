@@ -105,6 +105,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('fr', 'pr_end', 'prEnd')
             ->addFieldResult('fr', 'pr_total', 'prTotal')
             ->addFieldResult('fr', 'pr_max', 'prMax')
+            ->addFieldResult('fr', 'gr_id', 'grId')
             ->addFieldResult('fr', 'start', 'grStart')
             ->addFieldResult('fr', 'end', 'grEnd')
             ->addFieldResult('fr', 'b_id', 'bId')
@@ -125,19 +126,6 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id";
-
-
-        /*$sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
-              rr.id as rr_id, rr.p_raw as rr_perm,
-              m.id as m_id, m.name as m_name, 
-              b.id as b_id, b.name as b_name 
-            FROM rr rr
-            INNER JOIN branch_for_groups bfg ON bfg.id = rr.branch_for_group_id
-            INNER JOIN branches b ON b.id = bfg.branch_id
-            INNER JOIN majors m ON m.id = b.major_id
-            INNER JOIN students s ON s.id = rr.student_id
-            INNER JOIN graph_ranges gr ON gr.id = rr.graph_range_id
-            GROUP BY s.id, rr.branch_for_group_id, gr.id";*/
 
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getArrayResult();

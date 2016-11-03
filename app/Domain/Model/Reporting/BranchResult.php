@@ -16,7 +16,6 @@ class BranchResult
 {
 
     /**
-     * @Groups({"result_dto"})
      * @var NtUid
      */
     private $id;
@@ -28,19 +27,50 @@ class BranchResult
     private $name;
 
     /**
+     * @Groups({"result_dto"})
      * @var ArrayCollection
      */
-    private $graphRanges;
+    private $history;
 
     public function __construct(NtUid $id, $name)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->graphRanges = new ArrayCollection;
+        $this->history = new ArrayCollection;
     }
 
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param $data
+     * @return RangeResult
+     */
+    public function intoHistory($data)
+    {
+        $id = NtUid::import($data['grId']);
+        $range = $this->hasRange($id);
+        if (!$range) {
+            $start = $data['grStart'];
+            $end = $data['grEnd'];
+            $perm = $data['prPerm'];
+            $final = $data['prEnd'];
+            $total = $data['prTotal'];
+            $max = $data['prMax'];
+            $range = new RangeResult($id, $start, $end, $perm, $final, $total, $max);
+            $this->history->add($range);
+        }
+        return $range;
+    }
+
+    public function hasRange(NtUid $id)
+    {
+        $range = $this->history->filter(function ($element) use ($id) {
+            /** @var RangeResult $element */
+            return $element->getId() == $id;
+        })->first();
+        return $range;
     }
 }
