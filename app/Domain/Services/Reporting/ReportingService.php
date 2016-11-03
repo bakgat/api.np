@@ -14,7 +14,7 @@ use App\Domain\Model\Reporting\Report;
 
 class ReportingService
 {
-    /** @var EvaluationRepository  */
+    /** @var EvaluationRepository */
     private $evaluationRepo;
 
     public function __construct(EvaluationRepository $evaluationRepository)
@@ -28,7 +28,8 @@ class ReportingService
         $report = new Report();
         foreach ($data as $item) {
             $report->intoStudent($item)
-                ->intoMajor($item);
+                ->intoMajor($item)
+                ->intoBranch($item);
         }
         return $report;
     }

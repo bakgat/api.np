@@ -29,25 +29,42 @@ class MajorResult
     private $name;
 
     /**
+     * @Groups({"result_dto"})
      * @var ArrayCollection
      */
     private $branches;
-
-    /**
-     * @var NtUid[]
-     */
-    private $branchIds;
 
     public function __construct(NtUid $id, $name)
     {
         $this->id = $id;
         $this->name = $name;
         $this->branches = new ArrayCollection;
-        $this->branchIds = [];
     }
 
     public function getId()
     {
         return $this->id;
+    }
+
+
+    public function intoBranch($data)
+    {
+        $id = NtUid::import($data['bId']);
+        $branch = $this->hasBranch($id);
+        if (!$branch) {
+            $name =  $data['bName'];
+            $branch = new BranchResult($id, $name);
+            $this->branches->add($branch);
+        }
+        return $branch;
+    }
+
+    public function hasBranch(NtUid $id)
+    {
+        $branch = $this->branches->filter(function ($element) use ($id) {
+            /** @var MajorResult $element */
+            return $element->getId() == $id;
+        })->first();
+        return $branch;
     }
 }
