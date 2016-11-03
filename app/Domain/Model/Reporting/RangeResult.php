@@ -80,7 +80,7 @@ class RangeResult
      */
     public function getFinal()
     {
-        return $this->final;
+        return round($this->final, 1);
     }
 
     /**
@@ -88,7 +88,7 @@ class RangeResult
      */
     public function getMax()
     {
-        return $this->max;
+        return round($this->max, 1);
     }
 
     /**
@@ -96,7 +96,7 @@ class RangeResult
      */
     public function getPermanent()
     {
-        return $this->permanent;
+        return round($this->permanent, 1);
     }
 
     /**
@@ -104,6 +104,6 @@ class RangeResult
      */
     public function getTotal()
     {
-        return $this->total;
+        return round($this->total, 1);
     }
 }

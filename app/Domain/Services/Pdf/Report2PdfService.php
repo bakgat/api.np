@@ -85,10 +85,10 @@ class Report2PdfService
                     $this->pdf->Cell(50, 10, ucfirst($branchResult->getName()));
 
                     $history = $branchResult->getHistory();
-                    /** @var RangeResult $rangeResult */
+
                     $this->makePoint($history->get(0));
-                    $this->makeTotal($history->get(0));
                     $this->makeGraph($branchResult->getHistory());
+                    
                     $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
                     $this->pdf->SetAlpha(.54);
                     $this->pdf->y += 3;
@@ -112,41 +112,42 @@ class Report2PdfService
         $this->pdf->y += 3;
         $this->pdf->Cell(0, 5, $text, 0, 1);
 
-        $text = 'eindtoets: ' . $rangeResult->getFinal() . '/' . $rangeResult->getMax();
-        $this->pdf->Cell(0, 5, $text, 0, 1);
-
-    }
-
-    private function makeGraph(ArrayCollection $history)
-    {
-
-        $arr = [];
-        $arr[] = [
-            'color' => self::BLUE,
-            'data' => []
-        ];
-        $data = [];
-        //TODO: calculate TOTALS 60/40 !!!
-        //TODO: where to calculate range totals (does mysql trigger really works flawless?)
-        /** @var RangeResult $rangeResult */
-        foreach ($history as $rangeResult) {
-            $percent = ($rangeResult->getTotal() / $rangeResult->getMax()) * 100;
-            $data[] = ['key' => $rangeResult->getRange()->getStart()->format('Y-m-d'), 'value' => $percent];
+        if ($rangeResult->getFinal()) {
+            $this->pdf->SetX(92);
+            $text = 'eindtoets: ' . $rangeResult->getFinal() . '/' . $rangeResult->getMax();
+            $this->pdf->Cell(0, 5, $text, 0, 1);
+        } else {
+            $this->pdf->y += 5;
         }
-        $arr[0]['data'] = $data;
-        $this->pdf->SetX(162);
-        $this->pdf->SetAlpha(.84);
-        $this->pdf->LineChart($this->pdf->x, $this->pdf->y - 15, 35, 16, null, $arr);
-    }
-
-    private function makeTotal(RangeResult $rangeResult)
-    {
 
         $this->pdf->SetX(132);
         $this->pdf->y -= 10;
         $this->pdf->SetFontSize(12);
         $this->pdf->SetAlpha(.84);
         $this->pdf->Cell(0, 10, $rangeResult->getTotal() . '/' . $rangeResult->getMax(), 0, 1);
+    }
+
+    private function makeGraph(ArrayCollection $history)
+    {
+        if (count($history) > 1) {
+            $arr = [];
+            $arr[] = [
+                'color' => self::BLUE,
+                'data' => []
+            ];
+            $data = [];
+            //TODO: calculate TOTALS 60/40 !!!
+            //TODO: where to calculate range totals (does mysql trigger really works flawless?)
+            /** @var RangeResult $rangeResult */
+            foreach ($history as $rangeResult) {
+                $percent = ($rangeResult->getTotal() / $rangeResult->getMax()) * 100;
+                $data[] = ['key' => $rangeResult->getRange()->getStart()->format('Y-m-d'), 'value' => $percent];
+            }
+            $arr[0]['data'] = $data;
+            $this->pdf->SetX(162);
+            $this->pdf->SetAlpha(.84);
+            $this->pdf->LineChart($this->pdf->x, $this->pdf->y - 15, 35, 16, null, $arr);
+        }
     }
 
     public function Header(StudentResult $studentResult)
