@@ -139,7 +139,12 @@ class EvaluationController extends Controller
     public function getSummary()
     {
         $report = $this->reportingService->getReport();
-        return $this->response($report, ['result_dto']);
+
+        $this->pdfService
+            ->report($report)
+            ->withFrontPage()
+            ->build();
+
         //return $this->response($this->evaluationRepo->getSummary(), ['result_dto']);
         /*
         $range1 = ['start' => '2016-10-01', 'end' => '2016-12-31'];

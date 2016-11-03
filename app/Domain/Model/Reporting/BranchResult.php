@@ -45,6 +45,15 @@ class BranchResult
     }
 
     /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+
+    /**
      * @param $data
      * @return RangeResult
      */
@@ -73,4 +82,13 @@ class BranchResult
         })->first();
         return $range;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getHistory()
+    {
+        return clone $this->history;
+    }
+
 }

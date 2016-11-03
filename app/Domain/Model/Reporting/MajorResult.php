@@ -45,6 +45,13 @@ class MajorResult
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
     public function intoBranch($data)
     {
@@ -65,5 +72,10 @@ class MajorResult
             return $element->getId() == $id;
         })->first();
         return $branch;
+    }
+
+    public function getBranchResults()
+    {
+        return clone $this->branches;
     }
 }

@@ -25,6 +25,7 @@ class ReportingService
     public function getReport()
     {
         $data = $this->evaluationRepo->getSummary();
+
         $report = new Report();
         foreach ($data as $item) {
             $report->intoStudent($item)
@@ -32,6 +33,7 @@ class ReportingService
                 ->intoBranch($item)
                 ->intoHistory($item);
         }
+        
         return $report;
     }
 }

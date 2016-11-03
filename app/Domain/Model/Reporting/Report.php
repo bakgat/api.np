@@ -51,4 +51,9 @@ class Report
         })->first();
         return $stud;
     }
+
+    public function getStudentResults()
+    {
+        return clone $this->students;
+    }
 }

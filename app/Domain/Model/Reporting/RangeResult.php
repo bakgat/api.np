@@ -66,4 +66,44 @@ class RangeResult
     {
         return $this->id;
     }
+
+    /**
+     * @return DateRange
+     */
+    public function getRange()
+    {
+        return $this->range;
+    }
+
+    /**
+     * @return float
+     */
+    public function getFinal()
+    {
+        return $this->final;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMax()
+    {
+        return $this->max;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPermanent()
+    {
+        return $this->permanent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
 }

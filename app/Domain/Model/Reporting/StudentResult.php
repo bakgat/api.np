@@ -58,6 +58,42 @@ class StudentResult
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
+
+    public function getActiveGroupName()
+    {
+        //TODO
+        return '3LA';
+    }
+
+    public function getTitular()
+    {
+        return 'TITULAR';
+    }
+
+
     public function intoMajor($data)
     {
         $id = NtUid::import($data['mId']);
@@ -78,5 +114,13 @@ class StudentResult
         })->first();
         return $maj;
     }
+
+
+
+    public function getMajorResults()
+    {
+        return clone $this->majors;
+    }
+
 
 }
