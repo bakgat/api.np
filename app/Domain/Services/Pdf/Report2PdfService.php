@@ -129,7 +129,7 @@ class Report2PdfService
         $this->pdf->y -= 10;
         $this->pdf->SetFontSize(12);
         $this->pdf->SetAlpha(.84);
-        $this->pdf->Cell(0, 10, $rangeResult->getTotal() . '/' . $rangeResult->getMax(), 0, 1);
+        $this->pdf->Cell(20, 10, $rangeResult->getTotal() . '/' . $rangeResult->getMax(), 0, 1, 'R');
     }
 
     private function makeGraph(ArrayCollection $history)
