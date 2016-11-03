@@ -75,20 +75,20 @@ class Report2PdfService
                 $this->blue();
                 $this->pdf->SetFont('Roboto', 'bold', 17);
                 $this->pdf->SetAlpha(1);
-                $this->pdf->Cell(0, 15, ucfirst($majorResult->getName()), 0, 1);
+                $this->pdf->Cell(0, 15, utf8_decode(ucfirst($majorResult->getName())), 0, 1);
                 /** @var BranchResult $branchResult */
                 foreach ($majorResult->getBranchResults() as $branchResult) {
                     $this->pdf->SetX(42);
                     $this->blue();
                     $this->pdf->SetFont('Roboto', '', 12);
                     $this->pdf->SetAlpha(.84);
-                    $this->pdf->Cell(50, 10, ucfirst($branchResult->getName()));
+                    $this->pdf->Cell(50, 10, utf8_decode(ucfirst($branchResult->getName())));
 
                     $history = $branchResult->getHistory();
 
                     $this->makePoint($history->get(0));
                     $this->makeGraph($branchResult->getHistory());
-                    
+
                     $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
                     $this->pdf->SetAlpha(.54);
                     $this->pdf->y += 3;
@@ -108,9 +108,13 @@ class Report2PdfService
         $this->pdf->SetFont('Roboto', '', 9);
         $this->pdf->SetAlpha(.54);
 
-        $text = 'permanent: ' . $rangeResult->getPermanent() . '/' . $rangeResult->getMax();
-        $this->pdf->y += 3;
-        $this->pdf->Cell(0, 5, $text, 0, 1);
+        if ($rangeResult->getPermanent()) {
+            $text = 'permanent: ' . $rangeResult->getPermanent() . '/' . $rangeResult->getMax();
+            $this->pdf->y += 3;
+            $this->pdf->Cell(0, 5, $text, 0, 1);
+        } else {
+            $this->pdf->y += 5;
+        }
 
         if ($rangeResult->getFinal()) {
             $this->pdf->SetX(92);
@@ -136,8 +140,7 @@ class Report2PdfService
                 'data' => []
             ];
             $data = [];
-            //TODO: calculate TOTALS 60/40 !!!
-            //TODO: where to calculate range totals (does mysql trigger really works flawless?)
+
             /** @var RangeResult $rangeResult */
             foreach ($history as $rangeResult) {
                 $percent = ($rangeResult->getTotal() / $rangeResult->getMax()) * 100;
@@ -164,10 +167,12 @@ class Report2PdfService
         $this->pdf->SetAlpha(1);
         $this->pdf->SetXY(20, 0);
         $this->blue();
-        $this->pdf->Cell(($this->pdf->pageWidth() - 20) / 2, 30, $studentResult->getTitular());
+        $this->pdf->Cell(($this->pdf->pageWidth() - 20) / 2, 30, utf8_decode($studentResult->getTitular()));
 
         $this->orange();
-        $this->pdf->Cell(($this->pdf->pageWidth() - 20) / 2 - 10, 30, $studentResult->getFirstName() . '|' . $studentResult->getLastName(), 0, 1, 'R');
+        $fn =  utf8_decode($studentResult->getFirstName());
+        $ln = utf8_decode($studentResult->getLastName());
+        $this->pdf->Cell(($this->pdf->pageWidth() - 20) / 2 - 10, 30, $fn . '|' . $ln, 0, 1, 'R');
 
         $this->pdf->SetAlpha(1);
         $this->orange();
