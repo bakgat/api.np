@@ -27,7 +27,8 @@ class ReportingService
         $data = $this->evaluationRepo->getSummary();
         $report = new Report();
         foreach ($data as $item) {
-            $report->intoStudent($item);
+            $report->intoStudent($item)
+                ->intoMajor($item);
         }
         return $report;
     }

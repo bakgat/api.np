@@ -35,7 +35,9 @@ class Report
         $id = NtUid::import($data['sId']);
         $stud = $this->hasStudent($id);
         if (!$stud) {
-            $stud = new StudentResult($id, $data['sFirstName'], $data['sFirstName']);
+            $fn = $data['sFirstName'];
+            $ln = $data['sLastName'];
+            $stud = new StudentResult($id, $fn, $ln);
             $this->students->add($stud);
         }
         return $stud;

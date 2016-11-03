@@ -12,6 +12,7 @@ namespace App\Domain\Model\Reporting;
 use App\Domain\NtUid;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\VirtualProperty;
 
@@ -35,11 +36,19 @@ class StudentResult
      */
     private $lastName;
 
+    /**
+     * @Groups({"result_dto"})
+     * @var ArrayCollection
+     */
+    private $majors;
+
+
     public function __construct(NtUid $id, $firstName, $lastName)
     {
         $this->id = $id;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->majors = new ArrayCollection;
     }
 
     /**
@@ -49,5 +58,26 @@ class StudentResult
     {
         return $this->id;
     }
-    
+
+    public function intoMajor($data)
+    {
+        $id = NtUid::import($data['mId']);
+        $maj = $this->hasMajor($id);
+        if (!$maj) {
+            $name =  $data['mName'];
+            $maj = new MajorResult($id, $name);
+            $this->majors->add($maj);
+        }
+        return $maj;
+    }
+
+    public function hasMajor(NtUid $id)
+    {
+        $maj = $this->majors->filter(function ($element) use ($id) {
+            /** @var MajorResult $element */
+            return $element->getId() == $id;
+        })->first();
+        return $maj;
+    }
+
 }
