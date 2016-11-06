@@ -59,8 +59,7 @@ class FlatReport
      * @var string
      */
     private $gName;
-
-
+    
     /**
      * @ORM\Column(type="string")
      * @var string
