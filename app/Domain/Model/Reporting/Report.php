@@ -37,7 +37,8 @@ class Report
         if (!$stud) {
             $fn = $data['sFirstName'];
             $ln = $data['sLastName'];
-            $stud = new StudentResult($id, $fn, $ln);
+            $group = $data['gName'];
+            $stud = new StudentResult($id, $fn, $ln, $group);
             $this->students->add($stud);
         }
         return $stud;

@@ -185,7 +185,7 @@ class Report2PdfService
 
         $this->pdf->SetAlpha(.12);
         $this->pdf->SetFontSize(70);
-        $this->pdf->Cell(0, 30, $studentResult->getActiveGroupName());
+        $this->pdf->Cell(0, 30, $studentResult->getGroup());
 
         $this->pdf->SetFontSize(20);
         $this->pdf->SetAlpha(1);

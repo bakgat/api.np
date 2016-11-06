@@ -41,12 +41,19 @@ class StudentResult
      */
     private $majors;
 
+    /**
+     * @Groups({"result_dto"})
+     * @var string
+     */
+    private $group;
 
-    public function __construct(NtUid $id, $firstName, $lastName)
+
+    public function __construct(NtUid $id, $firstName, $lastName, $groupName)
     {
         $this->id = $id;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->group = $groupName;
         $this->majors = new ArrayCollection;
     }
 
@@ -82,10 +89,12 @@ class StudentResult
         return $this->firstName . ' ' . $this->lastName;
     }
 
-    public function getActiveGroupName()
+    /**
+     * @return string
+     */
+    public function getGroup()
     {
-        //TODO
-        return '3LA';
+        return $this->group;
     }
 
     public function getTitular()

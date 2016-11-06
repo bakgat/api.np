@@ -15,6 +15,7 @@ use DateTime;
 
 use JMS\Serializer\Annotation\Accessor;
 use Doctrine\ORM\Mapping AS ORM;
+
 /**
  * @ORM\Entity
  *
@@ -30,8 +31,6 @@ class FlatReport
      * @var NtUid
      */
     private $prId;
-
-
 
     /**
      * @ORM\Column(type="guid")
@@ -49,6 +48,17 @@ class FlatReport
      */
     private $sLastName;
 
+
+    /**
+     * @ORM\Column(type="guid")
+     * @var NtUid
+     */
+    private $gId;
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
+    private $gName;
 
     /**
      * @ORM\Column(type="guid")
@@ -74,7 +84,6 @@ class FlatReport
     private $bName;
 
 
-
     /**
      * @ORM\Column(type="guid")
      * @var NtUid
@@ -90,7 +99,6 @@ class FlatReport
      * @var DateTime
      */
     private $grEnd;
-
 
 
     /**
@@ -126,5 +134,4 @@ class FlatReport
     private $prEvCount;
 
 
-    
 }
