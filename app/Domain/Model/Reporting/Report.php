@@ -38,7 +38,9 @@ class Report
             $fn = $data['sFirstName'];
             $ln = $data['sLastName'];
             $group = $data['gName'];
-            $stud = new StudentResult($id, $fn, $ln, $group);
+            $stFn = $data['stFirstName'];
+            $stLn = $data['stLastName'];
+            $stud = new StudentResult($id, $fn, $ln, $group, $stFn, $stLn);
             $this->students->add($stud);
         }
         return $stud;

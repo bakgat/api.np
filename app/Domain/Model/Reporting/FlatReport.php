@@ -60,6 +60,18 @@ class FlatReport
      */
     private $gName;
 
+
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
+    private $stFirstName;
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
+    private $stLastName;
+
     /**
      * @ORM\Column(type="guid")
      * @var NtUid

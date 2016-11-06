@@ -108,16 +108,19 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               gr.start as start, gr.end as end,
               m.id as m_id, m.name as m_name, 
               b.id as b_id, b.name as b_name, bfg.id as bfg_id,
-              g.id as g_id, g.name as g_name
+              g.id as g_id, g.name as g_name,
+              st.first_name as st_first_name, st.last_name as st_last_name
               FROM rr pr
               INNER JOIN students s ON pr.student_id = s.id
               INNER JOIN student_in_groups sig ON s.id = sig.student_id
               INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id
               INNER JOIN groups g ON g.id = bfg.group_id
+              INNER JOIN staff_in_groups stig ON stig.group_id = g.id
+              INNER JOIN staff st ON st.id = stig.staff_id
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-              WHERE bfg.start <= NOW() AND bfg.end >= NOW()";
+              WHERE bfg.start <= NOW() AND bfg.end >= NOW() AND stig.type='X'";
 
         return $this->getReport($sql);
     }
@@ -183,6 +186,8 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('fr', 'last_name', 'sLastName')
             ->addFieldResult('fr', 'g_id', 'gId')
             ->addFieldResult('fr',  'g_name', 'gName')
+            ->addFieldResult('fr', 'st_first_name', 'stFirstName')
+            ->addFieldResult('fr', 'st_last_name', 'stLastNmae')
             ->addFieldResult('fr', 'pr_id', 'prId')
             ->addFieldResult('fr', 'pr_perm', 'prPerm')
             ->addFieldResult('fr', 'pr_end', 'prEnd')

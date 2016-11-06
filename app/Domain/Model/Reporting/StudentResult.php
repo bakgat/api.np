@@ -47,13 +47,27 @@ class StudentResult
      */
     private $group;
 
+    /**
+     * @Groups({"result_dto"})
+     * @var string
+     */
+    private $titularFirstName;
 
-    public function __construct(NtUid $id, $firstName, $lastName, $groupName)
+    /**
+     * @Groups({"result_dto"})
+     * @var string
+     */
+    private $titularLastName;
+
+
+    public function __construct(NtUid $id, $firstName, $lastName, $groupName, $stFirstName, $stLastName)
     {
         $this->id = $id;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->group = $groupName;
+        $this->titularFirstName = $stFirstName;
+        $this->titularLastName = $stLastName;
         $this->majors = new ArrayCollection;
     }
 
@@ -97,9 +111,12 @@ class StudentResult
         return $this->group;
     }
 
+    /**
+     * @return string
+     */
     public function getTitular()
     {
-        return 'TITULAR';
+        return $this->firstName . ' ' . $this->lastName;
     }
 
 
