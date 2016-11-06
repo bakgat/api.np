@@ -11,7 +11,6 @@
 |
  */
 
-$app->get('/bulk', 'Bulk\StudentCSVBulkController@bulkInsert');
 $app->get('/ntuid', function() {
    return \App\Domain\NtUid::generate(4);
 });

@@ -22,6 +22,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Report2PdfService
 {
+    private $fontmap = [
+        'B' => 'g',
+        'C' => 'l',
+        'T' => 'f',
+        'S' => 'd',
+    ];
+
     /** @var EvaluationRepository */
     private $evaluationRepo;
 
@@ -43,6 +50,7 @@ class Report2PdfService
         $this->pdf = new Ntpdf();
         $this->pdf->AddFont('Roboto', '', 'Roboto-Regular.php');
         $this->pdf->AddFont('Roboto', 'bold', 'Roboto-Bold.php');
+        $this->pdf->AddFont('NotosIcon', '', 'NotosIcons.php');
         $this->pdf->SetAutoPageBreak(false, 7);
     }
 
@@ -109,6 +117,7 @@ class Report2PdfService
         $this->pdf->SetFont('Roboto', '', 9);
         $this->pdf->SetAlpha(.54);
 
+        //PERMANENT
         if ($rangeResult->getPermanent()) {
             $text = 'permanent: ' . $rangeResult->getPermanent() . '/' . $rangeResult->getMax();
             $this->pdf->y += 0;
@@ -117,6 +126,7 @@ class Report2PdfService
             $this->pdf->y += 5;
         }
 
+        //FINAL
         if ($rangeResult->getFinal() && $rangeResult->getPermanent()) {
             $this->pdf->SetX(92);
             $text = 'eindtoets: ' . $rangeResult->getFinal() . '/' . $rangeResult->getMax();
@@ -125,11 +135,24 @@ class Report2PdfService
             $this->pdf->y += 5;
         }
 
+        //TOTAL
         $this->pdf->SetX(132);
         $this->pdf->y -= 10;
         $this->pdf->SetFontSize(12);
         $this->pdf->SetAlpha(.84);
         $this->pdf->Cell(20, 10, $rangeResult->getTotal() . '/' . $rangeResult->getMax(), 0, 1, 'R');
+
+        if (count($rangeResult->getRedicodi()) > 0) {
+            $this->pdf->SetX(47);
+            foreach ($rangeResult->getRedicodi() as $key => $value) {
+                if ($value >= $rangeResult->getEvCount() / 2) {
+                    $this->pdf->SetFont('NotosIcon', '', 12);
+                    $icon = $this->fontmap[$key];
+                    $this->pdf->Cell(7, 5, $icon, 0, 0);
+                }
+            }
+            $this->pdf->Ln();
+        }
     }
 
     private function makeGraph(ArrayCollection $history)
@@ -171,7 +194,7 @@ class Report2PdfService
         $this->pdf->Cell(($this->pdf->pageWidth() - 20) / 2, 30, utf8_decode($studentResult->getTitular()));
 
         $this->orange();
-        $fn =  utf8_decode($studentResult->getFirstName());
+        $fn = utf8_decode($studentResult->getFirstName());
         $ln = utf8_decode($studentResult->getLastName());
         $this->pdf->Cell(($this->pdf->pageWidth() - 20) / 2 - 10, 30, $fn . '|' . $ln, 0, 1, 'R');
 

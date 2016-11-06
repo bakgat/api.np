@@ -105,6 +105,8 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('fr', 'pr_end', 'prEnd')
             ->addFieldResult('fr', 'pr_total', 'prTotal')
             ->addFieldResult('fr', 'pr_max', 'prMax')
+            ->addFieldResult('fr', 'pr_redicodi', 'prRedicodi')
+            ->addFieldResult('fr', 'pr_evcount', 'prEvCount')
             ->addFieldResult('fr', 'gr_id', 'grId')
             ->addFieldResult('fr', 'start', 'grStart')
             ->addFieldResult('fr', 'end', 'grEnd')
@@ -116,10 +118,11 @@ class EvaluationDoctrineRepository implements EvaluationRepository
 
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
-              pr.max as pr_max, gr.start as start, gr.end as end,
+              pr.max as pr_max, pr.redicodi as pr_redicodi, pr.evaluation_count as pr_evcount,
+              gr.id as gr_id, 
+              gr.start as start, gr.end as end,
               m.id as m_id, m.name as m_name, 
-              b.id as b_id, b.name as b_name,
-              gr.id as gr_id, bfg.id as bfg_id
+              b.id as b_id, b.name as b_name, bfg.id as bfg_id
               FROM rr pr
               LEFT JOIN students s ON pr.student_id = s.id
               INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id

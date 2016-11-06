@@ -13,6 +13,7 @@ use App\Domain\NtUid;
 use DateTime;
 
 
+use JMS\Serializer\Annotation\Accessor;
 use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
@@ -113,4 +114,17 @@ class FlatReport
      */
     private $prMax;
 
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
+    private $prRedicodi;
+    /**
+     * @ORM\Column(type="integer")
+     * @var int
+     */
+    private $prEvCount;
+
+
+    
 }

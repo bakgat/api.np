@@ -138,57 +138,12 @@ class EvaluationController extends Controller
      */
     public function getSummary()
     {
-        $report = $this->reportingService->getReport();
+        $report = $this->reportingService->getReport();;
 
         $this->pdfService
             ->report($report)
             ->withFrontPage()
             ->build();
 
-        //return $this->response($this->evaluationRepo->getSummary(), ['result_dto']);
-        /*
-        $range1 = ['start' => '2016-10-01', 'end' => '2016-12-31'];
-        $range2 = ['start' => '2016-04-01', 'end' => '2016-06-30'];
-        $report = new ReportDTO($range1);
-
-        $st1 = new StudentResultsDTO('Karl', 'Van Iseghem', 'L3A', 'juf Ursula Baelde');
-        $st2 = new StudentResultsDTO('Rebekka', 'Buyse', 'L3A', 'juf Ursula Baelde');
-
-        $m1 = new MajorResultsDTO('wiskunde');
-        $b1 = new BranchResultsDTO('getallenkennis');
-        $rp1 = new PointResultDTO($range1, 13, 20, false);
-        $re1 = new PointResultDTO($range1, 15, 20, true);
-
-        $rp2 = new PointResultDTO($range2, 10, 20, false);
-        $re2 = new PointResultDTO($range2, 18, 20, true);
-        $b1->addPointResult($rp1)->addPointResult($re1)
-            ->addPointResult($rp2)->addPointResult($re2);
-
-        $b2 = new BranchResultsDTO('hoofdrekenen');
-        $rp3 = new PointResultDTO($range1, 10, 20, false);
-        $re3 = new PointResultDTO($range1, 13, 20, true);
-
-        $rp4 = new PointResultDTO($range2, 15, 20, false);
-        $re4 = new PointResultDTO($range2, 20, 20, true);
-        $b2->addPointResult($rp3)->addPointResult($re3)
-            ->addPointResult($rp4)->addPointResult($re4);
-
-
-        $m1->addBranchResult($b1)->addBranchResult($b2);
-        $m2 = new MajorResultsDTO('taal');
-        $st1->addMajorResult($m1)->addMajorResult($m2);
-
-        $m3 = new MajorResultsDTO('wiskunde');
-        $m4 = new MajorResultsDTO('taal');
-        $st2->addMajorResult($m3)->addMajorResult($m4);
-
-        $report->addStudentResults($st1)
-            ->addStudentResults($st2);
-
-        $this->pdfService
-            ->report($report)
-            ->withFrontPage()
-            ->build();
-        */
     }
 }

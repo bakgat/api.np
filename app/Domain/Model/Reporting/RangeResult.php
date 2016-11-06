@@ -48,8 +48,18 @@ class RangeResult
      * @var float
      */
     private $max;
+    /**
+     * @Groups({"result_dto"})
+     * @var array
+     */
+    private $redicodi;
+    /**
+     * @Groups({"result_dto"})
+     * @var int
+     */
+    private $evCount;
 
-    public function __construct(NtUid $id, $start, $end, $perm, $final, $total, $max)
+    public function __construct(NtUid $id, $start, $end, $perm, $final, $total, $max, $redicodi, $evCount)
     {
         $this->id = $id;
         $this->range = DateRange::fromData(['start' => $start, 'end' => $end]);
@@ -57,6 +67,8 @@ class RangeResult
         $this->final = $final;
         $this->total = $total;
         $this->max = $max;
+        $this->redicodi = $this->cleanRedicodi($redicodi);
+        $this->evCount = $evCount;
     }
 
     /**
@@ -105,5 +117,27 @@ class RangeResult
     public function getTotal()
     {
         return round($this->total, 1);
+    }
+
+
+    private function cleanRedicodi($redicodi)
+    {
+        //CLEAN UP FIRST !
+        $arr = explode(',', $redicodi);
+        $filtered = array_filter($arr, function ($value) {
+            return $value !== '';
+        });
+
+        return array_count_values($filtered);
+    }
+
+    public function getRedicodi()
+    {
+        return $this->redicodi;
+    }
+
+    public function getEvCount()
+    {
+        return $this->evCount;
     }
 }

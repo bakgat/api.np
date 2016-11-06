@@ -68,7 +68,9 @@ class BranchResult
             $final = $data['prEnd'];
             $total = $data['prTotal'];
             $max = $data['prMax'];
-            $range = new RangeResult($id, $start, $end, $perm, $final, $total, $max);
+            $redicodi = $data['prRedicodi'];
+            $evCount = $data['prEvCount'];
+            $range = new RangeResult($id, $start, $end, $perm, $final, $total, $max, $redicodi, $evCount);
             $this->history->add($range);
         }
         return $range;
@@ -91,4 +93,5 @@ class BranchResult
         return clone $this->history;
     }
 
+    
 }
