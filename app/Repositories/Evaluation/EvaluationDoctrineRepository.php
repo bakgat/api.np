@@ -187,7 +187,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('fr', 'g_id', 'gId')
             ->addFieldResult('fr',  'g_name', 'gName')
             ->addFieldResult('fr', 'st_first_name', 'stFirstName')
-            ->addFieldResult('fr', 'st_last_name', 'stLastNmae')
+            ->addFieldResult('fr', 'st_last_name', 'stLastName')
             ->addFieldResult('fr', 'pr_id', 'prId')
             ->addFieldResult('fr', 'pr_perm', 'prPerm')
             ->addFieldResult('fr', 'pr_end', 'prEnd')
