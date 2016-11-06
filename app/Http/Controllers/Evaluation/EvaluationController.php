@@ -9,7 +9,6 @@
 namespace App\Http\Controllers\Evaluation;
 
 
-
 use Anouar\Fpdf\Fpdf;
 use App\Domain\DTO\Results\BranchResultsDTO;
 use App\Domain\DTO\Results\MajorResultsDTO;
@@ -136,14 +135,22 @@ class EvaluationController extends Controller
     /**
      *
      */
-    public function getSummary()
+    public function getSummary(Request $request)
     {
-        $report = $this->reportingService->getReport();;
+        if ($request->has('group')) {
+            $group = $request->get('group');
+            $report = $this->reportingService->getReport($group);;
+        } else {
+            $report = $this->reportingService->getFullReport();
+        }
 
-        $this->pdfService
-            ->report($report)
-            ->withFrontPage()
-            ->build();
+        $pdf = $this->pdfService
+            ->report($report);
+
+        //TODO: if with front page requested
+        $pdf->withFrontPage();
+
+        $pdf->build();
 
     }
 }

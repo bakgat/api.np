@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Evaluation;
 
 
+use App\Domain\Model\Education\Major;
 use App\Domain\Model\Identity\Group;
 use App\Domain\NtUid;
 use DateTime;
@@ -43,7 +44,9 @@ interface EvaluationRepository
 
     public function getReportsForStudents($studentIds, $range);
 
-    public function getReportsForGroup(Group $group, $range);
+    public function getReportsForGroup(NtUid $group, $range);
 
-    
+    public function getReportsForStudentsByMajor($studentIds, $range, Major $major);
+
+    public function getReportsForGroupByMajor(Group $group, $range, Major $major);
 }
