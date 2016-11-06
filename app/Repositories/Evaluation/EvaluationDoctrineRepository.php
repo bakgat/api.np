@@ -115,10 +115,25 @@ class EvaluationDoctrineRepository implements EvaluationRepository
 
     public function getReportsForStudents($studentIds, $range)
     {
-
+        $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
+              pr.max as pr_max, pr.redicodi as pr_redicodi, pr.evaluation_count as pr_evcount,
+              gr.id as gr_id, 
+              gr.start as start, gr.end as end,
+              m.id as m_id, m.name as m_name, 
+              b.id as b_id, b.name as b_name, bfg.id as bfg_id
+              FROM rr pr
+              INNER JOIN students s ON pr.student_id = s.id
+              INNER JOIN student_in_groups sig ON s.id = sig.student_id
+              INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id
+              INNER JOIN branches b ON b.id = bfg.branch_id
+              INNER JOIN majors m ON m.id = b.major_id
+              INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
+              WHERE s.id IN('" . implode('\',\'', $studentIds) . "')";
+        return $this->getReport($sql);
     }
 
-    public function getReportsForGroup(NtUid $group, $range)
+    public function getReportsForGroup($group, $range)
     {
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
@@ -150,7 +165,8 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         // TODO: Implement getReportsForGroupByMajor() method.
     }
 
-    private function getReport($sql) {
+    private function getReport($sql)
+    {
         $rsm = new ResultSetMapping;
 
         $rsm->addEntityResult(FlatReport::class, 'fr')

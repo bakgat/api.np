@@ -44,7 +44,7 @@ interface EvaluationRepository
 
     public function getReportsForStudents($studentIds, $range);
 
-    public function getReportsForGroup(NtUid $group, $range);
+    public function getReportsForGroup($group, $range);
 
     public function getReportsForStudentsByMajor($studentIds, $range, Major $major);
 

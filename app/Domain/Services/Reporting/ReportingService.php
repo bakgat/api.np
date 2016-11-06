@@ -23,18 +23,11 @@ class ReportingService
         $this->evaluationRepo = $evaluationRepository;
     }
 
-    public function getFullReport() {
+    public function getFullReport()
+    {
         $data = $this->evaluationRepo->getSummary();
 
-        $report = new Report();
-        foreach ($data as $item) {
-            $report->intoStudent($item)
-                ->intoMajor($item)
-                ->intoBranch($item)
-                ->intoHistory($item);
-        }
-
-        return $report;
+        return $this->generateReport($data);
     }
     // TODO: per group
     // TODO: per student
@@ -45,9 +38,22 @@ class ReportingService
     // TODO: 
     public function getReport($group)
     {
-        $group = NtUid::import($group);
         $data = $this->evaluationRepo->getReportsForGroup($group, null);
+        return $this->generateReport($data);
+    }
 
+    public function getReportByStudents($students)
+    {
+        $data = $this->evaluationRepo->getReportsForStudents($students, null);
+        return $this->generateReport($data);
+    }
+
+    /**
+     * @param $data
+     * @return Report
+     */
+    private function generateReport($data)
+    {
         $report = new Report();
         foreach ($data as $item) {
             $report->intoStudent($item)
@@ -55,7 +61,7 @@ class ReportingService
                 ->intoBranch($item)
                 ->intoHistory($item);
         }
-        
+
         return $report;
     }
 }

@@ -140,6 +140,9 @@ class EvaluationController extends Controller
         if ($request->has('group')) {
             $group = $request->get('group');
             $report = $this->reportingService->getReport($group);;
+        } else if ($request->has('students')) {
+            $students = explode('|', $request->get('students'));
+            $report = $this->reportingService->getReportByStudents($students);
         } else {
             $report = $this->reportingService->getFullReport();
         }
