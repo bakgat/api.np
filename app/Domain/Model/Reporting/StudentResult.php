@@ -116,7 +116,7 @@ class StudentResult
      */
     public function getTitular()
     {
-        return $this->firstName . ' ' . $this->lastName;
+        return $this->titularFirstName . ' ' . $this->titularLastName;
     }
 
 
