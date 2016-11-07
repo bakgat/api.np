@@ -18,6 +18,7 @@ use App\Domain\Model\Reporting\StudentResult;
 use App\Domain\Model\Time\DateRange;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use IntlDateFormatter;
 
 
 class Report2PdfService
@@ -45,7 +46,7 @@ class Report2PdfService
 
     public function __construct(EvaluationRepository $evaluationRepository)
     {
-        app('translator')->setLocale('nl_BE');
+        setlocale(LC_ALL, 'nl_BE');
         $this->evaluationRepo = $evaluationRepository;
         $this->pdf = new Ntpdf();
         $this->pdf->AddFont('Roboto', '', 'Roboto-Regular.php');
@@ -68,8 +69,10 @@ class Report2PdfService
 
     public function build()
     {
+
         /** @var StudentResult $result */
         foreach ($this->report->getStudentResults() as $result) {
+
             if ($this->frontPage) {
                 $this->makeFrontPage($result);
             }
@@ -104,6 +107,7 @@ class Report2PdfService
                     $this->pdf->Line(42, $this->pdf->y, $this->pdf->pageWidth() - 20, $this->pdf->y);
                 }
             }
+            $this->Footer($result);
 
         }
 
@@ -191,6 +195,7 @@ class Report2PdfService
         $this->pdf->SetAlpha(1);
         $this->pdf->SetXY(20, 0);
         $this->blue();
+
         $this->pdf->Cell(($this->pdf->pageWidth() - 20) / 2, 30, utf8_decode($studentResult->getTitular()));
 
         $this->orange();
@@ -205,6 +210,26 @@ class Report2PdfService
         $this->pdf->Cell(0, 10, 'Dit zijn mijn leervorderingen', 0, 1);
         $this->pdf->SetDrawColor(self::ORANGE[0], self::ORANGE[1], self::ORANGE[2]);
         $this->pdf->Line($this->pdf->x + 32, $this->pdf->y, $this->pdf->pageWidth() - $this->pdf->x, $this->pdf->y);
+    }
+
+    public function Footer(StudentResult $studentResult)
+    {
+        $this->pdf->SetY(-25);
+        $this->pdf->SetFont('Roboto', 'bold', 18);
+        $this->orange();
+
+        $this->pdf->SetAlpha(.54);
+
+        $formatter = new IntlDateFormatter('nl_BE', IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
+        $formatter->setPattern('MMMM');
+        $start = $formatter->format($this->report->getRange()->getStart());
+        $end = $formatter->format($this->report->getRange()->getEnd());
+        $this->pdf->Cell(0, 7, $start . '-' . $end, 0, 1);
+
+        $this->pdf->SetFontSize(40);
+        $formatter->setPattern('YYYY');
+        $year = $formatter->format($this->report->getRange()->getEnd());
+        $this->pdf->Cell(0, 10, $year, 0, 1);
     }
 
 #region COLORS

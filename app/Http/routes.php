@@ -10,7 +10,9 @@
 | and give it the Closure to call when that URI is requested.
 |
  */
-
+$app->get('/info', function() {
+    return phpinfo();
+});
 $app->get('/ntuid', function() {
    return \App\Domain\NtUid::generate(4);
 });

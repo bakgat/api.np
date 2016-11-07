@@ -11,6 +11,7 @@ namespace App\Domain\Model\Evaluation;
 
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Identity\Group;
+use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -40,11 +41,11 @@ interface EvaluationRepository
     /**
      * @return ArrayCollection
      */
-    public function getSummary();
+    public function getSummary(DateRange $range);
 
-    public function getReportsForStudents($studentIds, $range);
+    public function getReportsForStudents($studentIds, DateRange $range);
 
-    public function getReportsForGroup($group, $range);
+    public function getReportsForGroup($group, DateRange $range);
 
     public function getReportsForStudentsByMajor($studentIds, $range, Major $major);
 

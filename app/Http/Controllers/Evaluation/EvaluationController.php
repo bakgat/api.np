@@ -137,14 +137,22 @@ class EvaluationController extends Controller
      */
     public function getSummary(Request $request)
     {
+        if($request->has('start')) {
+            $start = $request->get('start');
+            $end = $request->get('end');
+        } else {
+            $start = '2016-09-01';
+            $end = '2016-12-31';
+        }
+        $range = DateRange::fromData(['start' => $start, 'end' => $end]);
         if ($request->has('group')) {
             $group = $request->get('group');
-            $report = $this->reportingService->getReport($group);;
+            $report = $this->reportingService->getReport($group, $range);;
         } else if ($request->has('students')) {
             $students = explode('|', $request->get('students'));
-            $report = $this->reportingService->getReportByStudents($students);
+            $report = $this->reportingService->getReportByStudents($students, $range);
         } else {
-            $report = $this->reportingService->getFullReport();
+            $report = $this->reportingService->getFullReport($range);
         }
 
         $pdf = $this->pdfService

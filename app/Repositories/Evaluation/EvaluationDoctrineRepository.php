@@ -21,6 +21,7 @@ use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Reporting\FlatReport;
+use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
 use DateTime;
 use Doctrine\ORM\EntityManager;
@@ -97,7 +98,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     /* ***************************************************
      * REPORTING
      * **************************************************/
-    public function getSummary()
+    public function getSummary(DateRange $range)
     {
         //TODO: now for group relation should be requested range !!
 
@@ -120,12 +121,13 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-              WHERE bfg.start <= NOW() AND bfg.end >= NOW() AND stig.type='X'";
+              WHERE gr.end>='" . $range->getEnd()->format('Y-m-d') . "'
+                AND stig.type='X'";
 
         return $this->getReport($sql);
     }
 
-    public function getReportsForStudents($studentIds, $range)
+    public function getReportsForStudents($studentIds, DateRange $range)
     {
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
@@ -146,13 +148,13 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-              WHERE bfg.start <= NOW() AND bfg.end >= NOW() 
+              WHERE gr.end>='" . $range->getEnd()->format('Y-m-d') . "' 
                   AND stig.type='X'
                   AND s.id IN('" . implode('\',\'', $studentIds) . "')";
         return $this->getReport($sql);
     }
 
-    public function getReportsForGroup($group, $range)
+    public function getReportsForGroup($group, DateRange $range)
     {
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
@@ -173,7 +175,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-              WHERE bfg.start <= NOW() AND bfg.end >= NOW() 
+              WHERE gr.end>='" . $range->getEnd()->format('Y-m-d') . "'
                   AND stig.type='X'
                   AND sig.group_id='" . $group . "'";
         return $this->getReport($sql);
@@ -199,7 +201,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('fr', 'first_name', 'sFirstName')
             ->addFieldResult('fr', 'last_name', 'sLastName')
             ->addFieldResult('fr', 'g_id', 'gId')
-            ->addFieldResult('fr',  'g_name', 'gName')
+            ->addFieldResult('fr', 'g_name', 'gName')
             ->addFieldResult('fr', 'st_first_name', 'stFirstName')
             ->addFieldResult('fr', 'st_last_name', 'stLastName')
             ->addFieldResult('fr', 'pr_id', 'prId')

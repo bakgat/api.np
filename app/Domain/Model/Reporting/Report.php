@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Reporting;
 
 
+use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -17,6 +18,10 @@ use JMS\Serializer\Annotation\Groups;
 
 class Report
 {
+    /**
+     * @Groups({"result_dto"})
+     * @var DateRange
+     */
     private $range;
 
     /**
@@ -25,8 +30,9 @@ class Report
      */
     private $students;
 
-    public function __construct()
+    public function __construct(DateRange $dateRange)
     {
+        $this->range = $dateRange;
         $this->students = new ArrayCollection;
     }
 
@@ -58,5 +64,13 @@ class Report
     public function getStudentResults()
     {
         return clone $this->students;
+    }
+
+    /**
+     * @return DateRange
+     */
+    public function getRange()
+    {
+        return $this->range;
     }
 }
