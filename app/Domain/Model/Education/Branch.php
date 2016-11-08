@@ -13,6 +13,7 @@ use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Identity\Group;
 use DateTime;
 use App\Domain\NtUid;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
 use JMS\Serializer\Annotation\Groups;
@@ -27,7 +28,8 @@ use JMS\Serializer\Annotation\Groups;
 class Branch
 {
     /**
-     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
+     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi",
+     *     "group_evaluations", "evaluation_detail", "iac_goals", "student_iac"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -37,7 +39,8 @@ class Branch
     private $id;
 
     /**
-     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
+     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi",
+     *     "group_evaluations", "evaluation_detail", "iac_goals", "student_iac"})
      *
      * @ORM\Column(type="string")
      *
@@ -46,7 +49,7 @@ class Branch
     private $name;
 
     /**
-     * @Groups({"group_branches", "branch_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
+     * @Groups({"group_branches", "branch_list", "student_redicodi", "group_evaluations", "evaluation_detail", "student_iac"})
      *
      * @ORM\ManyToOne(targetEntity="Major", inversedBy="branches")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -62,10 +65,19 @@ class Branch
      */
     private $branchForGroups;
 
+    /**
+     * @Groups({"iac_goals"})
+     * @ORM\OneToMany(targetEntity="Goal", mappedBy="branch", cascade={"persist"})
+     *
+     * @var ArrayCollection
+     */
+    private $goals;
+
     public function __construct($name)
     {
         $this->id = NtUid::generate(4);
         $this->name = $name;
+        $this->goals = new ArrayCollection;
     }
 
     public function getId()
@@ -147,5 +159,13 @@ class Branch
             }
         }
         return $groups;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getGoals()
+    {
+        return clone $this->goals;
     }
 }

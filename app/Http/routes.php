@@ -99,6 +99,15 @@ $app->group(['prefix'=>'evaluations', 'namespace' => 'App\Http\Controllers\Evalu
 
     $app->post('/', 'EvaluationController@store');
     $app->put('/{id}', 'EvaluationController@update');
+});
 
+/* ***************************************************
+ * IACs
+ * **************************************************/
+$app->group(['prefix' => 'iac/goals', 'namespace' => 'App\Http\Controllers\Evaluation'], function() use($app) {
+    $app->get('/', 'IacController@indexGoals');
+    $app->get('/major/{majorId}', 'IacController@indexGoalsByMajor');
+    $app->get('/branch/{branchId}', 'IacController@indexGoalsByBranch');
 
+    $app->get('/student/{studentId}', 'IacController@indexGoalsForStudent');
 });

@@ -19,13 +19,13 @@ use JMS\Serializer\Annotation\Groups;
 class Report
 {
     /**
-     * @Groups({"result_dto"})
+     * @Groups({"result_dto", "student_iac"})
      * @var DateRange
      */
     private $range;
 
     /**
-     * @Groups({"result_dto"})
+     * @Groups({"result_dto", "student_iac"})
      * @var ArrayCollection
      */
     private $students;
@@ -43,9 +43,9 @@ class Report
         if (!$stud) {
             $fn = $data['sFirstName'];
             $ln = $data['sLastName'];
-            $group = $data['gName'];
-            $stFn = $data['stFirstName'];
-            $stLn = $data['stLastName'];
+            $group = isset($data['gName']) ? $data['gName'] : null;
+            $stFn = isset($data['stFirstName']) ? $data['stFirstName'] : null;
+            $stLn = isset($data['stLastName']) ? $data['stLastName'] : null;
             $stud = new StudentResult($id, $fn, $ln, $group, $stFn, $stLn);
             $this->students->add($stud);
         }

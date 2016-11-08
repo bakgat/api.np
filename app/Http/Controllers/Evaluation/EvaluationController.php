@@ -10,11 +10,6 @@ namespace App\Http\Controllers\Evaluation;
 
 
 use Anouar\Fpdf\Fpdf;
-use App\Domain\DTO\Results\BranchResultsDTO;
-use App\Domain\DTO\Results\MajorResultsDTO;
-use App\Domain\DTO\Results\PointResultDTO;
-use App\Domain\DTO\Results\ReportDTO;
-use App\Domain\DTO\Results\StudentResultsDTO;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\GroupRepository;
@@ -137,7 +132,7 @@ class EvaluationController extends Controller
      */
     public function getSummary(Request $request)
     {
-        if($request->has('start')) {
+        if ($request->has('start')) {
             $start = $request->get('start');
             $end = $request->get('end');
         } else {
@@ -154,14 +149,15 @@ class EvaluationController extends Controller
         } else {
             $report = $this->reportingService->getFullReport($range);
         }
-
+        return $this->response($report, ['result_dto', 'student_iac']);
+        /*
         $pdf = $this->pdfService
             ->report($report);
 
         //TODO: if with front page requested
         $pdf->withFrontPage();
 
-        $pdf->build();
+        $pdf->build();*/
 
     }
 }

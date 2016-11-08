@@ -13,6 +13,7 @@ use App\Domain\NtUid;
 
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity
  * @ORM\Table(name="goals")
@@ -23,6 +24,7 @@ use Doctrine\ORM\Mapping AS ORM;
 class Goal
 {
     /**
+     * @Groups({"iac_goals", "student_iac"})
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -31,7 +33,8 @@ class Goal
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Branch")
+     * @Groups({"student_iac"})
+     * @ORM\ManyToOne(targetEntity="Branch", inversedBy="goals")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
      * @var Branch
@@ -39,6 +42,7 @@ class Goal
     protected $branch;
 
     /**
+     * @Groups({"iac_goals", "student_iac"})
      * @ORM\Column(type="string")
      *
      * @var string

@@ -10,6 +10,7 @@ namespace App\Domain\Services\Reporting;
 
 
 use App\Domain\Model\Evaluation\EvaluationRepository;
+use App\Domain\Model\Evaluation\IACRepository;
 use App\Domain\Model\Reporting\Report;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
@@ -19,16 +20,27 @@ class ReportingService
     /** @var EvaluationRepository */
     private $evaluationRepo;
 
-    public function __construct(EvaluationRepository $evaluationRepository)
+    /**
+     * @var IACRepository
+     */
+    private $iacRepo;
+
+    public function __construct(EvaluationRepository $evaluationRepository, IACRepository $iacRepository)
     {
         $this->evaluationRepo = $evaluationRepository;
+        $this->iacRepo = $iacRepository;
     }
 
     public function getFullReport(DateRange $range)
     {
         $data = $this->evaluationRepo->getSummary($range);
+        $iacs = $this->iacRepo->getIacs();
 
-        return $this->generateReport($data, $range);
+        $report = new Report($range);
+        $this->generateResultsReport($report, $data);
+        $this->generateIacsReport($report, $iacs);
+
+        return $report;
     }
     // TODO: per group
     // TODO: per student
@@ -40,27 +52,48 @@ class ReportingService
     public function getReport($group, DateRange $range)
     {
         $data = $this->evaluationRepo->getReportsForGroup($group, $range);
-        return $this->generateReport($data, $range);
+        $report = new Report($range);
+        return $this->generateResultsReport($report, $data);
     }
 
     public function getReportByStudents($students, DateRange $range)
     {
         $data = $this->evaluationRepo->getReportsForStudents($students, $range);
-        return $this->generateReport($data, $range);
+        $report = new Report($range);
+        return $this->generateResultsReport($report, $data);
     }
 
     /**
+     * @param Report $report
      * @param $data
      * @return Report
      */
-    private function generateReport($data, DateRange $range)
+    private function generateResultsReport(Report $report, $data)
     {
-        $report = new Report($range);
+
         foreach ($data as $item) {
             $report->intoStudent($item)
                 ->intoMajor($item)
                 ->intoBranch($item)
                 ->intoHistory($item);
+        }
+
+        return $report;
+    }
+
+    /**
+     * @param Report $report
+     * @param $iacs
+     * @return Report
+     */
+    private function generateIacsReport(Report $report, $iacs)
+    {
+        foreach ($iacs as $item) {
+            $report->intoStudent($item)
+                ->intoMajor($item)
+                ->intoBranch($item)
+                ->intoIac($item)
+                ->intoGoal($item);
         }
 
         return $report;

@@ -25,7 +25,8 @@ use JMS\Serializer\Annotation\Groups;
 class Major
 {
     /**
-     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
+     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi", "group_evaluations",
+     *     "evaluation_detail", "iac_goals", "student_iac"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -35,7 +36,8 @@ class Major
     private $id;
 
     /**
-     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi", "group_evaluations", "evaluation_detail"})
+     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi", "group_evaluations",
+     *     "evaluation_detail", "iac_goals", "student_iac"})
      *
      * @ORM\Column(type="string", unique=true)
      *
@@ -44,7 +46,7 @@ class Major
     private $name;
 
     /**
-     * @Groups({"major_list"})
+     * @Groups({"major_list", "iac_goals"})
      * @ORM\OneToMany(targetEntity="Branch", mappedBy="major", cascade={"persist"})
      *
      * @var ArrayCollection

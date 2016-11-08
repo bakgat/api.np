@@ -71,6 +71,7 @@ $repos = [
     'Identity\Role',
     'Education\Branch',
     'Evaluation\Evaluation',
+    'Evaluation\IAC',
     'Events\EventTracking',
 ];
 

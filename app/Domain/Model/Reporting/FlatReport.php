@@ -8,11 +8,8 @@
 
 namespace App\Domain\Model\Reporting;
 
-
 use App\Domain\NtUid;
 use DateTime;
-
-
 use JMS\Serializer\Annotation\Accessor;
 use Doctrine\ORM\Mapping AS ORM;
 

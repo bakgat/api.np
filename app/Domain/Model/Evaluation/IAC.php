@@ -19,6 +19,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity
  * @ORM\Table(name="iacs")
@@ -31,6 +32,7 @@ class IAC
     use DateRangeTrait;
 
     /**
+     * @Groups({"student_iac"})
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -47,6 +49,7 @@ class IAC
     protected $student;
 
     /**
+     * @Groups({"student_iac"})
      * @ORM\OneToMany(targetEntity="IACGoal", mappedBy="iac", cascade={"persist"})
      *
      * @var IACGoal[]
@@ -54,6 +57,7 @@ class IAC
     protected $iacGoals;
 
     /**
+     * @Groups({"student_iac"})
      * @ORM\Embedded(class="App\Domain\Model\Time\DateRange", columnPrefix=false)
      *
      * @var DateRange

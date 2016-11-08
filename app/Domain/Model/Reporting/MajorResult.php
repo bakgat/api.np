@@ -22,13 +22,13 @@ class MajorResult
     private $id;
 
     /**
-     * @Groups({"result_dto"})
+     * @Groups({"result_dto", "student_iac"})
      * @var string
      */
     private $name;
 
     /**
-     * @Groups({"result_dto"})
+     * @Groups({"result_dto", "student_iac"})
      * @var ArrayCollection
      */
     private $branches;

@@ -16,6 +16,8 @@ use DateTime;
 
 use Doctrine\ORM\Mapping AS ORM;
 
+use JMS\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="iac_goals")
@@ -42,6 +44,7 @@ class IACGoal
     protected $iac;
 
     /**
+     * @Groups({"student_iac"})
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Education\Goal")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *

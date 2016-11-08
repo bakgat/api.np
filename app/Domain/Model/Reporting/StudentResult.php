@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Reporting;
 
 
+use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
 
 
@@ -24,19 +25,19 @@ class StudentResult
     private $id;
 
     /**
-     * @Groups({"result_dto"})
+     * @Groups({"result_dto", "student_iac"})
      * @var string
      */
     private $firstName;
 
     /**
-     * @Groups({"result_dto"})
+     * @Groups({"result_dto", "student_iac"})
      * @var string
      */
     private $lastName;
 
     /**
-     * @Groups({"result_dto"})
+     * @Groups({"result_dto", "student_iac"})
      * @var ArrayCollection
      */
     private $majors;
@@ -60,6 +61,7 @@ class StudentResult
     private $titularLastName;
 
 
+
     public function __construct(NtUid $id, $firstName, $lastName, $groupName, $stFirstName, $stLastName)
     {
         $this->id = $id;
@@ -69,6 +71,7 @@ class StudentResult
         $this->titularFirstName = $stFirstName;
         $this->titularLastName = $stLastName;
         $this->majors = new ArrayCollection;
+        $this->iacs = new ArrayCollection;
     }
 
     /**
@@ -125,14 +128,14 @@ class StudentResult
         $id = NtUid::import($data['mId']);
         $maj = $this->hasMajor($id);
         if (!$maj) {
-            $name =  $data['mName'];
+            $name = $data['mName'];
             $maj = new MajorResult($id, $name);
             $this->majors->add($maj);
         }
         return $maj;
     }
 
-    public function hasMajor(NtUid $id)
+    private function hasMajor(NtUid $id)
     {
         $maj = $this->majors->filter(function ($element) use ($id) {
             /** @var MajorResult $element */
@@ -142,11 +145,12 @@ class StudentResult
     }
 
 
-
     public function getMajorResults()
     {
         return clone $this->majors;
     }
+
+    
 
 
 }
