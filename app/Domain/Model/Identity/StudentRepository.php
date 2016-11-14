@@ -120,5 +120,10 @@ interface StudentRepository
      */
     public function updateRedicodi(RedicodiForStudent $studentRedicodi);
 
+    /**
+     * @return int
+     */
+    public function count();
+
 
 }

@@ -18,7 +18,7 @@ use Doctrine\ORM\Query\ResultSetMapping;
 
 class EventTrackingDoctrineRepository implements EventTrackingRepository
 {
-    /** @var EntityManager  */
+    /** @var EntityManager */
     protected $em;
 
     public function __construct(EntityManager $em)
@@ -43,7 +43,13 @@ class EventTrackingDoctrineRepository implements EventTrackingRepository
      */
     public function allOfType($type)
     {
-        // TODO: Implement allOfType() method.
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('et.action, COUNT(et.id) as action_count, SUBSTRING(et.timestamp, 1, 10) as fd')
+            ->from(EventTracking::class, 'et')
+            ->where('et.actionTable=:actionTable')
+            ->setParameter('actionTable', $type)
+            ->groupBy('et.action, fd');
+        return $qb->getQuery()->getScalarResult();
     }
 
     /**

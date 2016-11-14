@@ -9,13 +9,11 @@
 namespace App\Repositories\Identity;
 
 
-use App\Domain\Model\Identity\Collection;
 use App\Domain\Model\Identity\Exceptions\StaffNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\Staff;
 use App\Domain\Model\Identity\StaffRepository;
-use App\Domain\Model\Identity\Student;
 use App\Domain\NtUid;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -184,4 +182,14 @@ class StaffDoctrineRepository implements StaffRepository
     }
 
 
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('count(s.id)')
+            ->from(Staff::class, 's');
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

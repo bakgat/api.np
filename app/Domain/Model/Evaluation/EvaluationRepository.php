@@ -50,4 +50,9 @@ interface EvaluationRepository
     public function getReportsForStudentsByMajor($studentIds, $range, Major $major);
 
     public function getReportsForGroupByMajor(Group $group, $range, Major $major);
+
+    /**
+     * @return int
+     */
+    public function count();
 }

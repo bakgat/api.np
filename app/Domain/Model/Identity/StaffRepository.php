@@ -68,4 +68,9 @@ interface StaffRepository
      * @return int Number of affected rows.
      */
     public function delete(NtUid $id);
+
+    /**
+     * @return int
+     */
+    public function count();
 }

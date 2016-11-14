@@ -74,6 +74,15 @@ class EventTracking
      */
     protected $actionId;
 
+    /**
+     * @Groups({"track_list"})
+     *
+     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Version
+     *
+     * @var string
+     */
+    protected $timestamp;
 
     public function __construct($userTable, $userId, $actionTable, $action, $actionId)
     {

@@ -262,4 +262,14 @@ class StudentDoctrineRepository implements StudentRepository
     }
 
 
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('count(s.id)')
+            ->from(Student::class, 's');
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

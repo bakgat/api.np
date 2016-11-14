@@ -223,4 +223,15 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $result = $query->getArrayResult();
         return $result;
     }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('count(e.id)')
+            ->from(Evaluation::class, 'e');
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

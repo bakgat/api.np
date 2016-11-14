@@ -10,11 +10,11 @@
 | and give it the Closure to call when that URI is requested.
 |
  */
-$app->get('/info', function() {
+$app->get('/info', function () {
     return phpinfo();
 });
-$app->get('/ntuid', function() {
-   return \App\Domain\NtUid::generate(4);
+$app->get('/ntuid', function () {
+    return \App\Domain\NtUid::generate(4);
 });
 /* ***************************************************
  * STUDENTS
@@ -83,7 +83,7 @@ $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity
 /* ***************************************************
  * ROLES
  * **************************************************/
-$app->group(['prefix'=>'roles', 'namespace'=>'App\Http\Controllers\Identity'], function() use($app) {
+$app->group(['prefix' => 'roles', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
     $app->get('/', 'RoleController@index');
 });
 /* ***************************************************
@@ -98,7 +98,7 @@ $app->group(['prefix' => 'branches', 'namespace' => 'App\Http\Controllers\Educat
 /* ***************************************************
  * EVALUATIONS
  * **************************************************/
-$app->group(['prefix'=>'evaluations', 'namespace' => 'App\Http\Controllers\Evaluation'], function() use($app) {
+$app->group(['prefix' => 'evaluations', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
     $app->get('/', 'EvaluationController@index');
     $app->get('/summary', 'EvaluationController@getSummary');
     $app->get('/{id}', 'EvaluationController@show');
@@ -110,12 +110,16 @@ $app->group(['prefix'=>'evaluations', 'namespace' => 'App\Http\Controllers\Evalu
 /* ***************************************************
  * IACs
  * **************************************************/
-$app->group(['prefix' => 'iac/goals', 'namespace' => 'App\Http\Controllers\Evaluation'], function() use($app) {
+$app->group(['prefix' => 'iac/goals', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
     $app->get('/', 'IacController@indexGoals');
     $app->get('/major/{majorId}', 'IacController@indexGoalsByMajor');
     $app->get('/branch/{branchId}', 'IacController@indexGoalsByBranch');
 
     $app->get('/student/{studentId}', 'IacController@indexGoalsForStudent');
-    
+
     $app->delete('/{iacId}', 'IacController@destroy');
+});
+
+$app->group(['prefix' => 'analytics', 'namespace' => 'App\Http\Controllers\Events'], function () use ($app) {
+    $app->get('/events/report', 'EventController@reportEvents');
 });
