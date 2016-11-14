@@ -12,11 +12,13 @@ namespace App\Repositories\Evaluation;
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\Goal;
 use App\Domain\Model\Education\Major;
+use App\Domain\Model\Evaluation\Exceptions\IacNotFoundException;
 use App\Domain\Model\Evaluation\IAC;
 use App\Domain\Model\Evaluation\IACGoal;
 use App\Domain\Model\Evaluation\IACRepository;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Reporting\FlatIAC;
+use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -55,6 +57,7 @@ class IACDoctrineRepository implements IACRepository
         return $qb->getQuery()->getResult();
     }
 
+
     public function allGoalsForBranch(Branch $branch)
     {
         $qb = $this->em->createQueryBuilder();
@@ -66,6 +69,8 @@ class IACDoctrineRepository implements IACRepository
 
         return $qb->getQuery()->getResult();
     }
+
+
 
     /**
      * @return ArrayCollection
@@ -88,7 +93,7 @@ class IACDoctrineRepository implements IACRepository
     }
 
     public function iacForStudent(Student $student)
-    {
+    {/*
         $sql = "SELECT ig.id as ig_id, ig.achieved as ig_achieved, ig.practice as ig_practice, ig.comment as ig_comment, ig.date as ig_date,
                     iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
                     s.id as s_id, s.first_name as s_first_name, s.last_name as s_last_name,
@@ -102,8 +107,18 @@ class IACDoctrineRepository implements IACRepository
                     INNER JOIN majors m ON m.id = b.major_id
                     INNER JOIN students s ON s.id = iac.student_id
                     WHERE s.id = '" . $student->getId() . "'";
-
-        return $this->getIac($sql);
+*/
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('iac, ig, m, b, g')
+            ->from(IAC::class, 'iac')
+            ->join('iac.branch', 'b')
+            ->join('b.major', 'm')
+            ->join('iac.iacGoals', 'ig')
+            ->join('ig.goal', 'g')
+            ->where('iac.student=:student')
+            ->setParameter('student', $student->getId());
+        return $qb->getQuery()->getResult();
+        //return $this->getIac($sql);
     }
 
     /**
@@ -139,4 +154,50 @@ class IACDoctrineRepository implements IACRepository
     }
 
 
+    /**
+     * @param NtUid $id
+     * @return Goal
+     */
+    public function getGoal(NtUid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('g')
+            ->from(Goal::class, 'g')
+            ->where('g.id=:id')
+            ->setParameter('id', $id);
+        return $qb->getQuery()->getOneOrNullResult();
+        
+    }
+
+    public function insert(IAC $iac)
+    {
+        $this->em->persist($iac);
+        $this->em->flush();
+    }
+
+    public function get(NtUid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('iac', 'ig', 'g')
+            ->from(IAC::class, 'iac')
+            ->join('iac.iacGoals', 'ig')
+            ->join('ig.goal', 'g')
+            ->where('iac.id=:id')
+            ->setParameter('id',$id);
+
+        $iac = $qb->getQuery()->getOneOrNullResult();
+        
+        if($iac == null) {
+            throw new IacNotFoundException($id);
+        }
+        return $iac;
+    }
+
+    public function update(IAC $iac)
+    {
+        $this->em->persist($iac);
+
+        $this->em->flush();
+        return 1;
+    }
 }

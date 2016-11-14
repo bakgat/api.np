@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Evaluation;
 
 
+use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\Goal;
 use App\Domain\NtUid;
 use DateTime;
@@ -28,6 +29,7 @@ use JMS\Serializer\Annotation\Groups;
 class IACGoal
 {
     /**
+     * @Groups({"student_iac"})
      * @ORM\Id
      * @ORM\Column(type="guid")
      *
@@ -53,6 +55,7 @@ class IACGoal
     protected $goal;
 
     /**
+     * @Groups({"student_iac"})
      * @ORM\Column(type="boolean", nullable=true)
      *
      * @var bool
@@ -60,6 +63,7 @@ class IACGoal
     protected $achieved;
 
     /**
+     * @Groups({"student_iac"})
      * @ORM\Column(type="boolean", nullable=true)
      *
      * @var bool
@@ -67,6 +71,7 @@ class IACGoal
     protected $practice;
 
     /**
+     * @Groups({"student_iac"})
      * @ORM\Column(type="text", nullable=true)
      *
      * @var string
@@ -74,6 +79,7 @@ class IACGoal
     protected $comment;
 
     /**
+     * @Groups({"student_iac"})
      * @ORM\Column(type="date", nullable=true)
      *
      * @var DateTime
@@ -129,21 +135,37 @@ class IACGoal
         return $this->comment;
     }
 
-    public function setAchieved($comment = null)
+    public function setAchieved($achieved )
     {
-        $this->achieved = true;
-        $this->practice = false;
-        $this->comment = $comment;
+        $this->achieved = $achieved;
         $this->date = new DateTime;
 
         return $this;
     }
-    public function setPractice($comment = null) {
-        $this->achieved = false;
-        $this->practice = true;
-        $this->comment = $comment;
+
+    public function setPractice($practice)
+    {
+        $this->practice = $practice;
         $this->date = new DateTime();
 
+        return $this;
+    }
+
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+        return $this;
+    }
+
+    public function clearAchieved()
+    {
+        $this->achieved = null;
+        return $this;
+    }
+
+    public function clearPractice()
+    {
+        $this->practice = null;
         return $this;
     }
 }

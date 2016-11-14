@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Reporting;
 
 
+use App\Domain\Model\Education\Goal;
 use App\Domain\NtUid;
 
 use DateTime;
@@ -21,15 +22,6 @@ class IacGoalResult
      * @var NtUid
      */
     private $id;
-    /**
-     * @var NtUid
-     */
-    private $gId;
-    /**
-     * @Groups({"student_iac"})
-     * @var string
-     */
-    private $text;
     /**
      * @Groups({"student_iac"})
      * @var boolean
@@ -53,6 +45,11 @@ class IacGoalResult
      * @var DateTime
      */
     private $date;
+    /**
+     * @Groups({"student_iac"})
+     * @var GoalResult
+     */
+    private $goal;
 
 
     /**
@@ -67,8 +64,7 @@ class IacGoalResult
     public function __construct($id, $gId, $gText, $achieved, $practice, $comment, $date)
     {
         $this->id = $id;
-        $this->gId = $gId;
-        $this->text = $gText;
+        $this->goal = new GoalResult($gId, $gText);
         $this->achieved = $achieved == null ? false : $achieved;
         $this->practice = $practice == null ? false : $practice;
         $this->comment = $comment == null ? '' : $comment;

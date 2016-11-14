@@ -35,6 +35,11 @@ $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identi
     $app->post('/{id}/redicodi', 'StudentController@addRedicodi');
     $app->put('/{id}/redicodi/{studentRedicodiId}', 'StudentController@updateRedicodi');
 
+    //IAC
+    $app->get('/{id}/iac', 'StudentController@allIac');
+    $app->post('/{id}/iac', 'StudentController@addIac');
+    $app->put('/{id}/iac/{iacId}', 'StudentController@updateIac');
+
 });
 /* ***************************************************
  * STAFF

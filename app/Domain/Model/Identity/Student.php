@@ -60,6 +60,7 @@ class Student extends Person
 
 
 
+
     public function __construct($firstName, $lastName, $schoolId, Gender $gender, DateTime $birthday = null)
     {
         parent::__construct($firstName, $lastName, $gender, $birthday);

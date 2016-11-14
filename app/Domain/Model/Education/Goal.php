@@ -33,7 +33,6 @@ class Goal
     protected $id;
 
     /**
-     * @Groups({"student_iac"})
      * @ORM\ManyToOne(targetEntity="Branch", inversedBy="goals")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *

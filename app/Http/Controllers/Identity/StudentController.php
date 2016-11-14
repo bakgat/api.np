@@ -11,7 +11,9 @@ namespace App\Http\Controllers\Identity;
 
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\StudentRepository;
+use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
+use App\Domain\Services\Evaluation\IacService;
 use App\Domain\Services\Identity\StudentService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -26,16 +28,20 @@ class StudentController extends Controller
     private $groupRepo;
     /** @var StudentService */
     private $studentService;
+    /** @var IacService */
+    private $iacService;
 
     public function __construct(StudentRepository $studentRepo,
                                 GroupRepository $groupRepository,
                                 StudentService $studentService,
+                                IacService $iacService,
                                 SerializerInterface $serializer)
     {
         parent::__construct($serializer);
         $this->studentRepo = $studentRepo;
         $this->groupRepo = $groupRepository;
         $this->studentService = $studentService;
+        $this->iacService = $iacService;
     }
 
     public function index(Request $request)
@@ -78,7 +84,7 @@ class StudentController extends Controller
         }
 
         $data = $request->all();
-        $data['auth_token']= $request->header('Auth');
+        $data['auth_token'] = $request->header('Auth');
         $student = $this->studentService->create($data);
         return $this->response($student, ['student_detail']);
     }
@@ -97,7 +103,7 @@ class StudentController extends Controller
         }
 
         $data = $request->all();
-        $data['auth_token']= $request->header('Auth');
+        $data['auth_token'] = $request->header('Auth');
         $student = $this->studentService->update($data);
         return $this->response($student, ['student_detail']);
     }
@@ -158,7 +164,7 @@ class StudentController extends Controller
     {
         //TODO: validation !
         $data = $request->all();
-        $data['auth_token']= $request->header('Auth');
+        $data['auth_token'] = $request->header('Auth');
         $studentRedicodi = $this->studentService->addRedicodi($id, $data);
         return $this->response($studentRedicodi, ['student_redicodi']);
     }
@@ -166,8 +172,33 @@ class StudentController extends Controller
     public function updateRedicodi(Request $request, $studentRedicodiId)
     {
         $data = $request->all();
-        $data['auth_token']= $request->header('Auth');
+        $data['auth_token'] = $request->header('Auth');
         $studentRedicodi = $this->studentService->updateRedicodi($studentRedicodiId, $data);
         return $this->response($studentRedicodi, ['student_redicodi']);
+    }
+
+    /* ***************************************************
+     * IAC
+     * **************************************************/
+    public function allIac($id)
+    {
+        $iac = $this->iacService->getIACsForStudent($id, DateRange::infinite());
+        return $this->response($iac, ['student_iac']);
+    }
+
+    public function addIac(Request $request, $id)
+    {
+        $data = $request->all();
+        $data['auth_token'] = $request->header('Auth');
+        $studentIac = $this->iacService->addIac($id, $data);
+        return $this->response($studentIac, ['student_iac']);
+    }
+
+    public function updateIac(Request $request, $iacId)
+    {
+        $data = $request->all();
+        $data['auth_token'] = $request->header('Auth');
+        $studentIac = $this->iacService->updateIac($iacId, $data);
+        return $this->response($studentIac, ['student_iac']);
     }
 }

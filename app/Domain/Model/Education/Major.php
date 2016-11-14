@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Education;
 
 
+use App\Domain\Model\Evaluation\IAC;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Domain\NtUid;
 use Doctrine\ORM\Mapping AS ORM;

@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Evaluation;
 
 
+use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\Goal;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Time\DateRange;
@@ -20,6 +21,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping AS ORM;
 
 use JMS\Serializer\Annotation\Groups;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="iacs")
@@ -50,7 +52,15 @@ class IAC
 
     /**
      * @Groups({"student_iac"})
-     * @ORM\OneToMany(targetEntity="IACGoal", mappedBy="iac", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Education\Branch")
+     *
+     * @var Branch
+     */
+    protected $branch;
+
+    /**
+     * @Groups({"student_iac"})
+     * @ORM\OneToMany(targetEntity="IACGoal", mappedBy="iac", cascade={"persist", "remove"}, orphanRemoval=true)
      *
      * @var IACGoal[]
      */
@@ -64,10 +74,11 @@ class IAC
      */
     protected $dateRange;
 
-    public function __construct(Student $student, $dateRange)
+    public function __construct(Student $student, Branch $branch, $dateRange)
     {
         $this->id = NtUid::generate(4);
         $this->student = $student;
+        $this->branch = $branch;
         $this->iacGoals = new ArrayCollection;
         $this->dateRange = DateRange::fromData($dateRange);
     }
@@ -76,6 +87,7 @@ class IAC
     {
         return $this->id;
     }
+
 
     public function getStudent()
     {
@@ -92,5 +104,19 @@ class IAC
     public function allIACGoals()
     {
         return clone $this->iacGoals;
+    }
+
+    /**
+     * @param IACGoal $item
+     */
+    public function removeIACGoal(IACGoal $item)
+    {
+        $this->iacGoals->removeElement($item);
+    }
+
+    public function setDateRange($dateRange)
+    {
+        $this->dateRange = DateRange::fromData($dateRange);
+        return $this;
     }
 }

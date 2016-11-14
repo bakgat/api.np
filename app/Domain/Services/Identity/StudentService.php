@@ -12,9 +12,8 @@ namespace App\Domain\Services\Identity;
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Education\Redicodi;
+use App\Domain\Model\Evaluation\IACRepository;
 use App\Domain\Model\Evaluation\RedicodiForStudent;
-use App\Domain\Model\Events\EventTracking;
-use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
@@ -22,6 +21,7 @@ use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentInGroup;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Domain\NtUid;
+use App\Domain\Services\TrackService;
 
 class StudentService
 {
@@ -31,24 +31,29 @@ class StudentService
     protected $groupRepo;
     /** @var BranchRepository */
     protected $branchRepo;
-    /** @var EventTrackingRepository */
-    protected $trackRepo;
+    /** @var TrackService */
+    protected $trackService;
+    /** @var IACRepository */
+    protected $iacRepo;
 
     public function __construct(StudentRepository $studentRepository,
                                 GroupRepository $groupRepository,
                                 BranchRepository $branchRepository,
-                                EventTrackingRepository $eventTrackingRepository)
+                                TrackService $trackService,
+                                IACRepository $IACRepository)
     {
         $this->studentRepo = $studentRepository;
         $this->groupRepo = $groupRepository;
         $this->branchRepo = $branchRepository;
-        $this->trackRepo = $eventTrackingRepository;
+        $this->trackService = $trackService;
+        $this->iacRepo = $IACRepository;
     }
 
     public function all()
     {
         return $this->studentRepo->all();
     }
+
 
     public function get($id)
     {
@@ -79,10 +84,7 @@ class StudentService
 
         $this->studentRepo->insert($student);
 
-        $userId = $data['auth_token'];
-        $track = new EventTracking('staff', $userId, 'students', 'insert', $student->getId());
-        $this->trackRepo->save($track);
-
+        $this->trackService->track($data['auth_token'], 'students', 'insert', $student->getId());
 
         return $student;
     }
@@ -104,9 +106,7 @@ class StudentService
         $student->updateProfile($firstName, $lastName, $schoolId, $gender, $birthday);
         $this->studentRepo->update($student);
 
-        $userId = $data['auth_token'];
-        $track = new EventTracking('staff', $userId, 'students', 'update', $student->getId());
-        $this->trackRepo->save($track);
+        $this->trackService->track($data['auth_token'], 'students', 'update', $student->getId());
 
         return $student;
     }
@@ -167,7 +167,7 @@ class StudentService
             $branchId = $data['branch']['id'];
         }
         $majorId = null;
-        if(isset($data['major'])) {
+        if (isset($data['major'])) {
             $majorId = $data['major']['id'];
         }
         $content = $data['content'];
@@ -180,7 +180,7 @@ class StudentService
             $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
         }
         $major = null;
-        if($majorId != null) {
+        if ($majorId != null) {
             $major = $this->branchRepo->getMajor(NtUid::import($majorId));
         }
 
@@ -192,7 +192,7 @@ class StudentService
         }
         $this->studentRepo->update($student);
 
-        $this->insertTracking($data, 'redicodi_for_students', 'insert', $studentRedicodi->getId());
+        $this->trackService->track($data['auth_token'], 'redicodi_for_students', 'insert', $studentRedicodi->getId());
 
         return $studentRedicodi;
     }
@@ -213,7 +213,7 @@ class StudentService
             $branchId = $data['branch']['id'];
         }
         $majorId = null;
-        if(isset($data['major'])) {
+        if (isset($data['major'])) {
             $majorId = $data['major']['id'];
         }
         $content = $data['content'];
@@ -226,7 +226,7 @@ class StudentService
             $branch = $this->branchRepo->getBranch(NtUid::import($branchId));
         }
         $major = null;
-        if($majorId != null) {
+        if ($majorId != null) {
             $major = $this->branchRepo->getMajor(NtUid::import($majorId));
         }
 
@@ -234,28 +234,17 @@ class StudentService
         $studentRedicodi->resetStart($start);
         if ($end != null) {
             $studentRedicodi->stopRedicodi($end);
-            $trackDone = $this->insertTracking($data, 'redicodi_for_students', 'stopped', $studentRedicodiId);
+            $trackDone =  $this->trackService->track($data['auth_token'], 'redicodi_for_students', 'stopped', $studentRedicodi->getId());
         }
 
         $redicodi = new Redicodi($redicodi);
         $studentRedicodi->update($branch, $major, $redicodi, $content);
         $this->studentRepo->updateRedicodi($studentRedicodi);
 
-        if(!$trackDone) {
-            $this->insertTracking($data, 'redicodi_for_students', 'update', $studentRedicodiId);
+        if (!$trackDone) {
+            $this->trackService->track($data['auth_token'], 'redicodi_for_students', 'update', $studentRedicodi->getId());
         }
 
         return $studentRedicodi;
     }
-
-
-    private function insertTracking($data, $table, $action, $id)
-    {
-        $userId = $data['auth_token'];
-        $track = new EventTracking('staff', $userId, $table, $action, $id);
-        $this->trackRepo->save($track);
-        return true;
-    }
-
-
 }

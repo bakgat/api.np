@@ -14,7 +14,7 @@ use App\Domain\Model\Evaluation\IACRepository;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
-use App\Domain\Services\Reporting\IacService;
+use App\Domain\Services\Evaluation\IacService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use JMS\Serializer\SerializerInterface;
