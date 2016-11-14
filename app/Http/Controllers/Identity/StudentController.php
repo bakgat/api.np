@@ -201,4 +201,9 @@ class StudentController extends Controller
         $studentIac = $this->iacService->updateIac($iacId, $data);
         return $this->response($studentIac, ['student_iac']);
     }
+
+    public function destroyIac($iacId) {
+        $this->iacService->deleteIAC($iacId);
+        return $this->response(true);
+    }
 }

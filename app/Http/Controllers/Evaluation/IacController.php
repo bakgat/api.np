@@ -80,4 +80,9 @@ class IacController extends Controller
         $iac = $this->iacService->getIACsForStudent($studentId, $range);
         return $this->response($iac, ['student_iac']);
     }
+
+    public function destroy($iacId) {
+        $this->iacService->deleteIAC($iacId);
+        return $this->response($iacId);
+    }
 }

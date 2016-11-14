@@ -200,4 +200,14 @@ class IACDoctrineRepository implements IACRepository
         $this->em->flush();
         return 1;
     }
+
+    /**
+     * @param $iacId
+     * @return mixed
+     */
+    public function remove(IAC $iac)
+    {
+        $this->em->remove($iac);
+        $this->em->flush();
+    }
 }

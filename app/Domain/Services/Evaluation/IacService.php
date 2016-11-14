@@ -200,6 +200,11 @@ class IacService
         return $iac;
     }
 
+    public function deleteIAC($iacId) {
+        $iac = $this->get($iacId);
+        $this->iacRepo->remove($iac);
+    }
+
     public function getIACsForStudent($studentId, DateRange $range)
     {
         //TODO:

@@ -39,6 +39,7 @@ $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identi
     $app->get('/{id}/iac', 'StudentController@allIac');
     $app->post('/{id}/iac', 'StudentController@addIac');
     $app->put('/{id}/iac/{iacId}', 'StudentController@updateIac');
+    $app->delete('/{id}/iac/{iacId}', 'StudentController@destroyIac');
 
 });
 /* ***************************************************
@@ -115,4 +116,6 @@ $app->group(['prefix' => 'iac/goals', 'namespace' => 'App\Http\Controllers\Evalu
     $app->get('/branch/{branchId}', 'IacController@indexGoalsByBranch');
 
     $app->get('/student/{studentId}', 'IacController@indexGoalsForStudent');
+    
+    $app->delete('/{iacId}', 'IacController@destroy');
 });

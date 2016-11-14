@@ -51,5 +51,11 @@ interface IACRepository
      */
     public function getGoal(NtUid $id);
 
+    /**
+     * @param $iacId
+     * @return mixed
+     */
+    public function remove(IAC $iacId);
+
 
 }
