@@ -19,6 +19,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\Expr\Join;
 
 class StudentDoctrineRepository implements StudentRepository
 {
@@ -47,7 +48,8 @@ class StudentDoctrineRepository implements StudentRepository
                     $qb->expr()->gte('sig.dateRange.end', '?1')
                 ))
             ->join('sig.group', 'g')
-            ->orderBy('sig.number');
+            ->orderBy('sig.number')
+            ->setParameter(1, new DateTime);
         return $qb->getQuery()->getResult();
     }
 

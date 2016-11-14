@@ -43,11 +43,10 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
      * @group studentrepo
      * @group all
      */
-    public function should_return_440_students()
+    public function should_return_411_students()
     {
         $students = $this->studentRepo->all();
-
-        $this->assertCount(440, $students);
+        $this->assertCount(411, $students);
     }
 
     /**
@@ -75,7 +74,7 @@ class DoctrineStudentRepositoryTest extends DoctrineTestCase
         //flatten school id because this should be unique
         // and thus returns 440 results
         $students = $this->studentRepo->flat('schoolId');
-        $this->assertCount(440, $students);
+        $this->assertCount(411, $students);
 
         $student1 = $students[0];
 

@@ -2,6 +2,7 @@
 
 namespace App\Domain\Services\Identity;
 
+use App\Domain\Model\Identity\Exceptions\StaffNotFoundException;
 use App\Domain\Model\Identity\Gender;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\GroupRepository;
@@ -13,7 +14,9 @@ use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StaffRole;
 use App\Domain\Model\Identity\StaffType;
 use App\Domain\NtUid;
+use App\Domain\Services\TrackService;
 use DateTime;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -31,12 +34,20 @@ class StaffService
     protected $groupRepo;
     /** @var RoleRepository */
     protected $roleRepo;
+    /**
+     * @var TrackService
+     */
+    private $trackService;
 
-    public function __construct(StaffRepository $staffRepository, GroupRepository $groupRepository, RoleRepository $roleRepository)
+    public function __construct(StaffRepository $staffRepository,
+                                GroupRepository $groupRepository,
+                                RoleRepository $roleRepository,
+                                TrackService $trackService)
     {
         $this->staffRepo = $staffRepository;
         $this->groupRepo = $groupRepository;
         $this->roleRepo = $roleRepository;
+        $this->trackService = $trackService;
     }
 
     public function all()
@@ -220,5 +231,32 @@ class StaffService
     {
         $member = $this->staffRepo->findByEmail($email);
         return $member;
+    }
+
+    /**
+     * @param $email
+     * @return array
+     * @throws StaffNotFoundException
+     */
+    public function login($email)
+    {
+        ///$email = $request->get('email');
+        $member = $this->findByEmail($email);
+        if ($member == null) {
+            throw new StaffNotFoundException($email);
+        }
+        $auth = [
+            'auth_token' => $member->getId()->toString(),
+            'given_name' => $member->getFirstName(),
+            'roles' => []
+        ];
+        /** @var Role $activeRole */
+        foreach ($member->getActiveRoles() as $activeRole) {
+            $auth['roles'][] = ['id' => $activeRole->getId(), 'name' => $activeRole->getName()];
+        }
+
+        $this->trackService->track($auth['auth_token'], 'staff', 'login', $auth['auth_token']);
+
+        return $auth;
     }
 }

@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Identity;
 
 
 use App\Domain\Model\Events\EventTrackingRepository;
+use App\Domain\Model\Identity\Exceptions\StaffNotFoundException;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StaffType;
@@ -191,36 +192,18 @@ class StaffController extends Controller
         return $this->response($staffRole, ['staff_roles']);
     }
 
-
+    /**
+     * @param Request $request
+     * @return string
+     * @throws StaffNotFoundException
+     */
     public function login(Request $request)
     {
-        $email = $request->get('email');
-        $member = $this->staffService->findByEmail($email);
-        if ($member == null) {
-            return $this->response('User not found', 401); //unauthorized
-        }
-        $auth = [
-            'auth_token' => $member->getId()->toString(),
-            'given_name' => $member->getFirstName(),
-            'roles' => []
-        ];
-        /** @var Role $activeRole */
-        foreach ($member->getActiveRoles() as $activeRole) {
-            $auth['roles'][] = ['id' => $activeRole->getId(), 'name' => $activeRole->getName()];
-        }
-
+        $auth = $this->staffService->login($request->get('email'));
         return $this->response($auth);
     }
-    /*
-    public function removeRole(Request $request, $id, $roleId)
-    {
-        $end = $request->get('end');
-        if ($end) {
-            $end = convert_date_from_string($end);
-        }
 
-        return $this->staffService->removeFromRole($id, $roleId, $end);
-    }*/
+    
     public function actions($id) {
         $id = NtUid::import($id);
         $tracks = $this->trackingRepo->allOfUser($id, 'staff');
