@@ -149,15 +149,15 @@ class EvaluationController extends Controller
         } else {
             $report = $this->reportingService->getFullReport($range);
         }
-        return $this->response($report, ['result_dto', 'student_iac']);
-        /*
+        //return $this->response($report, ['result_dto', 'student_iac']);
+
         $pdf = $this->pdfService
             ->report($report);
 
         //TODO: if with front page requested
         $pdf->withFrontPage();
 
-        $pdf->build();*/
+        $pdf->build();
 
     }
 }
