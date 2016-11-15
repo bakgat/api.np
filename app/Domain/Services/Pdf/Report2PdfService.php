@@ -94,13 +94,16 @@ class Report2PdfService
                     $this->pdf->SetFont('Roboto', '', 12);
                     $this->pdf->SetAlpha(.84);
                     $this->pdf->y += 3;
-                    $this->pdf->Cell(50, 10, utf8_decode(ucfirst($branchResult->getName())));
+                    if ($branchResult->getName() != 'Permanente evaluatie') {
+                        $this->pdf->Cell(50, 10, utf8_decode(ucfirst($branchResult->getName())));
+                    }
 
                     $history = $branchResult->getHistory();
 
-                    $this->makePoint($history->get(0));
-                    $this->makeGraph($branchResult->getHistory());
-
+                    if (count($history) > 0) {
+                        $this->makePoint($history->get(0));
+                        $this->makeGraph($branchResult->getHistory());
+                    }
                     $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
                     $this->pdf->SetAlpha(.54);
                     $this->pdf->y += 3;
