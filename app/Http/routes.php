@@ -110,13 +110,16 @@ $app->group(['prefix' => 'evaluations', 'namespace' => 'App\Http\Controllers\Eva
 /* ***************************************************
  * IACs
  * **************************************************/
-$app->group(['prefix' => 'iac/goals', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
-    $app->get('/', 'IacController@indexGoals');
-    $app->get('/major/{majorId}', 'IacController@indexGoalsByMajor');
-    $app->get('/branch/{branchId}', 'IacController@indexGoalsByBranch');
+$app->group(['prefix' => 'iac', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
+    $app->get('/', 'IacController@indexIacs');
+
+    $app->get('/goals', 'IacController@indexGoals');
+    $app->get('/goals/major/{majorId}', 'IacController@indexGoalsByMajor');
+    $app->get('/goals/branch/{branchId}', 'IacController@indexGoalsByBranch');
 
     $app->get('/student/{studentId}', 'IacController@indexGoalsForStudent');
 
+    $app->put('/{iacId}', 'IacController@updateIac');
     $app->delete('/{iacId}', 'IacController@destroy');
 });
 

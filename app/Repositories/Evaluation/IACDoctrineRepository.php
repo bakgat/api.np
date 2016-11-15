@@ -16,9 +16,12 @@ use App\Domain\Model\Evaluation\Exceptions\IacNotFoundException;
 use App\Domain\Model\Evaluation\IAC;
 use App\Domain\Model\Evaluation\IACGoal;
 use App\Domain\Model\Evaluation\IACRepository;
+use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Reporting\FlatIAC;
+use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -71,7 +74,6 @@ class IACDoctrineRepository implements IACRepository
     }
 
 
-
     /**
      * @return ArrayCollection
      */
@@ -91,6 +93,7 @@ class IACDoctrineRepository implements IACRepository
                     INNER JOIN students s ON s.id = iac.student_id";
         return $this->getIac($sql);
     }
+
 
     public function iacForStudent(Student $student)
     {/*
@@ -166,7 +169,7 @@ class IACDoctrineRepository implements IACRepository
             ->where('g.id=:id')
             ->setParameter('id', $id);
         return $qb->getQuery()->getOneOrNullResult();
-        
+
     }
 
     public function insert(IAC $iac)
@@ -183,14 +186,39 @@ class IACDoctrineRepository implements IACRepository
             ->join('iac.iacGoals', 'ig')
             ->join('ig.goal', 'g')
             ->where('iac.id=:id')
-            ->setParameter('id',$id);
+            ->setParameter('id', $id);
 
         $iac = $qb->getQuery()->getOneOrNullResult();
-        
-        if($iac == null) {
+
+        if ($iac == null) {
             throw new IacNotFoundException($id);
         }
         return $iac;
+    }
+
+    /**
+     * @param $group
+     * @return ArrayCollection
+     */
+    public function iacsForGroup(Group $group)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('iac, ig, b, m, g, s')
+            ->from(IAC::class, 'iac')
+            ->join('iac.iacGoals', 'ig')
+            ->join('ig.goal', 'g')
+            ->join('iac.student', 's')
+            ->join('iac.branch', 'b')
+            ->join('b.major', 'm')
+            ->join('s.studentInGroups', 'sig')
+            ->where($qb->expr()->andX(
+                $qb->expr()->lte('iac.dateRange.start', '?1'),
+                $qb->expr()->gte('sig.dateRange.end', '?1'),
+                $qb->expr()->eq('sig.group', '?2')
+            ))
+            ->setParameter(1, new DateTime)
+            ->setParameter(2, $group->getId());
+        return $qb->getQuery()->getResult();
     }
 
     public function update(IAC $iac)
@@ -210,4 +238,6 @@ class IACDoctrineRepository implements IACRepository
         $this->em->remove($iac);
         $this->em->flush();
     }
+
+
 }

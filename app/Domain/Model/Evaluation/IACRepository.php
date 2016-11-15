@@ -12,6 +12,7 @@ namespace App\Domain\Model\Evaluation;
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\Goal;
 use App\Domain\Model\Education\Major;
+use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
 use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -56,6 +57,12 @@ interface IACRepository
      * @return mixed
      */
     public function remove(IAC $iacId);
+
+    /**
+     * @param $group
+     * @return ArrayCollection
+     */
+    public function iacsForGroup(Group $group);
 
 
 }

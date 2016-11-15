@@ -68,7 +68,7 @@ class IacController extends Controller
 
     public function indexGoalsForStudent(Request $request, $studentId)
     {
-        if($request->has('start')) {
+        if ($request->has('start')) {
             $start = $request->get('start');
             $end = $request->get('end');
         } else {
@@ -81,7 +81,32 @@ class IacController extends Controller
         return $this->response($iac, ['student_iac']);
     }
 
-    public function destroy($iacId) {
+    public function indexIacs(Request $request)
+    {
+        $groupId = $request->get('group');
+        if ($request->has('start')) {
+            $start = $request->get('start');
+            $end = $request->get('end');
+        } else {
+            $start = '2016-09-01';
+            $end = '2016-12-31';
+        }
+        $range = DateRange::fromData(['start' => $start, 'end' => $end]);
+
+        $iac = $this->iacService->getIacsForGroup($groupId);
+        return $this->response($iac, ['student_iac']);
+    }
+
+    public function updateIac(Request $request, $iacId)
+    {
+        $data = $request->all();
+        $data['auth_token'] = $request->header('Auth');
+        $studentIac = $this->iacService->updateIac($iacId, $data);
+        return $this->response($studentIac, ['student_iac']);
+    }
+
+    public function destroy($iacId)
+    {
         $this->iacService->deleteIAC($iacId);
         return $this->response($iacId);
     }

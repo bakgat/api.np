@@ -43,6 +43,8 @@ class IAC
     protected $id;
 
     /**
+     * @Groups({"student_iac"})
+    *
      * @ORM\ManyToOne(targetEntity="App\Domain\Model\Identity\Student")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *

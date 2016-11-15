@@ -13,6 +13,7 @@ use App\Domain\Model\Education\Goal;
 use App\Domain\Model\Evaluation\IAC;
 use App\Domain\Model\Evaluation\IACGoal;
 use App\Domain\Model\Evaluation\IACRepository;
+use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Domain\Model\Reporting\Report;
@@ -39,6 +40,10 @@ class IacService
      * @var TrackService
      */
     private $trackService;
+    /**
+     * @var GroupRepository
+     */
+    private $groupRepository;
 
     /**
      * IacService constructor.
@@ -49,12 +54,14 @@ class IacService
      */
     public function __construct(IACRepository $iacRepository,
                                 StudentService $studentService, BranchService $branchService,
+                                GroupRepository $groupRepository,
                                 TrackService $trackService)
     {
         $this->iacRepo = $iacRepository;
         $this->studentService = $studentService;
         $this->branchService = $branchService;
         $this->trackService = $trackService;
+        $this->groupRepository = $groupRepository;
     }
 
     /**
@@ -139,7 +146,7 @@ class IacService
         }
         $daterange = DateRange::fromData(['start' => $start, 'end' => $end]);
         $iac->setDateRange($daterange);
-        
+
         $dbIds = [];
         /** @var IACGoal $item */
         foreach ($iac->allIACGoals()->toArray() as $item) {
@@ -150,35 +157,40 @@ class IacService
         $dataIds = [];
         foreach ($dataGoals as $dataGoal) {
             if (isset($dataGoal['id']) && isset($dataGoal['goal'])) {
-
-                $criteria = Criteria::create()
-                    ->where(Criteria::expr()->eq("id", NtUid::import($dataGoal['id'])));
+                $ntId = NtUid::import($dataGoal['id']);
+                $ig = null;
                 /** @var IACGoal $ig */
-                $ig = $iac->allIACGoals()->matching($criteria)->first();
-                if (array_key_exists('achieved', $dataGoal)) {
-                    $achieved = $dataGoal['achieved'];
-                    if ($achieved == null) {
-                        $ig->clearAchieved();
-                    } else {
-                        $ig->setAchieved($achieved);
+                foreach ($iac->allIACGoals() as $iacGoal) {
+                    if ($iacGoal->getId() == $ntId) {
+                        $ig = $iacGoal;
+                        break;
                     }
                 }
-                if (array_key_exists('practice', $dataGoal)) {
-                    $practice = $dataGoal['practice'];
-                    if ($practice == null) {
-                        $ig->clearPractice();
-                    } else {
-                        $ig->setPractice($practice);
+                if ($ig) {
+                    if (array_key_exists('achieved', $dataGoal)) {
+                        $achieved = $dataGoal['achieved'];
+                        if ($achieved == null) {
+                            $ig->clearAchieved();
+                        } else {
+                            $ig->setAchieved($achieved);
+                        }
                     }
-                }
-                if (array_key_exists('comment', $dataGoal)) {
-                    $comment = $dataGoal['comment'];
-                    $ig->setComment($comment);
-                }
+                    if (array_key_exists('practice', $dataGoal)) {
+                        $practice = $dataGoal['practice'];
+                        if ($practice == null) {
+                            $ig->clearPractice();
+                        } else {
+                            $ig->setPractice($practice);
+                        }
+                    }
+                    if (array_key_exists('comment', $dataGoal)) {
+                        $comment = $dataGoal['comment'];
+                        $ig->setComment($comment);
+                    }
 
-                //keep track of data-ids, so we can calculate the difference for deleted ones
-                $dataIds[] = $dataGoal['id'];
-
+                    //keep track of data-ids, so we can calculate the difference for deleted ones
+                    $dataIds[] = $dataGoal['id'];
+                }
             } else if (isset($dataGoal['id']) && !isset($dataGoal['goal'])) {
                 //Adding new ones
                 $gId = $dataGoal['id'];
@@ -200,7 +212,8 @@ class IacService
         return $iac;
     }
 
-    public function deleteIAC($iacId) {
+    public function deleteIAC($iacId)
+    {
         $iac = $this->get($iacId);
         $this->iacRepo->remove($iac);
     }
@@ -222,6 +235,15 @@ class IacService
         $data = $this->iacRepo->iacForStudent($student);
         return $data;
         //return $this->generatePerStudent($data, $student);
+    }
+
+    public function getIacsForGroup($groupId)
+    {
+        $id = NtUid::import($groupId);
+        $group = $this->groupRepository->get($id);
+        $data = $this->iacRepo->iacsForGroup($group);
+        return $data;
+
     }
 
     private function generateIac($data, DateRange $range)

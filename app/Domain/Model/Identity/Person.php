@@ -111,7 +111,8 @@ abstract class Person
 
     /**
      * @VirtualProperty
-     * @Groups({"student_list", "student_detail", "staff_list", "staff_detail", "group_students", "evaluation_detail"})
+     * @Groups({"student_list", "student_detail", "staff_list", "staff_detail",
+     *     "group_students", "evaluation_detail","student_iac"})
      *
      * @return string
      */
