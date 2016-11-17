@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: karlvaniseghem
- * Date: 5/10/16
- * Time: 20:41
+ * Date: 16/11/16
+ * Time: 20:38
  */
 
 namespace App\Domain\Model\Evaluation;
@@ -20,12 +20,12 @@ use JMS\Serializer\Annotation\Type;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="spoken_results")
+ * @ORM\Table(name="feedback_results")
  *
- * Class SpokenResult
- * @package App\Domain\Model\Evaluation
+ * Class FeedbackResult
+ * @package app\Domain\Model\Evaluation
  */
-class SpokenResult
+class FeedbackResult
 {
     /**
      * @ORM\Id
@@ -34,9 +34,8 @@ class SpokenResult
      * @var NtUid
      */
     protected $id;
-
     /**
-     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Evaluation\Evaluation", inversedBy="spokenResults")
+     * @ORM\ManyToOne(targetEntity="App\Domain\Model\Evaluation\Evaluation", inversedBy="feedbackResults")
      * @ORM\JoinColumn(onDelete="CASCADE")
      *
      * @var Evaluation
@@ -62,7 +61,7 @@ class SpokenResult
      */
     protected $summary;
 
-    public function __construct(Student $student, $summary=null)
+    public function __construct(Student $student, $summary = null)
     {
         $this->id = NtUid::generate(4);
         $this->student = $student;
@@ -78,7 +77,7 @@ class SpokenResult
     }
 
     /**
-     * @param mixed $evaluation
+     * @param Evaluation $evaluation
      */
     public function setEvaluation($evaluation)
     {
@@ -86,7 +85,7 @@ class SpokenResult
     }
 
     /**
-     * @return mixed
+     * @return Evaluation
      */
     public function getEvaluation()
     {
@@ -94,7 +93,7 @@ class SpokenResult
     }
 
     /**
-     * @return mixed
+     * @return Student
      */
     public function getStudent()
     {
@@ -109,7 +108,12 @@ class SpokenResult
         return $this->summary;
     }
 
-    public function updateSummary($summary) {
+    /**
+     * @param string $summary
+     */
+    public function setSummary($summary)
+    {
         $this->summary = $summary;
     }
+    
 }

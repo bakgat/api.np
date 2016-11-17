@@ -142,14 +142,14 @@ class EvaluationController extends Controller
         $range = DateRange::fromData(['start' => $start, 'end' => $end]);
         if ($request->has('group')) {
             $group = $request->get('group');
-            $report = $this->reportingService->getReport($group, $range);;
+            $report = $this->reportingService->getReportByGroup($group, $range);;
         } else if ($request->has('students')) {
             $students = explode('|', $request->get('students'));
             $report = $this->reportingService->getReportByStudents($students, $range);
         } else {
             $report = $this->reportingService->getFullReport($range);
         }
-        //return $this->response($report, ['result_dto', 'student_iac']);
+        return $this->response($report, ['result_dto', 'student_iac']);
 
         $pdf = $this->pdfService
             ->report($report);

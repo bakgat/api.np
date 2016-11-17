@@ -100,10 +100,12 @@ class Report2PdfService
 
                     $history = $branchResult->getHistory();
 
+                    //TODO: check this out! What if only IAC ? there is no history then !!!
                     if (count($history) > 0) {
                         $this->makePoint($history->get(0));
                         $this->makeGraph($branchResult->getHistory());
                     }
+
                     $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
                     $this->pdf->SetAlpha(.54);
                     $this->pdf->y += 3;

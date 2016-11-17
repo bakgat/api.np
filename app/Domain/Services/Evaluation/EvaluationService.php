@@ -7,6 +7,7 @@ use App\Domain\Model\Evaluation\ComprehensiveResult;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\EvaluationType;
+use App\Domain\Model\Evaluation\FeedbackResult;
 use App\Domain\Model\Evaluation\MultiplechoiceResult;
 use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Evaluation\SpokenResult;
@@ -105,6 +106,16 @@ class EvaluationService
                 $mcr = new MultiplechoiceResult($student, $selected);
                 $evaluation->addMultiplechoiceResult($mcr);
             }
+        } else if($type->getValue() == EvaluationType::FEEDBACK) {
+            $results = $data['feedbackResults'];
+            foreach ($results as $result) {
+                $studentId = $result['student']['id'];
+                $student = $this->studentRepo->get(NtUid::import($studentId));
+
+                $summary = isset($result['summary']) ? $result['summary'] : null;
+                $fr = new FeedbackResult($student, $summary);
+                $evaluation->addFeedbackResult($fr);
+            }
         }
 
 
@@ -153,7 +164,16 @@ class EvaluationService
 
                 $evaluation->updateMultiplechoiceResult($student, $result['selected']);
             }
+        } else if($type->getValue() == EvaluationType::FEEDBACK) {
+            $results = $data['feedbackResults'];
+            foreach ($results as $result) {
+                $studentId = $result['student']['id'];
+                $student = $this->studentRepo->get(NtUid::import($studentId));
+
+                $evaluation->updateFeedbackResult($student, $result['summary']);
+            }
         }
+
         $this->evaluationRepo->update($evaluation);
 
         $userId = NtUid::import($data['auth_token']);

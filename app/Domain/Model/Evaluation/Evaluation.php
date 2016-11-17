@@ -97,7 +97,6 @@ class Evaluation
     protected $settings;
 
 
-
     /**
      * @Groups({"p_evaluation_detail"})
      * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\PointResult", mappedBy="evaluation", cascade={"persist"})
@@ -130,6 +129,14 @@ class Evaluation
      */
     protected $multiplechoiceResults;
 
+    /**
+     * @Groups({"f_evaluation_detail"})
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\FeedbackResult", mappedBy="evaluation", cascade={"persist"})
+     *
+     * @var ArrayCollection
+     */
+    protected $feedbackResults;
+
 
     /**
      * Evaluation constructor.
@@ -154,6 +161,7 @@ class Evaluation
         $this->comprehensiveResults = new ArrayCollection;
         $this->spokenResults = new ArrayCollection;
         $this->multiplechoiceResults = new ArrayCollection;
+        $this->feedbackResults = new ArrayCollection;
     }
 
     public function getId()
@@ -243,8 +251,17 @@ class Evaluation
         return clone $this->comprehensiveResults;
     }
 
-    public function getMultiplechoiceResults() {
+    public function getMultiplechoiceResults()
+    {
         return clone $this->multiplechoiceResults;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getFeedbackResults()
+    {
+        return clone $this->feedbackResults;
     }
 
     public function update($title, $branchForGroup, $date, $max, $permanent)
@@ -302,7 +319,8 @@ class Evaluation
     /* ***************************************************
      * SPOKEN RESULTS
      * **************************************************/
-    public function addSpokenResult(SpokenResult $result) {
+    public function addSpokenResult(SpokenResult $result)
+    {
         $this->spokenResults->add($result);
         $result->setEvaluation($this);
     }
@@ -316,7 +334,7 @@ class Evaluation
         $result->setEvaluation($this);
     }
 
-    public function updateMultiplechoiceResult($student, $selected)
+    public function updateMultiplechoiceResult(Student $student, $selected)
     {
         /** @var MultiplechoiceResult $result */
         foreach ($this->multiplechoiceResults as $result) {
@@ -326,6 +344,27 @@ class Evaluation
             }
         }
 
+        return $this;
+    }
+
+    /* ***************************************************
+     * FEEDBACK
+     * **************************************************/
+    public function addFeedbackResult(FeedbackResult $result)
+    {
+        $this->feedbackResults->add($result);
+        $result->setEvaluation($this);
+    }
+
+    public function updateFeedbackResult(Student $student, $summary)
+    {
+        /** @var FeedbackResult $result */
+        foreach ($this->feedbackResults as $result) {
+            if($result->getStudent()->getId() == $student->getId()) {
+                $result->setSummary($summary);
+                break;
+            }
+        }
         return $this;
     }
 

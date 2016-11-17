@@ -32,7 +32,7 @@ use JMS\Serializer\Annotation\VirtualProperty;
 class Student extends Person
 {
     /**
-     * @Groups({"student_detail", "evaluation_detail"})
+     * @Groups({"student_detail"})
      *
      * @ORM\Column(type="string")
      *

@@ -104,4 +104,11 @@ interface BranchRepository
      * @return ArrayCollection
      */
     public function allMajors();
+
+    /**
+     * @param $find
+     * @param $group
+     * @return ArrayCollection
+     */
+    public function byName($find, Group $group);
 }

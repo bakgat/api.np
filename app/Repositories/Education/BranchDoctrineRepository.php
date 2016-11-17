@@ -21,6 +21,7 @@ use App\Domain\Model\Identity\Group;
 use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
+use Illuminate\Support\Facades\Cache;
 
 class BranchDoctrineRepository implements BranchRepository
 {
@@ -118,7 +119,7 @@ class BranchDoctrineRepository implements BranchRepository
         $qb->select('bfg, m, b')
             ->from(BranchForGroup::class, 'bfg')
             ->join('bfg.branch', 'b')
-            ->join('b.major', 'm')
+            ->leftJoin('b.major', 'm')
             ->where('bfg.group=:group')
             ->andWhere('bfg.evaluationType=:type')
             ->setParameter('group', $group->getId())
@@ -238,4 +239,28 @@ class BranchDoctrineRepository implements BranchRepository
     }
 
 
+    /**
+     * @param $find
+     * @param $group
+     * @return ArrayCollection
+     */
+    public function byName($find, Group $group)
+    {
+        if(Cache::has($group->getId()) . '|' . $find) {
+            return Cache::get($group->getId() . '|' . $find);
+        }
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('bfg, m, b')
+            ->from(BranchForGroup::class, 'bfg')
+            ->join('bfg.branch', 'b')
+            ->join('b.major', 'm')
+            ->where('b.name=:find')
+            ->andWhere('bfg.group=:group')
+            ->setParameter('find', $find)
+            ->setParameter('group', $group->getId());
+
+        $result = $qb->getQuery()->getResult();
+        Cache::forever($group->getId() . '|' . $find, $result);
+        return $result;
+    }
 }

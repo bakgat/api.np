@@ -43,8 +43,20 @@ interface EvaluationRepository
      */
     public function getSummary(DateRange $range);
 
+    /**
+     * @param $studentId
+     * @param $range
+     * @return ArrayCollection
+     */
+    public function getReportsForStudent($studentId, $range);
+
     public function getReportsForStudents($studentIds, DateRange $range);
 
+    /**
+     * @param $group
+     * @param DateRange $range
+     * @return ArrayCollection
+     */
     public function getReportsForGroup($group, DateRange $range);
 
     public function getReportsForStudentsByMajor($studentIds, $range, Major $major);
@@ -55,4 +67,6 @@ interface EvaluationRepository
      * @return int
      */
     public function count();
+
+
 }

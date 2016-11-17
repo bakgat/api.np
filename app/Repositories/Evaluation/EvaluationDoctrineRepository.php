@@ -8,11 +8,6 @@
 
 namespace App\Repositories\Evaluation;
 
-
-use App\Domain\DTO\Results\BranchResultsDTO;
-use App\Domain\DTO\Results\MajorResultsDTO;
-use App\Domain\DTO\Results\PointResultDTO;
-use App\Domain\DTO\Results\StudentResultDTO;
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
@@ -24,6 +19,7 @@ use App\Domain\Model\Reporting\FlatReport;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
 
@@ -41,12 +37,13 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     {
         $qb = $this->em->createQueryBuilder();
 
-        $qb->select('e, bfg, b, m, pr')
+        $qb->select('e, bfg, b, m, pr, fr')
             ->from(Evaluation::class, 'e')
             ->join('e.branchForGroup', 'bfg')
             ->join('bfg.branch', 'b')
             ->join('b.major', 'm')
             ->leftJoin('e.pointResults', 'pr')
+            ->leftJoin('e.feedbackResults', 'fr')
             ->where('bfg.group= :groupId')
             ->andWhere('e.date >= :start')
             ->andWhere('e.date <= :end')
@@ -61,12 +58,13 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     public function get(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
-        $qb->select('e, bfg, b, m, pr, s')
+        $qb->select('e, bfg, b, m, pr, s, fr')
             ->from(Evaluation::class, 'e')
             ->join('e.branchForGroup', 'bfg')
             ->join('bfg.branch', 'b')
             ->join('b.major', 'm')
             ->leftJoin('e.pointResults', 'pr')
+            ->leftJoin('e.feedbackResults', 'fr')
             ->leftJoin('pr.student', 's')
             ->leftJoin('s.studentInGroups', 'sig')
             ->where('e.id=?1')
@@ -127,6 +125,16 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $this->getReport($sql);
     }
 
+    /**
+     * @param $studentId
+     * @param $range
+     * @return ArrayCollection
+     */
+    public function getReportsForStudent($studentId, $range)
+    {
+        return $this->getReportsForStudents([$studentId], $range);
+    }
+
     public function getReportsForStudents($studentIds, DateRange $range)
     {
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
@@ -150,7 +158,8 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
               WHERE gr.end>='" . $range->getEnd()->format('Y-m-d') . "' 
                   AND stig.type='X'
-                  AND s.id IN('" . implode('\',\'', $studentIds) . "')";
+                  AND s.id IN('" . implode('\',\'', $studentIds) . "')
+               ORDER BY m.order, b.order";
         return $this->getReport($sql);
     }
 
@@ -177,7 +186,8 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
               WHERE gr.end>='" . $range->getEnd()->format('Y-m-d') . "'
                   AND stig.type='X'
-                  AND sig.group_id='" . $group . "'";
+                  AND sig.group_id='" . $group . "'
+              ORDER BY m.order, b.order";
         return $this->getReport($sql);
     }
 
@@ -234,4 +244,6 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->from(Evaluation::class, 'e');
         return $qb->getQuery()->getSingleScalarResult();
     }
+
+
 }

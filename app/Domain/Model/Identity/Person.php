@@ -50,9 +50,7 @@ abstract class Person
      */
     protected $lastName;
 
-
-
-
+    
     /**
      * @Groups({"student_list", "student_detail", "staff_list", "staff_detail", "group_students"})
      *

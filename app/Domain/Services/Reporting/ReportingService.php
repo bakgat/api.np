@@ -49,9 +49,16 @@ class ReportingService
     // TODO: making graphs for any combination above (history per group, per student, per branch, per major, per range, per oldrange)
     // TODO: what about graphs in 1st and 2nd grade?
     // TODO: 
-    public function getReport($group, DateRange $range)
+    public function getReportByGroup($group, DateRange $range)
     {
         $data = $this->evaluationRepo->getReportsForGroup($group, $range);
+        $report = new Report($range);
+        return $this->generateResultsReport($report, $data);
+    }
+
+    public function getReportByStudent($studentId, $range)
+    {
+        $data = $this->evaluationRepo->getReportsForStudent($studentId, $range);
         $report = new Report($range);
         return $this->generateResultsReport($report, $data);
     }
@@ -98,4 +105,6 @@ class ReportingService
 
         return $report;
     }
+
+   
 }

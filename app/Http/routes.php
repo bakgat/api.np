@@ -108,6 +108,19 @@ $app->group(['prefix' => 'evaluations', 'namespace' => 'App\Http\Controllers\Eva
 });
 
 /* ***************************************************
+ * REPORTING
+ * **************************************************/
+$app->group(['prefix' => 'pdf/report', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
+    $app->get('/group/{groupId}', 'ReportController@pdfByGroup');
+    $app->get('/student/{studentId}', 'ReportController@pdfByStudent');
+    $app->get('/custom', 'ReportController@pdfCustom');
+});
+$app->group(['prefix' => 'report', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
+    $app->get('/group/{groupId}', 'ReportController@jsonByGroup');
+    $app->get('/student/{studentId}', 'ReportController@jsonByStudent');
+    $app->get('/custom', 'ReportController@jsonCustom');
+});
+/* ***************************************************
  * IACs
  * **************************************************/
 $app->group(['prefix' => 'iac', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {

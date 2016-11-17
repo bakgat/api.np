@@ -33,6 +33,7 @@ class BranchController extends Controller
 
     public function index(Request $request)
     {
+
         /* HAS GROUP */
         if ($request->has('group')) {
             $groupId = NtUid::import($request->get('group'));
@@ -40,6 +41,11 @@ class BranchController extends Controller
             return response('Group must be given.', 500);
         }
         $group = $this->groupRepo->get($groupId);
+
+        if($request->has('find')) {
+            $find = $request->get('find');
+            $this->response($this->branchRepo->byName($find, $group), ['major_list']);
+        }
         return $this->response($this->branchRepo->all($group), ['major_list']);
     }
 
