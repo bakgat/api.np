@@ -159,7 +159,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               WHERE gr.end>='" . $range->getEnd()->format('Y-m-d') . "' 
                   AND stig.type='X'
                   AND s.id IN('" . implode('\',\'', $studentIds) . "')
-               ORDER BY m.order, b.order";
+               ORDER BY sig.number, m.order, b.order";
         return $this->getReport($sql);
     }
 
@@ -187,7 +187,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               WHERE gr.end>='" . $range->getEnd()->format('Y-m-d') . "'
                   AND stig.type='X'
                   AND sig.group_id='" . $group . "'
-              ORDER BY m.order, b.order";
+              ORDER BY sig.number, m.order, b.order";
         return $this->getReport($sql);
     }
 
