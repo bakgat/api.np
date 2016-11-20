@@ -48,6 +48,7 @@ class EventController extends Controller
 
     public function reportEvents()
     {
+        $logins = $this->eventRepo->allOfType('login');
         $result = [
             'evaluations' => [
                 'count' => $this->evaluationRepo->count(),
@@ -59,7 +60,10 @@ class EventController extends Controller
             'staff' => [
                 'count' => $this->staffRepo->count(),
             ],
-            'logins' => $this->eventRepo->allOfType('login'),
+            'logins' => [
+                'count' => count($logins),
+                'actions' => $logins
+            ],
         ];
 
         return $this->response($result, ['track_list']);
