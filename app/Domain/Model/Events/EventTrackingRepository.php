@@ -28,6 +28,12 @@ interface EventTrackingRepository
     public function allOfType($type);
 
     /**
+     * @param $type
+     * @return ArrayCollection
+     */
+    public function allOfTypeAndAction($type, $action);
+
+    /**
      * @param NtUid $id
      * @param $userTable
      * @return ArrayCollection

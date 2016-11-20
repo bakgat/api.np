@@ -52,6 +52,19 @@ class EventTrackingDoctrineRepository implements EventTrackingRepository
         return $qb->getQuery()->getScalarResult();
     }
 
+    public function allOfTypeAndAction($type, $action)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('et.action, COUNT(et.id) as action_count, SUBSTRING(et.timestamp, 1, 10) as fd')
+            ->from(EventTracking::class, 'et')
+            ->where('et.actionTable=:actionTable')
+            ->andWhere('et.action=:action')
+            ->setParameter('actionTable', $type)
+            ->setParameter('action', $action)
+            ->groupBy('et.action, fd');
+        return $qb->getQuery()->getScalarResult();
+    }
+
     /**
      * @param NtUid $id
      * @param $userTable
