@@ -232,16 +232,16 @@ class IacService
          */
         $id = NtUid::import($studentId);
         $student = $this->studentService->get($id);
-        $data = $this->iacRepo->iacForStudent($student);
-        return $data;
-        //return $this->generatePerStudent($data, $student);
+        $data = $this->iacRepo->iacForStudent($studentId,  DateRange::infinite());
+        //return $data;
+        return $this->generatePerStudent($data, $student);
     }
 
     public function getIacsForGroup($groupId)
     {
         $id = NtUid::import($groupId);
         $group = $this->groupRepository->get($id);
-        $data = $this->iacRepo->iacsForGroup($group);
+        $data = $this->iacRepo->getIacForGroup($group, DateRange::infinite());
         return $data;
 
     }

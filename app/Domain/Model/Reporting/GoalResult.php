@@ -20,12 +20,12 @@ class GoalResult
      * @Groups({"student_iac"})
      * @var NtUid
      */
-    private $gId;
+    private $id;
     /**
      * @Groups({"student_iac"})
      * @var string
      */
-    private $gText;
+    private $text;
 
     /**
      * GoalResult constructor.
@@ -34,7 +34,15 @@ class GoalResult
      */
     public function __construct($gId, $gText)
     {
-        $this->gId = $gId;
-        $this->gText = $gText;
+        $this->id = $gId;
+        $this->text = $gText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
     }
 }

@@ -130,7 +130,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
      * @param $range
      * @return ArrayCollection
      */
-    public function getReportsForStudent($studentId, $range)
+    public function getPointReportForStudent($studentId, $range)
     {
         return $this->getReportsForStudents([$studentId], $range);
     }
@@ -163,7 +163,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $this->getReport($sql);
     }
 
-    public function getReportsForGroup($group, DateRange $range)
+    public function getPointReportForGroup($group, DateRange $range)
     {
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 

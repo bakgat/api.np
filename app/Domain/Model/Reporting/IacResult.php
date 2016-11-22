@@ -60,6 +60,13 @@ class IacResult
         return $this->range;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getGoals()
+    {
+        return clone $this->goals;
+    }
 
     public function intoGoal($data)
     {

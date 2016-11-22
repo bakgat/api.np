@@ -39,7 +39,7 @@ interface IACRepository
      * @param Student $student
      * @return ArrayCollection
      */
-    public function iacForStudent(Student $student);
+    public function iacForStudent($studentId, $range);
 
     /**
      * @return ArrayCollection
@@ -62,7 +62,13 @@ interface IACRepository
      * @param $group
      * @return ArrayCollection
      */
-    public function iacsForGroup(Group $group);
+    public function getIacReportForGroup($groupId, $range);
 
+    /**
+     * @param Group $group
+     * @param $infinite
+     * @return ArrayCollection
+     */
+    public function getIacForGroup(Group $group, $infinite);
 
 }

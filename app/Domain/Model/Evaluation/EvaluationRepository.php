@@ -48,7 +48,7 @@ interface EvaluationRepository
      * @param $range
      * @return ArrayCollection
      */
-    public function getReportsForStudent($studentId, $range);
+    public function getPointReportForStudent($studentId, $range);
 
     public function getReportsForStudents($studentIds, DateRange $range);
 
@@ -57,7 +57,7 @@ interface EvaluationRepository
      * @param DateRange $range
      * @return ArrayCollection
      */
-    public function getReportsForGroup($group, DateRange $range);
+    public function getPointReportForGroup($group, DateRange $range);
 
     public function getReportsForStudentsByMajor($studentIds, $range, Major $major);
 

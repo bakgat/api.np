@@ -76,7 +76,7 @@ class IacGoalResult
      */
     public function getText()
     {
-        return $this->text;
+        return $this->goal->getText();
     }
 
     /**

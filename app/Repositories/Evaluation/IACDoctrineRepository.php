@@ -94,9 +94,34 @@ class IACDoctrineRepository implements IACRepository
         return $this->getIac($sql);
     }
 
+    public function getIacForGroup(Group $group, $range)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('iac, ig, b, m, g, s')
+            ->from(IAC::class, 'iac')
+            ->join('iac.iacGoals', 'ig')
+            ->join('ig.goal', 'g')
+            ->join('iac.student', 's')
+            ->join('iac.branch', 'b')
+            ->join('b.major', 'm')
+            ->join('s.studentInGroups', 'sig')
+            ->where($qb->expr()->andX(
+                $qb->expr()->lte('iac.dateRange.start', '?1'),
+                $qb->expr()->gte('sig.dateRange.end', '?1'),
+                $qb->expr()->eq('sig.group', '?2')
+            ))
+            ->setParameter(1, new DateTime)
+            ->setParameter(2, $group->getId())
+            ->orderBy('sig.number');
+        return $qb->getQuery()->getResult();
+    }
 
-    public function iacForStudent(Student $student)
-    {/*
+    /**
+     * @param $group
+     * @return ArrayCollection
+     */
+    public function getIacReportForGroup($groupId, $range)
+    {
         $sql = "SELECT ig.id as ig_id, ig.achieved as ig_achieved, ig.practice as ig_practice, ig.comment as ig_comment, ig.date as ig_date,
                     iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
                     s.id as s_id, s.first_name as s_first_name, s.last_name as s_last_name,
@@ -109,51 +134,31 @@ class IACDoctrineRepository implements IACRepository
                     INNER JOIN branches b ON b.id = g.branch_id
                     INNER JOIN majors m ON m.id = b.major_id
                     INNER JOIN students s ON s.id = iac.student_id
-                    WHERE s.id = '" . $student->getId() . "'";
-*/
-        $qb = $this->em->createQueryBuilder();
-        $qb->select('iac, ig, m, b, g')
-            ->from(IAC::class, 'iac')
-            ->join('iac.branch', 'b')
-            ->join('b.major', 'm')
-            ->join('iac.iacGoals', 'ig')
-            ->join('ig.goal', 'g')
-            ->where('iac.student=:student')
-            ->setParameter('student', $student->getId());
-        return $qb->getQuery()->getResult();
-        //return $this->getIac($sql);
+                    INNER JOIN student_in_groups sig ON sig.student_id = s.id
+                    WHERE sig.group_id = '" . $groupId . "'
+                    ORDER BY sig.number, m.order, b.order";
+
+        return $this->getIac($sql);
     }
 
-    /**
-     * @param $sql
-     * @return array
-     */
-    private function getIac($sql)
+    public function iacForStudent($studentId, $range)
     {
-        $rsm = new ResultSetMapping;
+        $sql = "SELECT ig.id as ig_id, ig.achieved as ig_achieved, ig.practice as ig_practice, ig.comment as ig_comment, ig.date as ig_date,
+                    iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
+                    s.id as s_id, s.first_name as s_first_name, s.last_name as s_last_name,
+                    g.id as g_id, g.text as g_text,
+                    b.id as b_id, b.name as b_name,
+                    m.id as m_id, m.name as m_name
+                    FROM iacs iac
+                    INNER JOIN iac_goals ig ON ig.iac_id = iac.id
+                    INNER JOIN goals g ON ig.goal_id = g.id
+                    INNER JOIN branches b ON b.id = g.branch_id
+                    INNER JOIN majors m ON m.id = b.major_id
+                    INNER JOIN students s ON s.id = iac.student_id
+                    WHERE s.id = '" . $studentId . "'
+                    ORDER BY m.order, b.order";
 
-        $rsm->addEntityResult(FlatIAC::class, 'i')
-            ->addFieldResult('i', 'ig_id', 'igId')
-            ->addFieldResult('i', 'iac_id', 'iacId')
-            ->addFieldResult('i', 'iac_start', 'iacStart')
-            ->addFieldResult('i', 'iac_end', 'iacEnd')
-            ->addFieldResult('i', 's_id', 'sId')
-            ->addFieldResult('i', 's_first_name', 'sFirstName')
-            ->addFieldResult('i', 's_last_name', 'sLastName')
-            ->addFieldResult('i', 'g_id', 'gId')
-            ->addFieldResult('i', 'g_text', 'gText')
-            ->addFieldResult('i', 'ig_achieved', 'igAchieved')
-            ->addFieldResult('i', 'ig_practice', 'igPractice')
-            ->addFieldResult('i', 'ig_comment', 'igComment')
-            ->addFieldResult('i', 'ig_date', 'igDate')
-            ->addFieldResult('i', 'b_id', 'bId')
-            ->addFieldResult('i', 'b_name', 'bName')
-            ->addFieldResult('i', 'm_id', 'mId')
-            ->addFieldResult('i', 'm_name', 'mName');
-
-        $query = $this->em->createNativeQuery($sql, $rsm);
-        $result = $query->getArrayResult();
-        return $result;
+        return $this->getIac($sql);
     }
 
 
@@ -196,30 +201,6 @@ class IACDoctrineRepository implements IACRepository
         return $iac;
     }
 
-    /**
-     * @param $group
-     * @return ArrayCollection
-     */
-    public function iacsForGroup(Group $group)
-    {
-        $qb = $this->em->createQueryBuilder();
-        $qb->select('iac, ig, b, m, g, s')
-            ->from(IAC::class, 'iac')
-            ->join('iac.iacGoals', 'ig')
-            ->join('ig.goal', 'g')
-            ->join('iac.student', 's')
-            ->join('iac.branch', 'b')
-            ->join('b.major', 'm')
-            ->join('s.studentInGroups', 'sig')
-            ->where($qb->expr()->andX(
-                $qb->expr()->lte('iac.dateRange.start', '?1'),
-                $qb->expr()->gte('sig.dateRange.end', '?1'),
-                $qb->expr()->eq('sig.group', '?2')
-            ))
-            ->setParameter(1, new DateTime)
-            ->setParameter(2, $group->getId());
-        return $qb->getQuery()->getResult();
-    }
 
     public function update(IAC $iac)
     {
@@ -237,6 +218,42 @@ class IACDoctrineRepository implements IACRepository
     {
         $this->em->remove($iac);
         $this->em->flush();
+    }
+
+
+    /* ***************************************************
+     * PRIVATE
+     * **************************************************/
+    /**
+     * @param $sql
+     * @return array
+     */
+    private function getIac($sql)
+    {
+        $rsm = new ResultSetMapping;
+
+        $rsm->addEntityResult(FlatIAC::class, 'i')
+            ->addFieldResult('i', 'ig_id', 'igId')
+            ->addFieldResult('i', 'iac_id', 'iacId')
+            ->addFieldResult('i', 'iac_start', 'iacStart')
+            ->addFieldResult('i', 'iac_end', 'iacEnd')
+            ->addFieldResult('i', 's_id', 'sId')
+            ->addFieldResult('i', 's_first_name', 'sFirstName')
+            ->addFieldResult('i', 's_last_name', 'sLastName')
+            ->addFieldResult('i', 'g_id', 'gId')
+            ->addFieldResult('i', 'g_text', 'gText')
+            ->addFieldResult('i', 'ig_achieved', 'igAchieved')
+            ->addFieldResult('i', 'ig_practice', 'igPractice')
+            ->addFieldResult('i', 'ig_comment', 'igComment')
+            ->addFieldResult('i', 'ig_date', 'igDate')
+            ->addFieldResult('i', 'b_id', 'bId')
+            ->addFieldResult('i', 'b_name', 'bName')
+            ->addFieldResult('i', 'm_id', 'mId')
+            ->addFieldResult('i', 'm_name', 'mName');
+
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $result = $query->getArrayResult();
+        return $result;
     }
 
 

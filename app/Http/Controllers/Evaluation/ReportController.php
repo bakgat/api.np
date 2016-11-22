@@ -57,7 +57,7 @@ class ReportController extends Controller
     public function jsonByGroup(Request $request, $groupId)
     {
         $report = $this->byGroup($request, $groupId);
-        $this->generateJson($report);
+        return $this->generateJson($report);
     }
 
     public function jsonByStudent(Request $request, $studentId)
@@ -95,6 +95,7 @@ class ReportController extends Controller
         $report = $this->reportingService->getReportByGroup($groupId, $range);
         return $report;
     }
+
     private function byStudent(Request $request, $studentId) {
         $range = $this->getRange($request);
         $report = $this->reportingService->getReportByStudent($studentId, $range);

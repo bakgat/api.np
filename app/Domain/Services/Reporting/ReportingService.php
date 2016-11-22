@@ -51,16 +51,26 @@ class ReportingService
     // TODO: 
     public function getReportByGroup($group, DateRange $range)
     {
-        $data = $this->evaluationRepo->getReportsForGroup($group, $range);
+        $pointResults = $this->evaluationRepo->getPointReportForGroup($group, $range);
+        $iacs = $this->iacRepo->getIacReportForGroup($group, $range);
+
         $report = new Report($range);
-        return $this->generateResultsReport($report, $data);
+        $this->generateResultsReport($report, $pointResults);
+        $this->generateIacsReport($report, $iacs);
+
+        return $report;
     }
 
     public function getReportByStudent($studentId, $range)
     {
-        $data = $this->evaluationRepo->getReportsForStudent($studentId, $range);
+        $pointResults = $this->evaluationRepo->getPointReportForStudent($studentId, $range);
+        $iacs = $this->iacRepo->iacForStudent($studentId, $range);
+        
         $report = new Report($range);
-        return $this->generateResultsReport($report, $data);
+        $this->generateResultsReport($report, $pointResults);
+        $this->generateIacsReport($report, $iacs);
+
+        return $report;
     }
 
     public function getReportByStudents($students, DateRange $range)

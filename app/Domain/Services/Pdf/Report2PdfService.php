@@ -9,8 +9,11 @@
 namespace App\Domain\Services\Pdf;
 
 use App\Domain\Model\Evaluation\EvaluationRepository;
+use App\Domain\Model\Evaluation\IAC;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Reporting\BranchResult;
+use App\Domain\Model\Reporting\IacGoalResult;
+use App\Domain\Model\Reporting\IacResult;
 use App\Domain\Model\Reporting\MajorResult;
 use App\Domain\Model\Reporting\RangeResult;
 use App\Domain\Model\Reporting\Report;
@@ -29,6 +32,35 @@ class Report2PdfService
         'T' => 'f',
         'S' => 'd',
     ];
+
+    private $leftMargin = 42;
+    private $pointLeftMargin = 86;
+    private $totalPointLeftMargin = 140;
+    private $graphLeftMargin = 160;
+
+    private $majorWidth = 0;
+    private $branchWidth = 44;
+    private $subPointWidth = 32;
+    private $totalPointWidth = 11;
+    private $graphWidth = 35;
+
+    private $majorHeight = 8;
+    private $branchHeight = 5;
+    private $redicodiHeight = 5;
+    private $subPointHeight = 4;
+    private $branchTopMargin = 3;
+    private $subPointTopMargin = 1;
+    private $totalPointTopMargin = 1;
+    private $totalPointHeight = 8;
+
+    private $graphHeight = 8;
+    private $graphTopMargin = 1;
+
+    private $majorFontSize = 18;
+    private $branchFontSize = 12;
+    private $subPointFontSize = 8;
+    private $redicodiFontSize = 9;
+    private $totalPointFontSize = 12;
 
     /** @var EvaluationRepository */
     private $evaluationRepo;
@@ -82,33 +114,42 @@ class Report2PdfService
             $this->pdf->SetAutoPageBreak(true);
             /** @var MajorResult $majorResult */
             foreach ($result->getMajorResults() as $majorResult) {
-                $this->pdf->SetX(42);
+                $this->pdf->SetX($this->leftMargin);
                 $this->blue();
-                $this->pdf->SetFont('Roboto', 'bold', 17);
+                $this->pdf->SetFont('Roboto', 'bold', $this->majorFontSize);
                 $this->pdf->SetAlpha(1);
-                $this->pdf->Cell(0, 15, utf8_decode(ucfirst($majorResult->getName())), 0, 1);
+                $this->pdf->Cell($this->majorWidth, $this->majorHeight, utf8_decode(ucfirst($majorResult->getName())), 0, 1);
                 /** @var BranchResult $branchResult */
                 foreach ($majorResult->getBranchResults() as $branchResult) {
-                    $this->pdf->SetX(42);
+                    $this->pdf->SetX($this->leftMargin);
+                    $this->pdf->y += $this->branchTopMargin;
                     $this->blue();
-                    $this->pdf->SetFont('Roboto', '', 12);
+                    $this->pdf->SetFont('Roboto', '', $this->branchFontSize);
                     $this->pdf->SetAlpha(.84);
-                    $this->pdf->y += 3;
+
                     if ($branchResult->getName() != 'Permanente evaluatie') {
-                        $this->pdf->Cell(50, 10, utf8_decode(ucfirst($branchResult->getName())));
+                        $this->pdf->Cell($this->branchWidth, $this->branchHeight, utf8_decode(ucfirst($branchResult->getName())));
                     }
 
                     $history = $branchResult->getHistory();
 
                     //TODO: check this out! What if only IAC ? there is no history then !!!
                     if (count($history) > 0) {
-                        $this->makePoint($history->get(0));
+                        $this->makePoint($history->get(0), $this->pdf->GetY());
                         $this->makeGraph($branchResult->getHistory());
+                    }
+
+                    $iacs = $branchResult->getIacs();
+
+                    if (count($iacs) > 0) {
+                        foreach ($iacs as $iac) {
+                            $this->generateIac($iac);
+                        }
                     }
 
                     $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
                     $this->pdf->SetAlpha(.54);
-                    $this->pdf->y += 3;
+
                     $this->pdf->Line(42, $this->pdf->y, $this->pdf->pageWidth() - 20, $this->pdf->y);
                 }
             }
@@ -119,37 +160,36 @@ class Report2PdfService
         return $this->pdf->Output();
     }
 
-    private function makePoint(RangeResult $rangeResult)
+    private function makePoint(RangeResult $rangeResult, $top)
     {
-        $this->pdf->SetX(92);
+        $this->pdf->SetX($this->pointLeftMargin);
 
-        $this->pdf->SetFont('Roboto', '', 9);
-        $this->pdf->SetAlpha(.54);
+        $this->pdf->SetFont('Roboto', '', $this->subPointFontSize);
+        $this->pdf->SetAlpha(.84);
 
         //PERMANENT
         if ($rangeResult->getPermanent()) {
             $text = 'permanent: ' . $rangeResult->getPermanent() . '/' . $rangeResult->getMax();
-            $this->pdf->y += 0;
-            $this->pdf->Cell(0, 5, $text, 0, 1);
-        } else {
-            $this->pdf->y += 5;
+            $this->pdf->Cell($this->subPointWidth, $this->subPointHeight, $text, 0, 0, 'R');
         }
+        $this->pdf->y += $this->subPointHeight;
+
 
         //FINAL
         if ($rangeResult->getFinal() && $rangeResult->getPermanent()) {
-            $this->pdf->SetX(92);
+            $this->pdf->SetX($this->pointLeftMargin);
             $text = 'eindtoets: ' . $rangeResult->getFinal() . '/' . $rangeResult->getMax();
-            $this->pdf->Cell(0, 5, $text, 0, 1);
-        } else {
-            $this->pdf->y += 5;
+            $this->pdf->Cell($this->subPointWidth, $this->subPointHeight, $text, 0, 0, 'R');
         }
+        $this->pdf->y += $this->subPointHeight;
+
 
         //TOTAL
-        $this->pdf->SetX(132);
-        $this->pdf->y -= 10;
-        $this->pdf->SetFontSize(12);
+        $this->pdf->SetXY($this->totalPointLeftMargin, $top);
+
+        $this->pdf->SetFontSize($this->totalPointFontSize);
         $this->pdf->SetAlpha(.84);
-        $this->pdf->Cell(20, 10, $rangeResult->getTotal() . '/' . $rangeResult->getMax(), 0, 1, 'R');
+        $this->pdf->Cell($this->totalPointWidth, $this->totalPointHeight, $rangeResult->getTotal() . '/' . $rangeResult->getMax(), 0, 1, 'R');
 
         if (count($rangeResult->getRedicodi()) > 0) {
             $this->pdf->SetX(47);
@@ -161,6 +201,8 @@ class Report2PdfService
                 }
             }
             $this->pdf->Ln();
+        } else {
+            $this->pdf->y += 5;
         }
     }
 
@@ -274,5 +316,24 @@ class Report2PdfService
         $this->orange();
         $this->pdf->SetFontSize(50);
         $this->pdf->ShadowFittCell(0, 25, utf8_decode($student->getDisplayName()), 0, 1, '', false, '', self::BLUE, 1, .12);
+    }
+
+    private function generateIac(IacResult $iac)
+    {
+        /** @var IacGoalResult $goal */
+        foreach ($iac->getGoals() as $goal) {
+            $this->pdf->SetFont('Roboto', '', 10);
+            $this->pdf->Cell(100, 10, utf8_decode($goal->getText()), 0, 0);
+
+            $this->pdf->SetFont('NotosIcon', '', 12);
+            $achieved = $goal->isAchieved() ? $this->fontmap['B'] : '';
+            $this->pdf->Cell(20, 10, $achieved, 0, 0);
+            $practice = $goal->isPractice() ? $this->fontmap['B'] : '';
+            $this->pdf->Cell(20, 10, $practice, 0, 0);
+
+            $this->pdf->SetFont('Roboto', '', 8);
+            $this->pdf->Cell(50, 10, utf8_decode($goal->getComment()), 0, 1);
+            $this->pdf->Line($this->pdf->x + 32, $this->pdf->y, $this->pdf->pageWidth() - $this->pdf->x, $this->pdf->y);
+        }
     }
 }
