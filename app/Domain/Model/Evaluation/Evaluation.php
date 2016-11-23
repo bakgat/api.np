@@ -82,9 +82,9 @@ class Evaluation
 
     /**
      * @Groups({"group_evaluations", "p_evaluation_detail"})
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      *
-     * @var int
+     * @var float
      */
     protected $max;
 
@@ -213,6 +213,9 @@ class Evaluation
         return $this->permanent;
     }
 
+    /**
+     * @return float|null
+     */
     public function getMax()
     {
         return $this->max;
