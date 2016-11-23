@@ -47,11 +47,13 @@ class Report2PdfService
     private $majorHeight = 8;
     private $branchHeight = 5;
     private $redicodiHeight = 5;
+    private $majorTopMargin = 8;
     private $subPointHeight = 4;
     private $branchTopMargin = 3;
     private $subPointTopMargin = 1;
     private $totalPointTopMargin = 1;
     private $totalPointHeight = 8;
+    private $branchBottomMargin = 1;
 
     private $graphHeight = 8;
     private $graphTopMargin = 1;
@@ -61,6 +63,16 @@ class Report2PdfService
     private $subPointFontSize = 8;
     private $redicodiFontSize = 9;
     private $totalPointFontSize = 12;
+
+    private $iacLeftMargin = 20;
+    private $iacTextHeight = 10;
+    private $iacTextWidth = 100;
+    private $iacCommentWidth = 50;
+    private $iacIconWidth = 20;
+    private $iacTextFontSize = 10;
+    private $iacCommentFontSize = 8;
+    private $iacIconFontSize = 10;
+
 
     /** @var EvaluationRepository */
     private $evaluationRepo;
@@ -112,6 +124,8 @@ class Report2PdfService
             $this->pdf->AddPage();
             $this->Header($result);
             $this->pdf->SetAutoPageBreak(true);
+
+            $this->pdf->y += $this->majorTopMargin;
             /** @var MajorResult $majorResult */
             foreach ($result->getMajorResults() as $majorResult) {
                 $this->pdf->SetX($this->leftMargin);
@@ -140,16 +154,18 @@ class Report2PdfService
                     }
 
                     $iacs = $branchResult->getIacs();
-
                     if (count($iacs) > 0) {
+                        $this->pdf->Ln();
                         foreach ($iacs as $iac) {
                             $this->generateIac($iac);
                         }
                     }
 
-                    $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
-                    $this->pdf->SetAlpha(.54);
+                    $this->pdf->y += $this->branchBottomMargin;
 
+                    $this->blue();
+                    $this->pdf->SetAlpha(.54);
+                    $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
                     $this->pdf->Line(42, $this->pdf->y, $this->pdf->pageWidth() - 20, $this->pdf->y);
                 }
             }
@@ -192,17 +208,17 @@ class Report2PdfService
         $this->pdf->Cell($this->totalPointWidth, $this->totalPointHeight, $rangeResult->getTotal() . '/' . $rangeResult->getMax(), 0, 1, 'R');
 
         if (count($rangeResult->getRedicodi()) > 0) {
-            $this->pdf->SetX(47);
+            $this->pdf->SetXY(47, $top + $this->branchHeight);
             foreach ($rangeResult->getRedicodi() as $key => $value) {
                 if ($value >= $rangeResult->getEvCount() / 2) {
-                    $this->pdf->SetFont('NotosIcon', '', 12);
+                    $this->pdf->SetFont('NotosIcon', '', $this->redicodiFontSize);
                     $icon = $this->fontmap[$key];
-                    $this->pdf->Cell(7, 5, $icon, 0, 0);
+                    $this->pdf->Cell(7, $this->redicodiHeight, $icon, 0, 0);
                 }
             }
             $this->pdf->Ln();
         } else {
-            $this->pdf->y += 5;
+            $this->pdf->y += $this->redicodiHeight;
         }
     }
 
@@ -224,6 +240,7 @@ class Report2PdfService
             $arr[0]['data'] = $data;
             $this->pdf->SetX(162);
             $this->pdf->SetAlpha(.84);
+
             $this->pdf->LineChart($this->pdf->x, $this->pdf->y - 15, 35, 16, null, $arr);
         }
     }
@@ -320,20 +337,26 @@ class Report2PdfService
 
     private function generateIac(IacResult $iac)
     {
+
         /** @var IacGoalResult $goal */
         foreach ($iac->getGoals() as $goal) {
-            $this->pdf->SetFont('Roboto', '', 10);
-            $this->pdf->Cell(100, 10, utf8_decode($goal->getText()), 0, 0);
+            $this->pdf->SetFont('Roboto', '', $this->iacTextFontSize);
+            $this->pdf->SetAlpha(0.84);
+            $this->pdf->Cell($this->iacTextWidth, $this->iacTextHeight, utf8_decode($goal->getText()), 0, 0);
 
-            $this->pdf->SetFont('NotosIcon', '', 12);
+            $this->pdf->SetFont('NotosIcon', '', $this->iacIconFontSize);
             $achieved = $goal->isAchieved() ? $this->fontmap['B'] : '';
-            $this->pdf->Cell(20, 10, $achieved, 0, 0);
+            $this->pdf->Cell($this->iacIconWidth, $this->iacTextHeight, $achieved, 0, 0);
             $practice = $goal->isPractice() ? $this->fontmap['B'] : '';
-            $this->pdf->Cell(20, 10, $practice, 0, 0);
+            $this->pdf->Cell($this->iacIconWidth, $this->iacTextHeight, $practice, 0, 0);
 
-            $this->pdf->SetFont('Roboto', '', 8);
-            $this->pdf->Cell(50, 10, utf8_decode($goal->getComment()), 0, 1);
-            $this->pdf->Line($this->pdf->x + 32, $this->pdf->y, $this->pdf->pageWidth() - $this->pdf->x, $this->pdf->y);
+            $this->pdf->SetFont('Roboto', '', $this->iacCommentFontSize);
+            $this->pdf->Cell($this->iacCommentWidth, $this->iacTextHeight, utf8_decode($goal->getComment()), 0, 1);
+            $this->pdf->SetAlpha(0.54);
+            $this->pdf->SetDash(0.5, 1);
+            $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
+            $this->pdf->Line($this->pdf->x, $this->pdf->y, $this->pdf->pageWidth() - $this->pdf->x, $this->pdf->y);
+            $this->pdf->SetDash(); //reset
         }
     }
 }

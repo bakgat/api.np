@@ -39,7 +39,27 @@ interface IACRepository
      * @param Student $student
      * @return ArrayCollection
      */
-    public function iacForStudent($studentId, $range);
+    public function getFlatIacForStudent($studentId, $range);
+
+    /**
+     * @param $group
+     * @return ArrayCollection
+     */
+    public function getFlatIacForGroup($groupId, $range);
+
+    /**
+     * @param Group $group
+     * @param $infinite
+     * @return ArrayCollection
+     */
+    public function getIacForGroup(Group $group, $infinite);
+
+    /**
+     * @param $studentId
+     * @param $infinite
+     * @return IAC
+     */
+    public function getIacForStudent($studentId, $infinite);
 
     /**
      * @return ArrayCollection
@@ -58,17 +78,5 @@ interface IACRepository
      */
     public function remove(IAC $iacId);
 
-    /**
-     * @param $group
-     * @return ArrayCollection
-     */
-    public function getIacReportForGroup($groupId, $range);
-
-    /**
-     * @param Group $group
-     * @param $infinite
-     * @return ArrayCollection
-     */
-    public function getIacForGroup(Group $group, $infinite);
 
 }

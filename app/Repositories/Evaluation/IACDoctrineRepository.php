@@ -107,7 +107,7 @@ class IACDoctrineRepository implements IACRepository
             ->join('s.studentInGroups', 'sig')
             ->where($qb->expr()->andX(
                 $qb->expr()->lte('iac.dateRange.start', '?1'),
-                $qb->expr()->gte('sig.dateRange.end', '?1'),
+                $qb->expr()->gte('iac.dateRange.end', '?1'),
                 $qb->expr()->eq('sig.group', '?2')
             ))
             ->setParameter(1, new DateTime)
@@ -117,10 +117,35 @@ class IACDoctrineRepository implements IACRepository
     }
 
     /**
+     * @param $studentId
+     * @param $infinite
+     * @return IAC
+     */
+    public function getIacForStudent($studentId, $infinite)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('iac, ig, b, m, g, s')
+            ->from(IAC::class, 'iac')
+            ->join('iac.iacGoals', 'ig')
+            ->join('ig.goal', 'g')
+            ->join('iac.student', 's')
+            ->join('iac.branch', 'b')
+            ->join('b.major', 'm')
+            ->where($qb->expr()->andX(
+                $qb->expr()->lte('iac.dateRange.start', '?1'),
+                $qb->expr()->gte('iac.dateRange.end', '?1'),
+                $qb->expr()->eq('iac.student', '?2')
+            ))
+            ->setParameter(1, new DateTime)
+            ->setParameter(2, $studentId);
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * @param $group
      * @return ArrayCollection
      */
-    public function getIacReportForGroup($groupId, $range)
+    public function getFlatIacForGroup($groupId, $range)
     {
         $sql = "SELECT ig.id as ig_id, ig.achieved as ig_achieved, ig.practice as ig_practice, ig.comment as ig_comment, ig.date as ig_date,
                     iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
@@ -141,7 +166,7 @@ class IACDoctrineRepository implements IACRepository
         return $this->getIac($sql);
     }
 
-    public function iacForStudent($studentId, $range)
+    public function getFlatIacForStudent($studentId, $range)
     {
         $sql = "SELECT ig.id as ig_id, ig.achieved as ig_achieved, ig.practice as ig_practice, ig.comment as ig_comment, ig.date as ig_date,
                     iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
@@ -160,6 +185,8 @@ class IACDoctrineRepository implements IACRepository
 
         return $this->getIac($sql);
     }
+
+
 
 
     /**
@@ -255,6 +282,7 @@ class IACDoctrineRepository implements IACRepository
         $result = $query->getArrayResult();
         return $result;
     }
+
 
 
 }

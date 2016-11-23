@@ -13,7 +13,16 @@ use Anouar\Fpdf\Fpdf;
 
 class Ntpdf extends Fpdf
 {
-
+#region DASH PLUGIN
+    function SetDash($black=null, $white=null)
+    {
+        if($black!==null)
+            $s=sprintf('[%.3F %.3F] 0 d',$black*$this->k,$white*$this->k);
+        else
+            $s='[] 0 d';
+        $this->_out($s);
+    }
+#endregion
 
 #region ALPHA PLUGIN
     var $extgstates = [];

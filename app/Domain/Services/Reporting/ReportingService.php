@@ -52,7 +52,7 @@ class ReportingService
     public function getReportByGroup($group, DateRange $range)
     {
         $pointResults = $this->evaluationRepo->getPointReportForGroup($group, $range);
-        $iacs = $this->iacRepo->getIacReportForGroup($group, $range);
+        $iacs = $this->iacRepo->getFlatIacForGroup($group, $range);
 
         $report = new Report($range);
         $this->generateResultsReport($report, $pointResults);
@@ -64,7 +64,7 @@ class ReportingService
     public function getReportByStudent($studentId, $range)
     {
         $pointResults = $this->evaluationRepo->getPointReportForStudent($studentId, $range);
-        $iacs = $this->iacRepo->iacForStudent($studentId, $range);
+        $iacs = $this->iacRepo->getFlatIacForStudent($studentId, $range);
         
         $report = new Report($range);
         $this->generateResultsReport($report, $pointResults);
