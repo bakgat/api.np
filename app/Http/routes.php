@@ -105,6 +105,7 @@ $app->group(['prefix' => 'evaluations', 'namespace' => 'App\Http\Controllers\Eva
 
     $app->post('/', 'EvaluationController@store');
     $app->put('/{id}', 'EvaluationController@update');
+    $app->delete('/{id}', 'EvaluationController@destroy');
 });
 
 /* ***************************************************

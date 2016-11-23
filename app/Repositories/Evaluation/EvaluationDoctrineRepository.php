@@ -246,4 +246,14 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     }
 
 
+    /**
+     * @param $evaluation
+     * @return boolean
+     */
+    public function remove(Evaluation $evaluation)
+    {
+        $this->em->remove($evaluation);
+        $this->em->flush();
+        return true;
+    }
 }

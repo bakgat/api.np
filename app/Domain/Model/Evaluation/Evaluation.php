@@ -99,7 +99,7 @@ class Evaluation
 
     /**
      * @Groups({"p_evaluation_detail"})
-     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\PointResult", mappedBy="evaluation", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\PointResult", mappedBy="evaluation", cascade={"persist", "remove"})
      *
      * @var ArrayCollection
      */
@@ -107,7 +107,7 @@ class Evaluation
 
     /**
      * @Groups({"c_evaluation_detail"})
-     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\ComprehensiveResult", mappedBy="evaluation", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\ComprehensiveResult", mappedBy="evaluation", cascade={"persist", "remove"})
      *
      * @var ArrayCollection
      */
@@ -115,7 +115,7 @@ class Evaluation
 
     /**
      * @Groups({"s_evaluation_detail"})
-     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\SpokenResult", mappedBy="evaluation", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\SpokenResult", mappedBy="evaluation", cascade={"persist", "remove"})
      *
      * @var ArrayCollection
      */
@@ -123,7 +123,7 @@ class Evaluation
 
     /**
      * @Groups({"mc_evaluation_detail"})
-     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\MultiplechoiceResult", mappedBy="evaluation", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\MultiplechoiceResult", mappedBy="evaluation", cascade={"persist", "remove"})
      *
      * @var ArrayCollection
      */
@@ -131,7 +131,7 @@ class Evaluation
 
     /**
      * @Groups({"f_evaluation_detail"})
-     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\FeedbackResult", mappedBy="evaluation", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Domain\Model\Evaluation\FeedbackResult", mappedBy="evaluation", cascade={"persist", "remove"})
      *
      * @var ArrayCollection
      */

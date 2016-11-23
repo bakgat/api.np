@@ -44,6 +44,10 @@ class EvaluationService
         $this->trackRepo = $eventTrackingRepository;
     }
 
+    public function get(NtUid $id) {
+        return $this->evaluationRepo->get($id);
+    }
+
     public function create($data)
     {
         $title = $data['title'];
@@ -182,5 +186,15 @@ class EvaluationService
 
         return $evaluation;
 
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function delete($id)
+    {
+        $evaluation = $this->get(NtUid::import($id));
+        return $this->evaluationRepo->remove($evaluation);
     }
 }

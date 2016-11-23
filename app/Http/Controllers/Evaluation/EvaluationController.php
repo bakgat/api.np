@@ -127,37 +127,9 @@ class EvaluationController extends Controller
         return $this->response($evaluation, ['evaluation_detail']);
     }
 
-    /**
-     *
-     */
-    public function getSummary(Request $request)
+    public function destroy($id)
     {
-        if ($request->has('start')) {
-            $start = $request->get('start');
-            $end = $request->get('end');
-        } else {
-            $start = '2016-09-01';
-            $end = '2016-12-31';
-        }
-        $range = DateRange::fromData(['start' => $start, 'end' => $end]);
-        if ($request->has('group')) {
-            $group = $request->get('group');
-            $report = $this->reportingService->getReportByGroup($group, $range);;
-        } else if ($request->has('students')) {
-            $students = explode('|', $request->get('students'));
-            $report = $this->reportingService->getReportByStudents($students, $range);
-        } else {
-            $report = $this->reportingService->getFullReport($range);
-        }
-        return $this->response($report, ['result_dto', 'student_iac']);
-
-        $pdf = $this->pdfService
-            ->report($report);
-
-        //TODO: if with front page requested
-        $pdf->withFrontPage();
-
-        $pdf->build();
-
+        $result = $this->evaluationService->delete($id);
+        return $this->response($result);
     }
 }

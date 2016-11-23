@@ -33,7 +33,7 @@ class Report2PdfService
         'S' => 'd',
     ];
 
-    private $leftMargin = 42;
+    private $leftMargin = 20;
     private $pointLeftMargin = 86;
     private $totalPointLeftMargin = 140;
     private $graphLeftMargin = 160;
@@ -156,6 +156,7 @@ class Report2PdfService
                     $iacs = $branchResult->getIacs();
                     if (count($iacs) > 0) {
                         $this->pdf->Ln();
+
                         foreach ($iacs as $iac) {
                             $this->generateIac($iac);
                         }
@@ -166,7 +167,7 @@ class Report2PdfService
                     $this->blue();
                     $this->pdf->SetAlpha(.54);
                     $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
-                    $this->pdf->Line(42, $this->pdf->y, $this->pdf->pageWidth() - 20, $this->pdf->y);
+                    $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - 20, $this->pdf->y);
                 }
             }
             $this->Footer($result);
@@ -269,7 +270,7 @@ class Report2PdfService
 
         $this->pdf->SetAlpha(1);
         $this->orange();
-        $this->pdf->SetX(42);
+        $this->pdf->SetX($this->leftMargin);
 
         $this->pdf->Cell(0, 10, 'Dit zijn mijn leervorderingen', 0, 1);
         $this->pdf->SetDrawColor(self::ORANGE[0], self::ORANGE[1], self::ORANGE[2]);
@@ -338,8 +339,10 @@ class Report2PdfService
     private function generateIac(IacResult $iac)
     {
 
+        $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - $this->leftMargin, $this->pdf->y);
         /** @var IacGoalResult $goal */
         foreach ($iac->getGoals() as $goal) {
+            $this->pdf->SetX($this->leftMargin);
             $this->pdf->SetFont('Roboto', '', $this->iacTextFontSize);
             $this->pdf->SetAlpha(0.84);
             $this->pdf->Cell($this->iacTextWidth, $this->iacTextHeight, utf8_decode($goal->getText()), 0, 0);
@@ -355,7 +358,7 @@ class Report2PdfService
             $this->pdf->SetAlpha(0.54);
             $this->pdf->SetDash(0.5, 1);
             $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
-            $this->pdf->Line($this->pdf->x, $this->pdf->y, $this->pdf->pageWidth() - $this->pdf->x, $this->pdf->y);
+            $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - $this->leftMargin, $this->pdf->y);
             $this->pdf->SetDash(); //reset
         }
     }

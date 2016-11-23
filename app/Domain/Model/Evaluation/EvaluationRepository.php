@@ -68,5 +68,11 @@ interface EvaluationRepository
      */
     public function count();
 
+    /**
+     * @param Evaluation $evaluation
+     * @return boolean
+     */
+    public function remove(Evaluation $evaluation);
+
 
 }
