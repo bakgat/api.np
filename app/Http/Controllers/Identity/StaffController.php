@@ -32,7 +32,7 @@ class StaffController extends Controller
     protected $staffService;
     /** @var EventTrackingRepository */
     protected $trackingRepo;
-    /** @var GroupRepository  */
+    /** @var GroupRepository */
     protected $groupRepo;
 
     public function __construct(StaffService $staffService, EventTrackingRepository $eventTrackingRepository, GroupRepository $groupRepository, SerializerInterface $serializer)
@@ -104,8 +104,8 @@ class StaffController extends Controller
      * **************************************************/
     public function allGroups($id)
     {
-        return $this->response($this->groupRepo->allActiveForStaff(NtUid::import($id)), ['staff_groups']);
-       // return $this->response($member->allStaffGroups(), ['staff_groups']);
+        $member = $this->staffService->get($id);
+        return $this->response($member->allStaffGroups(), ['staff_groups']);
     }
 
     public function addGroup(Request $request, $id)
@@ -207,8 +207,9 @@ class StaffController extends Controller
         return $this->response($auth);
     }
 
-    
-    public function actions($id) {
+
+    public function actions($id)
+    {
         $id = NtUid::import($id);
         $tracks = $this->trackingRepo->allOfUser($id, 'staff');
         return $this->response($tracks, ['track_list']);

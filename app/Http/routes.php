@@ -72,7 +72,7 @@ $app->group(['prefix' => 'staff', 'namespace' => 'App\Http\Controllers\Identity'
  * **************************************************/
 $app->group(['prefix' => 'groups', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
     $app->get('/', 'GroupController@index');
-    $app->get('{id}', 'GroupController@show');
+    $app->get('/{id}', 'GroupController@show');
     $app->get('/{id}/students', 'GroupController@allActiveStudents');
     $app->post('/', 'GroupController@store');
     $app->put('/{id}', 'GroupController@update');
