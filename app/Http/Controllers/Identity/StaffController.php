@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Identity;
 
 use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\Exceptions\StaffNotFoundException;
+use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Identity\Role;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StaffType;
@@ -31,12 +32,15 @@ class StaffController extends Controller
     protected $staffService;
     /** @var EventTrackingRepository */
     protected $trackingRepo;
+    /** @var GroupRepository  */
+    protected $groupRepo;
 
-    public function __construct(StaffService $staffService, EventTrackingRepository $eventTrackingRepository, SerializerInterface $serializer)
+    public function __construct(StaffService $staffService, EventTrackingRepository $eventTrackingRepository, GroupRepository $groupRepository, SerializerInterface $serializer)
     {
         parent::__construct($serializer);
         $this->staffService = $staffService;
         $this->trackingRepo = $eventTrackingRepository;
+        $this->groupRepo = $groupRepository;
     }
 
     public function index()
@@ -100,8 +104,8 @@ class StaffController extends Controller
      * **************************************************/
     public function allGroups($id)
     {
-        $member = $this->staffService->get($id);
-        return $this->response($member->allStaffGroups(), ['staff_groups']);
+        return $this->response($this->groupRepo->allActiveForStaff(NtUid::import($id)), ['staff_groups']);
+       // return $this->response($member->allStaffGroups(), ['staff_groups']);
     }
 
     public function addGroup(Request $request, $id)

@@ -65,11 +65,12 @@ class Report2PdfService
     private $totalPointFontSize = 12;
 
     private $iacLeftMargin = 20;
-    private $iacTextHeight = 10;
-    private $iacTextWidth = 100;
-    private $iacCommentWidth = 50;
+    private $iacTextTopMargin = 2;
+    private $iacTextHeight = 4;
+    private $iacTextWidth = 80;
+    private $iacCommentWidth = 20;
     private $iacIconWidth = 20;
-    private $iacTextFontSize = 10;
+    private $iacTextFontSize = 9;
     private $iacCommentFontSize = 8;
     private $iacIconFontSize = 10;
 
@@ -87,6 +88,11 @@ class Report2PdfService
 
     /** @var bool */
     private $frontPage = false;
+
+
+    private $iacAchievedText = 'Gekend';
+    private $iacPracticeText= 'Nog oefenen';
+    private $iacCommentText = 'Commentaar';
 
     public function __construct(EvaluationRepository $evaluationRepository)
     {
@@ -122,61 +128,89 @@ class Report2PdfService
             }
 
             $this->pdf->AddPage();
+
             $this->Header($result);
+
             $this->pdf->SetAutoPageBreak(true);
 
-            $this->pdf->y += $this->majorTopMargin;
-            /** @var MajorResult $majorResult */
-            foreach ($result->getMajorResults() as $majorResult) {
-                $this->pdf->SetX($this->leftMargin);
-                $this->blue();
-                $this->pdf->SetFont('Roboto', 'bold', $this->majorFontSize);
-                $this->pdf->SetAlpha(1);
-                $this->pdf->Cell($this->majorWidth, $this->majorHeight, utf8_decode(ucfirst($majorResult->getName())), 0, 1);
-                /** @var BranchResult $branchResult */
-                foreach ($majorResult->getBranchResults() as $branchResult) {
-                    $this->pdf->SetX($this->leftMargin);
-                    $this->pdf->y += $this->branchTopMargin;
-                    $this->blue();
-                    $this->pdf->SetFont('Roboto', '', $this->branchFontSize);
-                    $this->pdf->SetAlpha(.84);
+            $this->generateMajors($result);
 
-                    if ($branchResult->getName() != 'Permanente evaluatie') {
-                        $this->pdf->Cell($this->branchWidth, $this->branchHeight, utf8_decode(ucfirst($branchResult->getName())));
-                    }
-
-                    $history = $branchResult->getHistory();
-
-                    //TODO: check this out! What if only IAC ? there is no history then !!!
-                    if (count($history) > 0) {
-                        $this->makePoint($history->get(0), $this->pdf->GetY());
-                        $this->makeGraph($branchResult->getHistory());
-                    }
-
-                    $iacs = $branchResult->getIacs();
-                    if (count($iacs) > 0) {
-                        $this->pdf->Ln();
-
-                        foreach ($iacs as $iac) {
-                            $this->generateIac($iac);
-                        }
-                    }
-
-                    $this->pdf->y += $this->branchBottomMargin;
-
-                    $this->blue();
-                    $this->pdf->SetAlpha(.54);
-                    $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
-                    $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - 20, $this->pdf->y);
-                }
-            }
             $this->Footer($result);
-
         }
 
         return $this->pdf->Output();
     }
 
+
+    /**
+     * @param $result
+     */
+    private function generateMajors(StudentResult $result)
+    {
+        /** @var MajorResult $majorResult */
+        foreach ($result->getMajorResults() as $majorResult) {
+            $this->pdf->y += $this->majorTopMargin;
+            $this->pdf->SetX($this->leftMargin);
+            $this->blue();
+            $this->pdf->SetFont('Roboto', 'bold', $this->majorFontSize);
+            $this->pdf->SetAlpha(1);
+
+            $this->pdf->Cell($this->majorWidth, $this->majorHeight, utf8_decode(ucfirst($majorResult->getName())), 0, 1);
+
+            $this->generateBranches($majorResult);
+
+            if(strtoupper($majorResult->getName()) == 'NEDERLANDS') {
+                $this->pdf->AddPage();
+            }
+        }
+    }
+
+    /**
+     * @param $majorResult
+     */
+    private function generateBranches(MajorResult $majorResult)
+    {
+        /** @var BranchResult $branchResult */
+        foreach ($majorResult->getBranchResults() as $branchResult) {
+            $this->pdf->SetX($this->leftMargin);
+            $this->pdf->y += $this->branchTopMargin;
+            $this->blue();
+            $this->pdf->SetAlpha(.84);
+
+            $history = $branchResult->getHistory();
+            $iacs = $branchResult->getIacs();
+
+            $this->generatePointResults($history, $branchResult);
+
+            $this->generateIac($iacs, $branchResult);
+
+            //BOTTOM LINE BENEATH BRANCH
+            $this->pdf->y += $this->branchBottomMargin;
+            $this->blue();
+            $this->pdf->SetAlpha(.54);
+            $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
+            $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - 20, $this->pdf->y);
+        }
+    }
+
+    /**
+     * @param $history
+     * @param $branchResult
+     */
+    private function generatePointResults(ArrayCollection $history, BranchResult $branchResult)
+    {
+        if (count($history) > 0) {
+            $this->pdf->SetFont('Roboto', '', $this->branchFontSize);
+
+            //MAKE TITLE
+            if (strtoupper($branchResult->getName()) != 'PERMANENTE EVALUATIE') {
+                $this->pdf->Cell($this->branchWidth, $this->branchHeight, utf8_decode(ucfirst($branchResult->getName())));
+            }
+
+            $this->makePoint($history->get(0), $this->pdf->GetY());
+            $this->makeGraph($branchResult->getHistory());
+        }
+    }
     private function makePoint(RangeResult $rangeResult, $top)
     {
         $this->pdf->SetX($this->pointLeftMargin);
@@ -202,19 +236,20 @@ class Report2PdfService
 
 
         //TOTAL
-        $this->pdf->SetXY($this->totalPointLeftMargin, $top);
+        $this->pdf->SetXY($this->totalPointLeftMargin, $top - ($this->subPointHeight / 2));
 
         $this->pdf->SetFontSize($this->totalPointFontSize);
         $this->pdf->SetAlpha(.84);
         $this->pdf->Cell($this->totalPointWidth, $this->totalPointHeight, $rangeResult->getTotal() . '/' . $rangeResult->getMax(), 0, 1, 'R');
 
+        //REDICODI
         if (count($rangeResult->getRedicodi()) > 0) {
-            $this->pdf->SetXY(47, $top + $this->branchHeight);
+            $this->pdf->SetXY($this->leftMargin + 10, $top + $this->branchHeight);
             foreach ($rangeResult->getRedicodi() as $key => $value) {
                 if ($value >= $rangeResult->getEvCount() / 2) {
                     $this->pdf->SetFont('NotosIcon', '', $this->redicodiFontSize);
                     $icon = $this->fontmap[$key];
-                    $this->pdf->Cell(7, $this->redicodiHeight, $icon, 0, 0);
+                    $this->pdf->Cell($this->redicodiHeight, $this->redicodiHeight, $icon, 0, 0);
                 }
             }
             $this->pdf->Ln();
@@ -246,6 +281,70 @@ class Report2PdfService
         }
     }
 
+    /**
+     * @param $iacs
+     * @param $branchResult
+     */
+    private function generateIac(ArrayCollection $iacs, BranchResult $branchResult)
+    {
+        if (count($iacs) > 0) {
+
+            //MAKE TITLE
+            $this->pdf->SetFont('Roboto', 'bold', $this->branchFontSize);
+            $this->pdf->Cell($this->iacTextWidth, $this->branchHeight, utf8_decode(ucfirst($branchResult->getName())), 0, 0);
+
+            $this->pdf->SetFont('Roboto', 'bold', $this->iacCommentFontSize);
+            $this->pdf->Cell($this->iacIconWidth, $this->branchHeight, $this->iacAchievedText, 0, 0, 'C');
+            $this->pdf->Cell($this->iacIconWidth, $this->branchHeight, $this->iacPracticeText, 0, 0, 'C');
+            $this->pdf->Cell($this->iacCommentWidth, $this->branchHeight, $this->iacCommentText, 0, 1);
+
+            $this->pdf->y += $this->branchTopMargin;
+            $this->pdf->SetLineWidth(0.5);
+            $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - $this->leftMargin, $this->pdf->y);
+            $this->pdf->SetLineWidth(0.1);
+
+            foreach ($iacs as $iac) {
+                $this->generateIacGoals($iac);
+            }
+        }
+    }
+
+    private function generateIacGoals(IacResult $iac)
+    {
+
+        /** @var IacGoalResult $goal */
+        foreach ($iac->getGoals() as $goal) {
+            $this->pdf->SetX($this->leftMargin);
+            $this->pdf->y += $this->iacTextTopMargin;
+            $this->pdf->SetFont('Roboto', '', $this->iacTextFontSize);
+            $this->pdf->SetAlpha(0.84);
+            $y1 = $this->pdf->GetY();
+            $this->pdf->MultiCell($this->iacTextWidth, $this->iacTextHeight, utf8_decode($goal->getText()), 0);
+            $y2 = $this->pdf->GetY();
+
+            $this->pdf->y = $y1;
+            $this->pdf->SetFont('NotosIcon', '', $this->iacIconFontSize);
+
+            $achieved = $goal->isAchieved() ? $this->fontmap['B'] : '';
+            $this->pdf->Cell($this->iacIconWidth, $this->iacTextHeight, $achieved, 0, 0);
+
+            $practice = $goal->isPractice() ? $this->fontmap['B'] : '';
+            $this->pdf->Cell($this->iacIconWidth, $this->iacTextHeight, $practice, 0, 0);
+
+            $this->pdf->SetFont('Roboto', '', $this->iacCommentFontSize);
+            $this->pdf->MultiCell($this->iacCommentWidth, $this->iacTextHeight, utf8_decode($goal->getComment()), 0);
+
+            $toY = $y1 > $y2 ? $y1 : $y2;
+            $this->pdf->SetY($toY + $this->iacTextTopMargin);
+            $this->pdf->SetAlpha(0.54);
+            $this->pdf->SetDash(0.5, 1);
+            $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
+            $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - $this->leftMargin, $this->pdf->y);
+            $this->pdf->SetDash(); //reset
+        }
+    }
+
+
     public function Header(StudentResult $studentResult)
     {
         $this->orange();
@@ -274,7 +373,7 @@ class Report2PdfService
 
         $this->pdf->Cell(0, 10, 'Dit zijn mijn leervorderingen', 0, 1);
         $this->pdf->SetDrawColor(self::ORANGE[0], self::ORANGE[1], self::ORANGE[2]);
-        $this->pdf->Line($this->pdf->x + 32, $this->pdf->y, $this->pdf->pageWidth() - $this->pdf->x, $this->pdf->y);
+        $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - $this->pdf->x, $this->pdf->y);
     }
 
     public function Footer(StudentResult $studentResult)
@@ -334,32 +433,5 @@ class Report2PdfService
         $this->orange();
         $this->pdf->SetFontSize(50);
         $this->pdf->ShadowFittCell(0, 25, utf8_decode($student->getDisplayName()), 0, 1, '', false, '', self::BLUE, 1, .12);
-    }
-
-    private function generateIac(IacResult $iac)
-    {
-
-        $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - $this->leftMargin, $this->pdf->y);
-        /** @var IacGoalResult $goal */
-        foreach ($iac->getGoals() as $goal) {
-            $this->pdf->SetX($this->leftMargin);
-            $this->pdf->SetFont('Roboto', '', $this->iacTextFontSize);
-            $this->pdf->SetAlpha(0.84);
-            $this->pdf->Cell($this->iacTextWidth, $this->iacTextHeight, utf8_decode($goal->getText()), 0, 0);
-
-            $this->pdf->SetFont('NotosIcon', '', $this->iacIconFontSize);
-            $achieved = $goal->isAchieved() ? $this->fontmap['B'] : '';
-            $this->pdf->Cell($this->iacIconWidth, $this->iacTextHeight, $achieved, 0, 0);
-            $practice = $goal->isPractice() ? $this->fontmap['B'] : '';
-            $this->pdf->Cell($this->iacIconWidth, $this->iacTextHeight, $practice, 0, 0);
-
-            $this->pdf->SetFont('Roboto', '', $this->iacCommentFontSize);
-            $this->pdf->Cell($this->iacCommentWidth, $this->iacTextHeight, utf8_decode($goal->getComment()), 0, 1);
-            $this->pdf->SetAlpha(0.54);
-            $this->pdf->SetDash(0.5, 1);
-            $this->pdf->SetDrawColor(self::BLUE[0], self::BLUE[1], self::BLUE[2]);
-            $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - $this->leftMargin, $this->pdf->y);
-            $this->pdf->SetDash(); //reset
-        }
     }
 }
