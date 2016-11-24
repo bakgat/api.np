@@ -78,7 +78,15 @@ class BranchForGroup
      */
     private $dateRange;
 
-    public function __construct(Branch $branch, Group $group, $daterange, EvaluationType $evaluationType, $max = null)
+    /**
+     * @Groups({"evaluation_detail", "group_branches"})
+     *
+     * @ORM\Column(type="boolean")
+     * @var boolean
+     */
+    private $onlyFinal;
+
+    public function __construct(Branch $branch, Group $group, $daterange, EvaluationType $evaluationType, $max = null, $onlyFinal = false)
     {
         $this->id = NtUid::generate(4);
         $this->branch = $branch;
@@ -92,6 +100,7 @@ class BranchForGroup
         }
 
         $this->dateRange = DateRange::fromData($daterange);
+        $this->onlyFinal = false;
     }
 
     public function getId()
@@ -128,6 +137,10 @@ class BranchForGroup
             $this->max = $max;
         }
         return $this;
+    }
+
+    public function isOnlyFinal() {
+        return $this->onlyFinal;
     }
 
     /**
