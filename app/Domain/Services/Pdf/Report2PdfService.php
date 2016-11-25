@@ -19,6 +19,8 @@ use App\Domain\Model\Reporting\RangeResult;
 use App\Domain\Model\Reporting\Report;
 use App\Domain\Model\Reporting\StudentResult;
 use App\Domain\Model\Time\DateRange;
+use App\Pdf\NtPdf\Multicell;
+use App\Pdf\Pdf;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use IntlDateFormatter;
@@ -31,6 +33,7 @@ class Report2PdfService
         'C' => 'l',
         'T' => 'f',
         'S' => 'd',
+        'CHECK' => 'n'
     ];
 
     private $leftMargin = 20;
@@ -68,11 +71,11 @@ class Report2PdfService
     private $iacTextTopMargin = 2;
     private $iacTextHeight = 4;
     private $iacTextWidth = 80;
-    private $iacCommentWidth = 20;
+    private $iacCommentWidth = 50;
     private $iacIconWidth = 20;
     private $iacTextFontSize = 9;
     private $iacCommentFontSize = 8;
-    private $iacIconFontSize = 10;
+    private $iacIconFontSize = 12;
 
 
     /** @var EvaluationRepository */
@@ -98,7 +101,7 @@ class Report2PdfService
     {
         setlocale(LC_ALL, 'nl_BE');
         $this->evaluationRepo = $evaluationRepository;
-        $this->pdf = new Ntpdf();
+        $this->pdf = new Pdf();
         $this->pdf->AddFont('Roboto', '', 'Roboto-Regular.php');
         $this->pdf->AddFont('Roboto', 'bold', 'Roboto-Bold.php');
         $this->pdf->AddFont('NotosIcon', '', 'NotosIcons.php');
@@ -319,22 +322,32 @@ class Report2PdfService
             $this->pdf->SetFont('Roboto', '', $this->iacTextFontSize);
             $this->pdf->SetAlpha(0.84);
             $y1 = $this->pdf->GetY();
-            $this->pdf->MultiCell($this->iacTextWidth, $this->iacTextHeight, utf8_decode($goal->getText()), 0);
+            $x = $this->pdf->x;
+            $mc = new Multicell($this->pdf);
+            $mc->setStyle( "p", 'roboto', "", $this->iacCommentFontSize, implode(',', self::BLUE));
+
+            $mc->multiCell($this->iacTextWidth, $this->iacTextHeight,'<p>' . utf8_decode($goal->getText() . '</p>'), 0);
+
             $y2 = $this->pdf->GetY();
 
-            $this->pdf->y = $y1;
+            $this->pdf->SetXY($x + $this->iacTextWidth, $y1);
             $this->pdf->SetFont('NotosIcon', '', $this->iacIconFontSize);
 
-            $achieved = $goal->isAchieved() ? $this->fontmap['B'] : '';
-            $this->pdf->Cell($this->iacIconWidth, $this->iacTextHeight, $achieved, 0, 0);
+            $achieved = $goal->isAchieved() ? $this->fontmap['CHECK'] : '';
+            $this->pdf->Cell($this->iacIconWidth, $this->iacTextHeight, $achieved, 0, 0, 'C');
 
-            $practice = $goal->isPractice() ? $this->fontmap['B'] : '';
-            $this->pdf->Cell($this->iacIconWidth, $this->iacTextHeight, $practice, 0, 0);
+            $practice = $goal->isPractice() ? $this->fontmap['CHECK'] : '';
+            $this->pdf->Cell($this->iacIconWidth, $this->iacTextHeight, $practice, 0, 0, 'C');
 
             $this->pdf->SetFont('Roboto', '', $this->iacCommentFontSize);
-            $this->pdf->MultiCell($this->iacCommentWidth, $this->iacTextHeight, utf8_decode($goal->getComment()), 0);
+            $this->pdf->SetXY($x + $this->iacTextWidth + ($this->iacIconWidth * 2), $y1);
+            $mc->multiCell($this->iacCommentWidth, $this->iacTextHeight, utf8_decode($goal->getComment()), 0);
 
-            $toY = $y1 > $y2 ? $y1 : $y2;
+            $y3 = $this->pdf->GetY();
+
+            $toY = $y1 > $y2 ?
+                        ($y3 > $y1 ? $y3 : $y1) :
+                        ($y3 > $y2 ? $y3 : $y2);
             $this->pdf->SetY($toY + $this->iacTextTopMargin);
             $this->pdf->SetAlpha(0.54);
             $this->pdf->SetDash(0.5, 1);
@@ -342,6 +355,11 @@ class Report2PdfService
             $this->pdf->Line($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - $this->leftMargin, $this->pdf->y);
             $this->pdf->SetDash(); //reset
         }
+    }
+
+    private function cmp( $a, $b ) {
+        if(  $a == $b ){ return 0 ; }
+        return ($a < $b) ? -1 : 1;
     }
 
 
