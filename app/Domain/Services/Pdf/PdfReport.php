@@ -258,9 +258,11 @@ class PdfReport
                             'PADDING_TOP' => 4,
                             'PADDING_BOTTOM' => 4
                         ];
+
+                        $this->resultsTable->addRow($row);
                     }
 
-                    $this->resultsTable->addRow($row);
+
                 }
 
                 $this->resultsTable->close();
