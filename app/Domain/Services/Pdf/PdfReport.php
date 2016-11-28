@@ -197,6 +197,7 @@ class PdfReport
                     'BORDER_TYPE' => 0,
                 ]
             ];
+            $headerMajorSet = false;
 
             if ($hasResult) {
                 $this->resultsTable = new PdfTable($this->pdf);
@@ -204,6 +205,7 @@ class PdfReport
 
                 $this->resultsTable->initialize([65, 35, 30, 40]);
                 $this->resultsTable->addHeader($headerMajor);
+                $headerMajorSet = true;
 
                 /** @var BranchResult $branchResult */
                 foreach ($majorResult->getBranchResults() as $branchResult) {
@@ -272,16 +274,28 @@ class PdfReport
             }
 
             if ($hasIacs) {
+                if(!$headerMajorSet) {
+                    $this->iacTable = new PdfTable($this->pdf);
+                    $this->initTable($this->iacTable);
+
+                    $this->iacTable->initialize(array($this->iacTextWidth, $this->iacIconWidth, $this->iacIconWidth, $this->iacCommentWidth));
+                    //add the header row
+                    $this->iacTable->addHeader($headerMajor);
+                    $this->iacTable->close();
+
+                    $headerMajorSet = true;
+                }
+
 
                 $this->iacTable = new PdfTable($this->pdf);
                 $this->initTable($this->iacTable);
 
                 $this->iacTable->initialize(array($this->iacTextWidth, $this->iacIconWidth, $this->iacIconWidth, $this->iacCommentWidth));
                 //add the header row
-                $this->iacTable->addHeader($headerMajor);
+
 
                 foreach ($branchResult->getIacs() as $iac) {
-                    $this->iacTable->setRowConfig([
+                    $this->iacTable->setHeaderConfig([
                         'BORDER_COLOR' => Colors::llblue(),
                         'BORDER_WIDTH' => 1,
                         'TEXT_COLOR' => Colors::lblue()
@@ -292,7 +306,8 @@ class PdfReport
                         ['TEXT' => 'Nog oefenen', 'TEXT_SIZE' => 8],
                         ['TEXT' => 'Opmerkingen', 'TEXT_SIZE' => 8],
                     ];
-                    $this->iacTable->addRow($branchHeader);
+                    $this->iacTable->addHeader($branchHeader);
+
 
                     $this->iacTable->setRowConfig([
                         'BORDER_COLOR' => Colors::lllblue(),
@@ -300,8 +315,6 @@ class PdfReport
                     ]);
                     /** @var IacGoalResult $goal */
                     foreach ($iac->getGoals() as $goal) {
-
-
                         //row 1 - add data as Array
                         $aRow = array();
                         $aRow = [
