@@ -52,10 +52,14 @@ class ReportingService
     public function getReportByGroup($group, DateRange $range)
     {
         $pointResults = $this->evaluationRepo->getPointReportForGroup($group, $range);
+        $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForGroup($group, $range);
+        $spokenResults = $this->evaluationRepo->getSpokenReportForGroup($group, $range);
         $iacs = $this->iacRepo->getFlatIacForGroup($group, $range);
 
         $report = new Report($range);
         $this->generateResultsReport($report, $pointResults);
+        $this->generateComprehensiveReport($report, $comprehensiveResults);
+        $this->generateSpokenReport($report, $spokenResults);
         $this->generateIacsReport($report, $iacs);
 
         return $report;
@@ -65,7 +69,7 @@ class ReportingService
     {
         $pointResults = $this->evaluationRepo->getPointReportForStudent($studentId, $range);
         $iacs = $this->iacRepo->getFlatIacForStudent($studentId, $range);
-        
+
         $report = new Report($range);
         $this->generateResultsReport($report, $pointResults);
         $this->generateIacsReport($report, $iacs);
@@ -100,6 +104,42 @@ class ReportingService
 
     /**
      * @param Report $report
+     * @param $data
+     * @return Report
+     */
+    private function generateComprehensiveReport(Report $report, $data)
+    {
+
+        foreach ($data as $item) {
+            $report->intoStudent($item)
+                ->intoMajor($item)
+                ->intoBranch($item)
+                ->intoComprehensive($item);
+        }
+
+        return $report;
+    }
+
+    /**
+     * @param Report $report
+     * @param $data
+     * @return Report
+     */
+    private function generateSpokenReport(Report $report, $data)
+    {
+
+        foreach ($data as $item) {
+            $report->intoStudent($item)
+                ->intoMajor($item)
+                ->intoBranch($item)
+                ->intoSpoken($item);
+        }
+
+        return $report;
+    }
+
+    /**
+     * @param Report $report
      * @param $iacs
      * @return Report
      */
@@ -116,5 +156,5 @@ class ReportingService
         return $report;
     }
 
-   
+
 }

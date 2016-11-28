@@ -40,12 +40,26 @@ class BranchResult
      */
     private $iacs;
 
+    /**
+     * @Groups({"student_iac"})
+     * @var boolean
+     */
+    private $hasComprehensive;
+
+    /**
+     * @Groups({"student_iac"})
+     * @var boolean
+     */
+    private $hasSpoken;
+
     public function __construct(NtUid $id, $name)
     {
         $this->id = $id;
         $this->name = $name;
         $this->history = new ArrayCollection;
         $this->iacs = new ArrayCollection;
+        $this->hasComprehensive = false;
+        $this->hasSpoken = false;
     }
 
     public function getId()
@@ -83,6 +97,28 @@ class BranchResult
             $this->history->add($range);
         }
         return $range;
+    }
+
+    /**
+     * @param $data
+     */
+    public function intoComprehensive($data)
+    {
+        if ($data['eCount'] > 0) {
+            $this->hasComprehensive = true;
+        }
+        return $this;
+    }
+
+    /**
+     * @param $data
+     */
+    public function intoSpoken($data)
+    {
+        if ($data['eCount'] > 0) {
+            $this->hasSpoken = true;
+        }
+        return $this;
     }
 
     public function intoIac($data)
@@ -129,6 +165,16 @@ class BranchResult
     public function getHistory()
     {
         return clone $this->history;
+    }
+
+    public function hasComprehensive()
+    {
+        return $this->hasComprehensive;
+    }
+
+    public function hasSpoken()
+    {
+        return $this->hasSpoken;
     }
 
 

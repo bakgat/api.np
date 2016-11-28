@@ -150,7 +150,7 @@ class PdfReport
             $start = $formatter->format($this->report->getRange()->getStart());
             $end = $formatter->format($this->report->getRange()->getEnd());
 
-            $this->pdf->ShadowCell(0, 15, $start . '-' . $end, 0, 1, '', false, '', Colors::BLUE, 1, .12);
+            $this->pdf->ShadowCell(0, 10, $start . '-' . $end, 0, 1, '', false, '', Colors::BLUE, 1, .12);
 
             // YEAR
             $this->orange();
@@ -199,6 +199,7 @@ class PdfReport
             ];
             $headerMajorSet = false;
 
+
             if ($hasResult) {
                 $this->resultsTable = new PdfTable($this->pdf);
                 $this->initTable($this->resultsTable);
@@ -212,6 +213,35 @@ class PdfReport
                     $row = [[], []];
                     $history = $branchResult->getHistory();
 
+                    //SPOKEN OR COMPREHENSIVE EVALUATION
+                    //FOR NOW BOTH CAN NOT BE TRUE
+                    //@todo: were to check this?
+
+                    $icon = [];
+                    if ($branchResult->hasComprehensive()) {
+                        $icon[] = 'o';
+                    }
+                    if ($branchResult->hasSpoken()) {
+                        $icon[] = 'k';
+                    }
+                    if (count($icon) > 0) {
+                        $branch = '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>';
+                        $row[0] = [
+                            'TEXT' => $branch,
+                            'PADDING_TOP' => 4,
+                            'PADDING_BOTTOM' => 4,
+                            'LINE_SIZE' => 4,
+                        ];
+                        $row[1] = [];
+                        $row[2] = [
+                            'TEXT' => '<bi>' . implode('</bi>   <bi>', $icon) . '</bi>',
+                            'TEXT_ALIGN' => 'R',
+                            'PADDING_TOP' => 4,
+                            'PADDING_BOTTOM' => 4
+                        ];
+                        $this->resultsTable->addRow($row);
+                    }
+
                     if (count($history) > 0) {
                         /** @var RangeResult $rangeResult */
                         $rangeResult = $history->get(0);
@@ -219,8 +249,18 @@ class PdfReport
                         $isPerm = strtoupper($branchResult->getName()) == 'PERMANENTE EVALUATIE';
 
                         $branch = '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>';
-                        if ($rangeResult->getRedicodi() > 0) {
-                            $branch .= "\n";
+                        $row[0] = [
+                            'PADDING_TOP' => 4,
+                            'PADDING_BOTTOM' => 4,
+                            'LINE_SIZE' => 4,
+                        ];
+                        if (count($rangeResult->getRedicodi()) > 0) {
+                            $branch .= "\n\t";
+                            $row[0] = [
+                                'PADDING_TOP' => 2,
+                                'PADDING_BOTTOM' => 2,
+                                'LINE_SIZE' => 6,
+                            ];
                             foreach ($rangeResult->getRedicodi() as $key => $value) {
                                 if ($value >= $rangeResult->getEvCount() / 2) {
                                     $icon = NotosIcon::MAP[$key];
@@ -228,11 +268,8 @@ class PdfReport
                                 }
                             }
                         }
-                        $row[0] = [
-                            'TEXT' => $branch,
-                            'PADDING_TOP' => 4,
-                            'PADDING_BOTTOM' => 4
-                        ];
+                        $row[0]['TEXT'] = $branch;
+
 
                         if (!$isPerm) {
                             $points = [];
@@ -263,8 +300,6 @@ class PdfReport
 
                         $this->resultsTable->addRow($row);
                     }
-
-
                 }
 
                 $this->resultsTable->close();
@@ -274,7 +309,7 @@ class PdfReport
             }
 
             if ($hasIacs) {
-                if(!$headerMajorSet) {
+                if (!$headerMajorSet) {
                     $this->iacTable = new PdfTable($this->pdf);
                     $this->initTable($this->iacTable);
 
@@ -367,6 +402,8 @@ class PdfReport
         $table->setStyle('sm', 'Roboto', '', 8, Colors::str_blue(), .84);
         $table->setStyle('g', 'Roboto', '', 9, Colors::str_blue(), .84);
 
+
+        $table->setStyle('bi', 'NotosIcon', '', 16, Colors::str_blue(), .84);
         $table->setStyle('i', 'NotosIcon', '', 12, Colors::str_blue(), .84);
     }
 

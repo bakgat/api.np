@@ -16,10 +16,10 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  *
- * Class FlatReport
+ * Class FlatPointReport
  * @package App\Domain\Model\Reporting
  */
-class FlatReport
+class FlatPointReport
 {
     /**
      * @ORM\Id

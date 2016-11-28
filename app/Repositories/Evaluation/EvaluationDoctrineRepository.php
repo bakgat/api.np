@@ -12,10 +12,10 @@ use App\Domain\Model\Education\Major;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException;
-use App\Domain\Model\Evaluation\PointResult;
 use App\Domain\Model\Identity\Group;
-use App\Domain\Model\Identity\Student;
-use App\Domain\Model\Reporting\FlatReport;
+use App\Domain\Model\Reporting\FlatComprehensiveReport;
+use App\Domain\Model\Reporting\FlatPointReport;
+use App\Domain\Model\Reporting\FlatSpokenReport;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
 use DateTime;
@@ -122,7 +122,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               WHERE gr.end>='" . $range->getEnd()->format('Y-m-d') . "'
                 AND stig.type='X'";
 
-        return $this->getReport($sql);
+        return $this->getPointReport($sql);
     }
 
     /**
@@ -135,9 +135,14 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $this->getReportsForStudents([$studentId], $range);
     }
 
+    /**
+     * @param $studentIds
+     * @param DateRange $range
+     * @return array
+     */
     public function getReportsForStudents($studentIds, DateRange $range)
     {
-        $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+        $sql = "SELECT  s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
               pr.max as pr_max, pr.redicodi as pr_redicodi, pr.evaluation_count as pr_evcount,
               gr.id as gr_id, 
@@ -160,9 +165,14 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                   AND stig.type='X'
                   AND s.id IN('" . implode('\',\'', $studentIds) . "')
                ORDER BY sig.number, m.order, b.order";
-        return $this->getReport($sql);
+        return $this->getPointReport($sql);
     }
 
+    /**
+     * @param $group
+     * @param DateRange $range
+     * @return array
+     */
     public function getPointReportForGroup($group, DateRange $range)
     {
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
@@ -188,7 +198,74 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                   AND stig.type='X'
                   AND sig.group_id='" . $group . "'
               ORDER BY sig.number, m.order, b.order";
-        return $this->getReport($sql);
+        return $this->getPointReport($sql);
+    }
+
+    /**
+     * @param $group
+     * @param $range
+     * @return mixed
+     */
+    public function getComprehensiveReportForGroup($group, DateRange $range)
+    {
+        $sql = "SELECT MAX(cr.id) as c_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+				COUNT(e.id) AS e_count,
+              m.id as m_id, m.name as m_name, 
+              b.id as b_id, b.name as b_name, bfg.id as bfg_id,
+              g.id as g_id, g.name as g_name,
+              st.first_name as st_first_name, st.last_name as st_last_name
+              FROM comprehensive_results cr
+              INNER JOIN evaluations e ON e.id = cr.evaluation_id
+              INNER JOIN students s ON cr.student_id = s.id
+              INNER JOIN student_in_groups sig ON s.id = sig.student_id
+              INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+              INNER JOIN groups g ON g.id = bfg.group_id 
+              INNER JOIN staff_in_groups stig ON stig.group_id = g.id
+              INNER JOIN staff st ON st.id = stig.staff_id
+              INNER JOIN branches b ON b.id = bfg.branch_id
+              INNER JOIN majors m ON m.id = b.major_id
+              WHERE e.date >= '" . $range->getStart()->format('Y-m-d') . "' 
+                    AND e.date<='" . $range->getEnd()->format('Y-m-d') . "'
+                    AND stig.type='X'
+                    AND sig.group_id='" . $group . "'
+              GROUP BY s.id, bfg.id
+              ORDER BY sig.number, m.order, b.order";
+
+        return $this->getComprehensiveReport($sql);
+    }
+
+
+    /**
+     * @param $group
+     * @param $range
+     * @return mixed
+     */
+    public function getSpokenReportForGroup($group, DateRange $range)
+    {
+        $sql = "SELECT MAX(sp.id) as sp_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+				COUNT(e.id) AS e_count,
+              m.id as m_id, m.name as m_name, 
+              b.id as b_id, b.name as b_name, bfg.id as bfg_id,
+              g.id as g_id, g.name as g_name,
+              st.first_name as st_first_name, st.last_name as st_last_name
+              FROM spoken_results sp
+              INNER JOIN evaluations e ON e.id = sp.evaluation_id
+              INNER JOIN students s ON sp.student_id = s.id
+              INNER JOIN student_in_groups sig ON s.id = sig.student_id
+              INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+              INNER JOIN groups g ON g.id = bfg.group_id 
+              INNER JOIN staff_in_groups stig ON stig.group_id = g.id
+              INNER JOIN staff st ON st.id = stig.staff_id
+              INNER JOIN branches b ON b.id = bfg.branch_id
+              INNER JOIN majors m ON m.id = b.major_id
+              WHERE e.date >= '" . $range->getStart()->format('Y-m-d') . "' 
+                    AND e.date<='" . $range->getEnd()->format('Y-m-d') . "'
+                    AND stig.type='X'
+                    AND sig.group_id='" . $group . "'
+              GROUP BY s.id, bfg.id
+              ORDER BY sig.number, m.order, b.order";
+
+        return $this->getSpokenReport($sql);
     }
 
 
@@ -202,11 +279,13 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         // TODO: Implement getReportsForGroupByMajor() method.
     }
 
-    private function getReport($sql)
+
+#region MAPPERS
+    private function getPointReport($sql)
     {
         $rsm = new ResultSetMapping;
 
-        $rsm->addEntityResult(FlatReport::class, 'fr')
+        $rsm->addEntityResult(FlatPointReport::class, 'fr')
             ->addFieldResult('fr', 's_id', 'sId')
             ->addFieldResult('fr', 'first_name', 'sFirstName')
             ->addFieldResult('fr', 'last_name', 'sLastName')
@@ -234,6 +313,55 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $result;
     }
 
+    private function getComprehensiveReport($sql)
+    {
+        $rsm = new ResultSetMapping;
+
+        $rsm->addEntityResult(FlatComprehensiveReport::class, 'cr')
+            ->addFieldResult('cr', 'c_id', 'cId')
+            ->addFieldResult('cr', 's_id', 'sId')
+            ->addFieldResult('cr', 'first_name', 'sFirstName')
+            ->addFieldResult('cr', 'last_name', 'sLastName')
+            ->addFieldResult('cr', 'g_id', 'gId')
+            ->addFieldResult('cr', 'g_name', 'gName')
+            ->addFieldResult('cr', 'st_first_name', 'stFirstName')
+            ->addFieldResult('cr', 'st_last_name', 'stLastName')
+            ->addFieldResult('cr', 'e_count', 'eCount')
+            ->addFieldResult('cr', 'b_id', 'bId')
+            ->addFieldResult('cr', 'b_name', 'bName')
+            ->addFieldResult('cr', 'm_id', 'mId')
+            ->addFieldResult('cr', 'm_name', 'mName');
+
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $result = $query->getArrayResult();
+        return $result;
+    }
+
+    private function getSpokenReport($sql)
+    {
+        $rsm = new ResultSetMapping;
+
+        $rsm->addEntityResult(FlatSpokenReport::class, 'spr')
+            ->addFieldResult('spr', 'sp_id', 'spId')
+            ->addFieldResult('spr', 's_id', 'sId')
+            ->addFieldResult('spr', 'first_name', 'sFirstName')
+            ->addFieldResult('spr', 'last_name', 'sLastName')
+            ->addFieldResult('spr', 'g_id', 'gId')
+            ->addFieldResult('spr', 'g_name', 'gName')
+            ->addFieldResult('spr', 'st_first_name', 'stFirstName')
+            ->addFieldResult('spr', 'st_last_name', 'stLastName')
+            ->addFieldResult('spr', 'e_count', 'eCount')
+            ->addFieldResult('spr', 'b_id', 'bId')
+            ->addFieldResult('spr', 'b_name', 'bName')
+            ->addFieldResult('spr', 'm_id', 'mId')
+            ->addFieldResult('spr', 'm_name', 'mName');
+
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $result = $query->getArrayResult();
+        return $result;
+    }
+#endregion
+
     /**
      * @return int
      */
@@ -256,4 +384,6 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $this->em->flush();
         return true;
     }
+
+
 }

@@ -59,6 +59,20 @@ interface EvaluationRepository
      */
     public function getPointReportForGroup($group, DateRange $range);
 
+    /**
+     * @param $group
+     * @param DateRange $range
+     * @return ArrayCollection
+     */
+    public function getComprehensiveReportForGroup($group, DateRange $range);
+
+    /**
+     * @param $group
+     * @param DateRange $range
+     * @return ArrayCollection
+     */
+    public function getSpokenReportForGroup($group, DateRange $range);
+
     public function getReportsForStudentsByMajor($studentIds, $range, Major $major);
 
     public function getReportsForGroupByMajor(Group $group, $range, Major $major);
@@ -73,6 +87,7 @@ interface EvaluationRepository
      * @return boolean
      */
     public function remove(Evaluation $evaluation);
+
 
 
 }
