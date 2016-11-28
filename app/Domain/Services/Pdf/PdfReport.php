@@ -300,12 +300,16 @@ class PdfReport
                         'BORDER_WIDTH' => 1,
                         'TEXT_COLOR' => Colors::lblue()
                     ]);
+                    $IACHeader = [
+                        ['TEXT' => '<h4>Individuele leerlijn</h4>', 'PADDING_TOP' => 10, 'TEXT_ALGIN' => 'L']
+                    ];
                     $branchHeader = [
-                        ['TEXT' => '<h4>' . utf8_decode(ucfirst($branchResult->getName())) . '</h4>', 'TEXT_ALIGN' => 'L'],
+                        ['TEXT' => '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>', 'TEXT_ALIGN' => 'L'],
                         ['TEXT' => 'Gekend', 'TEXT_SIZE' => 8],
                         ['TEXT' => 'Nog oefenen', 'TEXT_SIZE' => 8],
-                        ['TEXT' => 'Opmerkingen', 'TEXT_SIZE' => 8],
+                        ['TEXT' => 'Opmerkingen', 'TEXT_SIZE' => 8, 'TEXT_ALIGN' => 'L'],
                     ];
+                    $this->iacTable->addHeader($IACHeader);
                     $this->iacTable->addHeader($branchHeader);
 
 
