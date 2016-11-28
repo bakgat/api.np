@@ -53,7 +53,7 @@ class PdfReport
 
         $this->initFonts();
 
-        $this->pdf->SetAutoPageBreak(false, 7);
+        $this->pdf->SetAutoPageBreak(false, 45);
 
         $this->build();
     }
