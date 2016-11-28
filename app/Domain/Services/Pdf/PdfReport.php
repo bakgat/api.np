@@ -301,7 +301,7 @@ class PdfReport
                         'TEXT_COLOR' => Colors::lblue()
                     ]);
                     $IACHeader = [
-                        ['TEXT' => '<h4>Individuele leerlijn</h4>', 'PADDING_TOP' => 10, 'TEXT_ALGIN' => 'L']
+                        ['TEXT' => '<h4>Individuele leerlijn</h4>', 'PADDING_TOP' => 10, 'TEXT_ALIGN' => 'L', 'COLSPAN' => 4, 'BORDER_TYPE' => 0]
                     ];
                     $branchHeader = [
                         ['TEXT' => '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>', 'TEXT_ALIGN' => 'L'],
