@@ -9,7 +9,9 @@
 namespace App\Pdf;
 
 
-class PdfTable
+use App\Pdf\NtPdf\Table\Table;
+
+class PdfTable extends Table
 {
 
 }

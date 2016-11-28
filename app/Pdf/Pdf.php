@@ -10,9 +10,13 @@ namespace App\Pdf;
 
 
 use Anouar\Fpdf\Fpdf;
+use App\Pdf\NtPdf\Listener;
 
 class Pdf extends Fpdf
 {
+    /** @var Listener */
+    private $headerListener;
+
     public $images;
     public $w;
     public $tMargin;
@@ -34,51 +38,83 @@ class Pdf extends Fpdf
     public $ColorFlag;
     public $AutoPageBreak;
     public $CurOrientation;
+    public $headerText;
+    private $showHeader;
+    private $showFooter;
+    public $header;
+    public $footer;
+    public $student;
 
-    public function _out( $s )
+    public function _out($s)
     {
-        parent::_out( $s );
+        parent::_out($s);
     }
 
-    public function _parsejpg( $file )
+    public function _parsejpg($file)
     {
-        return parent::_parsejpg( $file );
+        return parent::_parsejpg($file);
     }
 
-    public function _parsegif( $file )
+    public function _parsegif($file)
     {
-        return parent::_parsegif( $file );
+        return parent::_parsegif($file);
     }
 
-    public function _parsepng( $file )
+    public function _parsepng($file)
     {
-        return parent::_parsepng( $file );
+        return parent::_parsepng($file);
     }
 
-    public function Cell( $w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '' )
+    public function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
     {
         /**
          * AB 10.09.2016 - for "some" reason(haven't investigated the TXT
          */
-        $txt = strval( $txt );
-        parent::Cell( $w, $h, $txt, $border, $ln, $align, $fill, $link );
+        $txt = strval($txt);
+        parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
+    }
+
+    public function Header()
+    {
+        if ($this->showHeader) {
+            call_user_func($this->header, $this->student);
+        }
+    }
+    public function Footer() {
+        if ($this->showFooter) {
+            call_user_func($this->footer, $this->student);
+        }
+    }
+
+
+    public function HideHeader()
+    {
+        $this->showHeader = false;
+    }
+    public function HideFooter()
+    {
+        $this->showFooter = false;
     }
 
 
 
-
-
-
-
+    public function ShowHeader()
+    {
+        $this->showHeader = true;
+    }
+    public function ShowFooter()
+    {
+        $this->showFooter = true;
+    }
 
 
 #region DASH PLUGIN
-    function SetDash($black=null, $white=null)
+    function SetDash($black = null, $white = null)
     {
-        if($black!==null)
-            $s=sprintf('[%.3F %.3F] 0 d',$black*$this->k,$white*$this->k);
+        if ($black !== null)
+            $s = sprintf('[%.3F %.3F] 0 d', $black * $this->k, $white * $this->k);
         else
-            $s='[] 0 d';
+            $s = '[] 0 d';
         $this->_out($s);
     }
 #endregion
@@ -475,6 +511,8 @@ class Pdf extends Fpdf
         $this->_out(sprintf('%.2f %.2f m', $x * $this->k, ($this->h - $y) * $this->k));
     }
 
+
+
     private function _Line($x, $y)
     {
         $this->_out(sprintf('%.2f %.2f l', $x * $this->k, ($this->h - $y) * $this->k));
@@ -485,4 +523,6 @@ class Pdf extends Fpdf
         $this->_out(sprintf('%.2f %.2f %.2f %.2f %.2f %.2f c', $x1 * $this->k, ($this->h - $y1) * $this->k, $x2 * $this->k, ($this->h - $y2) * $this->k, $x3 * $this->k, ($this->h - $y3) * $this->k));
     }
 #endregion
+
+
 }

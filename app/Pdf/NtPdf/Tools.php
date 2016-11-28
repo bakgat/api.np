@@ -21,7 +21,7 @@ class Tools
         return $default;
     }
 
-
+    
     /**
      * Get the next value from the array
      *

@@ -12,7 +12,7 @@ namespace App\Pdf\NtPdf\Table\Cell;
 use App\Pdf\NtPdf\Multicell;
 use App\Pdf\Pdf;
 
-class TableMulticell extends NtAbstract implements TableInterface
+class TableMulticell extends NtAbstract
 {
     /**
      *

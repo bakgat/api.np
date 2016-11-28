@@ -218,8 +218,9 @@ class Multicell
      * @param $fontstyle string font style
      * @param $fontsize number font size
      * @param $color mixed font color
+     * @param int $opacity
      */
-    public function setStyle( $tag, $fontfamily, $fontstyle, $fontsize, $color )
+    public function setStyle( $tag, $fontfamily, $fontstyle, $fontsize, $color, $opacity = 1 )
     {
         if ( $tag == "ttags" )
             $this->oPdf->Error( ">> ttags << is reserved TAG Name." );
@@ -236,6 +237,7 @@ class Multicell
         $this->TagStyle[ $tag ][ 'style' ] = trim( $fontstyle );
         $this->TagStyle[ $tag ][ 'size' ] = trim( $fontsize );
         $this->TagStyle[ $tag ][ 'color' ] = trim( $color );
+        $this->TagStyle[ $tag ][ 'opacity' ] = $opacity;
     }
 
 
@@ -346,6 +348,13 @@ class Multicell
             if ( strpos( $style[ 'size' ], '%' ) !== false ) {
                 $style[ 'size' ] = $this->oPdf->FontSizePt * ( ( (float)$style[ 'size' ] ) / 100 );
             }
+
+            if(isset($style['opacity'])) {
+                $this->oPdf->SetAlpha($style['opacity']);
+            } else {
+                $this->oPdf->SetAlpha(1);
+            }
+            
             $this->oPdf->SetFont( $style[ 'family' ], $style[ 'style' ], $style[ 'size' ] );
             //this is textcolor in PDF format
             if ( isset( $style[ 'textcolor_pdf' ] ) ) {
@@ -379,6 +388,7 @@ class Multicell
         $this->TagStyle[ 'DEFAULT' ][ 'size' ] = $this->oPdfi->getFontSizePt();
         $this->TagStyle[ 'DEFAULT' ][ 'textcolor_pdf' ] = $this->oPdf->TextColor;
         $this->TagStyle[ 'DEFAULT' ][ 'color' ] = "";
+        $this->TagStyle[ 'DEFAULT' ][ 'opacity' ] = 1;
     }
 
 
