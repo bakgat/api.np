@@ -14,6 +14,7 @@ use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Reporting\FlatComprehensiveReport;
+use App\Domain\Model\Reporting\FlatFeedbackReport;
 use App\Domain\Model\Reporting\FlatPointReport;
 use App\Domain\Model\Reporting\FlatSpokenReport;
 use App\Domain\Model\Time\DateRange;
@@ -268,6 +269,22 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $this->getSpokenReport($sql);
     }
 
+    public function getFeedbackReportForGroup($group, DateRange $range)
+    {
+        $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+                CONCAT(fr.summary) as fr_summary
+                FROM feedback_results as fr
+                INNER JOIN evaluations e on e.id = fr.evaluation_id
+                INNER JOIN students s on s.id = fr.student_id
+                INNER JOIN student_in_groups sig on sig.student_id = s.id
+                WHERE e.date >= '" . $range->getStart()->format('Y-m-d') . "'
+                    AND e.date <= '" . $range->getEnd()->format('Y-m-d') . "'
+                    AND sig.group_id = '" . $group . "'
+                GROUP BY s.id
+                ORDER BY sig.number";
+        return $this->getFeedbackReport($sql);
+
+    }
 
     public function getReportsForStudentsByMajor($studentIds, $range, Major $major)
     {
@@ -355,6 +372,20 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('spr', 'b_name', 'bName')
             ->addFieldResult('spr', 'm_id', 'mId')
             ->addFieldResult('spr', 'm_name', 'mName');
+
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $result = $query->getArrayResult();
+        return $result;
+    }
+
+    private function getFeedbackReport($sql) {
+        $rsm = new ResultSetMapping;
+
+        $rsm->addEntityResult(FlatFeedbackReport::class, 'fr')
+            ->addFieldResult('fr', 's_id','sId')
+            ->addFieldResult('fr', 'first_name', 'sFirstName')
+            ->addFieldResult('fr', 'last_name', 'sLastName')
+            ->addFieldResult('fr', 'fr_summary', 'frSummary');
 
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getArrayResult();

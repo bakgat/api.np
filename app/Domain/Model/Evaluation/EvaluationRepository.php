@@ -68,6 +68,13 @@ interface EvaluationRepository
 
     /**
      * @param $group
+     * @param $range
+     * @return ArrayCollection
+     */
+    public function getFeedbackReportForGroup($group, DateRange $range);
+
+    /**
+     * @param $group
      * @param DateRange $range
      * @return ArrayCollection
      */

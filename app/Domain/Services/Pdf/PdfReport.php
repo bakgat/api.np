@@ -78,6 +78,14 @@ class PdfReport
 
             $this->pdf->ShowFooter();
 
+
+            $mc = new Multicell($this->pdf);
+            $this->initMulticell($mc);
+            $mc->multiCell(0, 100, $result->getFeedback());
+
+            $this->pdf->AddPage();
+
+
             $this->makeResultsTable($result);
 
         }
@@ -405,6 +413,11 @@ class PdfReport
 
         $table->setStyle('bi', 'NotosIcon', '', 16, Colors::str_blue(), .84);
         $table->setStyle('i', 'NotosIcon', '', 12, Colors::str_blue(), .84);
+    }
+    private function initMulticell(Multicell $mc) {
+        $mc->setStyle('b', 'Roboto', 'b', 11, Colors::str_blue());
+        $mc->setStyle('p', 'Roboto', '', 11, Colors::str_blue());
+
     }
 
     private function makeFrontPage(StudentResult $student)

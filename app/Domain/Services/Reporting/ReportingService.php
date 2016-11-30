@@ -55,12 +55,14 @@ class ReportingService
         $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForGroup($group, $range);
         $spokenResults = $this->evaluationRepo->getSpokenReportForGroup($group, $range);
         $iacs = $this->iacRepo->getFlatIacForGroup($group, $range);
+        $feedback = $this->evaluationRepo->getFeedbackReportForGroup($group, $range);
 
         $report = new Report($range);
         $this->generateResultsReport($report, $pointResults);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
         $this->generateSpokenReport($report, $spokenResults);
         $this->generateIacsReport($report, $iacs);
+        $this->generateFeedbackReport($report, $feedback);
 
         return $report;
     }
@@ -153,6 +155,15 @@ class ReportingService
                 ->intoGoal($item);
         }
 
+        return $report;
+    }
+
+    private function generateFeedbackReport(Report $report, $data)
+    {
+        foreach ($data as $item) {
+            $report->intoStudent($item)
+                ->intoFeedback($item);
+        }
         return $report;
     }
 

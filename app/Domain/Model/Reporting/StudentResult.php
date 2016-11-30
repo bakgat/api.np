@@ -60,6 +60,12 @@ class StudentResult
      */
     private $titularLastName;
 
+    /**
+     * @Groups({"result_dto"})
+     * @var string
+     */
+    private $feedback;
+
 
 
     public function __construct(NtUid $id, $firstName, $lastName, $groupName, $stFirstName, $stLastName)
@@ -122,6 +128,13 @@ class StudentResult
         return $this->titularFirstName . ' ' . $this->titularLastName;
     }
 
+    /**
+     * @return string
+     */
+    public function getFeedback()
+    {
+        return $this->feedback;
+    }
 
     public function intoMajor($data)
     {
@@ -142,6 +155,11 @@ class StudentResult
             return $element->getId() == $id;
         })->first();
         return $maj;
+    }
+
+    public function intoFeedback($data) {
+        $this->feedback = $data['frSummary'];
+        return $this;
     }
 
 
