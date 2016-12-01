@@ -193,6 +193,9 @@ class PdfReport
                 if (count($branchResult->getIacs()) > 0) {
                     $hasIacs = true;
                 }
+                if($branchResult->hasComprehensive() || $branchResult->hasSpoken()) {
+                    $hasResult = true;
+                }
             }
 
             $headerMajor = [
