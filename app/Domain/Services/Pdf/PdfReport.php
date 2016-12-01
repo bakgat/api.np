@@ -193,7 +193,7 @@ class PdfReport
                 if (count($branchResult->getIacs()) > 0) {
                     $hasIacs = true;
                 }
-                if($branchResult->hasComprehensive() || $branchResult->hasSpoken()) {
+                if ($branchResult->hasComprehensive() || $branchResult->hasSpoken()) {
                     $hasResult = true;
                 }
             }
@@ -394,6 +394,7 @@ class PdfReport
 
     private function initTable(PdfTable $table)
     {
+
         $table->setStyle('tn', 'Roboto', '', 15, Colors::str_blue());
         $table->setStyle('fn', 'Roboto', '', 20, Colors::str_blue());
         $table->setStyle('ln', 'Roboto', '', 20, Colors::str_orange());
@@ -416,7 +417,9 @@ class PdfReport
         $table->setStyle('bi', 'NotosIcon', '', 16, Colors::str_blue(), .84);
         $table->setStyle('i', 'NotosIcon', '', 12, Colors::str_blue(), .84);
     }
-    private function initMulticell(Multicell $mc) {
+
+    private function initMulticell(Multicell $mc)
+    {
         $mc->setStyle('b', 'Roboto', 'b', 11, Colors::str_blue());
         $mc->setStyle('p', 'Roboto', '', 11, Colors::str_blue());
 
@@ -446,6 +449,62 @@ class PdfReport
         $this->orange();
         $this->pdf->SetFontSize(50);
         $this->pdf->ShadowCell(0, 25, utf8_decode($student->getDisplayName()), 0, 1, '', false, '', Colors::BLUE, 1, .12);
+
+        $this->makeDescriptionPage();
+    }
+
+    private function makeDescriptionPage()
+    {
+        $this->pdf->AddPage();
+        $this->pdf->SetFont('Roboto', 'B', 20);
+        $this->blue();
+        $t1 = 'Hoe zie ik mezelf?';
+
+        $this->pdf->MultiCell($this->pdf->pageWidth() - $this->pdf->x, 19, $t1, 0, 1);
+        $c1 = 'Elk jaar met Kerst schrijf ik in 3 woorden neer hoe ik mezelf op dat moment zie.';
+
+        $this->pdf->SetAlpha(.84);
+        $this->pdf->SetTextColor(0, 0, 0);
+        $this->pdf->SetFont('RobotoThin', '', 11);
+        $this->pdf->MultiCell(0, 4, $c1, 0, 1);
+        $this->pdf->SetAlpha(1);
+
+        $table = new PdfTable($this->pdf);
+        $columnWidth = ($this->pdf->pageWidth() - ($this->pdf->x * 2)) / 3;
+        $table->initialize([$columnWidth, $columnWidth, $columnWidth]);
+
+        $table->setRowConfig([
+            'BORDER_TYPE' => 0,
+            'TEXT_FONT' => 'Roboto',
+            'TEXT_TYPE' => 'b',
+            'FONT_SIZE' => 12
+        ]);
+
+        $this->pdf->SetFont('Roboto', 'b', 12);
+
+        $row1 = [
+            ['TEXT' => 'Leerjaar 1', 'TEXT_COLOR' => Colors::BLUE],
+            ['TEXT' => 'Leerjaar 2', 'TEXT_COLOR' => Colors::GREEN],
+            ['TEXT' => 'Leerjaar 3', 'TEXT_COLOR' => Colors::PINK]
+        ];
+        $row2 = [
+            ['TEXT' => 'Leerjaar 4', 'TEXT_COLOR' => Colors::BLACK],
+            ['TEXT' => 'Leerjaar 5', 'TEXT_COLOR' => Colors::ORANGE],
+            ['TEXT' => 'Leerjaar 6', 'TEXT_COLOR' => Colors::RED]
+        ];
+        $table->addRow($row1);
+        $table->addRow($row2);
+        $table->close();
+
+        $this->pdf->SetFont('Roboto', 'B', 20);
+        $this->blue();
+        $t2 = 'Wat betekenen de grafieken?';
+        $c2 = "Visuele weergave van de eigen leervorderingen per vak.";
+
+        $this->pdf->SetFillColor(Colors::BLUE[0], Colors::BLUE[1], Colors::BLUE[2]);
+        $this->pdf->RoundedRect($this->pdf->x, $this->pdf->y, $this->pdf->pageWidth() - ($this->pdf->x * 2), 46, 5, '1234', 'F');
+
+
     }
 
 

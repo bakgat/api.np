@@ -13,6 +13,10 @@ class Colors
 {
     const ORANGE = [231, 155, 0];
     const BLUE = [0, 87, 157];
+    const PINK = [244,34,206];
+    const GREEN = [27, 150, 0];
+    const RED = [255, 20, 0];
+    const BLACK= [0, 0, 0];
 
 
     public static function transparencyToRGB(array $color, $transparency = 200, $background = 255) {
@@ -55,6 +59,17 @@ class Colors
     public static function str_orange()
     {
         return implode(',', self::ORANGE);
+    }
+
+    public static function str_green()
+    {
+        return implode(',', self::GREEN);
+    }
+    public static function str_pink() {
+        return implode(',', self::PINK);
+    }
+    public function str_black() {
+        return implode(',', self::BLACK);
     }
 
 

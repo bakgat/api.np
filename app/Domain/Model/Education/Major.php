@@ -54,6 +54,13 @@ class Major
      */
     private $branches;
 
+    /**
+     * @ORM\Column(type="float")
+     *
+     * @var float
+     */
+    private $order;
+
     public function __construct($name)
     {
         $this->id = NtUid::generate(4);
