@@ -44,7 +44,8 @@ class GroupDoctrineRepository implements GroupRepository
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('g')
-            ->from(Group::class, 'g');
+            ->from(Group::class, 'g')
+            ->orderBy('g.name');
 
         return $qb->getQuery()->getResult();
     }
@@ -62,6 +63,7 @@ class GroupDoctrineRepository implements GroupRepository
             ->join('g.studentInGroups', 'sig')
             ->where('sig.dateRange.start<=?1')
             ->andWhere('sig.dateRange.end>=?1')
+            ->orderBy('g.name')
             ->setParameter(1, new DateTime);
 
         return $qb->getQuery()->getResult();
@@ -199,6 +201,7 @@ class GroupDoctrineRepository implements GroupRepository
             ->where('sig.group=?1')
             ->andWhere('sig.dateRange.start<=?2')
             ->andWhere('sig.dateRange.end>=?2')
+            ->orderBy('sig.number')
             ->setParameter(1, $id)
             ->setParameter(2, new DateTime);
 
@@ -218,6 +221,7 @@ class GroupDoctrineRepository implements GroupRepository
             ->where('sig.dateRange.start<=?1')
             ->andWhere('sig.dateRange.end>=?1')
             ->andWhere('sig.staff = ?2')
+            ->orderBy('g.name')
             ->setParameter(1, new DateTime)
             ->setParameter(2, $id);
 
@@ -239,7 +243,7 @@ class GroupDoctrineRepository implements GroupRepository
             ->setParameter('id', $id);
 
         $staffGroup = $qb->getQuery()->getOneOrNullResult();
-        if($staffGroup == null) {
+        if ($staffGroup == null) {
             throw new StaffGroupNotFoundException($id);
         }
         return $staffGroup;
@@ -270,8 +274,8 @@ class GroupDoctrineRepository implements GroupRepository
             ->where('sig.id=:id')
             ->setParameter('id', $id);
 
-        $studentGroup =  $qb->getQuery()->getOneOrNullResult();
-        if($studentGroup == null) {
+        $studentGroup = $qb->getQuery()->getOneOrNullResult();
+        if ($studentGroup == null) {
             throw new StudentGroupNotFoundException($id);
         }
         return $studentGroup;

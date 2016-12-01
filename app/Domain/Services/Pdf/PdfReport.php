@@ -78,7 +78,6 @@ class PdfReport
 
             $this->pdf->ShowFooter();
 
-
             $mc = new Multicell($this->pdf);
             $this->initMulticell($mc);
             $mc->multiCell(0, 100, $result->getFeedback());
