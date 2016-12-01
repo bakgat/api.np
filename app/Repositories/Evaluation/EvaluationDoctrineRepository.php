@@ -48,6 +48,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->where('bfg.group= :groupId')
             ->andWhere('e.date >= :start')
             ->andWhere('e.date <= :end')
+            ->orderBy('m.order, b.order')
             ->setParameter('groupId', $group->getId())
             ->setParameter('start', $start)
             ->setParameter('end', $end);
@@ -99,7 +100,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
      * **************************************************/
     public function getSummary(DateRange $range)
     {
-        //TODO: now for group relation should be requested range !!
+        //TODO: Is this function still used ???
 
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 

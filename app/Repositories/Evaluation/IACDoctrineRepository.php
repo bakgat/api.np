@@ -42,7 +42,8 @@ class IACDoctrineRepository implements IACRepository
         $qb->select('m, b, g')
             ->from(Major::class, 'm')
             ->join('m.branches', 'b')
-            ->join('b.goals', 'g');
+            ->join('b.goals', 'g')
+            ->orderBy('m.order, b.order, g.order');
 
         return $qb->getQuery()->getResult();
     }
@@ -55,6 +56,7 @@ class IACDoctrineRepository implements IACRepository
             ->join('m.branches', 'b')
             ->join('b.goals', 'g')
             ->where('m.id=:major')
+            ->orderBy('b.order, g.order')
             ->setParameter('major', $major->getId());
 
         return $qb->getQuery()->getResult();
@@ -68,6 +70,7 @@ class IACDoctrineRepository implements IACRepository
             ->from(Branch::class, 'b')
             ->join('b.goals', 'g')
             ->where('b.id=:branch')
+            ->orderBy('g.order')
             ->setParameter('branch', $branch->getId());
 
         return $qb->getQuery()->getResult();
@@ -90,7 +93,9 @@ class IACDoctrineRepository implements IACRepository
                     INNER JOIN goals g ON ig.goal_id = g.id
                     INNER JOIN branches b ON b.id = g.branch_id
                     INNER JOIN majors m ON m.id = b.major_id
-                    INNER JOIN students s ON s.id = iac.student_id";
+                    INNER JOIN students s ON s.id = iac.student_id
+                    INNER JOIN student_in_groups sig ON sig.student_id = s.id
+                    ORDER BY sig.number, m.order, b.order, g.order";
         return $this->getIac($sql);
     }
 
@@ -112,7 +117,7 @@ class IACDoctrineRepository implements IACRepository
             ))
             ->setParameter(1, new DateTime)
             ->setParameter(2, $group->getId())
-            ->orderBy('sig.number');
+            ->orderBy('sig.number, m.order, b.order, g.order');
         return $qb->getQuery()->getResult();
     }
 
@@ -136,6 +141,7 @@ class IACDoctrineRepository implements IACRepository
                 $qb->expr()->gte('iac.dateRange.end', '?1'),
                 $qb->expr()->eq('iac.student', '?2')
             ))
+            ->orderBy('m.order, b.order, g.order')
             ->setParameter(1, new DateTime)
             ->setParameter(2, $studentId);
         return $qb->getQuery()->getResult();
@@ -161,7 +167,7 @@ class IACDoctrineRepository implements IACRepository
                     INNER JOIN students s ON s.id = iac.student_id
                     INNER JOIN student_in_groups sig ON sig.student_id = s.id
                     WHERE sig.group_id = '" . $groupId . "'
-                    ORDER BY sig.number, m.order, b.order";
+                    ORDER BY sig.number, m.order, b.order, g.order";
 
         return $this->getIac($sql);
     }
@@ -181,12 +187,10 @@ class IACDoctrineRepository implements IACRepository
                     INNER JOIN majors m ON m.id = b.major_id
                     INNER JOIN students s ON s.id = iac.student_id
                     WHERE s.id = '" . $studentId . "'
-                    ORDER BY m.order, b.order";
+                    ORDER BY m.order, b.order, g.order";
 
         return $this->getIac($sql);
     }
-
-
 
 
     /**
@@ -218,6 +222,7 @@ class IACDoctrineRepository implements IACRepository
             ->join('iac.iacGoals', 'ig')
             ->join('ig.goal', 'g')
             ->where('iac.id=:id')
+            ->orderBy('g.order')
             ->setParameter('id', $id);
 
         $iac = $qb->getQuery()->getOneOrNullResult();
@@ -282,7 +287,6 @@ class IACDoctrineRepository implements IACRepository
         $result = $query->getArrayResult();
         return $result;
     }
-
 
 
 }

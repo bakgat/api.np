@@ -47,7 +47,8 @@ class BranchDoctrineRepository implements BranchRepository
             ->join('m.branches', 'b')
             ->join('b.branchForGroups', 'bfg')
             ->where('bfg.group=?1')
-            ->setParameter(1, $group->getId());
+            ->setParameter(1, $group->getId())
+            ->orderBy('m.order, b.order');
         return $qb->getQuery()->getResult();
     }
 
@@ -103,6 +104,7 @@ class BranchDoctrineRepository implements BranchRepository
             ->join('bfg.branch', 'b')
             ->join('b.major', 'm')
             ->andWhere('bfg.group=:group')
+            ->orderBy('m.order, b.order')
             ->setParameter('group', $group->getId());
 
         return $qb->getQuery()->getResult();
@@ -122,6 +124,7 @@ class BranchDoctrineRepository implements BranchRepository
             ->leftJoin('b.major', 'm')
             ->where('bfg.group=:group')
             ->andWhere('bfg.evaluationType=:type')
+            ->orderBy('m.order, b.order')
             ->setParameter('group', $group->getId())
             ->setParameter('type', $type);
 
@@ -139,7 +142,8 @@ class BranchDoctrineRepository implements BranchRepository
         //put in right place
         $qb = $this->em->createQueryBuilder();
         $qb->select('m')
-            ->from(Major::class, 'm');
+            ->from(Major::class, 'm')
+            ->orderBy('m.order');
         return $qb->getQuery()->getResult();
     }
 
@@ -233,7 +237,9 @@ class BranchDoctrineRepository implements BranchRepository
         $qb = $this->em->createQueryBuilder();
         $qb->select('bfg')
             ->from(BranchForGroup::class, 'bfg')
+            ->join('bfg.branch', 'b')
             ->where('bfg.id=:id')
+            ->orderBy('b.order')
             ->setParameter('id', $branchForGroupId);
         return $qb->getQuery()->getOneOrNullResult();
     }
@@ -246,7 +252,7 @@ class BranchDoctrineRepository implements BranchRepository
      */
     public function byName($find, Group $group)
     {
-        if(Cache::has($group->getId()) . '|' . $find) {
+        if (Cache::has($group->getId()) . '|' . $find) {
             return Cache::get($group->getId() . '|' . $find);
         }
         $qb = $this->em->createQueryBuilder();
@@ -256,6 +262,7 @@ class BranchDoctrineRepository implements BranchRepository
             ->join('b.major', 'm')
             ->where('b.name=:find')
             ->andWhere('bfg.group=:group')
+            ->orderBy('m.order','b.order')
             ->setParameter('find', $find)
             ->setParameter('group', $group->getId());
 
