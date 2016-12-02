@@ -66,6 +66,14 @@ class FlatSpokenReport
      */
     private $stLastName;
 
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    private $stGender;
+
     /**
      * @ORM\Column(type="guid")
      * @var NtUid

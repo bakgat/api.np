@@ -185,7 +185,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               m.id as m_id, m.name as m_name, 
               b.id as b_id, b.name as b_name, bfg.id as bfg_id,
               g.id as g_id, g.name as g_name,
-              st.first_name as st_first_name, st.last_name as st_last_name
+              st.first_name as st_first_name, st.last_name as st_last_name, st.gender as st_gender
               FROM rr pr
               INNER JOIN students s ON pr.student_id = s.id
               INNER JOIN student_in_groups sig ON s.id = sig.student_id
@@ -311,6 +311,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('fr', 'g_name', 'gName')
             ->addFieldResult('fr', 'st_first_name', 'stFirstName')
             ->addFieldResult('fr', 'st_last_name', 'stLastName')
+            ->addFieldResult('fr', 'st_gender', 'stGender')
             ->addFieldResult('fr', 'pr_id', 'prId')
             ->addFieldResult('fr', 'pr_perm', 'prPerm')
             ->addFieldResult('fr', 'pr_end', 'prEnd')
@@ -344,6 +345,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('cr', 'g_name', 'gName')
             ->addFieldResult('cr', 'st_first_name', 'stFirstName')
             ->addFieldResult('cr', 'st_last_name', 'stLastName')
+            ->addFieldResult('cr', 'st_gender', 'stGender')
             ->addFieldResult('cr', 'e_count', 'eCount')
             ->addFieldResult('cr', 'b_id', 'bId')
             ->addFieldResult('cr', 'b_name', 'bName')
@@ -368,6 +370,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('spr', 'g_name', 'gName')
             ->addFieldResult('spr', 'st_first_name', 'stFirstName')
             ->addFieldResult('spr', 'st_last_name', 'stLastName')
+            ->addFieldResult('spr', 'st_gender', 'stGender')
             ->addFieldResult('spr', 'e_count', 'eCount')
             ->addFieldResult('spr', 'b_id', 'bId')
             ->addFieldResult('spr', 'b_name', 'bName')

@@ -96,6 +96,7 @@ class PdfReport
     public function StudentHeader($hideTitle = false)
     {
         return function (StudentResult $studentResult) use ($hideTitle) {
+            $prTit = $studentResult->getTitularGender() == 'F' ? 'juf ' : 'meester ';
             $tit = utf8_decode($studentResult->getTitular());
             $fn = utf8_decode($studentResult->getFirstName());
             $ln = utf8_decode($studentResult->getLastName());
@@ -106,8 +107,8 @@ class PdfReport
 
             $headerTable->initialize([85, 85]);
             $row = [
-                ['TEXT' => '<tn>' . $tit . '</tn>', 'BORDER_TYPE' => 0, 'PADDING_BOTTOM' => 10],
-                ['TEXT' => '<fn>' . $fn . ' |</fn> <ln>' . $ln . '</ln>', 'TEXT_ALIGN' => 'R', 'BORDER_TYPE' => 0, 'PADDING_BOTTOM' => 10]
+                ['TEXT' => '<ptn>' . $prTit . ' | </ptn><tn>' . $tit . '</tn>', 'BORDER_TYPE' => 0, 'PADDING_BOTTOM' => 10],
+                ['TEXT' => '<fn>' . $fn . ' | </fn> <ln>' . $ln . '</ln>', 'TEXT_ALIGN' => 'R', 'BORDER_TYPE' => 0, 'PADDING_BOTTOM' => 10]
             ];
             $headerTable->addRow($row);
 
@@ -399,9 +400,10 @@ class PdfReport
     private function initTable(PdfTable $table)
     {
 
-        $table->setStyle('tn', 'Roboto', '', 15, Colors::str_blue());
-        $table->setStyle('fn', 'Roboto', '', 20, Colors::str_blue());
-        $table->setStyle('ln', 'Roboto', '', 20, Colors::str_orange());
+        $table->setStyle('tn', 'Roboto', '', 13, Colors::str_blue());
+        $table->setStyle('ptn', 'Roboto', '', 13, Colors::str_orange());
+        $table->setStyle('fn', 'Roboto', '', 16, Colors::str_blue());
+        $table->setStyle('ln', 'Roboto', '', 16, Colors::str_orange());
 
         $table->setStyle('h2', 'Roboto', 'b', 20, Colors::str_orange());
         $table->setStyle('h3', 'Roboto', 'b', 18, Colors::str_blue());
@@ -657,6 +659,7 @@ class PdfReport
         /* ***************************************************
          * NEEMT DEEL AAN
          * **************************************************/
+        $this->pdf->y -= 10;
         $left = $this->pdf->x;
         $this->orange();
         $this->pdf->SetFont('Roboto', 'b', 20);
@@ -676,7 +679,8 @@ class PdfReport
         $this->pdf->x = $left;
         $this->orange();
         $this->pdf->SetFont('Roboto', 'b', 20);
-        $this->pdf->Cell(0, 14, 'Dit wil ' . $student->getTitular() . ' mij vertellen', 0, 1);
+        $titular = ($student->getTitularGender() == 'F' ? 'juf ' : 'meester ') . $student->getTitularFirstName();
+        $this->pdf->Cell(0, 14, 'Dit wil ' . $titular . ' mij vertellen', 0, 1);
 
         $this->pdf->SetLineWidth(.5);
         $ly = $this->pdf->y - 3;

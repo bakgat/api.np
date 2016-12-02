@@ -44,9 +44,10 @@ class Report
             $fn = $data['sFirstName'];
             $ln = $data['sLastName'];
             $group = isset($data['gName']) ? $data['gName'] : null;
+            $stG = isset($data['stGender']) ? $data['stGender'] : null;
             $stFn = isset($data['stFirstName']) ? $data['stFirstName'] : null;
             $stLn = isset($data['stLastName']) ? $data['stLastName'] : null;
-            $stud = new StudentResult($id, $fn, $ln, $group, $stFn, $stLn);
+            $stud = new StudentResult($id, $fn, $ln, $group, $stFn, $stLn, $stG);
             $this->students->add($stud);
         }
         return $stud;

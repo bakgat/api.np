@@ -64,16 +64,22 @@ class StudentResult
      * @Groups({"result_dto"})
      * @var string
      */
+    private $titularGender;
+
+    /**
+     * @Groups({"result_dto"})
+     * @var string
+     */
     private $feedback;
 
 
-
-    public function __construct(NtUid $id, $firstName, $lastName, $groupName, $stFirstName, $stLastName)
+    public function __construct(NtUid $id, $firstName, $lastName, $groupName, $stFirstName, $stLastName, $stGender)
     {
         $this->id = $id;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->group = $groupName;
+        $this->titularGender = $stGender;
         $this->titularFirstName = $stFirstName;
         $this->titularLastName = $stLastName;
         $this->majors = new ArrayCollection;
@@ -104,6 +110,7 @@ class StudentResult
         return $this->lastName;
     }
 
+
     /**
      * @return string
      */
@@ -123,10 +130,35 @@ class StudentResult
     /**
      * @return string
      */
+    public function getTitularFirstName()
+    {
+        return $this->titularFirstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitularLastName()
+    {
+        return $this->titularLastName;
+    }
+
+    /**
+     * @return string
+     */
     public function getTitular()
     {
         return $this->titularFirstName . ' ' . $this->titularLastName;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTitularGender()
+    {
+        return $this->titularGender;
+    }
+
 
     /**
      * @return string
@@ -157,7 +189,8 @@ class StudentResult
         return $maj;
     }
 
-    public function intoFeedback($data) {
+    public function intoFeedback($data)
+    {
         $this->feedback = $data['frSummary'];
         return $this;
     }
@@ -167,8 +200,6 @@ class StudentResult
     {
         return clone $this->majors;
     }
-
-    
 
 
 }
