@@ -22,6 +22,11 @@ use App\Pdf\Pdf;
 use App\Pdf\PdfTable;
 use IntlDateFormatter;
 
+/**
+ * @todo: all variables in top as class fields !
+ * Class PdfReport
+ * @package App\Domain\Services\Pdf
+ */
 class PdfReport
 {
     /** @var PdfTable */
@@ -698,7 +703,7 @@ class PdfReport
         $fb = $student->getFeedback();
         $fb = str_replace("</p><p>","</p>\n<p>",$fb);
         $fb = str_replace("<br/>", "\n", $fb);
-        $cmc->multiCell(0, 4, utf8_decode($fb));
+        $cmc->multiCell(0, 5, utf8_decode($fb));
         $endY = $this->pdf->y;
 
         $diffY = $endY - $startY;
