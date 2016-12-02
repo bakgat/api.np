@@ -68,7 +68,7 @@ class Colors
     public static function str_pink() {
         return implode(',', self::PINK);
     }
-    public function str_black() {
+    public static function str_black() {
         return implode(',', self::BLACK);
     }
 

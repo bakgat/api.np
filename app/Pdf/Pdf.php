@@ -227,6 +227,7 @@ class Pdf extends Fpdf
             $ShadowColor = [0, 0, 0];
         else
             $ShadowColor = $color;
+        
         $TextColor = $this->TextColor;
         $x = $this->x;
         $this->x += $distance;

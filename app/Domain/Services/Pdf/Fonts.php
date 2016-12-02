@@ -12,7 +12,8 @@ namespace App\Domain\Services\Pdf;
 class Fonts
 {
     const ALL = [
-        ['name' => 'RobotoThin', 'style' => '', 'file' => 'RobotoCondensed-Regular.php'],
+        ['name' => 'RobotoThin', 'style' => '', 'file' => 'RobotoCondensed-Light.php'],
+        ['name' => 'RobotoThin', 'style' => 'b', 'file' => 'Roboto-Medium.php'],
         ['name' => 'Roboto', 'style' => 'i', 'file' => 'Roboto-Italic.php'],
         ['name' => 'Roboto', 'style' => '', 'file' => 'Roboto-Regular.php'],
         ['name' => 'Roboto', 'style' => 'b', 'file' => 'Roboto-Bold.php'],
