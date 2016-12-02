@@ -640,7 +640,7 @@ class PdfReport
             ['TEXT' => '<i>m</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => utf8_decode("<b>Individuele leerlijn</b>\nVoor leerlingen die voor één of meer vakken een eigen traject volgen op maat van hun kunnen.")],
         ];
         $r7 = [
-            ['TEXT' => '<i>e</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Filosofiegroep</b>\nVoor leerlnigen die willen nadenken over het leven zelf."],
+            ['TEXT' => '<i>e</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Filosofiegroep</b>\nVoor leerlingen die willen nadenken over het leven zelf."],
             ['TEXT' => '', 'TEXT_ALIGN' => 'R'], ['TEXT' => ''],
         ];
         $r8 = [
