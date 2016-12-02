@@ -616,7 +616,7 @@ class PdfReport
         );
         $tbl4->initialize([15, 70, 15, 70]);
         $r1 = [
-            ['TEXT' => '<i></i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Klas</b>\nIn deze klasgroep volgde je les."],
+            ['TEXT' => '<i></i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Klas</b>\nIn deze klasgroep volgde uw kind les."],
             ['TEXT' => '<i>j</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Vlinderklas</b>\nVoor kleuters en leerlingen 1e leerjaar die naast het gedifferentieerde aanbod tijdelijk meer nood hebben aan uitdaging."],
         ];
         $r2 = [
@@ -629,7 +629,7 @@ class PdfReport
         ];
         $r4 = [
             ['TEXT' => '<i>i</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Rekentrein</b>\nExtra ondersteuning bij de automatisatie van hoofdrekenen."],
-            ['TEXT' => '<i>f</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Hulpmiddelen</b>\nVoor leerlingen die nood hebben aan materiële ondersteuning."],
+            ['TEXT' => '<i>f</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => utf8_decode("<b>Hulpmiddelen</b>\nVoor leerlingen die nood hebben aan materiële ondersteuning.")],
         ];
         $r5 = [
             ['TEXT' => '<i>h</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Leestrein</b>\nExtra ondersteuning bij het technisch lezen."],
