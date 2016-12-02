@@ -426,6 +426,7 @@ class PdfReport
 
     private function initMulticell(Multicell $mc)
     {
+        $mc->setStyle('i', 'Roboto', 'i', 11, Colors::str_blue());
         $mc->setStyle('b', 'Roboto', 'b', 11, Colors::str_blue());
         $mc->setStyle('p', 'Roboto', '', 11, Colors::str_blue());
 
@@ -670,6 +671,7 @@ class PdfReport
         call_user_func_array([$this->pdf, 'SetDrawColor'], Colors::ORANGE);
         $this->pdf->Line($left, $ly, $this->pdf->pageWidth() - ($this->pdf->x * 2), $ly);
 
+        //@todo: icons for participating
         $this->pdf->Ln(30);
 
 
@@ -677,6 +679,7 @@ class PdfReport
          * TEACHER COMMENT
          * **************************************************/
         $this->pdf->x = $left;
+
         $this->orange();
         $this->pdf->SetFont('Roboto', 'b', 20);
         $titular = ($student->getTitularGender() == 'F' ? 'juf ' : 'meester ') . $student->getTitularFirstName();
@@ -687,7 +690,21 @@ class PdfReport
         call_user_func_array([$this->pdf, 'SetDrawColor'], Colors::ORANGE);
         $this->pdf->Line($left, $ly, $this->pdf->pageWidth() - ($this->pdf->x * 2), $ly);
 
-        $this->pdf->Ln(30);
+        $startY = $this->pdf->y;
+        $cmc = new Multicell($this->pdf);
+        $this->initMulticell($cmc);
+        $this->pdf->x = $left;
+
+        $fb = $student->getFeedback();
+        $fb = str_replace("</p><p>","</p>\n<p>",$fb);
+        $fb = str_replace("<br/>", "\n", $fb);
+        $cmc->multiCell(0, 4, utf8_decode($fb));
+        $endY = $this->pdf->y;
+
+        $diffY = $endY - $startY;
+        if($diffY < 60) {
+            $this->pdf->y += 60 - $diffY;
+        }
 
         /* ***************************************************
          * PARENT COMMENT
@@ -707,7 +724,8 @@ class PdfReport
         /* ***************************************************
          * SELF EVALUATION
          * **************************************************/
-        $this->pdf->x = $left;
+
+        $this->pdf->SetXY($left, -90);
         $this->orange();
         $this->pdf->SetFont('Roboto', 'b', 20);
         $this->pdf->Cell(0, 14, 'Dit vind ik van mijn evaluatie', 0, 1);
