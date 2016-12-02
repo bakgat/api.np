@@ -639,7 +639,7 @@ class PdfReport
         ];
         $r8 = [
             ['TEXT' => '<i>o</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => utf8_decode("<b>Schriftelijke evaluatie</b>\nVakken waar dit symbool naast staat werden schriftelijk geëvalueerd. U vindt deze evaluaties verder in dit portfolio.")],
-            ['TEXT' => '<i>k</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Mondelinge evaluatie</b>Deze evaluaties werden mondeling besproken met de leerlingen."],
+            ['TEXT' => '<i>k</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Mondelinge evaluatie</b>\nDeze evaluaties werden mondeling besproken met de leerlingen."],
         ];
         $tbl4->addRow($r1);
         $tbl4->addRow($r2);
