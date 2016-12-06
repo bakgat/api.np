@@ -5,6 +5,7 @@
  * Date: 25/11/16
  * Time: 15:01
  */
+use App\Domain\Services\Pdf\Colors;
 
 /**
  * Default configuration values for the PDF Advanced table
@@ -41,7 +42,7 @@ $aDefaultConfiguration = array(
     ),
 
     'ROW' => array(
-        'TEXT_COLOR' => array(0, 0, 0), //text color
+        'TEXT_COLOR' => Colors::BLUE, //text color
         'TEXT_SIZE' => 10, //font size
         'TEXT_FONT' => 'Roboto', //font family
         'TEXT_ALIGN' => 'L', //horizontal alignment, possible values: LRCJ (left, right, center, justified)

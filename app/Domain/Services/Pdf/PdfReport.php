@@ -10,9 +10,11 @@ namespace App\Domain\Services\Pdf;
 
 
 use App\Domain\Model\Education\Branch;
+use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Reporting\BranchResult;
 use App\Domain\Model\Reporting\IacGoalResult;
 use App\Domain\Model\Reporting\MajorResult;
+use App\Domain\Model\Reporting\McResult;
 use App\Domain\Model\Reporting\RangeResult;
 use App\Domain\Model\Reporting\Report;
 use App\Domain\Model\Reporting\StudentResult;
@@ -23,7 +25,7 @@ use App\Pdf\PdfTable;
 use IntlDateFormatter;
 
 /**
- * @todo: all variables in top as class fields !
+ * @todo: all variables in top as class cfields !
  * Class PdfReport
  * @package App\Domain\Services\Pdf
  */
@@ -195,6 +197,7 @@ class PdfReport
             //@todo: check if major has any branch history results
             $hasResult = false;
             $hasIacs = false;
+
             /** @var BranchResult $branchResult */
             foreach ($majorResult->getBranchResults() as $branchResult) {
                 if (count($branchResult->getHistory()) > 0) {
@@ -203,6 +206,7 @@ class PdfReport
                 if (count($branchResult->getIacs()) > 0) {
                     $hasIacs = true;
                 }
+
                 if ($branchResult->hasComprehensive() || $branchResult->hasSpoken()) {
                     $hasResult = true;
                 }
@@ -230,12 +234,13 @@ class PdfReport
 
                 /** @var BranchResult $branchResult */
                 foreach ($majorResult->getBranchResults() as $branchResult) {
-                    $row = [[], []];
+
                     $history = $branchResult->getHistory();
 
-                    //SPOKEN OR COMPREHENSIVE EVALUATION
-                    //FOR NOW BOTH CAN NOT BE TRUE
-                    //@todo: were to check this?
+                    $hasMultiplechoices = false;
+                    if (count($branchResult->getMultipleChoices()) > 0) {
+                        $hasMultiplechoices = true;
+                    }
 
                     $icon = [];
                     if ($branchResult->hasComprehensive()) {
@@ -245,23 +250,25 @@ class PdfReport
                         $icon[] = 'k';
                     }
                     if (count($icon) > 0) {
+
                         $branch = '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>';
                         $row[0] = [
                             'TEXT' => $branch,
                             'PADDING_TOP' => 4,
                             'PADDING_BOTTOM' => 4,
                             'LINE_SIZE' => 4,
+                            'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
-                        $row[1] = [];
+                        $row[1] = ['BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',];
                         $row[2] = [
                             'TEXT' => '<bi>' . implode('</bi>   <bi>', $icon) . '</bi>',
                             'TEXT_ALIGN' => 'R',
                             'PADDING_TOP' => 4,
-                            'PADDING_BOTTOM' => 4
+                            'PADDING_BOTTOM' => 4,
+                            'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
                         $this->resultsTable->addRow($row);
                     }
-
                     if (count($history) > 0) {
                         /** @var RangeResult $rangeResult */
                         $rangeResult = $history->get(0);
@@ -273,6 +280,7 @@ class PdfReport
                             'PADDING_TOP' => 4,
                             'PADDING_BOTTOM' => 4,
                             'LINE_SIZE' => 4,
+                            'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
                         if (count($rangeResult->getRedicodi()) > 0) {
                             $branch .= "\n\t";
@@ -280,6 +288,7 @@ class PdfReport
                                 'PADDING_TOP' => 2,
                                 'PADDING_BOTTOM' => 2,
                                 'LINE_SIZE' => 6,
+                                'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                             ];
                             foreach ($rangeResult->getRedicodi() as $key => $value) {
                                 if ($value >= $rangeResult->getEvCount() / 2) {
@@ -305,7 +314,8 @@ class PdfReport
                                 'TEXT' => '<sm>' . implode("\n", $points) . '</sm>',
                                 'TEXT_ALIGN' => 'R',
                                 'PADDING_TOP' => 4,
-                                'PADDING_BOTTOM' => 4
+                                'PADDING_BOTTOM' => 4,
+                                'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                             ];
                         }
 
@@ -315,10 +325,83 @@ class PdfReport
                             'TEXT' => $isPerm ? '<perm>' . $t . '</perm>' : '<t>' . $t . '</t>',
                             'TEXT_ALIGN' => 'R',
                             'PADDING_TOP' => 4,
-                            'PADDING_BOTTOM' => 4
+                            'PADDING_BOTTOM' => 4,
+                            'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
+                        ];
+
+                        //@TODO: WHY IS THIS BORDER BOTTOM STYLE NOT RENDERED CORRECTLY
+                        $row[3] = [
+                            'TEXT' => '',
+                            'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
 
                         $this->resultsTable->addRow($row);
+                    }
+
+                    if ($hasMultiplechoices) {
+                        foreach ($branchResult->getMultipleChoices() as $multipleChoice) {
+                            $settings = json_decode($multipleChoice->getSettings());
+                            $selected = json_decode($multipleChoice->getSelected());
+                            if ($selected) {
+                                $printOther = $settings->printOthers;
+                                $selectedStyle = [];
+                                $notSelectedStyle = [];
+                                switch ($settings->selected) {
+                                    case 'bold':
+                                        $selectedStyle = ['<b>', '</b>'];
+                                        break;
+                                    case 'green':
+                                        $selectedStyle = ['<gr>', '</gr>'];
+                                        break;
+                                    case 'red':
+                                        $selectedStyle = ['<red>', '</red>'];
+                                        break;
+                                }
+                                switch ($settings->notSelected) {
+                                    case 'small':
+                                        $notSelectedStyle = ['<sm>', '</sm>'];
+                                        break;
+                                    case 'red':
+                                        $notSelectedStyle = ['<red>', '</red>'];
+                                        break;
+                                    case 'line-through':
+                                        $notSelectedStyle = ['<lt>', '</lt>'];
+                                        break;
+                                    default:
+                                        $notSelectedStyle = ['', ''];
+                                        break;
+                                }
+
+
+                                $prefix = $settings->pre;
+                                $suffix = $settings->post;
+
+                                $mc = "\t" . ($prefix ? $prefix . ' ' : '');
+                                $optResults = [];
+                                if ($printOther) {
+                                    $options = $settings->options;
+                                    foreach ($options as $option) {
+                                        if (in_array($option, $selected)) {
+                                            $aOpt = $selectedStyle;
+                                            array_splice($aOpt, 1, 0, $option);
+                                            $optResults[] = implode('', $aOpt);
+                                        } else {
+                                            $aOpt = $notSelectedStyle;
+                                            array_splice($aOpt, 1, 0, $option);
+                                            $optResults[] = implode('', $aOpt);
+                                        }
+                                    }
+                                }
+                                $mc .= implode(', ', $optResults);
+                                $mc .= $suffix ? ' ' . $suffix : '';
+
+                                $row = [
+                                    ['TEXT' => $mc,
+                                        'COLSPAN' => 4]
+                                ];
+                                $this->resultsTable->addRow($row);
+                            }
+                        }
                     }
                 }
 
@@ -391,6 +474,8 @@ class PdfReport
                 //close the table
                 $this->iacTable->close();
             }
+
+
         }
     }
 
@@ -404,7 +489,6 @@ class PdfReport
 
     private function initTable(PdfTable $table)
     {
-
         $table->setStyle('tn', 'Roboto', '', 13, Colors::str_blue());
         $table->setStyle('ptn', 'Roboto', '', 13, Colors::str_orange());
         $table->setStyle('fn', 'Roboto', '', 16, Colors::str_blue());
@@ -415,6 +499,9 @@ class PdfReport
         $table->setStyle('h4', 'Roboto', 'b', 12, Colors::str_blue());
 
         $table->setStyle('b', 'Roboto', 'b', 10, Colors::str_blue(), .84);
+        $table->setStyle('red', 'Roboto', 'b', 10, Colors::str_red(), .84);
+        $table->setStyle('gr', 'Roboto', 'b', 10, Colors::str_green(), .84);
+
         $table->setStyle('bn', 'Roboto', '', 12, Colors::str_blue());
 
         $table->setStyle('p', 'Roboto', '', 10, Colors::str_blue());
@@ -676,9 +763,7 @@ class PdfReport
         call_user_func_array([$this->pdf, 'SetDrawColor'], Colors::ORANGE);
         $this->pdf->Line($left, $ly, $this->pdf->pageWidth() - ($this->pdf->x * 2), $ly);
 
-        //@todo: icons for participating
-        $this->pdf->Ln(30);
-
+        $this->makeParticipationTable($student);
 
         /* ***************************************************
          * TEACHER COMMENT
@@ -701,13 +786,13 @@ class PdfReport
         $this->pdf->x = $left;
 
         $fb = $student->getFeedback();
-        $fb = str_replace("</p><p>","</p>\n<p>",$fb);
+        $fb = str_replace("</p><p>", "</p>\n<p>", $fb);
         $fb = str_replace("<br/>", "\n", $fb);
         $cmc->multiCell(0, 5, utf8_decode($fb));
         $endY = $this->pdf->y;
 
         $diffY = $endY - $startY;
-        if($diffY < 60) {
+        if ($diffY < 60) {
             $this->pdf->y += 60 - $diffY;
         }
 
@@ -741,6 +826,56 @@ class PdfReport
         $this->pdf->Line($left, $ly, $this->pdf->pageWidth() - ($this->pdf->x * 2), $ly);
 
         $this->pdf->Ln(30);
+    }
+
+    private function makeParticipationTable(StudentResult $student)
+    {
+        $parts = ['GROUP', Redicodi::BASIC, Redicodi::CHALLENGE, Redicodi::BUTTERFLY, Redicodi::MINISUNFLOWER, Redicodi::MATHTRAIN, Redicodi::READTRAIN,
+            Redicodi::SUNFLOWER, Redicodi::IAC, Redicodi::TIGER, Redicodi::PHILOSOPHY];
+
+        $partsCount = count($parts);
+        $width = $this->pdf->pageWidth() - ($this->leftMargin * 2);
+        $halfPartsCount = ceil($partsCount / 2);
+
+        $colWidth = $width / $halfPartsCount;
+        $table = new PdfTable($this->pdf);
+
+        $tblColumns = array_fill(0, $halfPartsCount, $colWidth);
+        $table->initialize($tblColumns);
+        $table->setStyle('i', 'NotosIcon', '', 24, Colors::str_blue(), .84);
+        $table->setStyle('ci', 'NotosIcon', '', 24, Colors::str_green(), .84);
+
+        $table->setRowConfig(['PADDING_TOP' => 4, 'PADDING_BOTTOM' => 4, 'BORDER_TYPE' => 0, 'TEXT_ALIGN' => 'C']);
+
+        $i = 0;
+        $row = [];
+
+        foreach ($parts as $part) {
+            if ($part == 'GROUP') {
+                $row[$i] = [
+                    'TYPE' => 'IMAGE',
+                    'FILE' => resource_path('icons/groups/' . $student->getGroup() .'.png'),
+                    'WIDTH' => 10
+                ];
+            } else {
+                if ($i == 3) {
+                    $icon = '<ci>' . Redicodi::icon($part) . '</ci>';
+                } else {
+                    $icon = '<i>' . Redicodi::icon($part) . '</i>';
+                }
+                $row[$i] = ['TEXT' => $icon];
+            }
+
+
+            $i++;
+            if ($i == $halfPartsCount || $i == $partsCount) {
+                $partsCount = $partsCount - $i;
+                $i = 0;
+                $table->addRow($row);
+                $row = [];
+            }
+        }
+        $table->close();
     }
 
 

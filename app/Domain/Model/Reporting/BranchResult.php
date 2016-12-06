@@ -52,6 +52,12 @@ class BranchResult
      */
     private $hasSpoken;
 
+    /**
+     * @Groups({"result_dto"})
+     * @var ArrayCollection
+     */
+    private $multipleChoices;
+
     public function __construct(NtUid $id, $name)
     {
         $this->id = $id;
@@ -60,6 +66,7 @@ class BranchResult
         $this->iacs = new ArrayCollection;
         $this->hasComprehensive = false;
         $this->hasSpoken = false;
+        $this->multipleChoices = new ArrayCollection;
     }
 
     public function getId()
@@ -101,6 +108,24 @@ class BranchResult
 
     /**
      * @param $data
+     * @return McResult
+     */
+    public function intoMultiplechoice($data)
+    {
+        $id = NtUid::import($data['mcId']);
+        $mc = $this->hasMC($id);
+        if (!$mc) {
+            $settings = $data['eSettings'];
+            $selected = $data['mcSelected'];
+            $mc = new McResult($id, $settings, $selected);
+            $this->multipleChoices->add($mc);
+        }
+        return $mc;
+    }
+
+    /**
+     * @param $data
+     * @return $this
      */
     public function intoComprehensive($data)
     {
@@ -158,6 +183,15 @@ class BranchResult
         return $range;
     }
 
+    public function hasMC($id)
+    {
+        $mc = $this->multipleChoices->filter(function ($element) use ($id) {
+            /** @var McResult $element */
+            return $element->getId() == $id;
+        })->first();
+        return $mc;
+    }
+
 
     /**
      * @return ArrayCollection
@@ -165,6 +199,14 @@ class BranchResult
     public function getHistory()
     {
         return clone $this->history;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getMultipleChoices()
+    {
+        return clone $this->multipleChoices;
     }
 
     public function hasComprehensive()

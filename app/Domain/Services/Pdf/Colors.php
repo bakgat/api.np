@@ -72,5 +72,10 @@ class Colors
         return implode(',', self::BLACK);
     }
 
+    public static function str_red()
+    {
+        return implode(',', self::RED);
+    }
+
 
 }

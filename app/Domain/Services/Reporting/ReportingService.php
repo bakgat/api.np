@@ -54,6 +54,7 @@ class ReportingService
         $pointResults = $this->evaluationRepo->getPointReportForGroup($group, $range);
         $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForGroup($group, $range);
         $spokenResults = $this->evaluationRepo->getSpokenReportForGroup($group, $range);
+        $mcResults = $this->evaluationRepo->getMultiplechoiceReportForGroup($group, $range);
         $iacs = $this->iacRepo->getFlatIacForGroup($group, $range);
         $feedback = $this->evaluationRepo->getFeedbackReportForGroup($group, $range);
 
@@ -61,6 +62,7 @@ class ReportingService
         $this->generateResultsReport($report, $pointResults);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
         $this->generateSpokenReport($report, $spokenResults);
+        $this->generateMcResultsReport($report, $mcResults);
         $this->generateIacsReport($report, $iacs);
         $this->generateFeedbackReport($report, $feedback);
 
@@ -135,6 +137,23 @@ class ReportingService
                 ->intoMajor($item)
                 ->intoBranch($item)
                 ->intoSpoken($item);
+        }
+
+        return $report;
+    }
+
+    /**
+     * @param Report $report
+     * @param $data
+     * @return Report
+     */
+    private function generateMcResultsReport(Report $report, $data)
+    {
+        foreach ($data as $item) {
+            $report->intoStudent($item)
+                ->intoMajor($item)
+                ->intoBranch($item)
+                ->intoMultiplechoice($item);
         }
 
         return $report;

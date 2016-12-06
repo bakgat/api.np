@@ -16,17 +16,17 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  *
- * Class FlatSpokenReport
+ * Class FlatMultiplechoiceReport
  * @package App\Domain\Model\Reporting
  */
-class FlatSpokenReport
+class FlatMultiplechoiceReport
 {
     /**
- * @ORM\Id
- * @ORM\Column(type="guid")
- * @var NtUid
- */
-    private $spId;
+     * @ORM\Id
+     * @ORM\Column(type="guid")
+     * @var NtUid
+     */
+    private $mcId;
 
     /**
      * @ORM\Column(type="guid")
@@ -59,13 +59,24 @@ class FlatSpokenReport
      * @ORM\Column(type="string")
      * @var string
      */
+    private $eSettings;
+
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
+    private $mcSelected;
+
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
     private $stFirstName;
     /**
      * @ORM\Column(type="string")
      * @var string
      */
     private $stLastName;
-
 
     /**
      * @ORM\Column(type="string")
@@ -96,12 +107,4 @@ class FlatSpokenReport
      * @var string
      */
     private $bName;
-
-
-    /**
-     * @ORM\Column(type="integer")
-     *
-     * @var integer
-     */
-    private $eCount;
 }

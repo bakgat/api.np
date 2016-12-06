@@ -15,6 +15,7 @@ use App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Reporting\FlatComprehensiveReport;
 use App\Domain\Model\Reporting\FlatFeedbackReport;
+use App\Domain\Model\Reporting\FlatMultiplechoiceReport;
 use App\Domain\Model\Reporting\FlatPointReport;
 use App\Domain\Model\Reporting\FlatSpokenReport;
 use App\Domain\Model\Time\DateRange;
@@ -270,6 +271,39 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $this->getSpokenReport($sql);
     }
 
+    /**
+     * @param $group
+     * @param $range
+     * @return mixed
+     */
+    public function getMultiplechoiceReportForGroup($group, DateRange $range)
+    {
+        $sql = "SELECT mc.id as mc_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+				e.settings as e_settings, mc.selected as mc_selected,
+              m.id as m_id, m.name as m_name, 
+              b.id as b_id, b.name as b_name, bfg.id as bfg_id,
+              g.id as g_id, g.name as g_name,
+              st.first_name as st_first_name, st.last_name as st_last_name
+              FROM multiplechoice_results mc
+              INNER JOIN evaluations e ON e.id = mc.evaluation_id
+              INNER JOIN students s ON mc.student_id = s.id
+              INNER JOIN student_in_groups sig ON s.id = sig.student_id
+              INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+              INNER JOIN groups g ON g.id = bfg.group_id 
+              INNER JOIN staff_in_groups stig ON stig.group_id = g.id
+              INNER JOIN staff st ON st.id = stig.staff_id
+              INNER JOIN branches b ON b.id = bfg.branch_id
+              INNER JOIN majors m ON m.id = b.major_id
+              WHERE e.date >= '" . $range->getStart()->format('Y-m-d') . "' 
+                    AND e.date<='" . $range->getEnd()->format('Y-m-d') . "'
+                    AND stig.type='X'
+                    AND sig.group_id='" . $group . "'
+              GROUP BY s.id, bfg.id
+              ORDER BY sig.number, m.order, b.order";
+
+        return $this->getMultiplechoiceReport($sql);
+    }
+
     public function getFeedbackReportForGroup($group, DateRange $range)
     {
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
@@ -382,11 +416,38 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $result;
     }
 
-    private function getFeedbackReport($sql) {
+    private function getMultiplechoiceReport($sql)
+    {
+        $rsm = new ResultSetMapping();
+
+        $rsm->addEntityResult(FlatMultiplechoiceReport::class, 'mc')
+            ->addFieldResult('mc', 'mc_id', 'mcId')
+            ->addFieldResult('mc', 's_id', 'sId')
+            ->addFieldResult('mc', 'first_name', 'sFirstName')
+            ->addFieldResult('mc', 'last_name', 'sLastName')
+            ->addFieldResult('mc', 'e_settings','eSettings')
+            ->addFieldResult('mc', 'mc_selected', 'mcSelected')
+            ->addFieldResult('mc', 'g_id', 'gId')
+            ->addFieldResult('mc', 'g_name', 'gName')
+            ->addFieldResult('mc', 'st_first_name', 'stFirstName')
+            ->addFieldResult('mc', 'st_last_name', 'stLastName')
+            ->addFieldResult('mc', 'st_gender', 'stGender')
+            ->addFieldResult('mc', 'b_id', 'bId')
+            ->addFieldResult('mc', 'b_name', 'bName')
+            ->addFieldResult('mc', 'm_id', 'mId')
+            ->addFieldResult('mc', 'm_name', 'mName');
+
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $result = $query->getArrayResult();
+        return $result;
+    }
+
+    private function getFeedbackReport($sql)
+    {
         $rsm = new ResultSetMapping;
 
         $rsm->addEntityResult(FlatFeedbackReport::class, 'fr')
-            ->addFieldResult('fr', 's_id','sId')
+            ->addFieldResult('fr', 's_id', 'sId')
             ->addFieldResult('fr', 'first_name', 'sFirstName')
             ->addFieldResult('fr', 'last_name', 'sLastName')
             ->addFieldResult('fr', 'fr_summary', 'frSummary');
