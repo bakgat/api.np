@@ -87,6 +87,14 @@ interface EvaluationRepository
      */
     public function getMultiplechoiceReportForGroup($group, DateRange $range);
 
+    /**
+     * @param $group
+     * @param DateRange $range
+     * @return ArrayCollection
+     */
+    public function getRedicodiReportForGroup($group, DateRange $range);
+
+
     public function getReportsForStudentsByMajor($studentIds, $range, Major $major);
 
     public function getReportsForGroupByMajor(Group $group, $range, Major $major);

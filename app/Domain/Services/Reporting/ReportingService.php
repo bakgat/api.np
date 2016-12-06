@@ -57,6 +57,7 @@ class ReportingService
         $mcResults = $this->evaluationRepo->getMultiplechoiceReportForGroup($group, $range);
         $iacs = $this->iacRepo->getFlatIacForGroup($group, $range);
         $feedback = $this->evaluationRepo->getFeedbackReportForGroup($group, $range);
+        $redicodi = $this->evaluationRepo->getRedicodiReportForGroup($group, $range);
 
         $report = new Report($range);
         $this->generateResultsReport($report, $pointResults);
@@ -65,6 +66,7 @@ class ReportingService
         $this->generateMcResultsReport($report, $mcResults);
         $this->generateIacsReport($report, $iacs);
         $this->generateFeedbackReport($report, $feedback);
+        $this->generateRedicodiReport($report, $redicodi);
 
         return $report;
     }
@@ -184,6 +186,13 @@ class ReportingService
                 ->intoFeedback($item);
         }
         return $report;
+    }
+
+    private function generateRedicodiReport(Report $report, $data) {
+        foreach ($data as $item) {
+            $report->intoStudent($item)
+                ->intoRedicodi($item);
+        }
     }
 
 

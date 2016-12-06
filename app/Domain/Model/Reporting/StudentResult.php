@@ -72,6 +72,12 @@ class StudentResult
      */
     private $feedback;
 
+    /**
+     * @Groups({"result_dto"})
+     * @var ArrayCollection
+     */
+    private $redicodi;
+
 
     public function __construct(NtUid $id, $firstName, $lastName, $groupName, $stFirstName, $stLastName, $stGender)
     {
@@ -84,6 +90,7 @@ class StudentResult
         $this->titularLastName = $stLastName;
         $this->majors = new ArrayCollection;
         $this->iacs = new ArrayCollection;
+        $this->redicodi = new ArrayCollection;
     }
 
     /**
@@ -201,12 +208,22 @@ class StudentResult
         return clone $this->majors;
     }
 
+
+    public function intoRedicodi($data)
+    {
+        if (!$this->redicodi->contains($data['rfsRedicodi'])) {
+            $this->redicodi->add($data['rfsRedicodi']);
+        }
+
+        return $this;
+    }
+
     /**
      * @return array
      */
     public function getRedicodi()
     {
-        return [];
+        return $this->redicodi->getValues();
     }
 
 

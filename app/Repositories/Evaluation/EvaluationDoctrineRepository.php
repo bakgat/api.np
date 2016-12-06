@@ -18,6 +18,7 @@ use App\Domain\Model\Reporting\FlatFeedbackReport;
 use App\Domain\Model\Reporting\FlatMultiplechoiceReport;
 use App\Domain\Model\Reporting\FlatPointReport;
 use App\Domain\Model\Reporting\FlatSpokenReport;
+use App\Domain\Model\Reporting\FlatStudentRedicodiReport;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
 use DateTime;
@@ -318,7 +319,22 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                 GROUP BY s.id
                 ORDER BY sig.number";
         return $this->getFeedbackReport($sql);
+    }
 
+    public function getRedicodiReportForGroup($group, DateRange $range)
+    {
+        $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+                rfs.redicodi as rfs_redicodi
+                FROM redicodi_for_students rfs
+                INNER JOIN students s ON s.id = rfs.student_id
+                INNER JOIN student_in_groups sig on sig.student_id = s.id
+                WHERE rfs.start <= '" . $range->getStart()->format('Y-m-d') . "' 
+                    AND rfs.end >='" . $range->getEnd()->format('Y-m-d') . "'
+                    AND sig.group_id='" . $group . "'
+                GROUP BY s.id, rfs.redicodi
+                ORDER BY sig.number";
+
+        return $this->getRedicodiReport($sql);
     }
 
     public function getReportsForStudentsByMajor($studentIds, $range, Major $major)
@@ -425,7 +441,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('mc', 's_id', 'sId')
             ->addFieldResult('mc', 'first_name', 'sFirstName')
             ->addFieldResult('mc', 'last_name', 'sLastName')
-            ->addFieldResult('mc', 'e_settings','eSettings')
+            ->addFieldResult('mc', 'e_settings', 'eSettings')
             ->addFieldResult('mc', 'mc_selected', 'mcSelected')
             ->addFieldResult('mc', 'g_id', 'gId')
             ->addFieldResult('mc', 'g_name', 'gName')
@@ -456,6 +472,22 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $result = $query->getArrayResult();
         return $result;
     }
+
+    private function getRedicodiReport($sql)
+    {
+        $rsm = new ResultSetMapping();
+
+        $rsm->addEntityResult(FlatStudentRedicodiReport::class, "fsr")
+            ->addFieldResult('fsr', 's_id', 'sId')
+            ->addFieldResult('fsr', 'first_name', 'sFirstName')
+            ->addFieldResult('fsr', 'last_name', 'sLastName')
+            ->addFieldResult('fsr', 'rfs_redicodi', 'rfsRedicodi');
+
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $result = $query->getArrayResult();
+        return $result;
+    }
+
 #endregion
 
     /**
@@ -480,6 +512,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $this->em->flush();
         return true;
     }
+
 
 
 }
