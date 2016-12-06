@@ -858,7 +858,7 @@ class PdfReport
                     'WIDTH' => 10
                 ];
             } else {
-                if ($i == 3) {
+                if (in_array($part, $student->getRedicodi())) {
                     $icon = '<ci>' . Redicodi::icon($part) . '</ci>';
                 } else {
                     $icon = '<i>' . Redicodi::icon($part) . '</i>';

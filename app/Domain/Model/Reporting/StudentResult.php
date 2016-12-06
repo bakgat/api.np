@@ -201,5 +201,13 @@ class StudentResult
         return clone $this->majors;
     }
 
+    /**
+     * @return array
+     */
+    public function getRedicodi()
+    {
+        return [];
+    }
+
 
 }
