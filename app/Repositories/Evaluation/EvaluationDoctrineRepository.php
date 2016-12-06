@@ -335,7 +335,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                 FROM redicodi_for_students rfs
                 INNER JOIN students s ON s.id = rfs.student_id
                 INNER JOIN student_in_groups sig on sig.student_id = s.id
-                WHERE {$inRangeSql}
+                WHERE " . $inRangeSql . "
                 GROUP BY s.id, rfs.redicodi
                 ORDER BY sig.number";
 
