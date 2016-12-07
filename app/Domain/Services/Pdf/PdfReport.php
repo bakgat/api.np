@@ -843,7 +843,7 @@ class PdfReport
         $tblColumns = array_fill(0, $halfPartsCount, $colWidth);
         $table->initialize($tblColumns);
         $table->setStyle('i', 'NotosIcon', '', 24, Colors::str_blue(), .84);
-        $table->setStyle('ci', 'NotosIcon', '', 24, Colors::str_green(), .84);
+        $table->setStyle('si', 'NotosIcon', '', 16, Colors::str_blue(), .84);
 
         $table->setRowConfig(['PADDING_TOP' => 4, 'PADDING_BOTTOM' => 4, 'BORDER_TYPE' => 0, 'TEXT_ALIGN' => 'C']);
 
@@ -855,13 +855,14 @@ class PdfReport
                 $row[$i] = [
                     'TYPE' => 'IMAGE',
                     'FILE' => resource_path('icons/groups/' . $student->getGroup() .'.png'),
-                    'WIDTH' => 10
+                    'WIDTH' => 10,
                 ];
             } else {
+                $icon = '<i>' . Redicodi::icon($part) . '</i>';
                 if (in_array($part, $student->getRedicodi())) {
-                    $icon = '<ci>' . Redicodi::icon($part) . '</ci>';
+                    $icon .= ' <si>r</si>';
                 } else {
-                    $icon = '<i>' . Redicodi::icon($part) . '</i>';
+                    $icon .= ' <si>q</si>';
                 }
                 $row[$i] = ['TEXT' => $icon];
             }
