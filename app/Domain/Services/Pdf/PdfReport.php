@@ -860,9 +860,9 @@ class PdfReport
             } else {
                 $icon = '<i>' . Redicodi::icon($part) . '</i>';
                 if (in_array($part, $student->getRedicodi())) {
-                    $icon .= ' <si>r</si>';
+                    $icon .= '  <si>r</si>';
                 } else {
-                    $icon .= ' <si>q</si>';
+                    $icon .= '  <si>q</si>';
                 }
                 $row[$i] = ['TEXT' => $icon];
             }
