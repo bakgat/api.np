@@ -703,7 +703,7 @@ class PdfReport
         );
         $tbl4->initialize([15, 70, 15, 70]);
         $r1 = [
-            ['TEXT' => '<i></i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Klas</b>\nIn deze klasgroep volgde uw kind les."],
+            ['TYPE' => 'IMAGE','FILE' => resource_path('icons/groups/L1A.png'), 'WIDTH' => 10], ['TEXT' => "<b>Klas</b>\nIn deze klasgroep volgde uw kind les."],
             ['TEXT' => '<i>j</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Vlinderklas</b>\nVoor kleuters en leerlingen 1e leerjaar die naast het gedifferentieerde aanbod tijdelijk meer nood hebben aan uitdaging."],
         ];
         $r2 = [
