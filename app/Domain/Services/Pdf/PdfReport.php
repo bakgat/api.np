@@ -646,7 +646,7 @@ class PdfReport
         ];
         $r4 = [
             ['TEXT' => 'Totaal', 'TEXT_TYPE' => 'b'],
-            ['TEXT' => '60% permanent + 40% eindevaluatie']
+            ['TEXT' => '40% permanent + 60% eindevaluatie']
         ];
         $tbl3->addRow($r2);
         $tbl3->addRow($r3);
