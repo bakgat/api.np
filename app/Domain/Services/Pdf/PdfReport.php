@@ -785,6 +785,8 @@ class PdfReport
         $this->initMulticell($cmc);
         $this->pdf->x = $left;
 
+        $this->blue();
+        $this->pdf->SetFont('Roboto', '', 11);
         $fb = $student->getFeedback();
         $fb = str_replace("</p><p>", "</p>\n<p>", $fb);
         $fb = str_replace("<br/>", "\n", $fb);
