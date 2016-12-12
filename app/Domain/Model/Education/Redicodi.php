@@ -73,7 +73,7 @@ class Redicodi extends Enum
             case Redicodi::IAC:
                 return 'm';
             case Redicodi::BEE:
-                return 'q';
+                return 's';
         }
     }
 }
