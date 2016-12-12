@@ -836,7 +836,7 @@ class PdfReport
     private function makeParticipationTable(StudentResult $student)
     {
         $parts = ['GROUP', Redicodi::BASIC, Redicodi::CHALLENGE, Redicodi::BUTTERFLY, Redicodi::MINISUNFLOWER, Redicodi::MATHTRAIN, Redicodi::READTRAIN,
-            Redicodi::SUNFLOWER, Redicodi::IAC, Redicodi::TIGER, Redicodi::PHILOSOPHY];
+            Redicodi::SUNFLOWER, Redicodi::IAC, Redicodi::TIGER, Redicodi::PHILOSOPHY, Redicodi::BEE];
 
         $partsCount = count($parts);
         $width = $this->pdf->pageWidth() - ($this->leftMargin * 2);
