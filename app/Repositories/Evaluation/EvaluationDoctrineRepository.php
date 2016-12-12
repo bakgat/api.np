@@ -370,14 +370,16 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $rs = $range->getStart()->format('Y-m-d');
         $re = $range->getEnd()->format('Y-m-d');
 
-        $inRangeSql = "(rfs.start <= '{$rs}' AND rfs.end >= '{$re}') OR ('{$rs}' > rfs.start AND rfs.end <= '{$re}') OR ('{$rs}' < rfs.start AND rfs.end >= '{$re}') ";
+        $inRangeSql = "(rfs.start >= '{$rs}' AND rfs.end <= '{$re}') OR 
+                        (rfs.start < '{$rs}' AND rfs.end >= '{$rs}' AND rfs.end <= '{$re}') OR 
+                        (rfs.start > '{$rs}' AND rfs.start <= '{$re}') ";
 
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
                 rfs.redicodi as rfs_redicodi
                 FROM redicodi_for_students rfs
                 INNER JOIN students s ON s.id = rfs.student_id
                 INNER JOIN student_in_groups sig on sig.student_id = s.id
-                WHERE (" . $inRangeSql . ")
+                WHERE ({$inRangeSql})
                     AND sig.group_id = '{$group}'
                 GROUP BY s.id, rfs.redicodi
                 ORDER BY sig.number";
