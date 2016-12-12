@@ -296,12 +296,18 @@ class Evaluation
 
     public function updatePointResult(Student $student, $score, $redicodi)
     {
+        $found = false;
         /** @var PointResult $result */
         foreach ($this->pointResults as $result) {
             if ($result->getStudent()->getId() == $student->getId()) {
                 $result->update($score, $redicodi);
+                $found = true;
                 break;
             }
+        }
+        if(!$found) {
+            $pr = new PointResult($student, $score, $redicodi);
+            $this->addPointResult($pr);
         }
 
         return $this;
