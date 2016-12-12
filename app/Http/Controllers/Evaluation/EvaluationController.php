@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Evaluation;
 
 use Anouar\Fpdf\Fpdf;
 use App\Domain\Model\Evaluation\EvaluationRepository;
+use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Time\DateRange;
@@ -83,8 +84,13 @@ class EvaluationController extends Controller
         if (!$id instanceof NtUid) {
             $id = NtUid::import($id);
         }
-        $evaluation = $this->evaluationRepo->get($id);
-        $evType = $evaluation->getEvaluationType()->getValue();
+        //TODO: check type of evaluation to return correct json
+        $evType = $this->evaluationRepo->getType($id);
+        if ($evType == EvaluationType::FEEDBACK) {
+            $evaluation = $this->evaluationRepo->getFeedbackResults($id);
+        } else {
+            $evaluation = $this->evaluationRepo->get($id);
+        }
         $typeGroup = strtolower($evType) . '_evaluation_detail';
         return $this->response($evaluation, ['evaluation_detail', $typeGroup], true);
     }

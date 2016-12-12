@@ -11,6 +11,7 @@ namespace App\Repositories\Evaluation;
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
+use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Reporting\FlatComprehensiveReport;
@@ -62,13 +63,12 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     public function get(NtUid $id)
     {
         $qb = $this->em->createQueryBuilder();
-        $qb->select('e, bfg, b, m, pr, s, fr')
+        $qb->select('e, bfg, b, m, pr, s')
             ->from(Evaluation::class, 'e')
             ->join('e.branchForGroup', 'bfg')
             ->join('bfg.branch', 'b')
             ->join('b.major', 'm')
             ->leftJoin('e.pointResults', 'pr')
-            ->leftJoin('e.feedbackResults', 'fr')
             ->leftJoin('pr.student', 's')
             ->leftJoin('s.studentInGroups', 'sig')
             ->where('e.id=?1')
@@ -80,6 +80,48 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             throw new EvaluationNotFoundException($id);
         }
         return $evaluation;
+    }
+    public function getFeedbackResults(NtUid $id) {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('e, bfg, b, m, s, fr')
+            ->from(Evaluation::class, 'e')
+            ->join('e.branchForGroup', 'bfg')
+            ->join('bfg.branch', 'b')
+            ->join('b.major', 'm')
+            ->leftJoin('e.feedbackResults', 'fr')
+            ->leftJoin('fr.student', 's')
+            ->leftJoin('s.studentInGroups', 'sig')
+            ->where('e.id=?1')
+            ->setParameter(1, $id)
+            ->orderBy('sig.number');
+
+        $evaluation = $qb->getQuery()->getOneOrNullResult();
+        if ($evaluation == null) {
+            throw new EvaluationNotFoundException($id);
+        }
+        return $evaluation;
+    }
+
+
+    /**
+     * @param $id
+     * @return EvaluationType
+     */
+    public function getType(NtUid $id)
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('e, bfg')
+            ->from(Evaluation::class, 'e')
+            ->join('e.branchForGroup', 'bfg')
+            ->where('e.id = :id')
+            ->setParameter('id', $id);
+        /** @var Evaluation $ev */
+        $ev = $qb->getQuery()->getOneOrNullResult();
+        if($ev == null) {
+            throw new EvaluationNotFoundException($id);
+        }
+        return $ev->getEvaluationType();
     }
 
     public function insert(Evaluation $evaluation)
@@ -518,7 +560,6 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $this->em->flush();
         return true;
     }
-
 
 
 }

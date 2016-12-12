@@ -110,6 +110,17 @@ interface EvaluationRepository
      */
     public function remove(Evaluation $evaluation);
 
+    /**
+     * @param $id
+     * @return EvaluationType
+     */
+    public function getType(NtUid $id);
+
+    /**
+     * @param $id
+     * @return Evaluation
+     */
+    public function getFeedbackResults(NtUid $id);
 
 
 }
