@@ -731,7 +731,7 @@ class PdfReport
         ];
         $r7 = [
             ['TEXT' => '<i>e</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Filosofiegroep</b>\nVoor leerlingen die willen nadenken over het leven zelf."],
-            ['TEXT' => '', 'TEXT_ALIGN' => 'R'], ['TEXT' => ''],
+            ['TEXT' => '<i>s</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Bijtjesklas</b>\nVoor leerlingen die nood hebben aan een extra aanbod voor de lees- en rekenvoorwaarden."],
         ];
         $r8 = [
             ['TEXT' => '<i>o</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => utf8_decode("<b>Schriftelijke evaluatie</b>\nVakken waar dit symbool naast staat werden schriftelijk geëvalueerd. U vindt deze evaluaties verder in dit portfolio.")],

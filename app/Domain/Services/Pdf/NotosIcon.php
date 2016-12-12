@@ -16,6 +16,7 @@ class NotosIcon
         'C' => 'l',
         'T' => 'f',
         'S' => 'd',
+        'BEE' => 's',
         'CHECK' => 'n'
     ];
 }
