@@ -412,69 +412,72 @@ class PdfReport
             }
 
             if ($hasIacs) {
-                if (!$headerMajorSet) {
+
+                /** @var BranchResult $branchResult */
+                foreach ($majorResult->getBranchResults() as $branchResult) {
+                    if (!$headerMajorSet) {
+                        $this->iacTable = new PdfTable($this->pdf);
+                        $this->initTable($this->iacTable);
+
+                        $this->iacTable->initialize(array($this->iacTextWidth, $this->iacIconWidth, $this->iacIconWidth, $this->iacCommentWidth));
+                        //add the header row
+                        $this->iacTable->addHeader($headerMajor);
+                        $this->iacTable->close();
+
+                        $headerMajorSet = true;
+                    }
+
+
                     $this->iacTable = new PdfTable($this->pdf);
                     $this->initTable($this->iacTable);
 
                     $this->iacTable->initialize(array($this->iacTextWidth, $this->iacIconWidth, $this->iacIconWidth, $this->iacCommentWidth));
                     //add the header row
-                    $this->iacTable->addHeader($headerMajor);
-                    $this->iacTable->close();
-
-                    $headerMajorSet = true;
-                }
 
 
-                $this->iacTable = new PdfTable($this->pdf);
-                $this->initTable($this->iacTable);
-
-                $this->iacTable->initialize(array($this->iacTextWidth, $this->iacIconWidth, $this->iacIconWidth, $this->iacCommentWidth));
-                //add the header row
-
-
-                foreach ($branchResult->getIacs() as $iac) {
-                    $this->iacTable->setHeaderConfig([
-                        'BORDER_COLOR' => Colors::llblue(),
-                        'BORDER_WIDTH' => 1,
-                        'TEXT_COLOR' => Colors::lblue()
-                    ]);
-                    $IACHeader = [
-                        ['TEXT' => '<h4>Individuele leerlijn</h4>', 'PADDING_TOP' => 10, 'TEXT_ALIGN' => 'L', 'COLSPAN' => 4, 'BORDER_TYPE' => 0]
-                    ];
-                    $branchHeader = [
-                        ['TEXT' => '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>', 'TEXT_ALIGN' => 'L'],
-                        ['TEXT' => 'Gekend', 'TEXT_SIZE' => 8],
-                        ['TEXT' => 'Nog oefenen', 'TEXT_SIZE' => 8],
-                        ['TEXT' => 'Opmerkingen', 'TEXT_SIZE' => 8, 'TEXT_ALIGN' => 'L'],
-                    ];
-                    $this->iacTable->addHeader($IACHeader);
-                    $this->iacTable->addHeader($branchHeader);
-
-
-                    $this->iacTable->setRowConfig([
-                        'BORDER_COLOR' => Colors::lllblue(),
-                        'BORDER_WIDTH' => .1
-                    ]);
-                    /** @var IacGoalResult $goal */
-                    foreach ($iac->getGoals() as $goal) {
-                        //row 1 - add data as Array
-                        $aRow = array();
-                        $aRow = [
-                            ['TEXT' => '<g>' . utf8_decode($goal->getText()) . '</g>', 'TEXT_ALIGN' => 'L'],
-                            ['TEXT' => $goal->isAchieved() ? '<i>' . 'n' . '</i>' : '', 'TEXT_ALIGN' => 'C'],
-                            ['TEXT' => $goal->isPractice() ? '<i>' . 'n' . '</i>' : '', 'TEXT_ALIGN' => 'C'],
-                            ['TEXT' => '<sm>' . utf8_decode($goal->getComment()) . '</sm>', 'TEXT_ALIGN' => 'J']
+                    foreach ($branchResult->getIacs() as $iac) {
+                        $this->iacTable->setHeaderConfig([
+                            'BORDER_COLOR' => Colors::llblue(),
+                            'BORDER_WIDTH' => 1,
+                            'TEXT_COLOR' => Colors::lblue()
+                        ]);
+                        $IACHeader = [
+                            ['TEXT' => '<h4>Individuele leerlijn</h4>', 'PADDING_TOP' => 10, 'TEXT_ALIGN' => 'L', 'COLSPAN' => 4, 'BORDER_TYPE' => 0]
                         ];
+                        $branchHeader = [
+                            ['TEXT' => '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>', 'TEXT_ALIGN' => 'L'],
+                            ['TEXT' => 'Gekend', 'TEXT_SIZE' => 8],
+                            ['TEXT' => 'Nog oefenen', 'TEXT_SIZE' => 8],
+                            ['TEXT' => 'Opmerkingen', 'TEXT_SIZE' => 8, 'TEXT_ALIGN' => 'L'],
+                        ];
+                        $this->iacTable->addHeader($IACHeader);
+                        $this->iacTable->addHeader($branchHeader);
 
-                        //add the data row
-                        $this->iacTable->addRow($aRow);
+
+                        $this->iacTable->setRowConfig([
+                            'BORDER_COLOR' => Colors::lllblue(),
+                            'BORDER_WIDTH' => .1
+                        ]);
+                        /** @var IacGoalResult $goal */
+                        foreach ($iac->getGoals() as $goal) {
+                            //row 1 - add data as Array
+                            $aRow = array();
+                            $aRow = [
+                                ['TEXT' => '<g>' . utf8_decode($goal->getText()) . '</g>', 'TEXT_ALIGN' => 'L'],
+                                ['TEXT' => $goal->isAchieved() ? '<i>' . 'n' . '</i>' : '', 'TEXT_ALIGN' => 'C'],
+                                ['TEXT' => $goal->isPractice() ? '<i>' . 'n' . '</i>' : '', 'TEXT_ALIGN' => 'C'],
+                                ['TEXT' => '<sm>' . utf8_decode($goal->getComment()) . '</sm>', 'TEXT_ALIGN' => 'J']
+                            ];
+
+                            //add the data row
+                            $this->iacTable->addRow($aRow);
+                        }
                     }
+
+                    //close the table
+                    $this->iacTable->close();
                 }
-
-                //close the table
-                $this->iacTable->close();
             }
-
 
         }
     }
@@ -703,7 +706,7 @@ class PdfReport
         );
         $tbl4->initialize([15, 70, 15, 70]);
         $r1 = [
-            ['TYPE' => 'IMAGE','FILE' => resource_path('icons/groups/L1A.png'), 'WIDTH' => 10], ['TEXT' => "<b>Klas</b>\nIn deze klasgroep volgde uw kind les."],
+            ['TYPE' => 'IMAGE', 'FILE' => resource_path('icons/groups/L1A.png'), 'WIDTH' => 10], ['TEXT' => "<b>Klas</b>\nIn deze klasgroep volgde uw kind les."],
             ['TEXT' => '<i>j</i>', 'TEXT_ALIGN' => 'R'], ['TEXT' => "<b>Vlinderklas</b>\nVoor kleuters en leerlingen 1e leerjaar die naast het gedifferentieerde aanbod tijdelijk meer nood hebben aan uitdaging."],
         ];
         $r2 = [
@@ -856,7 +859,7 @@ class PdfReport
             if ($part == 'GROUP') {
                 $row[$i] = [
                     'TYPE' => 'IMAGE',
-                    'FILE' => resource_path('icons/groups/' . $student->getGroup() .'.png'),
+                    'FILE' => resource_path('icons/groups/' . $student->getGroup() . '.png'),
                     'WIDTH' => 10,
                 ];
             } else {

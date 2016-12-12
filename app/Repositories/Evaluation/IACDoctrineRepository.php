@@ -166,7 +166,7 @@ class IACDoctrineRepository implements IACRepository
                     INNER JOIN majors m ON m.id = b.major_id
                     INNER JOIN students s ON s.id = iac.student_id
                     INNER JOIN student_in_groups sig ON sig.student_id = s.id
-                    WHERE sig.group_id = '" . $groupId . "'
+                    WHERE sig.group_id = '{$groupId}'
                     ORDER BY sig.number, m.order, b.order, g.order";
 
         return $this->getIac($sql);
@@ -186,7 +186,7 @@ class IACDoctrineRepository implements IACRepository
                     INNER JOIN branches b ON b.id = g.branch_id
                     INNER JOIN majors m ON m.id = b.major_id
                     INNER JOIN students s ON s.id = iac.student_id
-                    WHERE s.id = '" . $studentId . "'
+                    WHERE s.id = '{$studentId}'
                     ORDER BY m.order, b.order, g.order";
 
         return $this->getIac($sql);
