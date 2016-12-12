@@ -148,18 +148,39 @@ class EvaluationService
         $evaluation->update($title, $branchForGroup, $date, $max, $permanent);
 
         $type = $branchForGroup->getEvaluationType();
-        //TODO HOW TO UPDATE FOR INSERT / DELETE OTHER STUDENTS
+
         //TODO fine tune this => lots of selects !!!
         //Can this be combined into one ?
         //as in select * from students where id IN(a, b, c)
         if ($type->getValue() == EvaluationType::POINT) {
+
+
             $results = $data['pointResults'];
+
+            //DELETED
+            $studIds = array_map(function($result){
+                return $result['student']['id'];
+            }, $results);
+            /** @var PointResult $pointResult */
+            foreach ($evaluation->getPointResults() as $pointResult) {
+                if(!in_array($pointResult->getStudent()->getId()->toString(), $studIds)) {
+                    $evaluation->removePointResult($pointResult);
+                }
+            }
+
+
+
+            //ADDED OR UPDATED
             foreach ($results as $result) {
+                //@todo: less selects when updatePointResults(studentID !!, score, redicodi);
                 $studentId = $result['student']['id'];
                 $student = $this->studentRepo->get(NtUid::import($studentId));
 
                 $evaluation->updatePointResult($student, $result['score'], $result['redicodi']);
             }
+
+
+
         } else if($type->getValue() == EvaluationType::MULTIPLECHOICE) {
             $results = $data['multiplechoiceResults'];
             foreach ($results as $result) {
