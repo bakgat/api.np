@@ -27,6 +27,7 @@ return [
      */
     S::KEY_ALLOWED_ORIGINS      => [
         'http://localhost:3000'         => true,
+        'http://10.0.1.171:3000'         => true,
         'http://evalueren.klimtoren.be' => true,
         'http://mijn.klimtoren.be'      => true,
         //'http://some.disabled.com' => null,
@@ -70,6 +71,7 @@ return [
      * You can read more on 'simple' headers at http://www.w3.org/TR/cors/#simple-header
      */
     S::KEY_ALLOWED_HEADERS      => [
+        'origin'                   => true,
         'content-type'             => true,
         'accept'                   => true,
         'auth'                     => true,
