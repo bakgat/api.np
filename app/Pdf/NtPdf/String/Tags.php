@@ -194,7 +194,9 @@ class Tags
         $aTAGS = array();
         $result = array();
 
-        $reg = preg_split( '/(<.*>)/U', $p_str, -1, PREG_SPLIT_DELIM_CAPTURE );
+        //Tag should start with letter or backslash.
+        //Otherwise < as in lt; is possible
+        $reg = preg_split( '/(<[a-zA-Z\/].*>)/U', $p_str, -1, PREG_SPLIT_DELIM_CAPTURE );
 
         $sTAG = "";
         $sHREF = "";

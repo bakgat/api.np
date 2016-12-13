@@ -96,6 +96,11 @@ class PdfReport
 
             $this->makeResultsTable($result);
 
+            if ($this->pdf->PageNo() % 2 != 0) {
+                $this->pdf->HideHeader();
+                $this->pdf->AddPage();
+            }
+
         }
         return $this;
     }
@@ -194,6 +199,7 @@ class PdfReport
     {
         /** @var MajorResult $majorResult */
         foreach ($studentResult->getMajorResults() as $majorResult) {
+            
             //@todo: check if major has any branch history results
             $hasResult = false;
             $hasIacs = false;
