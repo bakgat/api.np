@@ -530,7 +530,6 @@ class PdfReport
         $mc->setStyle('i', 'Roboto', 'i', 11, Colors::str_blue());
         $mc->setStyle('b', 'Roboto', 'b', 11, Colors::str_blue());
         $mc->setStyle('p', 'Roboto', '', 11, Colors::str_blue());
-        $mc->setStyle('span', 'Roboto', '', 11, Colors::str_blue());
     }
 
     private function makeFrontPage(StudentResult $student)
