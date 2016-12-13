@@ -74,7 +74,7 @@ class Tags
             }
         }
 
-        if ( in_array( $p_tag, $aTAGS ) ) return false; //tag already opened
+       // if ( in_array( $p_tag, $aTAGS ) ) return false; //tag already opened
 
 
         if ( in_array( "</$p_tag>", $p_array ) )
