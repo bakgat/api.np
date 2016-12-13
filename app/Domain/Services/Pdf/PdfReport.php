@@ -199,7 +199,7 @@ class PdfReport
     {
         /** @var MajorResult $majorResult */
         foreach ($studentResult->getMajorResults() as $majorResult) {
-            
+
             //@todo: check if major has any branch history results
             $hasResult = false;
             $hasIacs = false;
@@ -530,7 +530,7 @@ class PdfReport
         $mc->setStyle('i', 'Roboto', 'i', 11, Colors::str_blue());
         $mc->setStyle('b', 'Roboto', 'b', 11, Colors::str_blue());
         $mc->setStyle('p', 'Roboto', '', 11, Colors::str_blue());
-
+        $mc->setStyle('span', 'Roboto', '', 11, Colors::str_blue());
     }
 
     private function makeFrontPage(StudentResult $student)
@@ -797,7 +797,7 @@ class PdfReport
         $this->blue();
         $this->pdf->SetFont('Roboto', '', 11);
         $fb = $student->getFeedback();
-        $fb = str_replace("</p><p>", "</p>\n<p>", $fb);
+        $fb = str_replace("</p><p>", "</p>\n\n<p>", $fb);
         $fb = str_replace("<br/>", "\n", $fb);
         $cmc->multiCell(0, 5, utf8_decode($fb));
         $endY = $this->pdf->y;
