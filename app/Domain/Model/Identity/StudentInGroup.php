@@ -55,7 +55,7 @@ class StudentInGroup extends PersonInGroup
 
     public function __construct(Student $student, Group $group, $daterange)
     {
-        parent::__construct($group, $daterange);
+        parent::__construct($daterange);
         $this->group = $group;
         $this->student = $student;
     }

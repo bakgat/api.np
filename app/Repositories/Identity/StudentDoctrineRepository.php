@@ -68,7 +68,7 @@ class StudentDoctrineRepository implements StudentRepository
 
         $qb = $this->em->createQueryBuilder();
 
-        $qb->select('s')
+        $qb->select('s, sig')
             ->from(Student::class, 's')
             ->join('s.studentInGroups', 'sig')
             ->where($qb->expr()->andX(

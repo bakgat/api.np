@@ -63,13 +63,13 @@ class EvaluationController extends Controller
     {
         //TODO: check for existence
         $groupId = $request->get('group');
-        if ($request->has('start')) {
-            $start = DateTime::createFromFormat('Y-m-d', $request->get('start'));
+        if ($request->has('qstart')) {
+            $start = DateTime::createFromFormat('Y-m-d', $request->get('qstart'));
         } else {
             $start = DateTime::createFromFormat('Y-m-d', DateRange::PAST);
         }
-        if ($request->has('end')) {
-            $end = DateTime::createFromFormat('Y-m-d', $request->get('end'));
+        if ($request->has('qend')) {
+            $end = DateTime::createFromFormat('Y-m-d', $request->get('qend'));
         } else {
             $end = DateTime::createFromFormat('Y-m-d', DateRange::PAST);
         }

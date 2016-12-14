@@ -108,9 +108,9 @@ class ReportController extends Controller
      */
     private function getRange(Request $request)
     {
-        if ($request->has('start')) {
-            $start = $request->get('start');
-            $end = $request->get('end');
+        if ($request->has('qstart')) {
+            $start = $request->get('qstart');
+            $end = $request->get('qend');
         } else {
             $start = '2016-09-01';
             $end = '2016-12-31';
