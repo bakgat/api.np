@@ -296,11 +296,14 @@ class PdfReport
                                 'LINE_SIZE' => 6,
                                 'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                             ];
+                            $icons = [];
                             foreach ($rangeResult->getRedicodi() as $key => $value) {
                                 if ($value >= $rangeResult->getEvCount() / 2) {
-                                    $icon = NotosIcon::MAP[$key];
-                                    $branch .= '<i>' . $icon . '</i>';
+                                    $icons[] = NotosIcon::MAP[$key];
                                 }
+                            }
+                            if(count($icons) > 0) {
+                                $branch .= '<i>' . implode('</i>   <i>', $icons) . '</i>';
                             }
                         }
                         $row[0]['TEXT'] = $branch;
