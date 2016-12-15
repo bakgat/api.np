@@ -8,6 +8,7 @@
 
 namespace App\Pdf;
 
+ini_set('memory_limit', '256M');
 
 use Anouar\Fpdf\Fpdf;
 use App\Pdf\NtPdf\Listener;
