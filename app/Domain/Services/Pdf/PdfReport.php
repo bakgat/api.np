@@ -351,8 +351,12 @@ class PdfReport
                         foreach ($branchResult->getMultipleChoices() as $multipleChoice) {
                             $settings = json_decode($multipleChoice->getSettings());
                             $selected = json_decode($multipleChoice->getSelected());
+                            if(!is_array($selected)) {
+                                $selected = [$selected];
+                            };
+
                             if ($selected) {
-                                $printOther = $settings->printOthers;
+                                $printOther = isset($settings->printOthers) ? $settings->printOthers : false;
                                 $selectedStyle = [];
                                 $notSelectedStyle = [];
                                 switch ($settings->selected) {
@@ -382,8 +386,8 @@ class PdfReport
                                 }
 
 
-                                $prefix = $settings->pre;
-                                $suffix = $settings->post;
+                                $prefix = isset($settings->pre) ? $settings->pre : null;
+                                $suffix = isset($settings->post) ? $settings->post : null;
 
                                 $mc = "\t" . ($prefix ? $prefix . ' ' : '');
                                 $optResults = [];
