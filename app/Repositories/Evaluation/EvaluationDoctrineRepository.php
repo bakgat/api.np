@@ -370,9 +370,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $rs = $range->getStart()->format('Y-m-d');
         $re = $range->getEnd()->format('Y-m-d');
 
-        $inRangeSql = "(rfs.start >= '{$rs}' AND rfs.end <= '{$re}') OR 
-                        (rfs.start < '{$rs}' AND rfs.end >= '{$rs}' AND rfs.end <= '{$re}') OR 
-                        (rfs.start > '{$rs}' AND rfs.start <= '{$re}') ";
+        $inRangeSql = "rfs.start <= '{$re}' AND rfs.end >= '{$rs}'";
 
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
                 rfs.redicodi as rfs_redicodi
