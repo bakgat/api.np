@@ -111,16 +111,33 @@ interface EvaluationRepository
     public function remove(Evaluation $evaluation);
 
     /**
-     * @param $id
+     * @param NtUid $id
      * @return EvaluationType
      */
     public function getType(NtUid $id);
 
     /**
-     * @param $id
+     * @param NtUid $id
      * @return Evaluation
      */
     public function getFeedbackResults(NtUid $id);
+
+    /**
+     * @param NtUid $id
+     * @return Evaluation
+     */
+    public function getMultiplechoiceResults(NtUid $id);
+
+    public function getComprehensiveReportForStudent($studentId, DateRange $range);
+
+    public function getSpokenReportForStudent($studentId, DateRange $range);
+
+    public function getMultiplechoiceReportForStudent($studentId, DateRange $range);
+
+    public function getFeedbackReportForStudent($studentId, DateRange $range);
+
+    public function getRedicodiReportForStudent($studentId, DateRange $range);
+
 
 
 }

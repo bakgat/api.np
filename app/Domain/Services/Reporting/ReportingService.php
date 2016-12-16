@@ -74,7 +74,13 @@ class ReportingService
     public function getReportByStudent($studentId, $range)
     {
         $pointResults = $this->evaluationRepo->getPointReportForStudent($studentId, $range);
+        $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForStudent($studentId, $range);
+        $spokenResults = $this->evaluationRepo->getSpokenReportForStudent($studentId, $range);
+        $mcResults = $this->evaluationRepo->getMultiplechoiceReportForStudent($studentId, $range);
         $iacs = $this->iacRepo->getFlatIacForStudent($studentId, $range);
+        $feedback = $this->evaluationRepo->getFeedbackReportForStudent($studentId, $range);
+        $redicodi = $this->evaluationRepo->getRedicodiReportForStudent($studentId, $range);
+
 
         $report = new Report($range);
         $this->generateResultsReport($report, $pointResults);

@@ -350,12 +350,18 @@ class Evaluation
 
     public function updateMultiplechoiceResult(Student $student, $selected)
     {
+        $found = false;
         /** @var MultiplechoiceResult $result */
         foreach ($this->multiplechoiceResults as $result) {
             if ($result->getStudent()->getId() == $student->getId()) {
                 $result->update($selected);
+                $found = true;
                 break;
             }
+        }
+        if(!$found) {
+            $mcr = new MultiplechoiceResult($student, $selected);
+            $this->addMultiplechoiceResult($mcr);
         }
 
         return $this;
@@ -372,12 +378,18 @@ class Evaluation
 
     public function updateFeedbackResult(Student $student, $summary)
     {
+        $found = false;
         /** @var FeedbackResult $result */
         foreach ($this->feedbackResults as $result) {
             if($result->getStudent()->getId() == $student->getId()) {
                 $result->setSummary($summary);
+                $found = true;
                 break;
             }
+        }
+        if(!$found) {
+            $fr = new FeedbackResult($student, $summary);
+            $this->addFeedbackResult($fr);
         }
         return $this;
     }

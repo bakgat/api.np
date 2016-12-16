@@ -44,7 +44,8 @@ class EvaluationService
         $this->trackRepo = $eventTrackingRepository;
     }
 
-    public function get(NtUid $id) {
+    public function get(NtUid $id)
+    {
         return $this->evaluationRepo->get($id);
     }
 
@@ -110,7 +111,7 @@ class EvaluationService
                 $mcr = new MultiplechoiceResult($student, $selected);
                 $evaluation->addMultiplechoiceResult($mcr);
             }
-        } else if($type->getValue() == EvaluationType::FEEDBACK) {
+        } else if ($type->getValue() == EvaluationType::FEEDBACK) {
             $results = $data['feedbackResults'];
             foreach ($results as $result) {
                 $studentId = $result['student']['id'];
@@ -147,6 +148,10 @@ class EvaluationService
 
         $evaluation->update($title, $branchForGroup, $date, $max, $permanent);
 
+        if (isset($data['settings'])) {
+            $evaluation->setSettings($data['settings']);
+        }
+
         $type = $branchForGroup->getEvaluationType();
 
         //TODO fine tune this => lots of selects !!!
@@ -158,16 +163,15 @@ class EvaluationService
             $results = $data['pointResults'];
 
             //DELETED
-            $studIds = array_map(function($result){
+            $studIds = array_map(function ($result) {
                 return $result['student']['id'];
             }, $results);
             /** @var PointResult $pointResult */
             foreach ($evaluation->getPointResults() as $pointResult) {
-                if(!in_array($pointResult->getStudent()->getId()->toString(), $studIds)) {
+                if (!in_array($pointResult->getStudent()->getId()->toString(), $studIds)) {
                     $evaluation->removePointResult($pointResult);
                 }
             }
-
 
 
             //ADDED OR UPDATED
@@ -180,8 +184,7 @@ class EvaluationService
             }
 
 
-
-        } else if($type->getValue() == EvaluationType::MULTIPLECHOICE) {
+        } else if ($type->getValue() == EvaluationType::MULTIPLECHOICE) {
             $results = $data['multiplechoiceResults'];
             foreach ($results as $result) {
                 $studentId = $result['student']['id'];
@@ -189,7 +192,7 @@ class EvaluationService
 
                 $evaluation->updateMultiplechoiceResult($student, $result['selected']);
             }
-        } else if($type->getValue() == EvaluationType::FEEDBACK) {
+        } else if ($type->getValue() == EvaluationType::FEEDBACK) {
             $results = $data['feedbackResults'];
             foreach ($results as $result) {
                 $studentId = $result['student']['id'];

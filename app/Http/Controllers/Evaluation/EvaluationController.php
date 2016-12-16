@@ -86,8 +86,10 @@ class EvaluationController extends Controller
         }
         //TODO: check type of evaluation to return correct json
         $evType = $this->evaluationRepo->getType($id);
-        if ($evType == EvaluationType::FEEDBACK) { 
+        if ($evType == EvaluationType::FEEDBACK) {
             $evaluation = $this->evaluationRepo->getFeedbackResults($id);
+        } else if ($evType == EvaluationType::MULTIPLECHOICE) {
+            $evaluation = $this->evaluationRepo->getMultiplechoiceResults($id);
         } else {
             $evaluation = $this->evaluationRepo->get($id);
         }
