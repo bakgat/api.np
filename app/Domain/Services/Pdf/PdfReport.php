@@ -301,7 +301,7 @@ class PdfReport
                             $row[0] = [
                                 'PADDING_TOP' => $this->rowPadding / 2,
                                 'PADDING_BOTTOM' => $this->rowPadding / 2,
-                                'LINE_SIZE' => 5,
+                                'LINE_SIZE' => 6,
                                 'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                             ];
                             $icons = [];
