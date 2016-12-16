@@ -47,6 +47,9 @@ class PdfReport
     private $iacCommentWidth = 50;
     private $iacIconWidth = 20;
 
+    private $rowPadding = 3;
+    private $headerPaddingTop = 10;
+
     /* ***************************************************
      * C'tor
      * **************************************************/
@@ -224,8 +227,8 @@ class PdfReport
                 ['TEXT' => '<h3>' . ucfirst(utf8_decode($majorResult->getName())) . '</h3>',
                     'COLSPAN' => 4,
                     'TEXT_ALIGN' => 'L',
-                    'PADDING_TOP' => 13,
-                    'PADDING_BOTTOM' => 3,
+                    'PADDING_TOP' => $this->headerPaddingTop,
+                    'PADDING_BOTTOM' => $this->rowPadding,
                     'BORDER_TYPE' => 0,
                 ]
             ];
@@ -244,6 +247,7 @@ class PdfReport
                 foreach ($majorResult->getBranchResults() as $branchResult) {
 
                     $history = $branchResult->getHistory();
+                    $branchSet = false;
 
                     $hasMultiplechoices = false;
                     if (count($branchResult->getMultipleChoices()) > 0) {
@@ -262,8 +266,8 @@ class PdfReport
                         $branch = '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>';
                         $row[0] = [
                             'TEXT' => $branch,
-                            'PADDING_TOP' => 4,
-                            'PADDING_BOTTOM' => 4,
+                            'PADDING_TOP' => $this->rowPadding,
+                            'PADDING_BOTTOM' => $this->rowPadding,
                             'LINE_SIZE' => 4,
                             'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
@@ -271,8 +275,8 @@ class PdfReport
                         $row[2] = [
                             'TEXT' => '<bi>' . implode('</bi>   <bi>', $icon) . '</bi>',
                             'TEXT_ALIGN' => 'R',
-                            'PADDING_TOP' => 4,
-                            'PADDING_BOTTOM' => 4,
+                            'PADDING_TOP' => $this->rowPadding,
+                            'PADDING_BOTTOM' => $this->rowPadding,
                             'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
                         $this->resultsTable->addRow($row);
@@ -284,18 +288,20 @@ class PdfReport
                         $isPerm = strtoupper($branchResult->getName()) == 'PERMANENTE EVALUATIE';
 
                         $branch = '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>';
+                        $branchSet = true;
+
                         $row[0] = [
-                            'PADDING_TOP' => 4,
-                            'PADDING_BOTTOM' => 4,
+                            'PADDING_TOP' => $this->rowPadding,
+                            'PADDING_BOTTOM' => $this->rowPadding,
                             'LINE_SIZE' => 4,
                             'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
                         if (count($rangeResult->getRedicodi()) > 0) {
                             $branch .= "\n\t";
                             $row[0] = [
-                                'PADDING_TOP' => 2,
-                                'PADDING_BOTTOM' => 2,
-                                'LINE_SIZE' => 6,
+                                'PADDING_TOP' => $this->rowPadding / 2,
+                                'PADDING_BOTTOM' => $this->rowPadding / 2,
+                                'LINE_SIZE' => 5,
                                 'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                             ];
                             $icons = [];
@@ -324,8 +330,8 @@ class PdfReport
                             $row[1] = [
                                 'TEXT' => '<sm>' . implode("\n", $points) . '</sm>',
                                 'TEXT_ALIGN' => 'R',
-                                'PADDING_TOP' => 4,
-                                'PADDING_BOTTOM' => 4,
+                                'PADDING_TOP' => $this->rowPadding,
+                                'PADDING_BOTTOM' => $this->rowPadding,
                                 'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                             ];
                         }
@@ -335,8 +341,8 @@ class PdfReport
                         $row[2] = [
                             'TEXT' => $isPerm ? '<perm>' . $t . '</perm>' : '<t>' . $t . '</t>',
                             'TEXT_ALIGN' => 'R',
-                            'PADDING_TOP' => 4,
-                            'PADDING_BOTTOM' => 4,
+                            'PADDING_TOP' => $this->rowPadding,
+                            'PADDING_BOTTOM' => $this->rowPadding,
                             'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
 
@@ -350,6 +356,19 @@ class PdfReport
                     }
 
                     if ($hasMultiplechoices) {
+                        if(!$branchSet) {
+                            $branch = '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>';
+
+                            $row[0] = [
+                                'TEXT' => $branch,
+                                'COLSPAN' => 4,
+                                'PADDING_TOP' => $this->rowPadding,
+                                'PADDING_BOTTOM' => $this->rowPadding,
+                                'LINE_SIZE' => 4,
+                                'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
+                            ];
+                            $this->resultsTable->addRow($row);
+                        }
                         foreach ($branchResult->getMultipleChoices() as $multipleChoice) {
                             $settings = json_decode($multipleChoice->getSettings());
                             $selected = json_decode($multipleChoice->getSelected());
@@ -457,7 +476,7 @@ class PdfReport
                             'TEXT_COLOR' => Colors::lblue()
                         ]);
                         $IACHeader = [
-                            ['TEXT' => '<h4>Individuele leerlijn</h4>', 'PADDING_TOP' => 10, 'TEXT_ALIGN' => 'L', 'COLSPAN' => 4, 'BORDER_TYPE' => 0]
+                            ['TEXT' => '<h4>Individuele leerlijn</h4>', 'PADDING_TOP' => $this->headerPaddingTop, 'TEXT_ALIGN' => 'L', 'COLSPAN' => 4, 'BORDER_TYPE' => 0]
                         ];
                         $branchHeader = [
                             ['TEXT' => '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>', 'TEXT_ALIGN' => 'L'],
@@ -496,7 +515,6 @@ class PdfReport
 
         }
     }
-
 
     private function initFonts()
     {
@@ -897,7 +915,6 @@ class PdfReport
         }
         $table->close();
     }
-
 
     private function makeSignature()
     {
