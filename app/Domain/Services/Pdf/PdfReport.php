@@ -96,6 +96,8 @@ class PdfReport
 
             $this->makeResultsTable($result);
 
+            $this->makeSignature();
+
             if ($this->pdf->PageNo() % 2 != 0) {
                 $this->pdf->HideHeader();
                 $this->pdf->AddPage();
@@ -302,7 +304,7 @@ class PdfReport
                                     $icons[] = NotosIcon::MAP[$key];
                                 }
                             }
-                            if(count($icons) > 0) {
+                            if (count($icons) > 0) {
                                 $branch .= '<i>' . implode('</i>   <i>', $icons) . '</i>';
                             }
                         }
@@ -351,7 +353,7 @@ class PdfReport
                         foreach ($branchResult->getMultipleChoices() as $multipleChoice) {
                             $settings = json_decode($multipleChoice->getSettings());
                             $selected = json_decode($multipleChoice->getSelected());
-                            if(!is_array($selected)) {
+                            if (!is_array($selected)) {
                                 $selected = [$selected];
                             };
 
@@ -897,6 +899,20 @@ class PdfReport
     }
 
 
+    private function makeSignature()
+    {
+        $this->pdf->SetY(-70);
+        $this->orange();
+        $this->pdf->SetFont('Roboto', '', 10);
+        $width = ($this->pdf->pageWidth() - ($this->leftMargin*2)) / 4;
+        $i = 0;
+        foreach (['leerkracht', 'directeur', 'ouders', 'leerling'] as $item) {
+            $this->pdf->SetXY($this->leftMargin + (($width + 2) * $i++), -70);
+            $this->pdf->drawTextBox("Handtekening {$item}", $width, 30, 'C');
+        }
+    }
+
+
     private
     function blue()
     {
@@ -908,5 +924,6 @@ class PdfReport
     {
         call_user_func_array([$this->pdf, 'SetTextColor'], Colors::ORANGE);
     }
+
 
 }

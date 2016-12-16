@@ -81,7 +81,9 @@ class Pdf extends Fpdf
             call_user_func($this->header, $this->student);
         }
     }
-    public function Footer() {
+
+    public function Footer()
+    {
         if ($this->showFooter) {
             call_user_func($this->footer, $this->student);
         }
@@ -92,17 +94,18 @@ class Pdf extends Fpdf
     {
         $this->showHeader = false;
     }
+
     public function HideFooter()
     {
         $this->showFooter = false;
     }
 
 
-
     public function ShowHeader()
     {
         $this->showHeader = true;
     }
+
     public function ShowFooter()
     {
         $this->showFooter = true;
@@ -228,7 +231,7 @@ class Pdf extends Fpdf
             $ShadowColor = [0, 0, 0];
         else
             $ShadowColor = $color;
-        
+
         $TextColor = $this->TextColor;
         $x = $this->x;
         $this->x += $distance;
@@ -514,7 +517,6 @@ class Pdf extends Fpdf
     }
 
 
-
     private function _Line($x, $y)
     {
         $this->_out(sprintf('%.2f %.2f l', $x * $this->k, ($this->h - $y) * $this->k));
@@ -531,124 +533,248 @@ class Pdf extends Fpdf
     {
         $k = $this->k;
         $hp = $this->h;
-        if($style=='F')
-            $op='f';
-        elseif($style=='FD' || $style=='DF')
-            $op='B';
+        if ($style == 'F')
+            $op = 'f';
+        elseif ($style == 'FD' || $style == 'DF')
+            $op = 'B';
         else
-            $op='S';
-        $MyArc = 4/3 * (sqrt(2) - 1);
-        $this->_out(sprintf('%.2F %.2F m',($x+$r)*$k,($hp-$y)*$k ));
+            $op = 'S';
+        $MyArc = 4 / 3 * (sqrt(2) - 1);
+        $this->_out(sprintf('%.2F %.2F m', ($x + $r) * $k, ($hp - $y) * $k));
 
-        $xc = $x+$w-$r;
-        $yc = $y+$r;
-        $this->_out(sprintf('%.2F %.2F l', $xc*$k,($hp-$y)*$k ));
-        if (strpos($corners, '2')===false)
-            $this->_out(sprintf('%.2F %.2F l', ($x+$w)*$k,($hp-$y)*$k ));
+        $xc = $x + $w - $r;
+        $yc = $y + $r;
+        $this->_out(sprintf('%.2F %.2F l', $xc * $k, ($hp - $y) * $k));
+        if (strpos($corners, '2') === false)
+            $this->_out(sprintf('%.2F %.2F l', ($x + $w) * $k, ($hp - $y) * $k));
         else
-            $this->_Arc($xc + $r*$MyArc, $yc - $r, $xc + $r, $yc - $r*$MyArc, $xc + $r, $yc);
+            $this->_Arc($xc + $r * $MyArc, $yc - $r, $xc + $r, $yc - $r * $MyArc, $xc + $r, $yc);
 
-        $xc = $x+$w-$r;
-        $yc = $y+$h-$r;
-        $this->_out(sprintf('%.2F %.2F l',($x+$w)*$k,($hp-$yc)*$k));
-        if (strpos($corners, '3')===false)
-            $this->_out(sprintf('%.2F %.2F l',($x+$w)*$k,($hp-($y+$h))*$k));
+        $xc = $x + $w - $r;
+        $yc = $y + $h - $r;
+        $this->_out(sprintf('%.2F %.2F l', ($x + $w) * $k, ($hp - $yc) * $k));
+        if (strpos($corners, '3') === false)
+            $this->_out(sprintf('%.2F %.2F l', ($x + $w) * $k, ($hp - ($y + $h)) * $k));
         else
-            $this->_Arc($xc + $r, $yc + $r*$MyArc, $xc + $r*$MyArc, $yc + $r, $xc, $yc + $r);
+            $this->_Arc($xc + $r, $yc + $r * $MyArc, $xc + $r * $MyArc, $yc + $r, $xc, $yc + $r);
 
-        $xc = $x+$r;
-        $yc = $y+$h-$r;
-        $this->_out(sprintf('%.2F %.2F l',$xc*$k,($hp-($y+$h))*$k));
-        if (strpos($corners, '4')===false)
-            $this->_out(sprintf('%.2F %.2F l',($x)*$k,($hp-($y+$h))*$k));
+        $xc = $x + $r;
+        $yc = $y + $h - $r;
+        $this->_out(sprintf('%.2F %.2F l', $xc * $k, ($hp - ($y + $h)) * $k));
+        if (strpos($corners, '4') === false)
+            $this->_out(sprintf('%.2F %.2F l', ($x) * $k, ($hp - ($y + $h)) * $k));
         else
-            $this->_Arc($xc - $r*$MyArc, $yc + $r, $xc - $r, $yc + $r*$MyArc, $xc - $r, $yc);
+            $this->_Arc($xc - $r * $MyArc, $yc + $r, $xc - $r, $yc + $r * $MyArc, $xc - $r, $yc);
 
-        $xc = $x+$r ;
-        $yc = $y+$r;
-        $this->_out(sprintf('%.2F %.2F l',($x)*$k,($hp-$yc)*$k ));
-        if (strpos($corners, '1')===false)
-        {
-            $this->_out(sprintf('%.2F %.2F l',($x)*$k,($hp-$y)*$k ));
-            $this->_out(sprintf('%.2F %.2F l',($x+$r)*$k,($hp-$y)*$k ));
-        }
-        else
-            $this->_Arc($xc - $r, $yc - $r*$MyArc, $xc - $r*$MyArc, $yc - $r, $xc, $yc - $r);
+        $xc = $x + $r;
+        $yc = $y + $r;
+        $this->_out(sprintf('%.2F %.2F l', ($x) * $k, ($hp - $yc) * $k));
+        if (strpos($corners, '1') === false) {
+            $this->_out(sprintf('%.2F %.2F l', ($x) * $k, ($hp - $y) * $k));
+            $this->_out(sprintf('%.2F %.2F l', ($x + $r) * $k, ($hp - $y) * $k));
+        } else
+            $this->_Arc($xc - $r, $yc - $r * $MyArc, $xc - $r * $MyArc, $yc - $r, $xc, $yc - $r);
         $this->_out($op);
     }
 
     function _Arc($x1, $y1, $x2, $y2, $x3, $y3)
     {
         $h = $this->h;
-        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c ', $x1*$this->k, ($h-$y1)*$this->k,
-            $x2*$this->k, ($h-$y2)*$this->k, $x3*$this->k, ($h-$y3)*$this->k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c ', $x1 * $this->k, ($h - $y1) * $this->k,
+            $x2 * $this->k, ($h - $y2) * $this->k, $x3 * $this->k, ($h - $y3) * $this->k));
     }
 #endregion
 
+#region TEXTBOX WITH TOP ALIGN SUPPORT
+    function drawTextBox($strText, $w, $h, $align = 'L', $valign = 'T', $border = true)
+    {
+        $xi = $this->GetX();
+        $yi = $this->GetY();
+
+        $hrow = $this->FontSize;
+        $textrows = $this->drawRows($w, $hrow, $strText, 0, $align, 0, 0, 0);
+        $maxrows = floor($h / $this->FontSize);
+        $rows = min($textrows, $maxrows);
+
+        $dy = 1;
+        if (strtoupper($valign) == 'M')
+            $dy = ($h - $rows * $this->FontSize) / 2;
+        if (strtoupper($valign) == 'B')
+            $dy = $h - $rows * $this->FontSize;
+
+        $this->SetY($yi + $dy);
+        $this->SetX($xi);
+
+        $this->drawRows($w, $hrow, $strText, 0, $align, false, $rows, 1);
+
+        if ($border)
+            $this->Rect($xi, $yi, $w, $h);
+    }
+
+    function drawRows($w, $h, $txt, $border = 0, $align = 'J', $fill = false, $maxline = 0, $prn = 0)
+    {
+        $cw =& $this->CurrentFont['cw'];
+        if ($w == 0)
+            $w = $this->w - $this->rMargin - $this->x;
+        $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
+        $s = str_replace("\r", '', $txt);
+        $nb = strlen($s);
+        if ($nb > 0 && $s[$nb - 1] == "\n")
+            $nb--;
+        $b = 0;
+        if ($border) {
+            if ($border == 1) {
+                $border = 'LTRB';
+                $b = 'LRT';
+                $b2 = 'LR';
+            } else {
+                $b2 = '';
+                if (is_int(strpos($border, 'L')))
+                    $b2 .= 'L';
+                if (is_int(strpos($border, 'R')))
+                    $b2 .= 'R';
+                $b = is_int(strpos($border, 'T')) ? $b2 . 'T' : $b2;
+            }
+        }
+        $sep = -1;
+        $i = 0;
+        $j = 0;
+        $l = 0;
+        $ns = 0;
+        $nl = 1;
+        while ($i < $nb) {
+            //Get next character
+            $c = $s[$i];
+            if ($c == "\n") {
+                //Explicit line break
+                if ($this->ws > 0) {
+                    $this->ws = 0;
+                    if ($prn == 1) $this->_out('0 Tw');
+                }
+                if ($prn == 1) {
+                    $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
+                }
+                $i++;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $ns = 0;
+                $nl++;
+                if ($border && $nl == 2)
+                    $b = $b2;
+                if ($maxline && $nl > $maxline)
+                    return substr($s, $i);
+                continue;
+            }
+            if ($c == ' ') {
+                $sep = $i;
+                $ls = $l;
+                $ns++;
+            }
+            $l += $cw[$c];
+            if ($l > $wmax) {
+                //Automatic line break
+                if ($sep == -1) {
+                    if ($i == $j)
+                        $i++;
+                    if ($this->ws > 0) {
+                        $this->ws = 0;
+                        if ($prn == 1) $this->_out('0 Tw');
+                    }
+                    if ($prn == 1) {
+                        $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
+                    }
+                } else {
+                    if ($align == 'J') {
+                        $this->ws = ($ns > 1) ? ($wmax - $ls) / 1000 * $this->FontSize / ($ns - 1) : 0;
+                        if ($prn == 1) $this->_out(sprintf('%.3F Tw', $this->ws * $this->k));
+                    }
+                    if ($prn == 1) {
+                        $this->Cell($w, $h, substr($s, $j, $sep - $j), $b, 2, $align, $fill);
+                    }
+                    $i = $sep + 1;
+                }
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $ns = 0;
+                $nl++;
+                if ($border && $nl == 2)
+                    $b = $b2;
+                if ($maxline && $nl > $maxline)
+                    return substr($s, $i);
+            } else
+                $i++;
+        }
+        //Last chunk
+        if ($this->ws > 0) {
+            $this->ws = 0;
+            if ($prn == 1) $this->_out('0 Tw');
+        }
+        if ($border && is_int(strpos($border, 'B')))
+            $b .= 'B';
+        if ($prn == 1) {
+            $this->Cell($w, $h, substr($s, $j, $i - $j), $b, 2, $align, $fill);
+        }
+        $this->x = $this->lMargin;
+        return $nl;
+    }
+#endregion
 
 #region MEMORY OPTIMAZATION
 
     function _putpages()
     {
         $nb = $this->page;
-        if(!empty($this->AliasNbPages))
-        {
+        if (!empty($this->AliasNbPages)) {
             // Replace number of pages
-            for($n=1;$n<=$nb;$n++)
-            {
-                if($this->compress)
-                    $this->pages[$n] = gzcompress(str_replace($this->AliasNbPages,$nb,gzuncompress($this->pages[$n])));
+            for ($n = 1; $n <= $nb; $n++) {
+                if ($this->compress)
+                    $this->pages[$n] = gzcompress(str_replace($this->AliasNbPages, $nb, gzuncompress($this->pages[$n])));
                 else
-                    $this->pages[$n] = str_replace($this->AliasNbPages,$nb,$this->pages[$n]);
+                    $this->pages[$n] = str_replace($this->AliasNbPages, $nb, $this->pages[$n]);
             }
         }
-        if($this->DefOrientation=='P')
-        {
-            $wPt = $this->DefPageSize[0]*$this->k;
-            $hPt = $this->DefPageSize[1]*$this->k;
-        }
-        else
-        {
-            $wPt = $this->DefPageSize[1]*$this->k;
-            $hPt = $this->DefPageSize[0]*$this->k;
+        if ($this->DefOrientation == 'P') {
+            $wPt = $this->DefPageSize[0] * $this->k;
+            $hPt = $this->DefPageSize[1] * $this->k;
+        } else {
+            $wPt = $this->DefPageSize[1] * $this->k;
+            $hPt = $this->DefPageSize[0] * $this->k;
         }
         $filter = ($this->compress) ? '/Filter /FlateDecode ' : '';
-        for($n=1;$n<=$nb;$n++)
-        {
+        for ($n = 1; $n <= $nb; $n++) {
             // Page
             $this->_newobj();
             $this->_out('<</Type /Page');
             $this->_out('/Parent 1 0 R');
-            if(isset($this->PageSizes[$n]))
-                $this->_out(sprintf('/MediaBox [0 0 %.2F %.2F]',$this->PageSizes[$n][0],$this->PageSizes[$n][1]));
+            if (isset($this->PageSizes[$n]))
+                $this->_out(sprintf('/MediaBox [0 0 %.2F %.2F]', $this->PageSizes[$n][0], $this->PageSizes[$n][1]));
             $this->_out('/Resources 2 0 R');
-            if(isset($this->PageLinks[$n]))
-            {
+            if (isset($this->PageLinks[$n])) {
                 // Links
                 $annots = '/Annots [';
-                foreach($this->PageLinks[$n] as $pl)
-                {
-                    $rect = sprintf('%.2F %.2F %.2F %.2F',$pl[0],$pl[1],$pl[0]+$pl[2],$pl[1]-$pl[3]);
-                    $annots .= '<</Type /Annot /Subtype /Link /Rect ['.$rect.'] /Border [0 0 0] ';
-                    if(is_string($pl[4]))
-                        $annots .= '/A <</S /URI /URI '.$this->_textstring($pl[4]).'>>>>';
-                    else
-                    {
+                foreach ($this->PageLinks[$n] as $pl) {
+                    $rect = sprintf('%.2F %.2F %.2F %.2F', $pl[0], $pl[1], $pl[0] + $pl[2], $pl[1] - $pl[3]);
+                    $annots .= '<</Type /Annot /Subtype /Link /Rect [' . $rect . '] /Border [0 0 0] ';
+                    if (is_string($pl[4]))
+                        $annots .= '/A <</S /URI /URI ' . $this->_textstring($pl[4]) . '>>>>';
+                    else {
                         $l = $this->links[$pl[4]];
                         $h = isset($this->PageSizes[$l[0]]) ? $this->PageSizes[$l[0]][1] : $hPt;
-                        $annots .= sprintf('/Dest [%d 0 R /XYZ 0 %.2F null]>>',1+2*$l[0],$h-$l[1]*$this->k);
+                        $annots .= sprintf('/Dest [%d 0 R /XYZ 0 %.2F null]>>', 1 + 2 * $l[0], $h - $l[1] * $this->k);
                     }
                 }
-                $this->_out($annots.']');
+                $this->_out($annots . ']');
             }
-            if($this->PDFVersion>'1.3')
+            if ($this->PDFVersion > '1.3')
                 $this->_out('/Group <</Type /Group /S /Transparency /CS /DeviceRGB>>');
-            $this->_out('/Contents '.($this->n+1).' 0 R>>');
+            $this->_out('/Contents ' . ($this->n + 1) . ' 0 R>>');
             $this->_out('endobj');
             // Page content
             $p = $this->pages[$n];
             $this->_newobj();
-            $this->_out('<<'.$filter.'/Length '.strlen($p).'>>');
+            $this->_out('<<' . $filter . '/Length ' . strlen($p) . '>>');
             $this->_putstream($p);
             $this->_out('endobj');
         }
@@ -657,11 +783,11 @@ class Pdf extends Fpdf
         $this->_out('1 0 obj');
         $this->_out('<</Type /Pages');
         $kids = '/Kids [';
-        for($i=0;$i<$nb;$i++)
-            $kids .= (3+2*$i).' 0 R ';
-        $this->_out($kids.']');
-        $this->_out('/Count '.$nb);
-        $this->_out(sprintf('/MediaBox [0 0 %.2F %.2F]',$wPt,$hPt));
+        for ($i = 0; $i < $nb; $i++)
+            $kids .= (3 + 2 * $i) . ' 0 R ';
+        $this->_out($kids . ']');
+        $this->_out('/Count ' . $nb);
+        $this->_out(sprintf('/MediaBox [0 0 %.2F %.2F]', $wPt, $hPt));
         $this->_out('>>');
         $this->_out('endobj');
     }
@@ -669,7 +795,7 @@ class Pdf extends Fpdf
     function _endpage()
     {
         parent::_endpage();
-        if($this->compress)
+        if ($this->compress)
             $this->pages[$this->page] = gzcompress($this->pages[$this->page]);
     }
 
