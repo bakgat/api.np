@@ -67,12 +67,15 @@ class ReportingService
         $this->generateIacsReport($report, $iacs);
         $this->generateFeedbackReport($report, $feedback);
         $this->generateRedicodiReport($report, $redicodi);
+        
+        $report->sort();
 
         return $report;
     }
 
     public function getReportByStudent($studentId, $range)
     {
+        //@todo: fill repositories with these methods
         $pointResults = $this->evaluationRepo->getPointReportForStudent($studentId, $range);
         $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForStudent($studentId, $range);
         $spokenResults = $this->evaluationRepo->getSpokenReportForStudent($studentId, $range);
@@ -84,7 +87,12 @@ class ReportingService
 
         $report = new Report($range);
         $this->generateResultsReport($report, $pointResults);
+        $this->generateComprehensiveReport($report, $comprehensiveResults);
+        $this->generateSpokenReport($report, $spokenResults);
+        $this->generateMcResultsReport($report, $mcResults);
         $this->generateIacsReport($report, $iacs);
+        $this->generateFeedbackReport($report, $feedback);
+        $this->generateRedicodiReport($report, $redicodi);
 
         return $report;
     }

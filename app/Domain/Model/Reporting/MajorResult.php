@@ -32,11 +32,16 @@ class MajorResult
      * @var ArrayCollection
      */
     private $branches;
+    /**
+     * @var int
+     */
+    private $order;
 
-    public function __construct(NtUid $id, $name)
+    public function __construct(NtUid $id, $name, $order=0)
     {
         $this->id = $id;
         $this->name = $name;
+        $this->order = $order;
         $this->branches = new ArrayCollection;
     }
 
@@ -77,5 +82,10 @@ class MajorResult
     public function getBranchResults()
     {
         return clone $this->branches;
+    }
+
+    public function getOrder()
+    {
+        return $this->order;
     }
 }

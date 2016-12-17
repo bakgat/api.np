@@ -87,7 +87,7 @@ class IACDoctrineRepository implements IACRepository
                     s.id as s_id, s.first_name as s_first_name, s.last_name as s_last_name,
                     g.id as g_id, g.text as g_text,
                     b.id as b_id, b.name as b_name,
-                    m.id as m_id, m.name as m_name
+                    m.id as m_id, m.name as m_name, m.order as m_order,
                     FROM iacs iac
                     INNER JOIN iac_goals ig ON ig.iac_id = iac.id
                     INNER JOIN goals g ON ig.goal_id = g.id
@@ -158,7 +158,7 @@ class IACDoctrineRepository implements IACRepository
                     s.id as s_id, s.first_name as s_first_name, s.last_name as s_last_name,
                     g.id as g_id, g.text as g_text,
                     b.id as b_id, b.name as b_name,
-                    m.id as m_id, m.name as m_name
+                    m.id as m_id, m.name as m_name, m.order as m_order
                     FROM iacs iac
                     INNER JOIN iac_goals ig ON ig.iac_id = iac.id
                     INNER JOIN goals g ON ig.goal_id = g.id
@@ -180,7 +180,7 @@ class IACDoctrineRepository implements IACRepository
                     s.id as s_id, s.first_name as s_first_name, s.last_name as s_last_name,
                     g.id as g_id, g.text as g_text,
                     b.id as b_id, b.name as b_name,
-                    m.id as m_id, m.name as m_name
+                    m.id as m_id, m.name as m_name, m.order as m_order
                     FROM iacs iac
                     INNER JOIN iac_goals ig ON ig.iac_id = iac.id
                     INNER JOIN goals g ON ig.goal_id = g.id
@@ -283,7 +283,8 @@ class IACDoctrineRepository implements IACRepository
             ->addFieldResult('i', 'b_id', 'bId')
             ->addFieldResult('i', 'b_name', 'bName')
             ->addFieldResult('i', 'm_id', 'mId')
-            ->addFieldResult('i', 'm_name', 'mName');
+            ->addFieldResult('i', 'm_name', 'mName')
+            ->addFieldResult('i', 'm_order', 'mOrder');
 
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getArrayResult();

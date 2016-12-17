@@ -120,6 +120,11 @@ class FlatIAC
      * @var string
      */
     private $bName;
+    /**
+     * @ORM\Column(type="integer")
+     * @var int
+     */
+    private $mOrder;
 
     /**
      * @ORM\Column(type="guid")
@@ -131,4 +136,6 @@ class FlatIAC
      * @var string
      */
     private $mName;
+
+
 }

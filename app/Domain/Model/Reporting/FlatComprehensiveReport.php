@@ -83,6 +83,11 @@ class FlatComprehensiveReport
      * @var string
      */
     private $mName;
+    /**
+     * @ORM\Column(type="integer")
+     * @var int
+     */
+    private $mOrder;
 
 
     /**

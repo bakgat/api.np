@@ -178,9 +178,11 @@ class StudentResult
     public function intoMajor($data)
     {
         $id = NtUid::import($data['mId']);
+
         $maj = $this->hasMajor($id);
         if (!$maj) {
             $name = $data['mName'];
+            $order = isset($data['order']) ? $data['order'] : null;
             $maj = new MajorResult($id, $name);
             $this->majors->add($maj);
         }
@@ -224,6 +226,23 @@ class StudentResult
     public function getRedicodi()
     {
         return $this->redicodi->getValues();
+    }
+
+    public function sort()
+    {
+        $iterator = $this->majors->getIterator();
+        /**
+         * @var MajorResult $a
+         * @var MajorResult $b
+         */
+        $iterator->uasort(function ($a, $b) {
+            /**
+             * @var MajorResult $a
+             * @var MajorResult $b
+             */
+            return ($a->getOrder() < $b->getOrder()) ? -1 : 1;
+        });
+        return new ArrayCollection(iterator_to_array($iterator));
     }
 
 

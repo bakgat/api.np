@@ -74,4 +74,12 @@ class Report
     {
         return $this->range;
     }
+
+    public function sort()
+    {
+        /** @var StudentResult $student */
+        foreach ($this->students as $student) {
+            $student->sort();
+        }
+    }
 }
