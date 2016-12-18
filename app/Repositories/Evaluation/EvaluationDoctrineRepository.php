@@ -399,8 +399,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN majors m ON m.id = b.major_id
               WHERE (e.date BETWEEN '{$start}' AND '{$end}')
                     AND stig.type='X'
-                    AND sig.group_id='" . $group . "'
-              GROUP BY s.id, bfg.id
+                    AND sig.group_id='{$group}'
               ORDER BY sig.number, m.order, b.order";
 
         return $this->getMultiplechoiceReport($sql);
