@@ -176,7 +176,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               gr.id as gr_id, 
               gr.start as start, gr.end as end,
               m.id as m_id, m.name as m_name, m.order as m_order,
-              b.id as b_id, b.name as b_name, bfg.id as bfg_id,
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
               g.id as g_id, g.name as g_name,
               st.first_name as st_first_name, st.last_name as st_last_name
               FROM rr pr
@@ -218,7 +218,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               gr.id as gr_id, 
               gr.start as start, gr.end as end,
               m.id as m_id, m.name as m_name,  m.order as m_order,
-              b.id as b_id, b.name as b_name, bfg.id as bfg_id,
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
               g.id as g_id, g.name as g_name,
               st.first_name as st_first_name, st.last_name as st_last_name
               FROM rr pr
@@ -251,7 +251,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               gr.id as gr_id, 
               gr.start as start, gr.end as end,
               m.id as m_id, m.name as m_name, m.order as m_order, 
-              b.id as b_id, b.name as b_name, bfg.id as bfg_id,
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
               g.id as g_id, g.name as g_name,
               st.first_name as st_first_name, st.last_name as st_last_name, st.gender as st_gender
               FROM rr pr
@@ -284,7 +284,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $sql = "SELECT MAX(cr.id) as c_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
 				COUNT(e.id) AS e_count,
               m.id as m_id, m.name as m_name, m.order as m_order, 
-              b.id as b_id, b.name as b_name, bfg.id as bfg_id,
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
               g.id as g_id, g.name as g_name,
               st.first_name as st_first_name, st.last_name as st_last_name
               FROM comprehensive_results cr
@@ -314,7 +314,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $sql = "SELECT MAX(cr.id) as c_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
 				COUNT(e.id) AS e_count,
               m.id as m_id, m.name as m_name, m.order as m_order, 
-              b.id as b_id, b.name as b_name, bfg.id as bfg_id,
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
               g.id as g_id, g.name as g_name,
               st.first_name as st_first_name, st.last_name as st_last_name
               FROM comprehensive_results cr
@@ -349,7 +349,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $sql = "SELECT MAX(sp.id) as sp_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
 				COUNT(e.id) AS e_count,
               m.id as m_id, m.name as m_name, m.order as m_order, 
-              b.id as b_id, b.name as b_name, bfg.id as bfg_id,
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
               g.id as g_id, g.name as g_name,
               st.first_name as st_first_name, st.last_name as st_last_name
               FROM spoken_results sp
@@ -384,7 +384,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $sql = "SELECT mc.id as mc_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
 				e.settings as e_settings, mc.selected as mc_selected,
               m.id as m_id, m.name as m_name, 
-              b.id as b_id, b.name as b_name, bfg.id as bfg_id,
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
               g.id as g_id, g.name as g_name, m.order as m_order,
               st.first_name as st_first_name, st.last_name as st_last_name
               FROM multiplechoice_results mc
@@ -482,6 +482,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('fr', 'end', 'grEnd')
             ->addFieldResult('fr', 'b_id', 'bId')
             ->addFieldResult('fr', 'b_name', 'bName')
+            ->addFieldResult('fr', 'b_order', 'bOrder')
             ->addFieldResult('fr', 'm_id', 'mId')
             ->addFieldResult('fr', 'm_name', 'mName')
             ->addFieldResult('fr', 'm_order', 'mOrder');
@@ -508,6 +509,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('cr', 'e_count', 'eCount')
             ->addFieldResult('cr', 'b_id', 'bId')
             ->addFieldResult('cr', 'b_name', 'bName')
+            ->addFieldResult('cr', 'b_order', 'bOrder')
             ->addFieldResult('cr', 'm_id', 'mId')
             ->addFieldResult('cr', 'm_name', 'mName')
             ->addFieldResult('cr', 'm_order', 'mOrder');
@@ -534,6 +536,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('spr', 'e_count', 'eCount')
             ->addFieldResult('spr', 'b_id', 'bId')
             ->addFieldResult('spr', 'b_name', 'bName')
+            ->addFieldResult('spr', 'b_order', 'bOrder')
             ->addFieldResult('spr', 'm_id', 'mId')
             ->addFieldResult('spr', 'm_name', 'mName')
             ->addFieldResult('spr', 'm_order', 'mOrder');
@@ -561,6 +564,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('mc', 'st_gender', 'stGender')
             ->addFieldResult('mc', 'b_id', 'bId')
             ->addFieldResult('mc', 'b_name', 'bName')
+            ->addFieldResult('mc', 'b_order', 'bOrder')
             ->addFieldResult('mc', 'm_id', 'mId')
             ->addFieldResult('mc', 'm_name', 'mName')
             ->addFieldResult('mc', 'm_order', 'mOrder');

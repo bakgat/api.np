@@ -102,6 +102,11 @@ class FlatPointReport
      * @var string
      */
     private $bName;
+    /**
+     * @ORM\Column(type="integer")
+     * @var int
+     */
+    private $bOrder;
 
 
     /**

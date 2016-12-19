@@ -58,10 +58,14 @@ class BranchResult
      */
     private $multipleChoices;
 
-    public function __construct(NtUid $id, $name)
+    /** @var  integer */
+    private $order;
+
+    public function __construct(NtUid $id, $name, $order)
     {
         $this->id = $id;
         $this->name = $name;
+        $this->order= $order;
         $this->history = new ArrayCollection;
         $this->iacs = new ArrayCollection;
         $this->hasComprehensive = false;
@@ -217,6 +221,11 @@ class BranchResult
     public function hasSpoken()
     {
         return $this->hasSpoken;
+    }
+
+    public function getOrder()
+    {
+        return $this->order;
     }
 
 
