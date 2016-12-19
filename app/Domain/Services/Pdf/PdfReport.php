@@ -842,7 +842,8 @@ class PdfReport
             "\xE2\x80\xA6",  // … (U+2026) in UTF-8
             "<br />",
             "<br/>",
-            "</p><p>"
+            "</p><p>",
+            "&nbsp;"
         ];
 
         $replacements = [
@@ -863,15 +864,13 @@ class PdfReport
             "...",
             "\n",
             "\n",
-            "</p>\n\n<p>"
+            "</p>\n\n<p>",
+            " "
         ];
 
-        str_replace($search, $replacements, $fb);
-
-
-        $fb = str_replace("</p><p>", "</p>\n\n<p>", $fb);
-        $fb = str_replace("<br/>", "\n", $fb);
+        $fb = str_replace($search, $replacements, $fb);
         $fb = utf8_decode($fb);
+        
         $cmc->multiCell($this->pdf->pageWidth() - (2*$this->leftMargin), 5, $fb);
         $endY = $this->pdf->y;
 
