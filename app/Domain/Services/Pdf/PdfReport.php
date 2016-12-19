@@ -865,12 +865,12 @@ class PdfReport
             "\n",
             "\n",
             "</p>\n\n<p>",
-            " "
+            ""
         ];
 
         $fb = str_replace($search, $replacements, $fb);
         $fb = utf8_decode($fb);
-        
+
         $cmc->multiCell($this->pdf->pageWidth() - (2*$this->leftMargin), 5, $fb);
         $endY = $this->pdf->y;
 
