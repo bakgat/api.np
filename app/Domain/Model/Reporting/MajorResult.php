@@ -62,9 +62,11 @@ class MajorResult
     {
         $id = NtUid::import($data['bId']);
         $branch = $this->hasBranch($id);
+
         if (!$branch) {
             $name =  $data['bName'];
-            $branch = new BranchResult($id, $name);
+            $order = $data['bOrder'];
+            $branch = new BranchResult($id, $name, $order);
             $this->branches->add($branch);
         }
         return $branch;
