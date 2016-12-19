@@ -91,8 +91,8 @@ class ReportController extends Controller
     private function byGroup(Request $request, $groupId)
     {
         $range = $this->getRange($request);
-
-        $report = $this->reportingService->getReportByGroup($groupId, $range);
+        $render = $request->has('render') ? $request->get('render') : 'nf';
+        $report = $this->reportingService->getReportByGroup($groupId, $range, $render);
         return $report;
     }
 

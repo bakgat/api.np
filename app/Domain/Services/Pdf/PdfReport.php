@@ -75,7 +75,9 @@ class PdfReport
             $this->pdf->HideHeader();
             $this->pdf->HideFooter();
 
-            $this->makeFrontPage($result);
+            if ($this->report->hasFrontpage()) {
+                $this->makeFrontPage($result);
+            }
 
             $this->pdf->ShowHeader();
 
@@ -329,7 +331,7 @@ class PdfReport
                                 $points[] = 'eindevaluatie: ' . $rangeResult->getFinal() . '/' . $rangeResult->getMax();
                             }
 
-                            if(count($points) > 1) {
+                            if (count($points) > 1) {
                                 $pointText = '<sm>' . implode("\n", $points) . '</sm>';
                             } else {
                                 $pointText = '';

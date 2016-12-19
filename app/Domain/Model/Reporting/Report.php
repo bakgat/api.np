@@ -29,11 +29,16 @@ class Report
      * @var ArrayCollection
      */
     private $students;
+    /**
+     * @var bool
+     */
+    private $frontpage;
 
-    public function __construct(DateRange $dateRange)
+    public function __construct(DateRange $dateRange, $frontpage=false)
     {
         $this->range = $dateRange;
         $this->students = new ArrayCollection;
+        $this->frontpage = $frontpage;
     }
 
     public function intoStudent($data)
@@ -73,6 +78,14 @@ class Report
     public function getRange()
     {
         return $this->range;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasFrontpage()
+    {
+        return $this->frontpage;
     }
 
     public function sort()

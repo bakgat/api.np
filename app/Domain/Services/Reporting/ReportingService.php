@@ -49,8 +49,14 @@ class ReportingService
     // TODO: making graphs for any combination above (history per group, per student, per branch, per major, per range, per oldrange)
     // TODO: what about graphs in 1st and 2nd grade?
     // TODO: 
-    public function getReportByGroup($group, DateRange $range)
+    public function getReportByGroup($group, DateRange $range, $render = 'wf')
     {
+        $withFrontPage = $render == 'all';
+        $onlyFrontPage = $render == 'f';
+
+        //@todo: handle only front page
+
+        
         $pointResults = $this->evaluationRepo->getPointReportForGroup($group, $range);
         $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForGroup($group, $range);
         $spokenResults = $this->evaluationRepo->getSpokenReportForGroup($group, $range);
@@ -59,7 +65,8 @@ class ReportingService
         $feedback = $this->evaluationRepo->getFeedbackReportForGroup($group, $range);
         $redicodi = $this->evaluationRepo->getRedicodiReportForGroup($group, $range);
 
-        $report = new Report($range);
+
+        $report = new Report($range, $withFrontPage);
         $this->generateResultsReport($report, $pointResults);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
         $this->generateSpokenReport($report, $spokenResults);
@@ -67,7 +74,7 @@ class ReportingService
         $this->generateIacsReport($report, $iacs);
         $this->generateFeedbackReport($report, $feedback);
         $this->generateRedicodiReport($report, $redicodi);
-        
+
         $report->sort();
 
         return $report;
