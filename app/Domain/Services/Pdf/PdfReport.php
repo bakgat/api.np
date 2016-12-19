@@ -816,14 +816,17 @@ class PdfReport
         $this->pdf->Line($left, $ly, $this->pdf->pageWidth() - ($this->pdf->x * 2), $ly);
 
         $startY = $this->pdf->y;
-        $cmc = new Multicell($this->pdf);
-        $this->initMulticell($cmc);
         $this->pdf->x = $left;
 
-        $this->blue();
-        $this->pdf->SetFont('Roboto', '', 11);
+        $cmc = new Multicell($this->pdf);
+        $cmc->setStyle('i', 'Roboto', 'i', 9, Colors::str_blue());
+        $cmc->setStyle('b', 'Roboto', 'b', 9, Colors::str_blue());
+        $cmc->setStyle('p', 'Roboto', '', 9, Colors::str_blue());
+
         $fb = $student->getFeedback();
 
+        //CLEAN UP ALL DIACRITICS FROM WORD
+        //@todo: place this when saving new feedback
         $search = [          // www.fileformat.info/info/unicode/<NUM>/ <NUM> = 2018
             "\xC2\xAB",     // « (U+00AB) in UTF-8
             "\xC2\xBB",     // » (U+00BB) in UTF-8
@@ -865,13 +868,16 @@ class PdfReport
             "\n",
             "\n",
             "</p>\n\n<p>",
-            ""
+            " "
         ];
 
+
         $fb = str_replace($search, $replacements, $fb);
+        $fb = str_replace("\n ", "\n", $fb); //last cleanups trim spaces at start of line
         $fb = utf8_decode($fb);
 
         $cmc->multiCell($this->pdf->pageWidth() - (2*$this->leftMargin), 5, $fb);
+
         $endY = $this->pdf->y;
 
         $diffY = $endY - $startY;
