@@ -182,8 +182,8 @@ class StudentResult
         $maj = $this->hasMajor($id);
         if (!$maj) {
             $name = $data['mName'];
-            $order = isset($data['order']) ? $data['order'] : null;
-            $maj = new MajorResult($id, $name);
+            $order = isset($data['mOrder']) ? $data['mOrder'] : null;
+            $maj = new MajorResult($id, $name, $order);
             $this->majors->add($maj);
         }
         return $maj;
@@ -230,12 +230,12 @@ class StudentResult
 
     public function sort()
     {
-        /** @var MajorResult $major */
-        foreach ($this->majors as $major) {
-            $major->sort();
-        }
-
         $iterator = $this->majors->getIterator();
+        while ($iterator->valid()) {
+            $iterator->current()->sort();
+            $iterator->next();
+        }
+        $iterator->rewind();
         /**
          * @var MajorResult $a
          * @var MajorResult $b
@@ -247,7 +247,8 @@ class StudentResult
              */
             return ($a->getOrder() < $b->getOrder()) ? -1 : 1;
         });
-        return new ArrayCollection(iterator_to_array($iterator));
+        $this->majors = new ArrayCollection(iterator_to_array($iterator));
+        return $this->majors;
     }
 
 

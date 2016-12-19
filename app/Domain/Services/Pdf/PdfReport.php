@@ -328,10 +328,14 @@ class PdfReport
                             if ($rangeResult->getFinal()) {
                                 $points[] = 'eindevaluatie: ' . $rangeResult->getFinal() . '/' . $rangeResult->getMax();
                             }
-                            
 
+                            if(count($points) > 1) {
+                                $pointText = '<sm>' . implode("\n", $points) . '</sm>';
+                            } else {
+                                $pointText = '';
+                            }
                             $row[1] = [
-                                'TEXT' => '<sm>' . implode("\n", $points) . '</sm>',
+                                'TEXT' => $pointText,
                                 'TEXT_ALIGN' => 'R',
                                 'PADDING_TOP' => $this->rowPadding,
                                 'PADDING_BOTTOM' => $this->rowPadding,
@@ -342,7 +346,7 @@ class PdfReport
                         $t = $rangeResult->getTotal() . '/' . $rangeResult->getMax();
 
                         $row[2] = [
-                            'TEXT' => $isPerm ? '<perm>' . $t . '</perm>' : '<t>' . $t . '</t>',
+                            'TEXT' => $t,
                             'TEXT_ALIGN' => 'R',
                             'PADDING_TOP' => $this->rowPadding,
                             'PADDING_BOTTOM' => $this->rowPadding,
@@ -708,17 +712,18 @@ class PdfReport
         $this->pdf->MultiCell($w, $titleHeight, $t2, 0, 1);
 
         $this->pdf->SetFillColor(Colors::BLUE[0], Colors::BLUE[1], Colors::BLUE[2]);
-        $this->pdf->RoundedRect($this->pdf->x, $this->pdf->y, $this->pdf->pageWidth() - ($this->pdf->x * 2), $graphsBgHeight, 5, '1234', 'F');
+
+        $this->pdf->RoundedRect($this->leftMargin, $this->pdf->y, $this->pdf->pageWidth() - ($this->leftMargin * 2), $graphsBgHeight, 5, '1234', 'F');
         $endY = $this->pdf->y + $graphsBgHeight + ($titleHeight / 2);
 
-        $this->pdf->x = $leftMargin + 10;
+        $this->pdf->x = $this->leftMargin + 10;
         $this->pdf->y += 5;
         $this->pdf->SetAlpha(.84);
         $this->pdf->SetTextColor(255);
         $this->pdf->SetFont('RobotoThin', '', 10);
 
         $c2 = utf8_decode(file_get_contents(resource_path('report_content/expl_graphs.tmpl')));
-        $this->pdf->MultiCell(0, $explLineHeight, $c2, 0, 1);
+        $this->pdf->MultiCell($this->pdf->pageWidth() - ($this->leftMargin * 2), $explLineHeight, $c2, 0, 1);
         $this->pdf->SetAlpha(1);
 
         /* ***************************************************

@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 
 use JMS\Serializer\Annotation\Groups;
+
 class MajorResult
 {
     /**
@@ -37,7 +38,7 @@ class MajorResult
      */
     private $order;
 
-    public function __construct(NtUid $id, $name, $order=0)
+    public function __construct(NtUid $id, $name, $order = 0)
     {
         $this->id = $id;
         $this->name = $name;
@@ -64,7 +65,7 @@ class MajorResult
         $branch = $this->hasBranch($id);
 
         if (!$branch) {
-            $name =  $data['bName'];
+            $name = $data['bName'];
             $order = $data['bOrder'];
             $branch = new BranchResult($id, $name, $order);
             $this->branches->add($branch);
@@ -106,6 +107,7 @@ class MajorResult
              */
             return ($a->getOrder() < $b->getOrder()) ? -1 : 1;
         });
-        return new ArrayCollection(iterator_to_array($iterator));
+        $this->branches = new ArrayCollection(iterator_to_array($iterator));
+        return $this->branches;
     }
 }
