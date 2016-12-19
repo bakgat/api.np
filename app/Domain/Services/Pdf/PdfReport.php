@@ -8,7 +8,6 @@
 
 namespace App\Domain\Services\Pdf;
 
-
 use App\Domain\Model\Education\Branch;
 use App\Domain\Model\Education\Redicodi;
 use App\Domain\Model\Reporting\BranchResult;
@@ -22,6 +21,7 @@ use App\Pdf\NtPdf\Listener;
 use App\Pdf\NtPdf\Multicell;
 use App\Pdf\Pdf;
 use App\Pdf\PdfTable;
+use App\Support\Encoding;
 use IntlDateFormatter;
 
 /**
@@ -91,11 +91,9 @@ class PdfReport
 
             $this->makeFirstPage($result);
 
-
             $this->pdf->header = $this->StudentHeader(false);
 
             $this->pdf->AddPage();
-
 
             $this->makeResultsTable($result);
 
@@ -825,56 +823,8 @@ class PdfReport
 
         $fb = $student->getFeedback();
 
-        //CLEAN UP ALL DIACRITICS FROM WORD
-        //@todo: place this when saving new feedback
-        $search = [          // www.fileformat.info/info/unicode/<NUM>/ <NUM> = 2018
-            "\xC2\xAB",     // « (U+00AB) in UTF-8
-            "\xC2\xBB",     // » (U+00BB) in UTF-8
-            "\xE2\x80\x98", // ‘ (U+2018) in UTF-8
-            "\xE2\x80\x99", // ’ (U+2019) in UTF-8
-            "\xE2\x80\x9A", // ‚ (U+201A) in UTF-8
-            "\xE2\x80\x9B", // ‛ (U+201B) in UTF-8
-            "\xE2\x80\x9C", // “ (U+201C) in UTF-8
-            "\xE2\x80\x9D", // ” (U+201D) in UTF-8
-            "\xE2\x80\x9E", // „ (U+201E) in UTF-8
-            "\xE2\x80\x9F", // ‟ (U+201F) in UTF-8
-            "\xE2\x80\xB9", // ‹ (U+2039) in UTF-8
-            "\xE2\x80\xBA", // › (U+203A) in UTF-8
-            "\xE2\x80\x93", // – (U+2013) in UTF-8
-            "\xE2\x80\x94", // — (U+2014) in UTF-8
-            "\xE2\x80\xA6",  // … (U+2026) in UTF-8
-            "<br />",
-            "<br/>",
-            "</p><p>",
-            "&nbsp;"
-        ];
 
-        $replacements = [
-            "<<",
-            ">>",
-            "'",
-            "'",
-            "'",
-            "'",
-            '"',
-            '"',
-            '"',
-            '"',
-            "<",
-            ">",
-            "-",
-            "-",
-            "...",
-            "\n",
-            "\n",
-            "</p>\n\n<p>",
-            " "
-        ];
-
-
-        $fb = str_replace($search, $replacements, $fb);
-        $fb = str_replace("\n ", "\n", $fb); //last cleanups trim spaces at start of line
-        $fb = utf8_decode($fb);
+        $fb = $this->sanitize($fb);
 
         $cmc->multiCell($this->pdf->pageWidth() - (2*$this->leftMargin), 5, $fb);
 
@@ -992,6 +942,69 @@ class PdfReport
     function orange()
     {
         call_user_func_array([$this->pdf, 'SetTextColor'], Colors::ORANGE);
+    }
+
+    /**
+     * @param $fb
+     * @return array|mixed|string
+     */
+    private function sanitize($fb)
+    {
+        $fb = html_entity_decode($fb);
+
+        //CLEAN UP ALL DIACRITICS FROM WORD
+        //@todo: place this when saving new feedback
+        //@todo: is replacement of word diacritics still needed?
+        $search = [          // www.fileformat.info/info/unicode/<NUM>/ <NUM> = 2018
+            "\xC2\xAB",     // « (U+00AB) in UTF-8
+            "\xC2\xBB",     // » (U+00BB) in UTF-8
+            "\xE2\x80\x98", // ‘ (U+2018) in UTF-8
+            "\xE2\x80\x99", // ’ (U+2019) in UTF-8
+            "\xE2\x80\x9A", // ‚ (U+201A) in UTF-8
+            "\xE2\x80\x9B", // ‛ (U+201B) in UTF-8
+            "\xE2\x80\x9C", // “ (U+201C) in UTF-8
+            "\xE2\x80\x9D", // ” (U+201D) in UTF-8
+            "\xE2\x80\x9E", // „ (U+201E) in UTF-8
+            "\xE2\x80\x9F", // ‟ (U+201F) in UTF-8
+            "\xE2\x80\xB9", // ‹ (U+2039) in UTF-8
+            "\xE2\x80\xBA", // › (U+203A) in UTF-8
+            "\xE2\x80\x93", // – (U+2013) in UTF-8
+            "\xE2\x80\x94", // — (U+2014) in UTF-8
+            "\xE2\x80\xA6",  // … (U+2026) in UTF-8
+            "<br />",
+            "<br/>",
+            "</p><p>",
+            "&nbsp;"
+        ];
+
+        $replacements = [
+            "<<",
+            ">>",
+            "'",
+            "'",
+            "'",
+            "'",
+            '"',
+            '"',
+            '"',
+            '"',
+            "<",
+            ">",
+            "-",
+            "-",
+            "...",
+            "\n",
+            "\n",
+            "</p>\n\n<p>",
+            " "
+        ];
+
+
+       // $fb = str_replace($search, $replacements, $fb);
+        $fb = str_replace("\n ", "\n", $fb); //last cleanups trim spaces at start of line
+
+        $fb = Encoding::toUTF8($fb);
+        return $fb;
     }
 
 
