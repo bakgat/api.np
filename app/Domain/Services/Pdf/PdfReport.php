@@ -821,6 +821,8 @@ class PdfReport
         $cmc->setStyle('b', 'Roboto', 'b', 9, Colors::str_blue());
         $cmc->setStyle('p', 'Roboto', '', 9, Colors::str_blue());
 
+        $this->blue();
+        $this->pdf->SetFont('Roboto', '', 9);
         $fb = $student->getFeedback();
 
 
