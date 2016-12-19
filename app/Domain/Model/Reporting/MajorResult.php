@@ -88,4 +88,22 @@ class MajorResult
     {
         return $this->order;
     }
+
+    public function sort()
+    {
+
+        $iterator = $this->branches->getIterator();
+        /**
+         * @var BranchResult $a
+         * @var BranchResult $b
+         */
+        $iterator->uasort(function ($a, $b) {
+            /**
+             * @var BranchResult $a
+             * @var BranchResult $b
+             */
+            return ($a->getOrder() < $b->getOrder()) ? -1 : 1;
+        });
+        return new ArrayCollection(iterator_to_array($iterator));
+    }
 }

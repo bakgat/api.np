@@ -230,6 +230,11 @@ class StudentResult
 
     public function sort()
     {
+        /** @var MajorResult $major */
+        foreach ($this->majors as $major) {
+            $major->sort();
+        }
+
         $iterator = $this->majors->getIterator();
         /**
          * @var MajorResult $a

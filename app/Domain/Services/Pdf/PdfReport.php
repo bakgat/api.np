@@ -328,7 +328,7 @@ class PdfReport
                             if ($rangeResult->getFinal()) {
                                 $points[] = 'eindevaluatie: ' . $rangeResult->getFinal() . '/' . $rangeResult->getMax();
                             }
-
+                            
 
                             $row[1] = [
                                 'TEXT' => '<sm>' . implode("\n", $points) . '</sm>',
