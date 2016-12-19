@@ -48,7 +48,7 @@ class PdfReport
     private $iacIconWidth = 20;
 
     private $rowPadding = 3;
-    private $headerPaddingTop = 10;
+    private $headerPaddingTop = 8;
 
     /* ***************************************************
      * C'tor
@@ -260,8 +260,8 @@ class PdfReport
                         $icon[] = 'k';
                     }
                     if (count($icon) > 0) {
-
                         $branch = '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>';
+
                         $row[0] = [
                             'TEXT' => $branch,
                             'PADDING_TOP' => $this->rowPadding,
@@ -277,7 +277,13 @@ class PdfReport
                             'PADDING_BOTTOM' => $this->rowPadding,
                             'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
+                        $row[3] = [
+                            'PADDING_TOP' => $this->rowPadding,
+                            'PADDING_BOTTOM' => $this->rowPadding,
+                            'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
+                        ];
                         $this->resultsTable->addRow($row);
+                        $branchSet = true;
                     }
                     if (count($history) > 0) {
                         /** @var RangeResult $rangeResult */
@@ -286,7 +292,6 @@ class PdfReport
                         $isPerm = strtoupper($branchResult->getName()) == 'PERMANENTE EVALUATIE';
 
                         $branch = '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>';
-                        $branchSet = true;
 
                         $row[0] = [
                             'PADDING_TOP' => $this->rowPadding,
@@ -344,13 +349,14 @@ class PdfReport
                             'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
 
-                        //@TODO: WHY IS THIS BORDER BOTTOM STYLE NOT RENDERED CORRECTLY
                         $row[3] = [
                             'TEXT' => '',
                             'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
 
                         $this->resultsTable->addRow($row);
+
+                        $branchSet = true;
                     }
 
                     if ($hasMultiplechoices) {
@@ -363,7 +369,7 @@ class PdfReport
                                 'PADDING_TOP' => $this->rowPadding,
                                 'PADDING_BOTTOM' => $this->rowPadding,
                                 'LINE_SIZE' => 4,
-                                'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
+                                'BORDER_TYPE' => 0
                             ];
                             $this->resultsTable->addRow($row);
                         }
@@ -424,7 +430,8 @@ class PdfReport
                                         }
                                     }
                                 }
-                                $mc .= implode(', ', $optResults);
+                                $separator = isset($settings->type) && $settings->type == 'mc' ? "\n\t" : ", ";
+                                $mc .= implode($separator, $optResults);
                                 $mc .= $suffix ? ' ' . $suffix : '';
 
                                 $row = [
@@ -532,9 +539,9 @@ class PdfReport
         $table->setStyle('h3', 'Roboto', 'b', 18, Colors::str_blue());
         $table->setStyle('h4', 'Roboto', 'b', 12, Colors::str_blue());
 
-        $table->setStyle('b', 'Roboto', 'b', 10, Colors::str_blue(), .84);
-        $table->setStyle('red', 'Roboto', 'b', 10, Colors::str_red(), .84);
-        $table->setStyle('gr', 'Roboto', 'b', 10, Colors::str_green(), .84);
+        $table->setStyle('b', 'Roboto', 'b', 11, Colors::str_blue());
+        $table->setStyle('red', 'Roboto', 'b', 10, Colors::str_red());
+        $table->setStyle('gr', 'Roboto', 'b', 10, Colors::str_green());
 
         $table->setStyle('bn', 'Roboto', '', 12, Colors::str_blue());
 
@@ -573,14 +580,14 @@ class PdfReport
         $this->orange();
         $this->pdf->Cell($wKl, 5, $klimtoren, 0, 1);
 
-        $this->pdf->SetY(-42);
+        $this->pdf->SetY(-40);
         $this->blue();
-        $this->pdf->SetFontSize(35);
-        $this->pdf->Cell(0, 9, 'EVALUATIES', 0, 1);
+        $this->pdf->SetFontSize(30);
+        $this->pdf->Cell(0, 7, 'EVALUATIES', 0, 1);
 
         $this->orange();
-        $this->pdf->SetFontSize(50);
-        $this->pdf->Cell(0, 25, utf8_decode($student->getDisplayName()), 0, 1); //, '', false, '', Colors::BLUE, 1, .12);
+        $this->pdf->SetFontSize(40);
+        $this->pdf->Cell(0, 20, utf8_decode($student->getDisplayName()), 0, 1); //, '', false, '', Colors::BLUE, 1, .12);
 
         $this->makeDescriptionPage();
     }
@@ -789,7 +796,7 @@ class PdfReport
         $left = $this->pdf->x;
         $this->orange();
         $this->pdf->SetFont('Roboto', 'b', 20);
-        $this->pdf->Cell(0, 14, 'Ik neem deel aan', 0, 1);
+        $this->pdf->Cell(0, 14, 'Ik nam deel aan', 0, 1);
 
         $this->pdf->SetLineWidth(.5);
         $ly = $this->pdf->y - 3;
@@ -823,19 +830,19 @@ class PdfReport
 
         $this->blue();
         $this->pdf->SetFont('Roboto', '', 9);
-        $fb = $student->getFeedback();
 
+        $fb = $student->getFeedback();
 
         $fb = $this->sanitize($fb);
 
-        $cmc->multiCell($this->pdf->pageWidth() - (2 * $this->leftMargin), 5, $fb);
+        $cmc->multiCell($this->pdf->pageWidth() - (2 * $this->leftMargin), 4.5, $fb);
 
         $endY = $this->pdf->y;
 
-        $diffY = $endY - $startY;
-        if ($diffY < 60) {
+        /*$diffY = $endY - $startY;
+        if ($diffY > 60) {
             $this->pdf->y += 60 - $diffY;
-        }
+        }*/
 
         /* ***************************************************
          * PARENT COMMENT
