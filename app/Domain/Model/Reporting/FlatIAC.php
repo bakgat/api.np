@@ -124,7 +124,7 @@ class FlatIAC
      * @ORM\Column(type="integer")
      * @var int
      */
-    private $mOrder;
+    private $bOrder;
 
     /**
      * @ORM\Column(type="guid")
@@ -137,5 +137,10 @@ class FlatIAC
      */
     private $mName;
 
+    /**
+     * @ORM\Column(type="integer")
+     * @var int
+     */
+    private $mOrder;
 
 }

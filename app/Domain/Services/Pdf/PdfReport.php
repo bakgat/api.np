@@ -304,7 +304,7 @@ class PdfReport
                             $row[0] = [
                                 'PADDING_TOP' => $this->rowPadding / 2,
                                 'PADDING_BOTTOM' => $this->rowPadding / 2,
-                                'LINE_SIZE' => 6,
+                                'LINE_SIZE' => 5,
                                 'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                             ];
                             $icons = [];
@@ -558,14 +558,7 @@ class PdfReport
 
 
         $table->setStyle('bi', 'NotosIcon', '', 16, Colors::str_blue(), .84);
-        $table->setStyle('i', 'NotosIcon', '', 12, Colors::str_blue(), .84);
-    }
-
-    private function initMulticell(Multicell $mc)
-    {
-        $mc->setStyle('i', 'Roboto', 'i', 11, Colors::str_blue());
-        $mc->setStyle('b', 'Roboto', 'b', 11, Colors::str_blue());
-        $mc->setStyle('p', 'Roboto', '', 11, Colors::str_blue());
+        $table->setStyle('i', 'NotosIcon', '', 10, Colors::str_blue(), .84);
     }
 
     private function makeFrontPage(StudentResult $student)

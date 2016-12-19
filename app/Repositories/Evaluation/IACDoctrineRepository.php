@@ -86,7 +86,7 @@ class IACDoctrineRepository implements IACRepository
                     iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
                     s.id as s_id, s.first_name as s_first_name, s.last_name as s_last_name,
                     g.id as g_id, g.text as g_text,
-                    b.id as b_id, b.name as b_name,
+                    b.id as b_id, b.name as b_name, b.order as b_order,
                     m.id as m_id, m.name as m_name, m.order as m_order,
                     FROM iacs iac
                     INNER JOIN iac_goals ig ON ig.iac_id = iac.id
@@ -157,7 +157,7 @@ class IACDoctrineRepository implements IACRepository
                     iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
                     s.id as s_id, s.first_name as s_first_name, s.last_name as s_last_name,
                     g.id as g_id, g.text as g_text,
-                    b.id as b_id, b.name as b_name,
+                    b.id as b_id, b.name as b_name, b.order as b_order,
                     m.id as m_id, m.name as m_name, m.order as m_order
                     FROM iacs iac
                     INNER JOIN iac_goals ig ON ig.iac_id = iac.id
@@ -179,7 +179,7 @@ class IACDoctrineRepository implements IACRepository
                     iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
                     s.id as s_id, s.first_name as s_first_name, s.last_name as s_last_name,
                     g.id as g_id, g.text as g_text,
-                    b.id as b_id, b.name as b_name,
+                    b.id as b_id, b.name as b_name, b.order as b_order,
                     m.id as m_id, m.name as m_name, m.order as m_order
                     FROM iacs iac
                     INNER JOIN iac_goals ig ON ig.iac_id = iac.id
@@ -282,6 +282,7 @@ class IACDoctrineRepository implements IACRepository
             ->addFieldResult('i', 'ig_date', 'igDate')
             ->addFieldResult('i', 'b_id', 'bId')
             ->addFieldResult('i', 'b_name', 'bName')
+            ->addFieldResult('i', 'b_order', 'bOrder')
             ->addFieldResult('i', 'm_id', 'mId')
             ->addFieldResult('i', 'm_name', 'mName')
             ->addFieldResult('i', 'm_order', 'mOrder');
