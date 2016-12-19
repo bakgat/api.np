@@ -161,7 +161,7 @@ class PdfReport
             //NAME
             $this->pdf->SetAlpha(.12);
             $this->pdf->SetFontSize(200);
-            $fn = $studentResult->getFirstName();
+            $fn = utf8_decode($studentResult->getFirstName());
             $fnW = $this->pdf->GetStringWidth($fn);
             $this->pdf->x = 0 - (($fnW - $this->pdf->pageWidth()) / 2);
             $this->pdf->Cell($fnW, 50, $fn, 0, 0);
