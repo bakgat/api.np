@@ -520,6 +520,9 @@ class PdfReport
                     //close the table
                     $this->iacTable->close();
                 }
+
+                //new page after iac listings
+                $this->pdf->AddPage();
             }
 
         }
