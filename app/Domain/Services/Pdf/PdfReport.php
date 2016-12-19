@@ -871,7 +871,8 @@ class PdfReport
 
         $fb = str_replace("</p><p>", "</p>\n\n<p>", $fb);
         $fb = str_replace("<br/>", "\n", $fb);
-        $cmc->multiCell($this->pdf->pageWidth() - (2*$this->leftMargin), 5, iconv("UTF-8", "CP1252", $fb));
+        $fb = utf8_decode($fb);
+        $cmc->multiCell($this->pdf->pageWidth() - (2*$this->leftMargin), 5, $fb);
         $endY = $this->pdf->y;
 
         $diffY = $endY - $startY;
