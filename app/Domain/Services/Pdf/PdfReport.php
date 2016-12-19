@@ -354,7 +354,7 @@ class PdfReport
                     }
 
                     if ($hasMultiplechoices) {
-                        if(!$branchSet) {
+                        if (!$branchSet) {
                             $branch = '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>';
 
                             $row[0] = [
@@ -826,7 +826,7 @@ class PdfReport
 
         $fb = $this->sanitize($fb);
 
-        $cmc->multiCell($this->pdf->pageWidth() - (2*$this->leftMargin), 5, $fb);
+        $cmc->multiCell($this->pdf->pageWidth() - (2 * $this->leftMargin), 5, $fb);
 
         $endY = $this->pdf->y;
 
@@ -923,7 +923,7 @@ class PdfReport
         $this->pdf->SetY(-70);
         $this->orange();
         $this->pdf->SetFont('Roboto', '', 10);
-        $width = ($this->pdf->pageWidth() - ($this->leftMargin*2)) / 4;
+        $width = ($this->pdf->pageWidth() - ($this->leftMargin * 2)) / 4;
         $i = 0;
         foreach (['leerkracht', 'directeur', 'ouders', 'leerling'] as $item) {
             $this->pdf->SetXY($this->leftMargin + (($width + 2) * $i++), -70);
@@ -950,6 +950,22 @@ class PdfReport
      */
     private function sanitize($fb)
     {
+        //FIRST html replacements
+        $searchHtmlEntities = [
+            "<br />",
+            "<br/>",
+            "</p><p>",
+            "&nbsp;",
+        ];
+        $htmlReplacements = [
+            "\n",
+            "\n",
+            "</p>\n\n<p>",
+            " ",
+        ];
+        $fb = str_replace($searchHtmlEntities, $htmlReplacements, $fb);
+
+        //THEN DECODE POSSIBLE &eacute ... entities
         $fb = html_entity_decode($fb);
 
         //CLEAN UP ALL DIACRITICS FROM WORD
@@ -971,10 +987,6 @@ class PdfReport
             "\xE2\x80\x93", // – (U+2013) in UTF-8
             "\xE2\x80\x94", // — (U+2014) in UTF-8
             "\xE2\x80\xA6",  // … (U+2026) in UTF-8
-            "<br />",
-            "<br/>",
-            "</p><p>",
-            "&nbsp;"
         ];
 
         $replacements = [
@@ -993,17 +1005,18 @@ class PdfReport
             "-",
             "-",
             "...",
-            "\n",
-            "\n",
-            "</p>\n\n<p>",
-            " "
         ];
 
 
-       // $fb = str_replace($search, $replacements, $fb);
-        $fb = str_replace("\n ", "\n", $fb); //last cleanups trim spaces at start of line
+        $fb = str_replace($search, $replacements, $fb);
 
-        $fb = Encoding::toUTF8($fb);
+        //cleanups trim spaces at start of line
+        $fb = str_replace("\n ", "\n", $fb);
+
+        //utf8 enoding
+        $fb = Encoding::toISO8859($fb);
+        //$fb = utf8_decode($fb);
+
         return $fb;
     }
 
