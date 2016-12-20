@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Evaluation;
 
 
 use App\Domain\Model\Reporting\Report;
+use App\Domain\Model\Reporting\StudentResult;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\Services\Pdf\Report2PdfService;
 use App\Domain\Services\Reporting\ReportingService;
@@ -39,14 +40,14 @@ class ReportController extends Controller
     public function pdfByGroup(Request $request, $groupId)
     {
         $report = $this->byGroup($request, $groupId);
-        $this->generatePdf($report);
+        $this->generatePdf($report, true);
     }
 
 
     public function pdfByStudents(Request $request)
     {
         $report = $this->byStudents($request);
-        $this->generatePdf($report);
+        $this->generatePdf($report, false);
     }
 
     public function pdfCustom(Request $request)
@@ -63,7 +64,7 @@ class ReportController extends Controller
     public function jsonByStudents(Request $request)
     {
         $report = $this->byStudents($request);
-        return  $this->generateJson($report);
+        return $this->generateJson($report);
     }
 
     public function jsonCustom(Request $request)
@@ -72,15 +73,27 @@ class ReportController extends Controller
     }
 
 
-    private function generatePdf(Report $report)
+    private function generatePdf(Report $report, $byGroup = true)
     {
         $pdf = $this->pdfService
             ->report($report);
 
-        //TODO: if with front page requested
-        $pdf->withFrontPage();
-
-        $pdf->build();
+        if ($byGroup) {
+            $name = array_first($report->getGroups());
+            if (count($report->getGroups()) > 1) {
+                $name .= '-' . array_last($report->getGroups());
+            }
+        } else {
+            /** @var StudentResult $firstStud */
+            $firstStud = $report->getStudentResults()->first();
+            $name = $firstStud->getLastName();
+            if (count($report->getStudentResults()) > 1) {
+                /** @var StudentResult $lastStud */
+                $lastStud = $report->getStudentResults()->last();
+                $name .= '-' . $lastStud->getLastName();
+            }
+        }
+        $pdf->build($name);
     }
 
     private function generateJson(Report $report)
@@ -96,8 +109,9 @@ class ReportController extends Controller
         return $report;
     }
 
-    private function byStudents(Request $request) {
-        $id =  $request->get('id');
+    private function byStudents(Request $request)
+    {
+        $id = $request->get('id');
         $ids = explode(',', $id);
         $range = $this->getRange($request);
         $report = $this->reportingService->getReportByStudents($ids, $range);

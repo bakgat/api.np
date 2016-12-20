@@ -192,9 +192,9 @@ class PdfReport
     }
 
 
-    public function output()
+    public function output($name)
     {
-        $this->pdf->Output();
+        $this->pdf->Output($name . '.pdf', 'I');
     }
 
     /* ***************************************************

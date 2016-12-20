@@ -34,10 +34,16 @@ class Report
      */
     private $frontpage;
 
+    /**
+     * @var string[]
+     */
+    private $groups;
+
     public function __construct(DateRange $dateRange, $frontpage=false)
     {
         $this->range = $dateRange;
         $this->students = new ArrayCollection;
+        $this->groups = [];
         $this->frontpage = $frontpage;
     }
 
@@ -48,7 +54,14 @@ class Report
         if (!$stud) {
             $fn = $data['sFirstName'];
             $ln = $data['sLastName'];
+
             $group = isset($data['gName']) ? $data['gName'] : null;
+
+            if($group) {
+                if(!in_array($group, $this->groups)) {
+                    $this->groups[] = $group;
+                }
+            }
             $stG = isset($data['stGender']) ? $data['stGender'] : null;
             $stFn = isset($data['stFirstName']) ? $data['stFirstName'] : null;
             $stLn = isset($data['stLastName']) ? $data['stLastName'] : null;
@@ -88,6 +101,14 @@ class Report
         return $this->frontpage;
     }
 
+    /**
+     * @return \string[]
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
     public function sort()
     {
         /** @var StudentResult $student */
@@ -95,4 +116,6 @@ class Report
             $student->sort();
         }
     }
+
+
 }

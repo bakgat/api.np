@@ -42,15 +42,12 @@ class Report2PdfService
         return $this;
     }
 
-    public function build()
+    public function build($name)
     {
         $this->pdfReport = new PdfReport($this->report);
         $this->pdfReport
-            ->output();
+            ->output($name);
     }
 
-    public function withFrontPage()
-    {
-        return $this;
-    }
+   
 }
