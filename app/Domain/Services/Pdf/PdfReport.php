@@ -680,7 +680,7 @@ class PdfReport
         $tbl3->addRow($r1);
         $r2 = [
             ['TEXT' => 'Permanent', 'TEXT_TYPE' => 'b'],
-            ['TEXT' => 'evaluaties die gedurende het school worden afgenomen, nadat nieuwe leerstof wordt aangebracht']
+            ['TEXT' => 'evaluaties die gedurende het schooljaar worden afgenomen, nadat nieuwe leerstof wordt aangebracht']
         ];
         $r3 = [
             ['TEXT' => 'Eindevaluatie', 'TEXT_TYPE' => 'b'],

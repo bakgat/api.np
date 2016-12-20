@@ -202,43 +202,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
      */
     public function getPointReportForStudent($studentId, $range)
     {
-        return $this->getReportsForStudents([$studentId], $range);
-    }
-
-    /**
-     * @param $studentIds
-     * @param DateRange $range
-     * @return array
-     */
-    public function getReportsForStudents($studentIds, DateRange $range)
-    {
-        $start = $range->getStart()->format('Y-m-d');
-        $end = $range->getEnd()->format('Y-m-d');
-
-        $sql = "SELECT  s.id as s_id, s.first_name as first_name, s.last_name as last_name,
-              pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
-              pr.max as pr_max, pr.redicodi as pr_redicodi, pr.evaluation_count as pr_evcount,
-              gr.id as gr_id, 
-              gr.start as start, gr.end as end,
-              m.id as m_id, m.name as m_name,  m.order as m_order,
-              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
-              g.id as g_id, g.name as g_name,
-              st.first_name as st_first_name, st.last_name as st_last_name
-              FROM rr pr
-              INNER JOIN students s ON pr.student_id = s.id
-              INNER JOIN student_in_groups sig ON s.id = sig.student_id
-              INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id
-              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
-              INNER JOIN staff_in_groups stig ON stig.group_id = g.id
-              INNER JOIN staff st ON st.id = stig.staff_id
-              INNER JOIN branches b ON b.id = bfg.branch_id
-              INNER JOIN majors m ON m.id = b.major_id
-              INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-              WHERE gr.start <='{$end}' AND gr.end >= '{$start}'
-                  AND stig.type='X'
-                  AND s.id IN('" . implode('\',\'', $studentIds) . "')
-               ORDER BY sig.number, m.order, b.order";
-        return $this->getPointReport($sql);
+        return $this->getPointReportForStudents([$studentId], $range);
     }
 
     /**
@@ -278,6 +242,43 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     }
 
     /**
+     * @param $studentIds
+     * @param DateRange $range
+     * @return array
+     */
+    public function getPointReportForStudents($studentIds, DateRange $range)
+    {
+        $start = $range->getStart()->format('Y-m-d');
+        $end = $range->getEnd()->format('Y-m-d');
+        $ids = implode('\',\'', $studentIds);
+
+        $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+              pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
+              pr.max as pr_max, pr.redicodi as pr_redicodi, pr.evaluation_count as pr_evcount,
+              gr.id as gr_id, 
+              gr.start as start, gr.end as end,
+              m.id as m_id, m.name as m_name, m.order as m_order, 
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
+              g.id as g_id, g.name as g_name,
+              st.first_name as st_first_name, st.last_name as st_last_name, st.gender as st_gender
+              FROM rr pr
+              INNER JOIN students s ON pr.student_id = s.id
+              INNER JOIN student_in_groups sig ON s.id = sig.student_id
+              INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id
+              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
+              INNER JOIN staff_in_groups stig ON stig.group_id = g.id
+              INNER JOIN staff st ON st.id = stig.staff_id
+              INNER JOIN branches b ON b.id = bfg.branch_id
+              INNER JOIN majors m ON m.id = b.major_id
+              INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
+              WHERE gr.start <='{$end}' AND gr.end >= '{$start}'
+                  AND stig.type='X'
+                  AND s.id IN('{$ids}')
+               ORDER BY sig.number, m.order, b.order";
+        return $this->getPointReport($sql);
+    }
+
+    /**
      * @param $group
      * @param $range
      * @return mixed
@@ -305,17 +306,19 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN majors m ON m.id = b.major_id
               WHERE (e.date BETWEEN '{$start}' AND '{$end}')
                     AND stig.type='X'
-                    AND sig.group_id='" . $group . "'
+                    AND sig.group_id='{$group}'
               GROUP BY s.id, bfg.id
               ORDER BY sig.number, m.order, b.order";
 
         return $this->getComprehensiveReport($sql);
     }
 
-    public function getComprehensiveReportForStudent($studentId, DateRange $range)
+    public function getComprehensiveReportForStudents($studentIds, DateRange $range)
     {
         $start = $range->getStart()->format('Y-m-d');
         $end = $range->getEnd()->format('Y-m-d');
+
+        $ids = implode('\',\'', $studentIds);
 
         $sql = "SELECT MAX(cr.id) as c_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
 				COUNT(e.id) AS e_count,
@@ -326,6 +329,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               FROM comprehensive_results cr
               INNER JOIN evaluations e ON e.id = cr.evaluation_id
               INNER JOIN students s ON cr.student_id = s.id
+              INNER JOIN student_in_groups sig ON s.id = sig.student_id
               INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
               INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
               INNER JOIN staff_in_groups stig ON stig.group_id = g.id
@@ -334,13 +338,12 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN majors m ON m.id = b.major_id
               WHERE (e.date BETWEEN '{$start}' AND '{$end}')
                     AND stig.type='X'
-                    AND s.id='{$studentId}'
-              GROUP BY bfg.id
-              ORDER BY m.order, b.order";
+                    AND s.id  IN ('{$ids}')
+              GROUP BY s.id, bfg.id
+              ORDER BY sig.number, m.order, b.order";
 
         return $this->getComprehensiveReport($sql);
     }
-
 
     /**
      * @param $group
@@ -351,6 +354,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     {
         $start = $range->getStart()->format('Y-m-d');
         $end = $range->getEnd()->format('Y-m-d');
+
 
         $sql = "SELECT MAX(sp.id) as sp_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
 				COUNT(e.id) AS e_count,
@@ -371,6 +375,43 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               WHERE (e.date BETWEEN '{$start}' AND '{$end}')
                     AND stig.type='X'
                     AND sig.group_id='" . $group . "'
+              GROUP BY s.id, bfg.id
+              ORDER BY sig.number, m.order, b.order";
+
+        return $this->getSpokenReport($sql);
+    }
+
+
+    /**
+     * @param $group
+     * @param $range
+     * @return mixed
+     */
+    public function getSpokenReportForStudents($studentIds, DateRange $range)
+    {
+        $start = $range->getStart()->format('Y-m-d');
+        $end = $range->getEnd()->format('Y-m-d');
+        $ids = implode('\',\'', $studentIds);
+
+        $sql = "SELECT MAX(sp.id) as sp_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+				COUNT(e.id) AS e_count,
+              m.id as m_id, m.name as m_name, m.order as m_order, 
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
+              g.id as g_id, g.name as g_name,
+              st.first_name as st_first_name, st.last_name as st_last_name
+              FROM spoken_results sp
+              INNER JOIN evaluations e ON e.id = sp.evaluation_id
+              INNER JOIN students s ON sp.student_id = s.id
+              INNER JOIN student_in_groups sig ON s.id = sig.student_id
+              INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
+              INNER JOIN staff_in_groups stig ON stig.group_id = g.id
+              INNER JOIN staff st ON st.id = stig.staff_id
+              INNER JOIN branches b ON b.id = bfg.branch_id
+              INNER JOIN majors m ON m.id = b.major_id
+              WHERE (e.date BETWEEN '{$start}' AND '{$end}')
+                    AND stig.type='X'
+                    AND s.id IN('{$ids}')
               GROUP BY s.id, bfg.id
               ORDER BY sig.number, m.order, b.order";
 
@@ -411,6 +452,38 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $this->getMultiplechoiceReport($sql);
     }
 
+    public function getMultiplechoiceReportForStudents($studentIds, DateRange $range)
+    {
+        $start = $range->getStart()->format('Y-m-d');
+        $end = $range->getEnd()->format('Y-m-d');
+
+        $ids = implode('\',\'', $studentIds);
+
+        $sql = "SELECT mc.id as mc_id, s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+				e.settings as e_settings, mc.selected as mc_selected,
+              m.id as m_id, m.name as m_name, 
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
+              g.id as g_id, g.name as g_name, m.order as m_order,
+              st.first_name as st_first_name, st.last_name as st_last_name
+              FROM multiplechoice_results mc
+              INNER JOIN evaluations e ON e.id = mc.evaluation_id
+              INNER JOIN students s ON mc.student_id = s.id
+              INNER JOIN student_in_groups sig ON s.id = sig.student_id
+              INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
+              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
+              INNER JOIN staff_in_groups stig ON stig.group_id = g.id
+              INNER JOIN staff st ON st.id = stig.staff_id
+              INNER JOIN branches b ON b.id = bfg.branch_id
+              INNER JOIN majors m ON m.id = b.major_id
+              WHERE (e.date BETWEEN '{$start}' AND '{$end}')
+                    AND stig.type='X'
+                    AND s.id IN('{$ids}')
+              ORDER BY sig.number, m.order, b.order";
+
+        return $this->getMultiplechoiceReport($sql);
+    }
+
+
     public function getFeedbackReportForGroup($group, DateRange $range)
     {
         $start = $range->getStart()->format('Y-m-d');
@@ -427,8 +500,25 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                 GROUP BY s.id
                 ORDER BY sig.number";
         return $this->getFeedbackReport($sql);
+    }
+    public function getFeedbackReportForStudents($studentIds, DateRange $range)
+    {
+        $start = $range->getStart()->format('Y-m-d');
+        $end = $range->getEnd()->format('Y-m-d');
 
+        $ids = implode('\',\'', $studentIds);
 
+        $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+                CONCAT(fr.summary) as fr_summary
+                FROM feedback_results as fr
+                INNER JOIN evaluations e on e.id = fr.evaluation_id
+                INNER JOIN students s on s.id = fr.student_id
+                INNER JOIN student_in_groups sig on sig.student_id = s.id
+                WHERE (e.date BETWEEN '{$start}' AND '{$end}')
+                    AND s.id IN('{$ids}')
+                GROUP BY s.id
+                ORDER BY sig.number";
+        return $this->getFeedbackReport($sql);
     }
 
     public function getRedicodiReportForGroup($group, DateRange $range)
@@ -436,15 +526,32 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $rs = $range->getStart()->format('Y-m-d');
         $re = $range->getEnd()->format('Y-m-d');
 
-        $inRangeSql = "rfs.start <= '{$re}' AND rfs.end >= '{$rs}'";
+        $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
+                rfs.redicodi as rfs_redicodi
+                FROM redicodi_for_students rfs
+                INNER JOIN students s ON s.id = rfs.student_id
+                INNER JOIN student_in_groups sig on sig.student_id = s.id
+                WHERE (rfs.start <= '{$re}' AND rfs.end >= '{$rs}')
+                    AND sig.group_id = '{$group}'
+                GROUP BY s.id, rfs.redicodi
+                ORDER BY sig.number";
+
+        return $this->getRedicodiReport($sql);
+    }
+    public function getRedicodiReportForStudents($studentIds, DateRange $range)
+    {
+        $rs = $range->getStart()->format('Y-m-d');
+        $re = $range->getEnd()->format('Y-m-d');
+
+        $ids = implode('\',\'', $studentIds);
 
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
                 rfs.redicodi as rfs_redicodi
                 FROM redicodi_for_students rfs
                 INNER JOIN students s ON s.id = rfs.student_id
                 INNER JOIN student_in_groups sig on sig.student_id = s.id
-                WHERE ({$inRangeSql})
-                    AND sig.group_id = '{$group}'
+                WHERE (rfs.start <= '{$re}' AND rfs.end >= '{$rs}')
+                    AND s.id IN('{$ids}')
                 GROUP BY s.id, rfs.redicodi
                 ORDER BY sig.number";
 
@@ -636,28 +743,5 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     }
 
 
-    public function getSpokenReportForStudent($studentId, DateRange $range)
-    {
-        // TODO: Implement getSpokenReportForStudent() method.
-    }
 
-    public function getMultiplechoiceReportForStudent($studentId, DateRange $range)
-    {
-        // TODO: Implement getMultiplechoiceReportForStudent() method.
-    }
-
-    public function getFeedbackReportForStudent($studentId, DateRange $range)
-    {
-        // TODO: Implement getFeedbackReportForStudent() method.
-    }
-
-    public function getRedicodiReportForStudent($studentId, DateRange $range)
-    {
-        // TODO: Implement getRedicodiReportForStudent() method.
-    }
-
-    public function getStudentInfoForGroup($group, $range)
-    {
-        // TODO: Implement getStudentInfoForGroup() method.
-    }
 }

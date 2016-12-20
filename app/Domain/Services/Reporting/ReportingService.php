@@ -89,36 +89,31 @@ class ReportingService
         return $report;
     }
 
-    public function getReportByStudent($studentId, $range)
+    public function getReportByStudents($studentIds, $range)
     {
-        //@todo: fill repositories with these methods
-        $pointResults = $this->evaluationRepo->getPointReportForStudent($studentId, $range);
-        //$comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForStudent($studentId, $range);
-        //$spokenResults = $this->evaluationRepo->getSpokenReportForStudent($studentId, $range);
-        //$mcResults = $this->evaluationRepo->getMultiplechoiceReportForStudent($studentId, $range);
-        $iacs = $this->iacRepo->getFlatIacForStudent($studentId, $range);
-        //$feedback = $this->evaluationRepo->getFeedbackReportForStudent($studentId, $range);
-        //$redicodi = $this->evaluationRepo->getRedicodiReportForStudent($studentId, $range);
+        
+        $pointResults = $this->evaluationRepo->getPointReportForStudents($studentIds, $range);
+        $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForStudents($studentIds, $range);
+        $spokenResults = $this->evaluationRepo->getSpokenReportForStudents($studentIds, $range);
+        $mcResults = $this->evaluationRepo->getMultiplechoiceReportForStudents($studentIds, $range);
+        $iacs = $this->iacRepo->getFlatIacForStudents($studentIds, $range);
+        $feedback = $this->evaluationRepo->getFeedbackReportForStudents($studentIds, $range);
+        $redicodi = $this->evaluationRepo->getRedicodiReportForStudents($studentIds, $range);
 
 
         $report = new Report($range);
         $this->generateResultsReport($report, $pointResults);
-        //$this->generateComprehensiveReport($report, $comprehensiveResults);
-        //$this->generateSpokenReport($report, $spokenResults);
-        //$this->generateMcResultsReport($report, $mcResults);
+        $this->generateComprehensiveReport($report, $comprehensiveResults);
+        $this->generateSpokenReport($report, $spokenResults);
+        $this->generateMcResultsReport($report, $mcResults);
         $this->generateIacsReport($report, $iacs);
-        //$this->generateFeedbackReport($report, $feedback);
-        //$this->generateRedicodiReport($report, $redicodi);
+        $this->generateFeedbackReport($report, $feedback);
+        $this->generateRedicodiReport($report, $redicodi);
 
         return $report;
     }
 
-    public function getReportByStudents($students, DateRange $range)
-    {
-        $data = $this->evaluationRepo->getReportsForStudents($students, $range);
-        $report = new Report($range);
-        return $this->generateResultsReport($report, $data);
-    }
+
 
     /**
      * @param Report $report

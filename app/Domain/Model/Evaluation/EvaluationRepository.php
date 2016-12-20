@@ -50,7 +50,7 @@ interface EvaluationRepository
      */
     public function getPointReportForStudent($studentId, $range);
 
-    public function getReportsForStudents($studentIds, DateRange $range);
+    public function getPointReportForStudents($studentIds, DateRange $range);
 
     /**
      * @param $group
@@ -128,15 +128,15 @@ interface EvaluationRepository
      */
     public function getMultiplechoiceResults(NtUid $id);
 
-    public function getComprehensiveReportForStudent($studentId, DateRange $range);
+    public function getComprehensiveReportForStudents($studentIds, DateRange $range);
 
-    public function getSpokenReportForStudent($studentId, DateRange $range);
+    public function getSpokenReportForStudents($studentIds, DateRange $range);
 
-    public function getMultiplechoiceReportForStudent($studentId, DateRange $range);
+    public function getMultiplechoiceReportForStudents($studentId, DateRange $range);
 
-    public function getFeedbackReportForStudent($studentId, DateRange $range);
+    public function getFeedbackReportForStudents($studentIds, DateRange $range);
 
-    public function getRedicodiReportForStudent($studentId, DateRange $range);
+    public function getRedicodiReportForStudents($studentIds, DateRange $range);
 
 
 }

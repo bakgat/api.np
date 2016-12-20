@@ -61,6 +61,10 @@ interface IACRepository
      */
     public function getIacForStudent($studentId, $infinite);
 
+
+
+    public function getFlatIacForStudents($studentIds, $range);
+
     /**
      * @return ArrayCollection
      */

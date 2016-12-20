@@ -43,9 +43,9 @@ class ReportController extends Controller
     }
 
 
-    public function pdfByStudent(Request $request, $studentId)
+    public function pdfByStudents(Request $request)
     {
-        $report = $this->byStudent($request, $studentId);
+        $report = $this->byStudents($request);
         $this->generatePdf($report);
     }
 
@@ -60,9 +60,9 @@ class ReportController extends Controller
         return $this->generateJson($report);
     }
 
-    public function jsonByStudent(Request $request, $studentId)
+    public function jsonByStudents(Request $request)
     {
-        $report = $this->byStudent($request, $studentId);
+        $report = $this->byStudents($request);
         return  $this->generateJson($report);
     }
 
@@ -96,9 +96,11 @@ class ReportController extends Controller
         return $report;
     }
 
-    private function byStudent(Request $request, $studentId) {
+    private function byStudents(Request $request) {
+        $id =  $request->get('id');
+        $ids = explode(',', $id);
         $range = $this->getRange($request);
-        $report = $this->reportingService->getReportByStudent($studentId, $range);
+        $report = $this->reportingService->getReportByStudents($ids, $range);
         return $report;
     }
 

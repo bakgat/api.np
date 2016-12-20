@@ -293,4 +293,25 @@ class IACDoctrineRepository implements IACRepository
     }
 
 
+    public function getFlatIacForStudents($studentIds, $range)
+    {
+        $ids = implode('\',\'', $studentIds);
+        $sql = "SELECT ig.id as ig_id, ig.achieved as ig_achieved, ig.practice as ig_practice, ig.comment as ig_comment, ig.date as ig_date,
+                    iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
+                    s.id as s_id, s.first_name as s_first_name, s.last_name as s_last_name,
+                    g.id as g_id, g.text as g_text,
+                    b.id as b_id, b.name as b_name, b.order as b_order,
+                    m.id as m_id, m.name as m_name, m.order as m_order
+                    FROM iacs iac
+                    INNER JOIN iac_goals ig ON ig.iac_id = iac.id
+                    INNER JOIN goals g ON ig.goal_id = g.id
+                    INNER JOIN branches b ON b.id = g.branch_id
+                    INNER JOIN majors m ON m.id = b.major_id
+                    INNER JOIN students s ON s.id = iac.student_id
+                    WHERE s.id IN ('{$ids}')
+                      AND NOT (ig.achieved IS NULL AND ig.practice IS NULL)
+                    ORDER BY m.order, b.order, g.order";
+
+        return $this->getIac($sql);
+    }
 }

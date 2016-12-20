@@ -113,7 +113,7 @@ $app->group(['prefix' => 'evaluations', 'namespace' => 'App\Http\Controllers\Eva
  * **************************************************/
 $app->group(['prefix' => 'pdf/report', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
     $app->get('/group/{groupId}', 'ReportController@pdfByGroup');
-    $app->get('/student/{studentId}', 'ReportController@pdfByStudent');
+    $app->get('/student', 'ReportController@pdfByStudents');
     $app->get('/custom', 'ReportController@pdfCustom');
 });
 $app->group(['prefix' => 'report', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
