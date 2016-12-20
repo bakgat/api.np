@@ -11,6 +11,9 @@ namespace App\Domain\Services\Reporting;
 
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\IACRepository;
+use App\Domain\Model\Identity\Group;
+use App\Domain\Model\Identity\Student;
+use App\Domain\Model\Identity\StudentRepository;
 use App\Domain\Model\Reporting\Report;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
@@ -24,11 +27,16 @@ class ReportingService
      * @var IACRepository
      */
     private $iacRepo;
+    /**
+     * @var StudentRepository
+     */
+    private $studentRepository;
 
-    public function __construct(EvaluationRepository $evaluationRepository, IACRepository $iacRepository)
+    public function __construct(StudentRepository $studentRepository, EvaluationRepository $evaluationRepository, IACRepository $iacRepository)
     {
         $this->evaluationRepo = $evaluationRepository;
         $this->iacRepo = $iacRepository;
+        $this->studentRepository = $studentRepository;
     }
 
     public function getFullReport(DateRange $range)
@@ -55,8 +63,9 @@ class ReportingService
         $onlyFrontPage = $render == 'f';
 
         //@todo: handle only front page
+        //@todo: now all student info relies on point_results data
+        //      student info (current group, teacher, names, parents, ...) must be seperate query, I guess
 
-        
         $pointResults = $this->evaluationRepo->getPointReportForGroup($group, $range);
         $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForGroup($group, $range);
         $spokenResults = $this->evaluationRepo->getSpokenReportForGroup($group, $range);
@@ -209,12 +218,12 @@ class ReportingService
         return $report;
     }
 
-    private function generateRedicodiReport(Report $report, $data) {
+    private function generateRedicodiReport(Report $report, $data)
+    {
         foreach ($data as $item) {
             $report->intoStudent($item)
                 ->intoRedicodi($item);
         }
     }
-
 
 }

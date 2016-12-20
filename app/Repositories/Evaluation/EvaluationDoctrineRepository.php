@@ -212,6 +212,9 @@ class EvaluationDoctrineRepository implements EvaluationRepository
      */
     public function getReportsForStudents($studentIds, DateRange $range)
     {
+        $start = $range->getStart()->format('Y-m-d');
+        $end = $range->getEnd()->format('Y-m-d');
+
         $sql = "SELECT  s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
               pr.max as pr_max, pr.redicodi as pr_redicodi, pr.evaluation_count as pr_evcount,
@@ -225,13 +228,13 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN students s ON pr.student_id = s.id
               INNER JOIN student_in_groups sig ON s.id = sig.student_id
               INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id
-              INNER JOIN groups g ON g.id = bfg.group_id
+              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
               INNER JOIN staff_in_groups stig ON stig.group_id = g.id
               INNER JOIN staff st ON st.id = stig.staff_id
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-              WHERE gr.end>='" . $range->getEnd()->format('Y-m-d') . "' 
+              WHERE gr.start <='{$end}' AND gr.end >= '{$start}'
                   AND stig.type='X'
                   AND s.id IN('" . implode('\',\'', $studentIds) . "')
                ORDER BY sig.number, m.order, b.order";
@@ -245,6 +248,9 @@ class EvaluationDoctrineRepository implements EvaluationRepository
      */
     public function getPointReportForGroup($group, DateRange $range)
     {
+        $start = $range->getStart()->format('Y-m-d');
+        $end = $range->getEnd()->format('Y-m-d');
+
         $sql = "SELECT s.id as s_id, s.first_name as first_name, s.last_name as last_name,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
               pr.max as pr_max, pr.redicodi as pr_redicodi, pr.evaluation_count as pr_evcount,
@@ -258,13 +264,13 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN students s ON pr.student_id = s.id
               INNER JOIN student_in_groups sig ON s.id = sig.student_id
               INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id
-              INNER JOIN groups g ON g.id = bfg.group_id
+              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
               INNER JOIN staff_in_groups stig ON stig.group_id = g.id
               INNER JOIN staff st ON st.id = stig.staff_id
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-              WHERE gr.end>='" . $range->getEnd()->format('Y-m-d') . "'
+               WHERE gr.start <='{$end}' AND gr.end >= '{$start}'
                   AND stig.type='X'
                   AND sig.group_id='" . $group . "'
               ORDER BY sig.number, m.order, b.order";
@@ -292,7 +298,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN students s ON cr.student_id = s.id
               INNER JOIN student_in_groups sig ON s.id = sig.student_id
               INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
-              INNER JOIN groups g ON g.id = bfg.group_id 
+              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
               INNER JOIN staff_in_groups stig ON stig.group_id = g.id
               INNER JOIN staff st ON st.id = stig.staff_id
               INNER JOIN branches b ON b.id = bfg.branch_id
@@ -321,7 +327,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN evaluations e ON e.id = cr.evaluation_id
               INNER JOIN students s ON cr.student_id = s.id
               INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
-              INNER JOIN groups g ON g.id = bfg.group_id 
+              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
               INNER JOIN staff_in_groups stig ON stig.group_id = g.id
               INNER JOIN staff st ON st.id = stig.staff_id
               INNER JOIN branches b ON b.id = bfg.branch_id
@@ -357,7 +363,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN students s ON sp.student_id = s.id
               INNER JOIN student_in_groups sig ON s.id = sig.student_id
               INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
-              INNER JOIN groups g ON g.id = bfg.group_id 
+              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
               INNER JOIN staff_in_groups stig ON stig.group_id = g.id
               INNER JOIN staff st ON st.id = stig.staff_id
               INNER JOIN branches b ON b.id = bfg.branch_id
@@ -392,7 +398,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN students s ON mc.student_id = s.id
               INNER JOIN student_in_groups sig ON s.id = sig.student_id
               INNER JOIN branch_for_groups bfg ON bfg.id = e.branch_for_group_id
-              INNER JOIN groups g ON g.id = bfg.group_id 
+              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
               INNER JOIN staff_in_groups stig ON stig.group_id = g.id
               INNER JOIN staff st ON st.id = stig.staff_id
               INNER JOIN branches b ON b.id = bfg.branch_id
@@ -648,5 +654,10 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     public function getRedicodiReportForStudent($studentId, DateRange $range)
     {
         // TODO: Implement getRedicodiReportForStudent() method.
+    }
+
+    public function getStudentInfoForGroup($group, $range)
+    {
+        // TODO: Implement getStudentInfoForGroup() method.
     }
 }

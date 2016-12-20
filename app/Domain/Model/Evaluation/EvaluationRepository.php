@@ -139,5 +139,4 @@ interface EvaluationRepository
     public function getRedicodiReportForStudent($studentId, DateRange $range);
 
 
-
 }
