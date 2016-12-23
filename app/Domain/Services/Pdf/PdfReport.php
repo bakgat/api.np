@@ -701,9 +701,7 @@ class PdfReport
         /* ***************************************************
          * GRAPHS
          * **************************************************/
-
-        $this->pdf->Ln($titleHeight / 3);
-
+        
         $this->pdf->SetFont('Roboto', 'B', 20);
         $this->blue();
         $t2 = 'Wat betekenen de grafieken?';

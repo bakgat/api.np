@@ -89,8 +89,10 @@ class ReportingService
         return $report;
     }
 
-    public function getReportByStudents($studentIds, $range)
+    public function getReportByStudents($studentIds, $range, $render)
     {
+        $withFrontPage = $render == 'all';
+        $onlyFrontPage = $render == 'f';
         
         $pointResults = $this->evaluationRepo->getPointReportForStudents($studentIds, $range);
         $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForStudents($studentIds, $range);
@@ -101,7 +103,7 @@ class ReportingService
         $redicodi = $this->evaluationRepo->getRedicodiReportForStudents($studentIds, $range);
 
 
-        $report = new Report($range);
+        $report = new Report($range, $withFrontPage);
         $this->generateResultsReport($report, $pointResults);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
         $this->generateSpokenReport($report, $spokenResults);

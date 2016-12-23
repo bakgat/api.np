@@ -276,23 +276,29 @@ class StudentController extends Controller
             ini_set('user_agent', 'MSIE 4\.0b2;');
 
             $file_headers = @get_headers($url);
-            if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
+            if (!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') {
                 $exists = false;
-            }
-            else {
+            } else {
                 $exists = true;
             }
 
             $imagePath = resource_path('avatars/' . $student->getId()->toString() . '.jpg');
-            if($exists) {
+            if ($exists) {
                 copy($url, $imagePath);
             } else {
                 copy(resource_path('avatars/_avatar_empty_2.png'), $imagePath);
             }
         }
     }
-    public function getPic($id) {
+
+    public function getPic($id)
+    {
         $img = resource_path('avatars/' . $id . '.jpg');
         return Image::make($img)->response();
+    }
+
+    public function postPic(Request $request, $id)
+    {
+        $request->file();
     }
 }

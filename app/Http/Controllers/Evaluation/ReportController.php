@@ -114,7 +114,8 @@ class ReportController extends Controller
         $id = $request->get('id');
         $ids = explode(',', $id);
         $range = $this->getRange($request);
-        $report = $this->reportingService->getReportByStudents($ids, $range);
+        $render = $request->has('render') ? $request->get('render') : 'nf';
+        $report = $this->reportingService->getReportByStudents($ids, $range, $render);
         return $report;
     }
 

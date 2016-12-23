@@ -23,6 +23,7 @@ $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identi
     $app->get('/', 'StudentController@index');
     $app->get('/make/avatars', 'StudentController@makeAvatars');
     $app->get('/pic/{id}', 'StudentController@getPic');
+    $app->post('/pic/{id}', 'StudentController@postPic');
     $app->get('/{id}', 'StudentController@show');
 
     $app->post('/', 'StudentController@store');
