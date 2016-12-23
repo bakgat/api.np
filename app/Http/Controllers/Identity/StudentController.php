@@ -291,9 +291,13 @@ class StudentController extends Controller
         }
     }
 
-    public function getPic($id)
+    public function getPic(Request $request, $id)
     {
         $img = resource_path('avatars/' . $id . '.jpg');
+        if ($request->has('sq')) {
+            return Image::make($img)->fit(200, 200, null, 'top')->response();
+        }
+
         return Image::make($img)->response();
     }
 
