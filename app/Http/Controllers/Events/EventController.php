@@ -14,6 +14,7 @@ use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\StaffRepository;
 use App\Domain\Model\Identity\StudentRepository;
 use App\Http\Controllers\Controller;
+use DateTime;
 use JMS\Serializer\SerializerInterface;
 
 class EventController extends Controller
@@ -69,6 +70,7 @@ class EventController extends Controller
                 'count' => $loginCount,
                 'actions' => $logins
             ],
+            'redicodi' => $this->evaluationRepo->allRedicodiStats(new DateTime()),
         ];
 
         return $this->response($result, ['track_list']);

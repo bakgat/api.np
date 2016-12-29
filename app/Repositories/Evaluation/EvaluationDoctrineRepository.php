@@ -20,6 +20,7 @@ use App\Domain\Model\Reporting\FlatMultiplechoiceReport;
 use App\Domain\Model\Reporting\FlatPointReport;
 use App\Domain\Model\Reporting\FlatSpokenReport;
 use App\Domain\Model\Reporting\FlatStudentRedicodiReport;
+use App\Domain\Model\Stats\FlatRedicodiStat;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
 use DateTime;
@@ -743,5 +744,24 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     }
 
 
+    public function allRedicodiStats(DateTime $endDate)
+    {
+        $end = $endDate->format('Y-m-d');
+        $rsm = new ResultSetMapping;
 
+        $rsm->addEntityResult(FlatRedicodiStat::class, 'rs')
+            ->addFieldResult('rs', 'rs_id', 'id')
+            ->addFieldResult('rs', 'rs_count', 'count')
+            ->addFieldResult('rs', 'rs_redicodi', 'redicodi');
+
+        $sql = "SELECT temp.student_id AS rs_id, COUNT(temp.student_id) AS rs_count, temp.redicodi AS rs_redicodi
+                  FROM 
+	                (SELECT DISTINCT rfs.student_id, rfs.redicodi FROM redicodi_for_students rfs WHERE rfs.end >= '{$end}') temp
+                  GROUP BY temp.redicodi;";
+
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $result = $query->getArrayResult();
+        return $result;
+
+    }
 }
