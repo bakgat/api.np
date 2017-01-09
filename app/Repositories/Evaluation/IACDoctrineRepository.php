@@ -99,7 +99,7 @@ class IACDoctrineRepository implements IACRepository
         return $this->getIac($sql);
     }
 
-    public function getIacForGroup(Group $group, $range)
+    public function getIacForGroup(Group $group, DateRange $range)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('iac, ig, b, m, g, s')
@@ -111,12 +111,13 @@ class IACDoctrineRepository implements IACRepository
             ->join('b.major', 'm')
             ->join('s.studentInGroups', 'sig')
             ->where($qb->expr()->andX(
-                $qb->expr()->lte('iac.dateRange.start', '?1'),
-                $qb->expr()->gte('iac.dateRange.end', '?1'),
-                $qb->expr()->eq('sig.group', '?2')
+                $qb->expr()->lte('iac.dateRange.start', ':end'),
+                $qb->expr()->gte('iac.dateRange.end', ':start'),
+                $qb->expr()->eq('sig.group', ':group')
             ))
-            ->setParameter(1, new DateTime)
-            ->setParameter(2, $group->getId())
+            ->setParameter('start', $range->getEnd())
+            ->setParameter('end', $range->getStart())
+            ->setParameter('group', $group->getId())
             ->orderBy('sig.number, m.order, b.order, g.order');
         return $qb->getQuery()->getResult();
     }

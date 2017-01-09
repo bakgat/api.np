@@ -307,13 +307,14 @@ class TableMulticell extends NtAbstract
             $this->getPaddingLeft(),
             $this->getPaddingTop(),
             $this->getPaddingRight(),
-            $this->getPaddingBottom()
+            $this->getPaddingBottom(),
+            $this->getRotate()
         );
     }
 
 
     function multiCellTbl($w, $h, $txtData, $align = 'J', $valign = 'T', $vh = 0, $vtop = 0, $pad_left = 0, $pad_top = 0, $pad_right = 0,
-                          $pad_bottom = 0)
+                          $pad_bottom = 0, $rotate = 0)
     {
         $wh_Top = 0;
 
@@ -342,6 +343,6 @@ class TableMulticell extends NtAbstract
                 $wh_T = $wh_Top; //Top width
         }
 
-        $this->oMulticell->multiCellSec($w, $h, $txtData, 0, $align, 1, $pad_left, $pad_top + $wh_T, $pad_right, $pad_bottom, false);
+        $this->oMulticell->multiCellSec($w, $h, $txtData, 0, $align, 1, $pad_left, $pad_top + $wh_T, $pad_right, $pad_bottom, false, $rotate);
     }
 }

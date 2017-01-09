@@ -64,6 +64,13 @@ interface EvaluationRepository
      * @param DateRange $range
      * @return ArrayCollection
      */
+    public function getHeadersReportForGroup($group, DateRange $range);
+
+    /**
+     * @param $group
+     * @param DateRange $range
+     * @return ArrayCollection
+     */
     public function getComprehensiveReportForGroup($group, DateRange $range);
 
     /**

@@ -30,6 +30,7 @@ abstract class NtAbstract implements TableInterface
         'BORDER_SIZE' => 'setBorderSize',
         'BORDER_COLOR' => 'setBorderColor',
         'BACKGROUND_COLOR' => 'setBackgroundColor',
+        'ROTATE' => 'setRotate',
     );
 
     /**
@@ -59,6 +60,7 @@ abstract class NtAbstract implements TableInterface
 
     protected $align = 'L';
     protected $alignVertical = 'M';
+    protected $rotate = 0;
 
     protected $aProperties = array();
 
@@ -552,6 +554,22 @@ abstract class NtAbstract implements TableInterface
     public function getBackgroundColor()
     {
         return $this->backgroundColor;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRotate()
+    {
+        return $this->rotate;
+    }
+
+    /**
+     * @param int $rotate
+     */
+    public function setRotate($rotate)
+    {
+        $this->rotate = $rotate;
     }
 
     public function split( $nRowHeight, $nMaxHeight )

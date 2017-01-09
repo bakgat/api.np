@@ -49,5 +49,10 @@ class Report2PdfService
             ->output($name);
     }
 
+    public function buildPivot($name = 'test.pdf') {
+        $this->pdfReport = new PdfPivot($this->report);
+        $this->pdfReport
+            ->output($name);
+    }
    
 }

@@ -66,6 +66,7 @@ class ReportingService
         //@todo: now all student info relies on point_results data
         //      student info (current group, teacher, names, parents, ...) must be seperate query, I guess
 
+        $headers = $this->evaluationRepo->getHeadersReportForGroup($group, $range);
         $pointResults = $this->evaluationRepo->getPointReportForGroup($group, $range);
         $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForGroup($group, $range);
         $spokenResults = $this->evaluationRepo->getSpokenReportForGroup($group, $range);
@@ -76,6 +77,7 @@ class ReportingService
 
 
         $report = new Report($range, $withFrontPage);
+        $this->generateReportHeaders($report, $headers);
         $this->generateResultsReport($report, $pointResults);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
         $this->generateSpokenReport($report, $spokenResults);
@@ -220,6 +222,16 @@ class ReportingService
         foreach ($data as $item) {
             $report->intoStudent($item)
                 ->intoRedicodi($item);
+        }
+    }
+
+    private function generateReportHeaders(Report $report, $headers)
+    {
+        $header = $report->addReportHeader();
+        foreach ($headers as $item) {
+            $header
+                ->intoMajor($item)
+                ->intoBranch($item);
         }
     }
 

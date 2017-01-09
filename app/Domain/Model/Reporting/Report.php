@@ -25,6 +25,12 @@ class Report
     private $range;
 
     /**
+     ** @Groups({"result_dto"})
+     * @var ReportHeader
+     */
+    private $header;
+
+    /**
      * @Groups({"result_dto", "student_iac"})
      * @var ArrayCollection
      */
@@ -39,12 +45,18 @@ class Report
      */
     private $groups;
 
-    public function __construct(DateRange $dateRange, $frontpage=false)
+    public function __construct(DateRange $dateRange, $frontpage = false)
     {
         $this->range = $dateRange;
         $this->students = new ArrayCollection;
         $this->groups = [];
         $this->frontpage = $frontpage;
+    }
+
+    public function addReportHeader()
+    {
+        $this->header = new ReportHeader();
+        return $this->header;
     }
 
     public function intoStudent($data)
@@ -57,8 +69,8 @@ class Report
 
             $group = isset($data['gName']) ? $data['gName'] : null;
 
-            if($group) {
-                if(!in_array($group, $this->groups)) {
+            if ($group) {
+                if (!in_array($group, $this->groups)) {
                     $this->groups[] = $group;
                 }
             }
@@ -115,6 +127,14 @@ class Report
         foreach ($this->students as $student) {
             $student->sort();
         }
+    }
+
+    /**
+     * @return ReportHeader
+     */
+    public function getHeader()
+    {
+        return $this->header;
     }
 
 

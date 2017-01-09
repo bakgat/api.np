@@ -16,6 +16,7 @@ use App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Reporting\FlatComprehensiveReport;
 use App\Domain\Model\Reporting\FlatFeedbackReport;
+use App\Domain\Model\Reporting\FlatHeaderReport;
 use App\Domain\Model\Reporting\FlatMultiplechoiceReport;
 use App\Domain\Model\Reporting\FlatPointReport;
 use App\Domain\Model\Reporting\FlatSpokenReport;
@@ -27,6 +28,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
+use Webpatser\Uuid\Uuid;
 
 class EvaluationDoctrineRepository implements EvaluationRepository
 {
@@ -237,7 +239,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
                WHERE gr.start <='{$end}' AND gr.end >= '{$start}'
                   AND stig.type='X'
-                  AND sig.group_id='" . $group . "'
+                  AND sig.group_id='{$group}'
               ORDER BY sig.number, m.order, b.order";
         return $this->getPointReport($sql);
     }
@@ -277,6 +279,32 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                   AND s.id IN('{$ids}')
                ORDER BY sig.number, m.order, b.order";
         return $this->getPointReport($sql);
+    }
+
+    public function getHeadersReportForGroup($group, DateRange $range)
+    {
+        $start = $range->getStart()->format('Y-m-d');
+        $end = $range->getEnd()->format('Y-m-d');
+
+        $sql = "SELECT MAX(pr.id) as hr_id,
+                    AVG(pr.e_raw) AS avg_e_raw, AVG(pr.p_raw) AS avg_p_raw, AVG(pr.total) AS avg_total, 
+                    pr.max as pr_max,
+                    gr.id as gr_id, 
+                    gr.start as start, gr.end as end,
+                    m.id as m_id, m.name as m_name, m.order as m_order, 
+                    b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
+                    g.id as g_id, g.name as g_name
+                    FROM rr pr
+                    INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id
+                    INNER JOIN groups g ON g.id = bfg.group_id
+                    INNER JOIN branches b ON b.id = bfg.branch_id
+                    INNER JOIN majors m ON m.id = b.major_id
+                    INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
+                    WHERE gr.start <='{$end}' AND gr.end >= '{$start}'
+                        AND g.id = '{$group}'
+                    GROUP BY branch_for_group_id
+                    ORDER BY m.order, b.order";
+        return $this->getHeaderReport($sql);
     }
 
     /**
@@ -502,6 +530,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                 ORDER BY sig.number";
         return $this->getFeedbackReport($sql);
     }
+
     public function getFeedbackReportForStudents($studentIds, DateRange $range)
     {
         $start = $range->getStart()->format('Y-m-d');
@@ -539,6 +568,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
 
         return $this->getRedicodiReport($sql);
     }
+
     public function getRedicodiReportForStudents($studentIds, DateRange $range)
     {
         $rs = $range->getStart()->format('Y-m-d');
@@ -600,6 +630,29 @@ class EvaluationDoctrineRepository implements EvaluationRepository
             ->addFieldResult('fr', 'm_id', 'mId')
             ->addFieldResult('fr', 'm_name', 'mName')
             ->addFieldResult('fr', 'm_order', 'mOrder');
+
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $result = $query->getArrayResult();
+        return $result;
+    }
+
+    private function getHeaderReport($sql)
+    {
+        $rsm = new ResultSetMapping;
+        $rsm->addEntityResult(FlatHeaderReport::class, 'hr')
+            ->addFieldResult('hr', 'hr_id', 'hrId')
+            ->addFieldResult('hr', 'b_id', 'bId')
+            ->addFieldResult('hr', 'b_name', 'bName')
+            ->addFieldResult('hr', 'b_order', 'bOrder')
+            ->addFieldResult('hr', 'm_id', 'mId')
+            ->addFieldResult('hr', 'm_name', 'mName')
+            ->addFieldResult('hr', 'm_order', 'mOrder')
+            ->addFieldResult('hr', 'g_id', 'gId')
+            ->addFieldResult('hr', 'g_name', 'gName')
+            ->addFieldResult('hr', 'avg_e_raw', 'avgEnd')
+            ->addFieldResult('hr', 'avg_p_raw', 'avgPermanent')
+            ->addFieldResult('hr', 'avg_total', 'avgTotal')
+            ->addFieldResult('hr', 'pr_max', 'prMax');
 
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getArrayResult();
@@ -764,4 +817,6 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $result;
 
     }
+
+
 }

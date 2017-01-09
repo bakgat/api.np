@@ -93,7 +93,7 @@ class IacController extends Controller
         }
         $range = DateRange::fromData(['start' => $start, 'end' => $end]);
 
-        $iac = $this->iacService->getIacsForGroup($groupId);
+        $iac = $this->iacService->getIacsForGroup($groupId, $range);
         return $this->response($iac, ['student_iac']);
     }
 

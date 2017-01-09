@@ -120,6 +120,10 @@ $app->group(['prefix' => 'pdf/report', 'namespace' => 'App\Http\Controllers\Eval
     $app->get('/student', 'ReportController@pdfByStudents');
     $app->get('/custom', 'ReportController@pdfCustom');
 });
+$app->group(['prefix' => 'pdf/pivot', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
+    $app->get('/group/{groupId}', 'ReportController@pivotByGroup');
+    $app->get('/student', 'ReportController@pivotByStudents');
+});
 $app->group(['prefix' => 'report', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
     $app->get('/group/{groupId}', 'ReportController@jsonByGroup');
     $app->get('/student/{studentId}', 'ReportController@jsonByStudent');

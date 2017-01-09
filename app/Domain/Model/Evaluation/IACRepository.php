@@ -14,6 +14,7 @@ use App\Domain\Model\Education\Goal;
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
+use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -52,7 +53,7 @@ interface IACRepository
      * @param $infinite
      * @return ArrayCollection
      */
-    public function getIacForGroup(Group $group, $infinite);
+    public function getIacForGroup(Group $group, DateRange $range);
 
     /**
      * @param $studentId

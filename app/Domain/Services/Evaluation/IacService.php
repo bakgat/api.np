@@ -237,11 +237,11 @@ class IacService
         //return $this->generatePerStudent($data, $student);
     }
 
-    public function getIacsForGroup($groupId)
+    public function getIacsForGroup($groupId, DateRange $range)
     {
         $id = NtUid::import($groupId);
         $group = $this->groupRepository->get($id);
-        $data = $this->iacRepo->getIacForGroup($group, DateRange::infinite());
+        $data = $this->iacRepo->getIacForGroup($group, $range);
         return $data;
 
     }

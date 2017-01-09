@@ -112,15 +112,29 @@ if (!function_exists('convert_date_from_string')) {
     }
 }
 
-if (! function_exists('resource_path')) {
+if (!function_exists('resource_path')) {
     /**
      * Get the path to the resources folder.
      *
-     * @param  string  $path
+     * @param  string $path
      * @return string
      */
     function resource_path($path = '')
     {
-        return app()->basePath().DIRECTORY_SEPARATOR.'resources'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return app()->basePath() . DIRECTORY_SEPARATOR . 'resources' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+}
+
+if (!function_exists('array_index_of')) {
+    function array_index_of($needle, $haystack)
+    {
+        $count = -1;
+        foreach ($haystack as $item) {
+            $count++;
+            if ($item == $needle) {
+                return $count;
+            }
+        }
+        return -1;
     }
 }

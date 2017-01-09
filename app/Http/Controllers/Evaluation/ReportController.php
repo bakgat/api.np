@@ -55,6 +55,12 @@ class ReportController extends Controller
 
     }
 
+    public function pivotByGroup(Request $request, $groupId)
+    {
+        $report = $this->byGroup($request, $groupId);
+        $this->generatePivot($report);
+    }
+
     public function jsonByGroup(Request $request, $groupId)
     {
         $report = $this->byGroup($request, $groupId);
@@ -95,6 +101,19 @@ class ReportController extends Controller
         }
         $pdf->build($name);
     }
+    private function generatePivot(Report $report)
+    {
+        $pdf = $this->pdfService
+            ->report($report);
+
+        $name = array_first($report->getGroups());
+        if (count($report->getGroups()) > 1) {
+            $name .= '-' . array_last($report->getGroups());
+        }
+
+        $pdf->buildPivot($name);
+    }
+
 
     private function generateJson(Report $report)
     {
@@ -135,6 +154,7 @@ class ReportController extends Controller
         $range = DateRange::fromData(['start' => $start, 'end' => $end]);
         return $range;
     }
+
 
 
 }
