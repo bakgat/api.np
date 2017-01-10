@@ -49,6 +49,16 @@ class Branch
     private $name;
 
     /**
+     * @Groups({"group_branches", "major_list", "branch_list", "student_list", "student_redicodi",
+     *     "group_evaluations", "evaluation_detail", "iac_goals", "student_iac"})
+     *
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    private $shortName;
+
+    /**
      * @Groups({"group_branches", "branch_list", "student_redicodi", "group_evaluations", "evaluation_detail", "student_iac"})
      *
      * @ORM\ManyToOne(targetEntity="Major", inversedBy="branches")
@@ -110,6 +120,14 @@ class Branch
     public function changeName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShortName()
+    {
+        return $this->shortName;
     }
 
     public function joinGroup(Group $group, EvaluationType $evaluationType, $max = null, $start = null, $end = null)

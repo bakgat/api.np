@@ -269,7 +269,13 @@ class StudentDoctrineRepository implements StudentRepository
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('count(s.id)')
-            ->from(Student::class, 's');
+            ->from(Student::class, 's')
+            ->join('s.studentInGroups', 'sig')
+            ->where($qb->expr()->andX(
+                $qb->expr()->gt('sig.number', 0),
+                $qb->expr()->gt('sig.dateRange.end', ':now')
+            ))
+            ->setParameter('now', new DateTime);
         return $qb->getQuery()->getSingleScalarResult();
     }
 }
