@@ -20,6 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
+use Illuminate\Support\Facades\Cache;
 
 class StudentDoctrineRepository implements StudentRepository
 {
@@ -277,5 +278,26 @@ class StudentDoctrineRepository implements StudentRepository
             ))
             ->setParameter('now', new DateTime);
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function findByName($query)
+    {
+        $cn = 'sfbn_' + $query;
+        $cached = Cache::get($cn);
+        if ($cached) {
+            return $cached;
+        }
+        //$cache = Cache::get($query);
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('s')
+            ->from(Student::class, 's')
+            ->where("s.firstName LIKE :query")
+            ->orWhere("s.lastName LIKE :query")
+            ->orWhere("CONCAT(s.firstName, ' ', s.lastName) LIKE :query")
+            ->setParameter('query', '%' . $query . '%');
+        $result = $qb->getQuery()->getResult();
+        Cache::put($cn, $result);
+        return $result;
+
     }
 }

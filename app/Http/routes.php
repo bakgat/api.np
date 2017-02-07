@@ -16,11 +16,16 @@ $app->get('/info', function () {
 $app->get('/ntuid', function () {
     return \App\Domain\NtUid::generate(4);
 });
+
+$app->group(['prefix' => 'export', 'namespace' => 'App\Http\Controllers\Utils'], function () use ($app) {
+    $app->get('/asm', 'ExportController@asm');
+});
 /* ***************************************************
  * STUDENTS
  * **************************************************/
 $app->group(['prefix' => 'students', 'namespace' => 'App\Http\Controllers\Identity'], function () use ($app) {
     $app->get('/', 'StudentController@index');
+    $app->get('/find', 'StudentController@findByName');
     $app->get('/make/avatars', 'StudentController@makeAvatars');
     $app->get('/pic/{id}', 'StudentController@getPic');
     $app->post('/pic/{id}', 'StudentController@postPic');

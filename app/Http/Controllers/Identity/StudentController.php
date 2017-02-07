@@ -17,6 +17,7 @@ use App\Domain\NtUid;
 use App\Domain\Services\Evaluation\IacService;
 use App\Domain\Services\Identity\StudentService;
 use App\Http\Controllers\Controller;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -68,6 +69,10 @@ class StudentController extends Controller
             $id = NtUid::import($id);
         }
         return $this->response($this->studentRepo->find($id), ['student_detail']);
+    }
+
+    public function findByName(Request $request) {
+        return $this->response($this->studentRepo->findByName($request->get('q')), ['flat_student']);
     }
 
     public function store(Request $request)
@@ -182,9 +187,20 @@ class StudentController extends Controller
     /* ***************************************************
      * IAC
      * **************************************************/
-    public function allIac($id)
+    public function allIac(Request $request, $id)
     {
-        $iac = $this->iacService->getIACsForStudent($id, DateRange::infinite());
+        if ($request->has('qstart')) {
+            $start = DateTime::createFromFormat('Y-m-d', $request->get('qstart'));
+        } else {
+            $start = DateTime::createFromFormat('Y-m-d', DateRange::PAST);
+        }
+        if ($request->has('qend')) {
+            $end = DateTime::createFromFormat('Y-m-d', $request->get('qend'));
+        } else {
+            $end = DateTime::createFromFormat('Y-m-d', DateRange::PAST);
+        }
+        $range = DateRange::fromData(['start' => $start, 'end' => $end]);
+        $iac = $this->iacService->getIACsForStudent($id, $range);
         return $this->response($iac, ['student_iac']);
     }
 

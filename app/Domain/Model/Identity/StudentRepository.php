@@ -125,5 +125,7 @@ interface StudentRepository
      */
     public function count();
 
+    public function findByName($query);
+
 
 }

@@ -25,7 +25,7 @@ use JMS\Serializer\Annotation\Type;
 abstract class Person
 {
     /**
-     * @Groups({"student_list", "student_detail", "staff_list", "staff_detail", "group_students", "evaluation_detail"})
+     * @Groups({"student_list", "student_detail", "flat_student", "staff_list", "staff_detail", "group_students", "evaluation_detail"})
      *
      * @ORM\Id
      * @ORM\Column(type="guid")
@@ -35,7 +35,7 @@ abstract class Person
     protected $id;
 
     /**
-     * @Groups({"student_list", "student_detail", "staff_list", "staff_detail"})
+     * @Groups({"student_list", "student_detail", "flat_student", "staff_list", "staff_detail"})
      *
      * @ORM\Column(type="string")
      * @var string
@@ -43,7 +43,7 @@ abstract class Person
     protected $firstName;
 
     /**
-     * @Groups({"student_list", "student_detail", "staff_list", "staff_detail"})
+     * @Groups({"student_list", "student_detail", "flat_student", "staff_list", "staff_detail"})
      *
      * @ORM\Column(type="string")
      * @var string
@@ -52,7 +52,7 @@ abstract class Person
 
     
     /**
-     * @Groups({"student_list", "student_detail", "staff_list", "staff_detail", "group_students"})
+     * @Groups({"student_list", "student_detail", "flat_student", "staff_list", "staff_detail", "group_students"})
      *
      * @ORM\Column(type="gender")
      *
@@ -61,7 +61,7 @@ abstract class Person
     protected $gender;
 
     /**
-     * @Groups({"student_list", "student_detail", "staff_list", "staff_detail"})
+     * @Groups({"student_list", "student_detail", "flat_student", "staff_list", "staff_detail"})
      * @Type("DateTime<'Y-m-d'>")
      *
      * @ORM\Column(type="date", nullable=true)
