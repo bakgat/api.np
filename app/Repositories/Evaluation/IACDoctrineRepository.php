@@ -115,8 +115,8 @@ class IACDoctrineRepository implements IACRepository
                 $qb->expr()->gte('iac.dateRange.end', ':start'),
                 $qb->expr()->eq('sig.group', ':group')
             ))
-            ->setParameter('start', $range->getEnd())
-            ->setParameter('end', $range->getStart())
+            ->setParameter('start', $range->getStart())
+            ->setParameter('end', $range->getEnd())
             ->setParameter('group', $group->getId())
             ->orderBy('sig.number, m.order, b.order, g.order');
         return $qb->getQuery()->getResult();
@@ -127,7 +127,7 @@ class IACDoctrineRepository implements IACRepository
      * @param $infinite
      * @return IAC
      */
-    public function getIacForStudent($studentId, $infinite)
+    public function getIacForStudent($studentId, DateRange $range)
     {
         $qb = $this->em->createQueryBuilder();
         $qb->select('iac, ig, b, m, g, s')
@@ -138,14 +138,16 @@ class IACDoctrineRepository implements IACRepository
             ->join('iac.branch', 'b')
             ->join('b.major', 'm')
             ->where($qb->expr()->andX(
-                $qb->expr()->lte('iac.dateRange.start', '?1'),
-                $qb->expr()->gte('iac.dateRange.end', '?1'),
-                $qb->expr()->eq('iac.student', '?2')
+                $qb->expr()->lte('iac.dateRange.start', ':end'),
+                $qb->expr()->gte('iac.dateRange.end', ':start'),
+                $qb->expr()->eq('iac.student', ':student')
             ))
             ->orderBy('m.order, b.order, g.order')
-            ->setParameter(1, new DateTime)
-            ->setParameter(2, $studentId);
-        return $qb->getQuery()->getResult();
+            ->setParameter('start', $range->getStart())
+            ->setParameter('end', $range->getEnd())
+            ->setParameter('student', $studentId);
+        $data = $qb->getQuery()->getResult();
+        return $data;
     }
 
     /**

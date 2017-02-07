@@ -60,7 +60,7 @@ interface IACRepository
      * @param $infinite
      * @return IAC
      */
-    public function getIacForStudent($studentId, $infinite);
+    public function getIacForStudent($studentId, DateRange $range);
 
 
 

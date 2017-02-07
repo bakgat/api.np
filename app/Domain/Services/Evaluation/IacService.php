@@ -232,7 +232,7 @@ class IacService
          */
         $id = NtUid::import($studentId);
         $student = $this->studentService->get($id);
-        $data = $this->iacRepo->getIacForStudent($studentId,  DateRange::infinite());
+        $data = $this->iacRepo->getIacForStudent($studentId,  $range);
         return $data;
         //return $this->generatePerStudent($data, $student);
     }
