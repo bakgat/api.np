@@ -86,8 +86,8 @@ class FlatPointReport
      */
     private $mName;
     /**
-     * @ORM\Column(type="integer")
-     * @var int
+     * @ORM\Column(type="float")
+     * @var float
      */
     private $mOrder;
 
@@ -103,8 +103,8 @@ class FlatPointReport
      */
     private $bName;
     /**
-     * @ORM\Column(type="integer")
-     * @var int
+     * @ORM\Column(type="float")
+     * @var float
      */
     private $bOrder;
 

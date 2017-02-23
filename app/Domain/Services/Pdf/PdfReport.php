@@ -22,6 +22,7 @@ use App\Pdf\NtPdf\Multicell;
 use App\Pdf\Pdf;
 use App\Pdf\PdfTable;
 use App\Support\Encoding;
+use Doctrine\Common\Collections\ArrayCollection;
 use IntlDateFormatter;
 
 /**
@@ -243,8 +244,18 @@ class PdfReport
                 $this->resultsTable->addHeader($headerMajor);
                 $headerMajorSet = true;
 
+                $iterator = $majorResult->getBranchResults()->getIterator();
+
+                $iterator->uasort(function($a, $b) {
+                    /**
+                     * @var BranchResult $a
+                     * @var BranchResult $b
+                     */
+                    return $a->getOrder() < $b->getOrder() ? -1 : 1;
+                });
+                $newBranchCollection = new ArrayCollection(iterator_to_array($iterator));
                 /** @var BranchResult $branchResult */
-                foreach ($majorResult->getBranchResults() as $branchResult) {
+                foreach ($newBranchCollection as $branchResult) {
 
                     $history = $branchResult->getHistory();
                     $branchSet = false;
@@ -400,6 +411,9 @@ class PdfReport
                                     case 'red':
                                         $selectedStyle = ['<red>', '</red>'];
                                         break;
+                                    default:
+                                        $selectedStyle = ['<b>', '</b>'];
+                                        break;
                                 }
                                 switch ($settings->notSelected) {
                                     case 'small':
@@ -431,6 +445,15 @@ class PdfReport
                                             $optResults[] = implode('', $aOpt);
                                         } else {
                                             $aOpt = $notSelectedStyle;
+                                            array_splice($aOpt, 1, 0, $option);
+                                            $optResults[] = implode('', $aOpt);
+                                        }
+                                    }
+                                } else {
+                                    $options = $settings->options;
+                                    foreach ($options as $option) {
+                                        if (in_array($option, $selected)) {
+                                            $aOpt = $selectedStyle;
                                             array_splice($aOpt, 1, 0, $option);
                                             $optResults[] = implode('', $aOpt);
                                         }

@@ -96,8 +96,8 @@ class FlatMultiplechoiceReport
      */
     private $mName;
     /**
-     * @ORM\Column(type="integer")
-     * @var int
+     * @ORM\Column(type="float")
+     * @var float
      */
     private $mOrder;
 
@@ -113,8 +113,8 @@ class FlatMultiplechoiceReport
      */
     private $bName;
     /**
-     * @ORM\Column(type="integer")
-     * @var int
+     * @ORM\Column(type="float")
+     * @var float
      */
     private $bOrder;
 }

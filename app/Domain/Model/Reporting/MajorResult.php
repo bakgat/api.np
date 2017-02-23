@@ -34,7 +34,7 @@ class MajorResult
      */
     private $branches;
     /**
-     * @var int
+     * @var float
      */
     private $order;
 

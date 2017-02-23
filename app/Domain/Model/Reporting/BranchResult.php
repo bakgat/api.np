@@ -58,7 +58,7 @@ class BranchResult
      */
     private $multipleChoices;
 
-    /** @var  integer */
+    /** @var float */
     private $order;
 
     public function __construct(NtUid $id, $name, $order)
