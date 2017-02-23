@@ -206,6 +206,11 @@ class PdfReport
         /** @var MajorResult $majorResult */
         foreach ($studentResult->getMajorResults() as $majorResult) {
 
+            $startPageMajor = 0;
+            if($majorResult->getName() == 'Nederlands') {
+                $startPageMajor = $this->pdf->PageNo();
+            }
+
             //@todo: check if major has any branch history results
             $hasResult = false;
             $hasIacs = false;
@@ -237,6 +242,7 @@ class PdfReport
 
 
             if ($hasResult) {
+
                 $this->resultsTable = new PdfTable($this->pdf);
                 $this->initTable($this->resultsTable);
 
@@ -474,7 +480,7 @@ class PdfReport
                 }
 
                 $this->resultsTable->close();
-                if ($majorResult->getName() == 'Nederlands') {
+                if ($majorResult->getName() == 'Nederlands' && $startPageMajor == $this->pdf->PageNo()) {
                     $this->pdf->AddPage();
                 }
             }
