@@ -88,11 +88,13 @@ class PdfReport
 
             $this->pdf->student = $result;
 
-            $this->pdf->AddPage();
-
-            $this->pdf->ShowFooter();
-
-            $this->makeFirstPage($result);
+            if ($this->report->hasCommentPage()) {
+                $this->pdf->AddPage();
+                $this->pdf->ShowFooter();
+                $this->makeFirstPage($result);
+            } else {
+                $this->pdf->ShowFooter();
+            }
 
             $this->pdf->header = $this->StudentHeader(false);
 
@@ -203,11 +205,13 @@ class PdfReport
      * **************************************************/
     private function makeResultsTable(StudentResult $studentResult)
     {
+
         /** @var MajorResult $majorResult */
         foreach ($studentResult->getMajorResults() as $majorResult) {
 
+
             $startPageMajor = 0;
-            if($majorResult->getName() == 'Nederlands') {
+            if ($majorResult->getName() == 'Nederlands') {
                 $startPageMajor = $this->pdf->PageNo();
             }
 
@@ -240,6 +244,7 @@ class PdfReport
             ];
             $headerMajorSet = false;
 
+            $predictY = $this->pdf->GetY(); //predict the height to ensure branch name is not at end of one page and mc's on the other page / cluster branch name and mc's.
 
             if ($hasResult) {
 
@@ -248,11 +253,14 @@ class PdfReport
 
                 $this->resultsTable->initialize([65, 35, 30, 40]);
                 $this->resultsTable->addHeader($headerMajor);
+
+                $predictY += 15;
+
                 $headerMajorSet = true;
 
                 $iterator = $majorResult->getBranchResults()->getIterator();
 
-                $iterator->uasort(function($a, $b) {
+                $iterator->uasort(function ($a, $b) {
                     /**
                      * @var BranchResult $a
                      * @var BranchResult $b
@@ -383,6 +391,10 @@ class PdfReport
                     }
 
                     if ($hasMultiplechoices) {
+
+                        $mcHeightPrediction = 0;
+
+                        $branchNameRow = [];
                         if (!$branchSet) {
                             $branch = '<bn>' . utf8_decode(ucfirst($branchResult->getName())) . '</bn>';
 
@@ -394,8 +406,12 @@ class PdfReport
                                 'LINE_SIZE' => 4,
                                 'BORDER_TYPE' => 0
                             ];
-                            $this->resultsTable->addRow($row);
+
+                            $branchNameRow = $row;
+                            $mcHeightPrediction += 4;
+                            //$this->resultsTable->addRow($row);
                         }
+                        $mcRows = [];
                         foreach ($branchResult->getMultipleChoices() as $multipleChoice) {
                             $settings = json_decode($multipleChoice->getSettings());
                             $selected = json_decode($multipleChoice->getSelected());
@@ -465,16 +481,42 @@ class PdfReport
                                         }
                                     }
                                 }
-                                $separator = isset($settings->type) && $settings->type == 'mc' ? "\n\t" : ", ";
+                                if (isset($settings->type) && $settings->type == 'mc') {
+                                    //each line has its height
+                                    $mcHeightPrediction += count($optResults) * 2;
+                                    $separator = "\n\t";
+                                } else {
+                                    $separator = ", ";
+                                }
+                                //one row
+                                $mcHeightPrediction += 4;
+
+                                //$separator = isset($settings->type) && $settings->type == 'mc' ? "\n\t" : ", ";
                                 $mc .= implode($separator, $optResults);
                                 $mc .= $suffix ? ' ' . $suffix : '';
+
 
                                 $row = [
                                     ['TEXT' => $mc,
                                         'COLSPAN' => 4]
                                 ];
-                                $this->resultsTable->addRow($row);
+                                $mcRows[] = $row;
+                                //$this->resultsTable->addRow($row);
                             }
+                        }
+
+                        //TODO: Height prediction New page if needed
+                        $nowY = $this->pdf->GetY();
+                        $ph = $this->pdf->CurPageSize[1];
+                        $bMargin = $this->pdf->bMargin;
+                        if (($nowY + $mcHeightPrediction) > ($ph - $bMargin)) {
+                            $this->pdf->AddPage();
+                        }
+
+                        //TODO: set branch name row
+                        $this->resultsTable->addRow($branchNameRow);
+                        foreach ($mcRows as $mcRow) {
+                            $this->resultsTable->addRow($mcRow);
                         }
                     }
                 }
@@ -730,7 +772,7 @@ class PdfReport
         /* ***************************************************
          * GRAPHS
          * **************************************************/
-        
+
         $this->pdf->SetFont('Roboto', 'B', 20);
         $this->blue();
         $t2 = 'Wat betekenen de grafieken?';

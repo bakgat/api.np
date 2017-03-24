@@ -57,10 +57,12 @@ class ReportingService
     // TODO: making graphs for any combination above (history per group, per student, per branch, per major, per range, per oldrange)
     // TODO: what about graphs in 1st and 2nd grade?
     // TODO: 
-    public function getReportByGroup($group, DateRange $range, $render = 'wf')
+    public function getReportByGroup($group, DateRange $range, $render = 'nf')
     {
         $withFrontPage = $render == 'all';
+        $withCommentPage = $render == 'nf' || $render == 'all';
         $onlyFrontPage = $render == 'f';
+
 
         //@todo: handle only front page
         //@todo: now all student info relies on point_results data
@@ -76,7 +78,7 @@ class ReportingService
         $redicodi = $this->evaluationRepo->getRedicodiReportForGroup($group, $range);
 
 
-        $report = new Report($range, $withFrontPage);
+        $report = new Report($range, $withFrontPage, $withCommentPage);
         $this->generateReportHeaders($report, $headers);
         $this->generateResultsReport($report, $pointResults);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
@@ -94,6 +96,7 @@ class ReportingService
     public function getReportByStudents($studentIds, $range, $render)
     {
         $withFrontPage = $render == 'all';
+        $withCommentPage = $render == 'nf' || $render == 'all';
         $onlyFrontPage = $render == 'f';
         
         $pointResults = $this->evaluationRepo->getPointReportForStudents($studentIds, $range);
@@ -105,7 +108,7 @@ class ReportingService
         $redicodi = $this->evaluationRepo->getRedicodiReportForStudents($studentIds, $range);
 
 
-        $report = new Report($range, $withFrontPage);
+        $report = new Report($range, $withFrontPage, $withCommentPage);
         $this->generateResultsReport($report, $pointResults);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
         $this->generateSpokenReport($report, $spokenResults);

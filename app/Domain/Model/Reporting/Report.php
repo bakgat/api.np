@@ -45,12 +45,18 @@ class Report
      */
     private $groups;
 
-    public function __construct(DateRange $dateRange, $frontpage = false)
+    /**
+     * @var bool
+     */
+    private $commentPage;
+
+    public function __construct(DateRange $dateRange, $frontpage = false, $commentPage = false)
     {
         $this->range = $dateRange;
         $this->students = new ArrayCollection;
         $this->groups = [];
         $this->frontpage = $frontpage;
+        $this->commentPage = $commentPage;
     }
 
     public function addReportHeader()
@@ -111,6 +117,13 @@ class Report
     public function hasFrontpage()
     {
         return $this->frontpage;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCommentPage() {
+        return $this->commentPage;
     }
 
     /**
