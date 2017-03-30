@@ -51,6 +51,9 @@ class PdfReport
     private $rowPadding = 3;
     private $headerPaddingTop = 8;
 
+    /** @var  StudentResult */
+    private $_currentStudent;
+
     /* ***************************************************
      * C'tor
      * **************************************************/
@@ -71,6 +74,13 @@ class PdfReport
     {
         /** @var StudentResult $result */
         foreach ($this->report->getStudentResults() as $result) {
+            //hack to set footer or header with correct
+            // student info in any of the generated reports
+            // footer was updated with next student info
+            // before it was generated (FPDF genrates previous footer when new page is reached)
+            if ($this->report->hasCommentPage()) {
+                $this->_currentStudent = $result;
+            }
 
             $this->pdf->SetAutoPageBreak(false, 45);
             $this->pdf->HideHeader();
@@ -99,6 +109,14 @@ class PdfReport
             $this->pdf->header = $this->StudentHeader(false);
 
             $this->pdf->AddPage();
+
+            //hack to set footer or header with correct
+            // student info in any of the generated reports
+            // footer was updated with next student info
+            // before it was generated (FPDF genrates previous footer when new page is reached)
+            if (!$this->report->hasCommentPage()) {
+                $this->_currentStudent = $result;
+            }
 
             $this->makeResultsTable($result);
 
@@ -157,8 +175,8 @@ class PdfReport
 
     public function StudentFooter()
     {
-        return function (StudentResult $studentResult) {
-
+        return function () {
+            $studentResult = $this->_currentStudent;
             $this->orange();
             $this->pdf->SetY(-35);
             $this->pdf->SetFont('Roboto', 'B', 18);

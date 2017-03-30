@@ -42,6 +42,7 @@ class Pdf extends Fpdf
     public $headerText;
     private $showHeader;
     private $showFooter;
+    public $blockAutoFooter = false;
     public $header;
     public $footer;
     public $student;
@@ -85,7 +86,7 @@ class Pdf extends Fpdf
 
     public function Footer()
     {
-        if ($this->showFooter) {
+        if ($this->showFooter && !$this->blockAutoFooter) {
             call_user_func($this->footer, $this->student);
         }
     }
