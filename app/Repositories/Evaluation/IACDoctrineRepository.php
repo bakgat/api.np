@@ -154,7 +154,7 @@ class IACDoctrineRepository implements IACRepository
      * @param $group
      * @return ArrayCollection
      */
-    public function getFlatIacForGroup($groupId, $range)
+    public function getFlatIacForGroup($groupId, DateRange $range)
     {
         $sql = "SELECT ig.id as ig_id, ig.achieved as ig_achieved, ig.practice as ig_practice, ig.comment as ig_comment, ig.date as ig_date,
                     iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
@@ -171,12 +171,14 @@ class IACDoctrineRepository implements IACRepository
                     INNER JOIN student_in_groups sig ON sig.student_id = s.id
                     WHERE sig.group_id = '{$groupId}'
                       AND NOT (ig.achieved IS NULL AND ig.practice IS NULL)
+                      AND iac.start >= '{$range->getStart()->format('Y-m-d')}' 
+                      AND iac.end <= '{$range->getEnd()->format('Y-m-d')}'
                     ORDER BY sig.number, m.order, b.order, g.order";
 
         return $this->getIac($sql);
     }
 
-    public function getFlatIacForStudent($studentId, $range)
+    public function getFlatIacForStudent($studentId, DateRange $range)
     {
         $sql = "SELECT ig.id as ig_id, ig.achieved as ig_achieved, ig.practice as ig_practice, ig.comment as ig_comment, ig.date as ig_date,
                     iac.id as iac_id, iac.start as iac_start, iac.end as iac_end,
@@ -192,6 +194,8 @@ class IACDoctrineRepository implements IACRepository
                     INNER JOIN students s ON s.id = iac.student_id
                     WHERE s.id = '{$studentId}'
                       AND NOT (ig.achieved IS NULL AND ig.practice IS NULL)
+                      AND iac.start >= '{$range->getStart()->format('Y-m-d')}' 
+                      AND iac.end <= '{$range->getEnd()->format('Y-m-d')}'
                     ORDER BY m.order, b.order, g.order";
 
         return $this->getIac($sql);

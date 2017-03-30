@@ -40,13 +40,13 @@ interface IACRepository
      * @param Student $student
      * @return ArrayCollection
      */
-    public function getFlatIacForStudent($studentId, $range);
+    public function getFlatIacForStudent($studentId, DateRange $range);
 
     /**
      * @param $group
      * @return ArrayCollection
      */
-    public function getFlatIacForGroup($groupId, $range);
+    public function getFlatIacForGroup($groupId, DateRange $range);
 
     /**
      * @param Group $group
