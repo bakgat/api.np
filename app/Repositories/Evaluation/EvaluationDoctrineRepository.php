@@ -237,7 +237,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-               WHERE gr.start <='{$end}' AND gr.end >= '{$start}'
+               WHERE gr.start ='{$start}' AND gr.end = '{$end}'
                   AND stig.type='X'
                   AND sig.group_id='{$group}'
               ORDER BY sig.number, m.order, b.order";
@@ -277,6 +277,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               WHERE gr.start <='{$end}' AND gr.end >= '{$start}'
                   AND stig.type='X'
                   AND s.id IN('{$ids}')
+                  AND (sig.end IS NULL OR sig.end >='{$end}')
                ORDER BY sig.number, m.order, b.order";
         return $this->getPointReport($sql);
     }
@@ -633,6 +634,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
 
         $query = $this->em->createNativeQuery($sql, $rsm);
         $result = $query->getArrayResult();
+
         return $result;
     }
 

@@ -989,10 +989,14 @@ class PdfReport
         $row = [];
 
         foreach ($parts as $part) {
+            $groupName = $student->getGroup();
+            if(!$groupName) {
+                $groupName = 'default';
+            }
             if ($part == 'GROUP') {
                 $row[$i] = [
                     'TYPE' => 'IMAGE',
-                    'FILE' => resource_path('icons/groups/' . $student->getGroup() . '.png'),
+                    'FILE' => resource_path('icons/groups/' . $groupName . '.png'),
                     'WIDTH' => 10,
                 ];
             } else {
