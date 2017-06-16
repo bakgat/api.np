@@ -71,14 +71,16 @@ class EvaluationService
         if ($type->getValue() == EvaluationType::POINT) {
             $results = $data['pointResults'];
             foreach ($results as $result) {
-                $studentId = $result['student']['id'];
-                $student = $this->studentRepo->get(NtUid::import($studentId));
+                if(!is_null($result['score'])) {
+                    $studentId = $result['student']['id'];
+                    $student = $this->studentRepo->get(NtUid::import($studentId));
 
-                $score = $result['score'];
-                $redicodi = $result['redicodi'];
-                $pr = new PointResult($student, $score, $redicodi);
-
-                $evaluation->addPointResult($pr);
+                    $score = $result['score'];
+                    $redicodi = $result['redicodi'];
+                    $pr = new PointResult($student, $score, $redicodi);
+                    
+                    $evaluation->addPointResult($pr);
+                }
             }
         } else if ($type->getValue() == EvaluationType::COMPREHENSIVE) {
             $results = $data['comprehensiveResults'];
@@ -176,11 +178,13 @@ class EvaluationService
 
             //ADDED OR UPDATED
             foreach ($results as $result) {
-                //@todo: less selects when updatePointResults(studentID !!, score, redicodi);
-                $studentId = $result['student']['id'];
-                $student = $this->studentRepo->get(NtUid::import($studentId));
+                if(!is_null($result['score'])) {
+                    //@todo: less selects when updatePointResults(studentID !!, score, redicodi);
+                    $studentId = $result['student']['id'];
+                    $student = $this->studentRepo->get(NtUid::import($studentId));
 
-                $evaluation->updatePointResult($student, $result['score'], $result['redicodi']);
+                    $evaluation->updatePointResult($student, $result['score'], $result['redicodi']);
+                }
             }
 
 
