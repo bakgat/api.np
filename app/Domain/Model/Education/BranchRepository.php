@@ -111,4 +111,6 @@ interface BranchRepository
      * @return ArrayCollection
      */
     public function byName($find, Group $group);
+
+    public function allBranchForGroups();
 }

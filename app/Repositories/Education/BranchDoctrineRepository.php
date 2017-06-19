@@ -270,4 +270,15 @@ class BranchDoctrineRepository implements BranchRepository
         Cache::forever($group->getId() . '|' . $find, $result);
         return $result;
     }
+
+    public function allBranchForGroups()
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('bfg')
+            ->from(BranchForGroup::class, 'bfg')
+            ->join('bfg.group', 'g');
+
+        $result = $qb->getQuery()->getResult();
+        return $result;
+    }
 }

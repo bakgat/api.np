@@ -157,10 +157,14 @@ class EvaluationService
     }
 
     public function sanitizeAll() {
-        $evaluations = $this->evaluationRepo->allEvaluations();
-        /** @var Evaluation $evaluation */
-        foreach ($evaluations as $evaluation) {
-            $this->sanitizeTotals($evaluation->getDate(), $evaluation->getBranchForGroup());
+        $grs = $this->graphRangeService->all();
+        $bfgs = $this->branchRepo->allBranchForGroups();
+        /** @var GraphRange $gr */
+        foreach ($grs as $gr) {
+            /** @var BranchForGroup $bfg */
+            foreach ($bfgs as $bfg) {
+                $this->sanitizeTotals($gr->getStart(), $bfg);
+            }
         }
     }
 
