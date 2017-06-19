@@ -257,23 +257,56 @@ class IACGoal extends \App\Domain\Model\Evaluation\IACGoal implements \Doctrine\
     /**
      * {@inheritDoc}
      */
-    public function setAchieved($comment = NULL)
+    public function setAchieved($achieved)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAchieved', [$comment]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAchieved', [$achieved]);
 
-        return parent::setAchieved($comment);
+        return parent::setAchieved($achieved);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setPractice($comment = NULL)
+    public function setPractice($practice)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPractice', [$comment]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPractice', [$practice]);
 
-        return parent::setPractice($comment);
+        return parent::setPractice($practice);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setComment($comment)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setComment', [$comment]);
+
+        return parent::setComment($comment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function clearAchieved()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'clearAchieved', []);
+
+        return parent::clearAchieved();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function clearPractice()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'clearPractice', []);
+
+        return parent::clearPractice();
     }
 
 }

@@ -64,10 +64,10 @@ class IAC extends \App\Domain\Model\Evaluation\IAC implements \Doctrine\ORM\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'student', 'iacGoals', 'dateRange'];
+            return ['__isInitialized__', 'id', 'student', 'branch', 'iacGoals', 'dateRange'];
         }
 
-        return ['__isInitialized__', 'id', 'student', 'iacGoals', 'dateRange'];
+        return ['__isInitialized__', 'id', 'student', 'branch', 'iacGoals', 'dateRange'];
     }
 
     /**
@@ -219,6 +219,28 @@ class IAC extends \App\Domain\Model\Evaluation\IAC implements \Doctrine\ORM\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'allIACGoals', []);
 
         return parent::allIACGoals();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeIACGoal(\App\Domain\Model\Evaluation\IACGoal $item)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeIACGoal', [$item]);
+
+        return parent::removeIACGoal($item);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDateRange($dateRange)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDateRange', [$dateRange]);
+
+        return parent::setDateRange($dateRange);
     }
 
     /**

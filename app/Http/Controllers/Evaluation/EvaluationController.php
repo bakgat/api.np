@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Evaluation;
 
 
 use Anouar\Fpdf\Fpdf;
+use App\Domain\Model\Education\BranchRepository;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Events\EventTrackingRepository;
@@ -17,6 +18,7 @@ use App\Domain\Model\Identity\GroupRepository;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\Services\Evaluation\EvaluationService;
 use App\Domain\NtUid;
+use App\Domain\Services\Evaluation\GraphRangeService;
 use App\Domain\Services\Pdf\Ntpdf;
 use App\Domain\Services\Pdf\Report2PdfService;
 use App\Domain\Services\Reporting\ReportingService;
@@ -42,6 +44,10 @@ class EvaluationController extends Controller
     private $pdfService;
     /** @var  ReportingService */
     private $reportingService;
+    /** @var GraphRangeService */
+    private $graphRangeService;
+    /** @var  BranchRepository */
+    private $branchRepo;
 
 
     public function __construct(EvaluationService $evaluationService,
@@ -49,6 +55,8 @@ class EvaluationController extends Controller
                                 EvaluationRepository $evaluationRepository,
                                 Report2PdfService $pdfService,
                                 ReportingService $reportingService,
+                                GraphRangeService $graphRangeService,
+                                BranchRepository $branchRepository,
                                 SerializerInterface $serializer)
     {
         parent::__construct($serializer);
@@ -57,6 +65,8 @@ class EvaluationController extends Controller
         $this->pdfService = $pdfService;
         $this->evaluationRepo = $evaluationRepository;
         $this->reportingService = $reportingService;
+        $this->graphRangeService = $graphRangeService;
+        $this->branchRepo = $branchRepository;
     }
 
     public function index(Request $request)
@@ -77,6 +87,38 @@ class EvaluationController extends Controller
         $group = $this->groupRepo->get(NtUid::import($groupId));
         $evaluations = $this->evaluationRepo->allEvaluationsForGroup($group, $start, $end);
         return $this->response($evaluations, ['group_evaluations']);
+    }
+
+    public function indexRangeResults(Request $request)
+    {
+
+        $branchForGroupId = $request->get('bfgid');
+        $rangeId = $request->get('rid');
+        $results = $this->evaluationService->getRangeResults($rangeId, $branchForGroupId);
+        return $this->response($results);
+    }
+
+    public function indexGraphRanges()
+    {
+        return $this->response($this->graphRangeService->all());
+    }
+
+    public function indexPointResults(Request $request)
+    {
+        $bfgid = NtUid::import($request->get('bfgid'));
+        $date = convert_date_from_string($request->get('d'));
+
+        $branchForGroup = $this->branchRepo->getBranchForGroup($bfgid);
+        $range = $this->graphRangeService->find($date);
+
+        $this->evaluationService->sanitizeTotals($date, $branchForGroup);
+    }
+
+    public function sanitizeAll()
+    {
+        set_time_limit(0);
+        $this->evaluationService->sanitizeAll();
+        return $this->response('done');
     }
 
     public function show($id)

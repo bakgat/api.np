@@ -64,10 +64,10 @@ class EventTracking extends \App\Domain\Model\Events\EventTracking implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'userTable', 'userId', 'actionTable', 'action', 'actionId'];
+            return ['__isInitialized__', 'id', 'userTable', 'userId', 'actionTable', 'action', 'actionId', 'timestamp'];
         }
 
-        return ['__isInitialized__', 'id', 'userTable', 'userId', 'actionTable', 'action', 'actionId'];
+        return ['__isInitialized__', 'id', 'userTable', 'userId', 'actionTable', 'action', 'actionId', 'timestamp'];
     }
 
     /**

@@ -64,10 +64,10 @@ class StudentInGroup extends \App\Domain\Model\Identity\StudentInGroup implement
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'student', 'number', 'id', 'group', 'dateRange'];
+            return ['__isInitialized__', 'student', 'number', 'group', 'id', 'dateRange'];
         }
 
-        return ['__isInitialized__', 'student', 'number', 'id', 'group', 'dateRange'];
+        return ['__isInitialized__', 'student', 'number', 'group', 'id', 'dateRange'];
     }
 
     /**
@@ -187,6 +187,17 @@ class StudentInGroup extends \App\Domain\Model\Identity\StudentInGroup implement
     /**
      * {@inheritDoc}
      */
+    public function getGroup()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGroup', []);
+
+        return parent::getGroup();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getNumber()
     {
 
@@ -219,17 +230,6 @@ class StudentInGroup extends \App\Domain\Model\Identity\StudentInGroup implement
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getGroup()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGroup', []);
-
-        return parent::getGroup();
     }
 
     /**

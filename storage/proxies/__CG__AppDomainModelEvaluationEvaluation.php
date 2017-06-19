@@ -64,10 +64,10 @@ class Evaluation extends \App\Domain\Model\Evaluation\Evaluation implements \Doc
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'branchForGroup', 'date', 'title', 'permanent', 'max', 'settings', 'pointResults', 'comprehensiveResults', 'spokenResults', 'multiplechoiceResults'];
+            return ['__isInitialized__', 'id', 'branchForGroup', 'date', 'title', 'permanent', 'max', 'settings', 'pointResults', 'comprehensiveResults', 'spokenResults', 'multiplechoiceResults', 'feedbackResults'];
         }
 
-        return ['__isInitialized__', 'id', 'branchForGroup', 'date', 'title', 'permanent', 'max', 'settings', 'pointResults', 'comprehensiveResults', 'spokenResults', 'multiplechoiceResults'];
+        return ['__isInitialized__', 'id', 'branchForGroup', 'date', 'title', 'permanent', 'max', 'settings', 'pointResults', 'comprehensiveResults', 'spokenResults', 'multiplechoiceResults', 'feedbackResults'];
     }
 
     /**
@@ -334,6 +334,17 @@ class Evaluation extends \App\Domain\Model\Evaluation\Evaluation implements \Doc
     /**
      * {@inheritDoc}
      */
+    public function getFeedbackResults()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFeedbackResults', []);
+
+        return parent::getFeedbackResults();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function update($title, $branchForGroup, $date, $max, $permanent)
     {
 
@@ -378,6 +389,17 @@ class Evaluation extends \App\Domain\Model\Evaluation\Evaluation implements \Doc
     /**
      * {@inheritDoc}
      */
+    public function removePointResult($pointResult)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removePointResult', [$pointResult]);
+
+        return parent::removePointResult($pointResult);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function addComprehensiveResult(\App\Domain\Model\Evaluation\ComprehensiveResult $result)
     {
 
@@ -411,12 +433,34 @@ class Evaluation extends \App\Domain\Model\Evaluation\Evaluation implements \Doc
     /**
      * {@inheritDoc}
      */
-    public function updateMultiplechoiceResult($student, $selected)
+    public function updateMultiplechoiceResult(\App\Domain\Model\Identity\Student $student, $selected)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'updateMultiplechoiceResult', [$student, $selected]);
 
         return parent::updateMultiplechoiceResult($student, $selected);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addFeedbackResult(\App\Domain\Model\Evaluation\FeedbackResult $result)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addFeedbackResult', [$result]);
+
+        return parent::addFeedbackResult($result);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updateFeedbackResult(\App\Domain\Model\Identity\Student $student, $summary)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'updateFeedbackResult', [$student, $summary]);
+
+        return parent::updateFeedbackResult($student, $summary);
     }
 
 }

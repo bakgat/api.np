@@ -9,6 +9,7 @@
 namespace App\Domain\Model\Evaluation;
 
 
+use App\Domain\Model\Education\BranchForGroup;
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Time\DateRange;
@@ -18,6 +19,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 interface EvaluationRepository
 {
+    public function allEvaluations();
+
     public function allEvaluationsForGroup(Group $group, DateTime $start, DateTime $end);
 
     /**
@@ -147,5 +150,19 @@ interface EvaluationRepository
 
     public function allRedicodiStats(DateTime $endDate);
 
+    /**
+     * @param GraphRange $graphRange
+     * @param BranchForGroup $branchForGroup
+     * @return mixed
+     */
+    public function allRangeResults(GraphRange $graphRange, BranchForGroup $branchForGroup);
 
+    /**
+     * @param GraphRange $graphRange
+     * @param BranchForGroup $branchForGroup
+     * @return mixed
+     */
+    public function allPointResults(GraphRange $graphRange, BranchForGroup $branchForGroup);
+
+    public function updateOrCreateRR(RR $rr);
 }

@@ -12,8 +12,16 @@ namespace App\Domain\Model\Reporting;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
 
+
+use Doctrine\ORM\Mapping AS ORM;
+
 use JMS\Serializer\Annotation\Groups;
 
+/**
+ *
+ * Class RangeResult
+ * @package App\Domain\Model\Reporting
+ */
 class RangeResult
 {
     /**

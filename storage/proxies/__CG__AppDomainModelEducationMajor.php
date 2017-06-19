@@ -64,10 +64,10 @@ class Major extends \App\Domain\Model\Education\Major implements \Doctrine\ORM\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'name', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'branches'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'name', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'branches', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'order'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'name', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'branches'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'name', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'branches', '' . "\0" . 'App\\Domain\\Model\\Education\\Major' . "\0" . 'order'];
     }
 
     /**

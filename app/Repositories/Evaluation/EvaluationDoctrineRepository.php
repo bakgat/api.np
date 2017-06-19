@@ -8,11 +8,14 @@
 
 namespace App\Repositories\Evaluation;
 
+use App\Domain\Model\Education\BranchForGroup;
 use App\Domain\Model\Education\Major;
 use App\Domain\Model\Evaluation\Evaluation;
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\EvaluationType;
 use App\Domain\Model\Evaluation\Exceptions\EvaluationNotFoundException;
+use App\Domain\Model\Evaluation\GraphRange;
+use App\Domain\Model\Evaluation\RR;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Reporting\FlatComprehensiveReport;
 use App\Domain\Model\Reporting\FlatFeedbackReport;
@@ -40,6 +43,15 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $this->em = $entityManager;
     }
 
+    /** NEEDED FOR SANITIZING RR tables */
+    public function allEvaluations() {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('e, bfg')
+            ->from(Evaluation::class, 'e')
+            ->join('e.branchForGroup', 'bfg');
+        $result = $qb->getQuery()->getResult();
+        return $result;
+    }
     public function allEvaluationsForGroup(Group $group, DateTime $start, DateTime $end)
     {
         $qb = $this->em->createQueryBuilder();
@@ -820,5 +832,53 @@ class EvaluationDoctrineRepository implements EvaluationRepository
 
     }
 
+    /* ***************************************************
+     * CALCULATIONS
+     * **************************************************/
+    public function allRangeResults(GraphRange $graphRange, BranchForGroup $branchForGroup)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('rr')
+            ->from(RR::class, 'rr')
+            ->where('rr.graphRange=:grid')
+            ->andWhere('rr.branchForGroup=:bfgid')
+            ->setParameter('grid', $graphRange->getId())
+            ->setParameter('bfgid', $branchForGroup->getId());
+
+        $results = $qb->getQuery()->getResult();
+        return $results;
+    }
+
+    public function allPointResults(GraphRange $graphRange, BranchForGroup $branchForGroup)
+    {
+        $sql = "
+        SELECT pr.student_id AS student_id, 
+          (SUM(pr.score)/SUM(e.max)) * bfg.max  AS raw_score, 
+          e.permanent AS permanent,
+          COUNT(pr.id) AS ev_count,
+          GROUP_CONCAT(pr.redicodi) AS redicodi,
+          bfg.max AS max
+        FROM point_results pr
+            INNER JOIN evaluations e on pr.evaluation_id = e.id
+            INNER JOIN branch_for_groups bfg on e.branch_for_group_id=bfg.id
+        WHERE e.branch_for_group_id='{$branchForGroup->getId()}'
+            AND e.date >= '{$graphRange->getStart()->format('Y-m-d')}'
+            AND e.date <= '{$graphRange->getEnd()->format('Y-m-d')}'
+        GROUP BY pr.student_id, e.permanent
+        ORDER BY pr.student_id
+                
+        ";
+        $stmt = $this->em->getConnection()->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+
+    public function updateOrCreateRR(RR $rr)
+    {
+        $this->em->persist($rr);
+        $this->em->flush();
+        return 1;
+    }
 
 }

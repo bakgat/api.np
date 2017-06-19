@@ -64,10 +64,10 @@ class Branch extends \App\Domain\Model\Education\Branch implements \Doctrine\ORM
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'name', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'major', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'branchForGroups'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'name', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'shortName', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'major', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'branchForGroups', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'goals', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'order'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'name', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'major', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'branchForGroups'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'name', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'shortName', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'major', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'branchForGroups', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'goals', '' . "\0" . 'App\\Domain\\Model\\Education\\Branch' . "\0" . 'order'];
     }
 
     /**
@@ -235,6 +235,17 @@ class Branch extends \App\Domain\Model\Education\Branch implements \Doctrine\ORM
     /**
      * {@inheritDoc}
      */
+    public function getShortName()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getShortName', []);
+
+        return parent::getShortName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function joinGroup(\App\Domain\Model\Identity\Group $group, \App\Domain\Model\Evaluation\EvaluationType $evaluationType, $max = NULL, $start = NULL, $end = NULL)
     {
 
@@ -274,6 +285,17 @@ class Branch extends \App\Domain\Model\Education\Branch implements \Doctrine\ORM
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActiveGroups', [$evaluationType]);
 
         return parent::getActiveGroups($evaluationType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGoals()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGoals', []);
+
+        return parent::getGoals();
     }
 
 }

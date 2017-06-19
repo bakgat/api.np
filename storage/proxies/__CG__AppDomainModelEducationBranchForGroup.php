@@ -64,10 +64,10 @@ class BranchForGroup extends \App\Domain\Model\Education\BranchForGroup implemen
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'branch', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'group', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'evaluationType', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'max', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'dateRange'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'branch', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'group', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'evaluationType', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'max', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'dateRange', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'onlyFinal'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'branch', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'group', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'evaluationType', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'max', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'dateRange'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'id', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'branch', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'group', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'evaluationType', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'max', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'dateRange', '' . "\0" . 'App\\Domain\\Model\\Education\\BranchForGroup' . "\0" . 'onlyFinal'];
     }
 
     /**
@@ -241,6 +241,17 @@ class BranchForGroup extends \App\Domain\Model\Education\BranchForGroup implemen
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'changeMax', [$max]);
 
         return parent::changeMax($max);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isOnlyFinal()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isOnlyFinal', []);
+
+        return parent::isOnlyFinal();
     }
 
     /**

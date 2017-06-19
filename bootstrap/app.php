@@ -72,7 +72,9 @@ $repos = [
     'Education\Branch',
     'Evaluation\Evaluation',
     'Evaluation\IAC',
+    'Evaluation\GraphRange',
     'Events\EventTracking',
+
 ];
 
 foreach ($repos as $idx => $repo) {

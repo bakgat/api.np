@@ -79,6 +79,13 @@ class Group
      */
     protected $branchForGroups;
 
+    /**
+     * @ORM\Column(type="guid", name="level_id")
+     *
+     * @var NtUid
+     */
+    protected $level;
+
 
     public function __construct($name, $active = true)
     {
@@ -139,5 +146,10 @@ class Group
     public function getBranchForGroups()
     {
         return clone $this->branchForGroups;
+    }
+
+    public function getLevel()
+    {
+        return $this->level;
     }
 }

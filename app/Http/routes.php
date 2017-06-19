@@ -110,6 +110,9 @@ $app->group(['prefix' => 'branches', 'namespace' => 'App\Http\Controllers\Educat
 $app->group(['prefix' => 'evaluations', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
     $app->get('/', 'EvaluationController@index');
     $app->get('/summary', 'EvaluationController@getSummary');
+    $app->get('/rr', 'EvaluationController@indexRangeResults');
+    $app->get('/pr', 'EvaluationController@indexPointResults');
+    $app->get('/sanitize', 'EvaluationController@sanitizeAll');
     $app->get('/{id}', 'EvaluationController@show');
 
     $app->post('/', 'EvaluationController@store');
@@ -152,4 +155,11 @@ $app->group(['prefix' => 'iac', 'namespace' => 'App\Http\Controllers\Evaluation'
 
 $app->group(['prefix' => 'analytics', 'namespace' => 'App\Http\Controllers\Events'], function () use ($app) {
     $app->get('/events/report', 'EventController@reportEvents');
+});
+
+/* ***************************************************
+ * GraphRanges
+ * **************************************************/
+$app->group(['prefix' => 'graphranges', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
+    $app->get('/', 'EvaluationController@indexGraphRanges');
 });
