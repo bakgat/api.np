@@ -157,14 +157,10 @@ class EvaluationService
     }
 
     public function sanitizeAll() {
-        $grs = $this->graphRangeService->all();
-        $bfgs = $this->branchRepo->allBranchForGroups();
-        /** @var GraphRange $gr */
-        foreach ($grs as $gr) {
-            /** @var BranchForGroup $bfg */
-            foreach ($bfgs as $bfg) {
-                $this->sanitizeTotals($gr->getStart(), $bfg);
-            }
+        $evaluations = $this->evaluationRepo->allEvaluations();
+        /** @var Evaluation $evaluation */
+        foreach ($evaluations as $evaluation) {
+            $this->sanitizeTotals($evaluation->getDate(), $evaluation->getBranchForGroup());
         }
     }
 
@@ -173,7 +169,6 @@ class EvaluationService
         $grs = $this->graphRangeService->find($date, $branchForGroup->getGroup()->getId());
         /** @var GraphRange $gr */
         foreach ($grs as $gr) {
-            echo $gr->getId() . ': ' . $gr->getLevel();
             $prs = $this->evaluationRepo->allPointResults($gr, $branchForGroup);
             $rrs = $this->evaluationRepo->allRangeResults($gr, $branchForGroup);
             /** @var RR $rs */
@@ -239,6 +234,7 @@ class EvaluationService
             }
 
         }
+        echo 'done';
     }
 
 
