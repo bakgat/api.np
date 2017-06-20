@@ -415,6 +415,8 @@ class PdfReport
                                 $marker = str_replace(',', '.', ($item->getTotal() / $item->getMax()) * 100);
                                 $markers[] = $marker;
                             }
+                            //reverse markers because they are ordered DESC
+                            $markers = array_reverse($markers);
                             $url = 'http://chart.apis.google.com/chart?chs=75x30&chd=t:' .
                                 implode(',', $markers) .
                                 '&cht=lc:nda&chm=o,0066FF,0,-1,4|o,FFFFFF,0,-1,2&chma=2,2,2,2';
