@@ -318,7 +318,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $this->getHistoryReport($sql);
     }
 
-    public function getHistoryForGroup($group)
+    public function getHistoryForGroup($group, DateRange $range)
     {
         $sql = "SELECT s.id as s_id,
               pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
@@ -339,6 +339,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
                WHERE sig.group_id='{$group}'
+                AND (sig.end IS NULL OR sig.end >= '{$range->getEnd()->format('Y-m-d')}')
               ORDER BY gr.end DESC, sig.number, m.order, b.order";
         return $this->getHistoryReport($sql);
     }

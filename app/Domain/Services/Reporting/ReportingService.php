@@ -70,7 +70,7 @@ class ReportingService
 
         $headers = $this->evaluationRepo->getHeadersReportForGroup($group, $range);
         $pointResults = $this->evaluationRepo->getPointReportForGroup($group, $range);
-        $history = $this->evaluationRepo->getHistoryForGroup($group);
+        $history = $this->evaluationRepo->getHistoryForGroup($group, $range);
         $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForGroup($group, $range);
         $spokenResults = $this->evaluationRepo->getSpokenReportForGroup($group, $range);
         $mcResults = $this->evaluationRepo->getMultiplechoiceReportForGroup($group, $range);

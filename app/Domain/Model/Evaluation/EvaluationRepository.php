@@ -168,5 +168,5 @@ interface EvaluationRepository
 
     public function getHistory($studentIds);
 
-    public function getHistoryForGroup($group);
+    public function getHistoryForGroup($group, DateRange $range);
 }
