@@ -165,4 +165,8 @@ interface EvaluationRepository
     public function allPointResults(GraphRange $graphRange, BranchForGroup $branchForGroup);
 
     public function updateOrCreateRR(RR $rr);
+
+    public function getHistory($studentIds);
+
+    public function getHistoryForGroup($group);
 }

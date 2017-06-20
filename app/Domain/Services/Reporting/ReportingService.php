@@ -70,6 +70,7 @@ class ReportingService
 
         $headers = $this->evaluationRepo->getHeadersReportForGroup($group, $range);
         $pointResults = $this->evaluationRepo->getPointReportForGroup($group, $range);
+        $history = $this->evaluationRepo->getHistoryForGroup($group);
         $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForGroup($group, $range);
         $spokenResults = $this->evaluationRepo->getSpokenReportForGroup($group, $range);
         $mcResults = $this->evaluationRepo->getMultiplechoiceReportForGroup($group, $range);
@@ -81,6 +82,7 @@ class ReportingService
         $report = new Report($range, $withFrontPage, $withCommentPage);
         $this->generateReportHeaders($report, $headers);
         $this->generateResultsReport($report, $pointResults);
+        $this->generateResultsReport($report, $history);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
         $this->generateSpokenReport($report, $spokenResults);
         $this->generateMcResultsReport($report, $mcResults);
@@ -100,6 +102,7 @@ class ReportingService
         $onlyFrontPage = $render == 'f';
         
         $pointResults = $this->evaluationRepo->getPointReportForStudents($studentIds, $range);
+        $history = $this->evaluationRepo->getHistory($studentIds);
         $comprehensiveResults = $this->evaluationRepo->getComprehensiveReportForStudents($studentIds, $range);
         $spokenResults = $this->evaluationRepo->getSpokenReportForStudents($studentIds, $range);
         $mcResults = $this->evaluationRepo->getMultiplechoiceReportForStudents($studentIds, $range);
@@ -110,6 +113,7 @@ class ReportingService
 
         $report = new Report($range, $withFrontPage, $withCommentPage);
         $this->generateResultsReport($report, $pointResults);
+        $this->generateResultsReport($report, $history);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
         $this->generateSpokenReport($report, $spokenResults);
         $this->generateMcResultsReport($report, $mcResults);

@@ -44,7 +44,8 @@ class EvaluationDoctrineRepository implements EvaluationRepository
     }
 
     /** NEEDED FOR SANITIZING RR tables */
-    public function allEvaluations() {
+    public function allEvaluations()
+    {
         $qb = $this->em->createQueryBuilder();
         $qb->select('e, bfg')
             ->from(Evaluation::class, 'e')
@@ -52,6 +53,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $result = $qb->getQuery()->getResult();
         return $result;
     }
+
     public function allEvaluationsForGroup(Group $group, DateTime $start, DateTime $end)
     {
         $qb = $this->em->createQueryBuilder();
@@ -249,10 +251,10 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-               WHERE gr.start ='{$start}' AND gr.end = '{$end}'
+               WHERE gr.start <='{$start}' AND gr.end >= '{$end}'
                   AND stig.type='X'
                   AND sig.group_id='{$group}'
-              ORDER BY sig.number, m.order, b.order";
+              ORDER BY gr.end DESC, sig.number, m.order, b.order";
         return $this->getPointReport($sql);
     }
 
@@ -290,8 +292,55 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                   AND stig.type='X'
                   AND s.id IN('{$ids}')
                   AND (sig.end IS NULL OR sig.end >='{$end}')
-               ORDER BY sig.number, m.order, b.order";
+               ORDER BY gr.end DESC, sig.number, m.order, b.order";
         return $this->getPointReport($sql);
+    }
+
+    public function getHistory($studentIds)
+    {
+        $ids = implode('\',\'', $studentIds);
+
+        $sql = "SELECT pr.student_id as s_id,
+              pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
+              pr.max as pr_max, pr.redicodi as pr_redicodi, pr.evaluation_count as pr_evcount,
+              gr.id as gr_id, 
+              gr.start as start, gr.end as end,
+              m.id as m_id, m.name as m_name, m.order as m_order, 
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id
+              FROM rr pr
+              INNER JOIN students s ON pr.student_id = s.id
+              INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id
+              INNER JOIN branches b ON b.id = bfg.branch_id
+              INNER JOIN majors m ON m.id = b.major_id
+              INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
+              WHERE s.id IN('{$ids}')
+               ORDER BY gr.end DESC, m.order, b.order";
+        return $this->getHistoryReport($sql);
+    }
+
+    public function getHistoryForGroup($group)
+    {
+        $sql = "SELECT s.id as s_id,
+              pr.id as pr_id, pr.p_raw as pr_perm, pr.e_raw as pr_end, pr.total as pr_total, 
+              pr.max as pr_max, pr.redicodi as pr_redicodi, pr.evaluation_count as pr_evcount,
+              gr.id as gr_id, 
+              gr.start as start, gr.end as end,
+              m.id as m_id, m.name as m_name, m.order as m_order, 
+              b.id as b_id, b.name as b_name, b.order as b_order, bfg.id as bfg_id,
+              g.id as g_id, g.name as g_name
+              FROM rr pr
+              INNER JOIN students s ON pr.student_id = s.id
+              INNER JOIN student_in_groups sig ON s.id = sig.student_id
+              INNER JOIN branch_for_groups bfg ON bfg.id = pr.branch_for_group_id
+              INNER JOIN groups g ON (g.id = sig.group_id AND g.id = bfg.group_id)
+              INNER JOIN staff_in_groups stig ON stig.group_id = g.id
+              INNER JOIN staff st ON st.id = stig.staff_id
+              INNER JOIN branches b ON b.id = bfg.branch_id
+              INNER JOIN majors m ON m.id = b.major_id
+              INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
+               WHERE sig.group_id='{$group}'
+              ORDER BY gr.end DESC, sig.number, m.order, b.order";
+        return $this->getHistoryReport($sql);
     }
 
     public function getHeadersReportForGroup($group, DateRange $range)
@@ -650,6 +699,35 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         return $result;
     }
 
+    private function getHistoryReport($sql)
+    {
+        $rsm = new ResultSetMapping;
+
+        $rsm->addEntityResult(FlatPointReport::class, 'fr')
+            ->addFieldResult('fr', 's_id', 'sId')
+            ->addFieldResult('fr', 'pr_id', 'prId')
+            ->addFieldResult('fr', 'pr_perm', 'prPerm')
+            ->addFieldResult('fr', 'pr_end', 'prEnd')
+            ->addFieldResult('fr', 'pr_total', 'prTotal')
+            ->addFieldResult('fr', 'pr_max', 'prMax')
+            ->addFieldResult('fr', 'pr_redicodi', 'prRedicodi')
+            ->addFieldResult('fr', 'pr_evcount', 'prEvCount')
+            ->addFieldResult('fr', 'gr_id', 'grId')
+            ->addFieldResult('fr', 'start', 'grStart')
+            ->addFieldResult('fr', 'end', 'grEnd')
+            ->addFieldResult('fr', 'b_id', 'bId')
+            ->addFieldResult('fr', 'b_name', 'bName')
+            ->addFieldResult('fr', 'b_order', 'bOrder')
+            ->addFieldResult('fr', 'm_id', 'mId')
+            ->addFieldResult('fr', 'm_name', 'mName')
+            ->addFieldResult('fr', 'm_order', 'mOrder');
+
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $result = $query->getArrayResult();
+
+        return $result;
+    }
+
     private function getHeaderReport($sql)
     {
         $rsm = new ResultSetMapping;
@@ -880,5 +958,6 @@ class EvaluationDoctrineRepository implements EvaluationRepository
         $this->em->flush();
         return 1;
     }
+
 
 }

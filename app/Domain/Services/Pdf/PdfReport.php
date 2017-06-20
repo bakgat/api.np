@@ -17,6 +17,7 @@ use App\Domain\Model\Reporting\McResult;
 use App\Domain\Model\Reporting\RangeResult;
 use App\Domain\Model\Reporting\Report;
 use App\Domain\Model\Reporting\StudentResult;
+use App\Domain\NtUid;
 use App\Pdf\NtPdf\Listener;
 use App\Pdf\NtPdf\Multicell;
 use App\Pdf\Pdf;
@@ -398,12 +399,49 @@ class PdfReport
                             'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
                         ];
 
-                        $row[3] = [
-                            'TEXT' => '',
-                            'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B',
-                        ];
+                        /* --------------------------
+                         * CHARTS
+                         * 1. generate google image
+                         * 2. download and store with unique id
+                         * 3. insert into pdf
+                         * 4. delete downloaded graphs
+                         * -------------------------- */
+                        //generate url
+                        if (count($history) > 1) {
+                            $markers = [];
+                            /** @var RangeResult $item */
+                            foreach ($history as $item) {
+                                //set percent
+                                $marker = str_replace(',', '.', ($item->getTotal() / $item->getMax()) * 100);
+                                $markers[] = $marker;
+                            }
+                            $url = 'http://chart.apis.google.com/chart?chs=75x30&chd=t:' .
+                                implode(',', $markers) .
+                                '&cht=lc:nda&chm=o,0066FF,0,-1,4|o,FFFFFF,0,-1,2&chma=2,2,2,2';
 
-                        $this->resultsTable->addRow($row);
+                            $chartId = NtUid::generate(4);
+                            $chart = resource_path('charts/' . $chartId . '.png');
+                            file_put_contents($chart, file_get_contents($url));
+
+                            $row[3] = [
+                                'TYPE' => 'IMAGE',
+                                'FILE' => $chart,
+                                'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B'
+                            ];
+                            //must add row here, because image is embedded then
+                            //after this it is safe to remove temp chart image
+                            $this->resultsTable->addRow($row);
+
+                            //remove temp saved chart
+                            unlink($chart);
+
+                        } else {
+                            $row[3] = [
+                                'TEXT' => '',
+                                'BORDER_TYPE' => $hasMultiplechoices ? 0 : 'B'
+                            ];
+                            $this->resultsTable->addRow($row);
+                        }
 
                         $branchSet = true;
                     }
@@ -990,7 +1028,7 @@ class PdfReport
 
         foreach ($parts as $part) {
             $groupName = $student->getGroup();
-            if(!$groupName) {
+            if (!$groupName) {
                 $groupName = 'default';
             }
             if ($part == 'GROUP') {
