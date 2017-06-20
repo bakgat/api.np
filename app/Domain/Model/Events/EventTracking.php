@@ -84,6 +84,13 @@ class EventTracking
      */
     protected $timestamp;
 
+    /**
+     * @ORM\Column(type="text", nullable=false)
+     *
+     * @var string
+     */
+    protected $details;
+
     public function __construct($userTable, $userId, $actionTable, $action, $actionId)
     {
         $this->id = NtUid::generate(4);
@@ -124,4 +131,19 @@ class EventTracking
         return $this->actionId;
     }
 
+    /**
+     * @param mixed $details
+     */
+    public function setDetails($details)
+    {
+        $this->details = $details;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
 }

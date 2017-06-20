@@ -124,7 +124,7 @@ class ReportController extends Controller
     {
         $range = $this->getRange($request);
         $render = $request->has('render') ? $request->get('render') : 'nf';
-        $report = $this->reportingService->getReportByGroup($groupId, $range, $render);
+        $report = $this->reportingService->getReportByGroup($groupId, $range, $render, $request->get('token'));
         return $report;
     }
 
@@ -134,7 +134,7 @@ class ReportController extends Controller
         $ids = explode(',', $id);
         $range = $this->getRange($request);
         $render = $request->has('render') ? $request->get('render') : 'nf';
-        $report = $this->reportingService->getReportByStudents($ids, $range, $render);
+        $report = $this->reportingService->getReportByStudents($ids, $range, $render, $request->get('token'));
         return $report;
     }
 

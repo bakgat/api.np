@@ -11,6 +11,8 @@ namespace App\Domain\Services\Reporting;
 
 use App\Domain\Model\Evaluation\EvaluationRepository;
 use App\Domain\Model\Evaluation\IACRepository;
+use App\Domain\Model\Events\EventTracking;
+use App\Domain\Model\Events\EventTrackingRepository;
 use App\Domain\Model\Identity\Group;
 use App\Domain\Model\Identity\Student;
 use App\Domain\Model\Identity\StudentRepository;
@@ -31,12 +33,18 @@ class ReportingService
      * @var StudentRepository
      */
     private $studentRepository;
+    /** @var EventTrackingRepository  */
+    private $trackRepo;
 
-    public function __construct(StudentRepository $studentRepository, EvaluationRepository $evaluationRepository, IACRepository $iacRepository)
+    public function __construct(StudentRepository $studentRepository,
+                                    EvaluationRepository $evaluationRepository,
+                                    IACRepository $iacRepository,
+                                    EventTrackingRepository $eventTrackingRepository)
     {
         $this->evaluationRepo = $evaluationRepository;
         $this->iacRepo = $iacRepository;
         $this->studentRepository = $studentRepository;
+        $this->trackRepo = $eventTrackingRepository;
     }
 
     public function getFullReport(DateRange $range)
@@ -57,7 +65,7 @@ class ReportingService
     // TODO: making graphs for any combination above (history per group, per student, per branch, per major, per range, per oldrange)
     // TODO: what about graphs in 1st and 2nd grade?
     // TODO: 
-    public function getReportByGroup($group, DateRange $range, $render = 'nf')
+    public function getReportByGroup($group, DateRange $range, $render = 'nf', $authToken)
     {
         $withFrontPage = $render == 'all';
         $withCommentPage = $render == 'nf' || $render == 'all';
@@ -92,10 +100,15 @@ class ReportingService
 
         $report->sort();
 
+        $userId = $authToken;
+        $track = new EventTracking('staff', $userId, 'report', 'report-group', $group);
+        $track->setDetails($range->toString() . '|' . $render);
+        $this->trackRepo->save($track);
+
         return $report;
     }
 
-    public function getReportByStudents($studentIds, $range, $render)
+    public function getReportByStudents($studentIds, $range, $render, $authToken)
     {
         $withFrontPage = $render == 'all';
         $withCommentPage = $render == 'nf' || $render == 'all';
@@ -120,6 +133,13 @@ class ReportingService
         $this->generateIacsReport($report, $iacs);
         $this->generateFeedbackReport($report, $feedback);
         $this->generateRedicodiReport($report, $redicodi);
+
+        foreach ($studentIds as $item) {
+            $userId = $authToken;
+            $track = new EventTracking('staff', $userId, 'report', 'report-student', $item);
+            $track->setDetails($range->toString() . '|' . $render);
+            $this->trackRepo->save($track);
+        }
 
         return $report;
     }
