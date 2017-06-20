@@ -231,10 +231,16 @@ class EvaluationService
                 $foundRR->setRedicodi(implode(',', array_unique($redicodi))); //unique values
 
                 $this->evaluationRepo->updateOrCreateRR($foundRR);
+
+
+                $track = new EventTracking('sanitize_service', NtUid::generate(4),
+                    'rr', ($found ? 'update' : 'insert'), $foundRR->getId());
+                $this->trackRepo->save($track);
             }
 
         }
-        echo 'done';
+
+
     }
 
 
@@ -335,23 +341,19 @@ class EvaluationService
     public function delete($id)
     {
         $evaluation = $this->get(NtUid::import($id));
-        return $this->evaluationRepo->remove($evaluation);
+        $result = $this->evaluationRepo->remove($evaluation);
+        /*
+         * Only need graph_ranges for point results.
+         * After adding all points recalculate totals for each
+         * matching graph range AND branchForGroup
+         */
+        //@todo: when evaluation is removed and is the last rr for branch_for_group and graph_range, then remove rr too.
+        if ($evaluation->getEvaluationType()->getValue() == EvaluationType::POINT) {
+            $this->sanitizeTotals($evaluation->getDate(), $evaluation->getBranchForGroup());
+        }
+        return $result;
     }
 
-    public function calculateTotals($graphRangeId, $branchForGroupId)
-    {
-        /*
-         * STEPS
-         * ----------------------
-         * 1. get RR for branchForGroup and graphRange
-         * 2. get PRs (group by student, sum(score), sum(max), concat(redicodi) for all evaluations in branchForGroup and graphRange
-         * 3. Loop through PRs per student.
-         * 4. If student_id in RR => update
-         * 5. Else create RR
-         * 6. Flush results to RR
-         *
-         */
-    }
 
     public function getRangeResults($graphRangeId, $branchForGroupId)
     {
