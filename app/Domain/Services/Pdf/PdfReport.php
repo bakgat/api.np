@@ -586,7 +586,7 @@ class PdfReport
             }
 
             if ($hasIacs) {
-
+                $this->pdf->bMargin = 60;
                 /** @var BranchResult $branchResult */
                 foreach ($majorResult->getBranchResults() as $branchResult) {
                     if (!$headerMajorSet) {
