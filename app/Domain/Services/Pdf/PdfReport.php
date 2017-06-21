@@ -603,6 +603,7 @@ class PdfReport
 
 
                     $this->iacTable = new PdfTable($this->pdf);
+                    $this->iacTable->setHeaderNewPage(false);
                     $this->initTable($this->iacTable);
 
                     $this->iacTable->initialize(array($this->iacTextWidth, $this->iacIconWidth, $this->iacIconWidth, $this->iacCommentWidth));
