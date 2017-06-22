@@ -254,7 +254,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                WHERE gr.start <='{$start}' AND gr.end >= '{$end}'
                   AND stig.type='X'
                   AND sig.group_id='{$group}'
-              ORDER BY gr.end DESC, sig.number, m.order, b.order";
+              ORDER BY gr.end DESC, gr.level_id DESC, sig.number, m.order, b.order";
         return $this->getPointReport($sql);
     }
 
@@ -292,7 +292,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                   AND stig.type='X'
                   AND s.id IN('{$ids}')
                   AND (sig.end IS NULL OR sig.end >='{$end}')
-               ORDER BY gr.end DESC, sig.number, m.order, b.order";
+               ORDER BY gr.end DESC, gr.level_id DESC, sig.number, m.order, b.order";
         return $this->getPointReport($sql);
     }
 

@@ -113,7 +113,8 @@ $app->group(['prefix' => 'evaluations', 'namespace' => 'App\Http\Controllers\Eva
     $app->get('/rr', 'EvaluationController@indexRangeResults');
     $app->get('/pr', 'EvaluationController@indexPointResults');
     $app->get('/sanitize', 'EvaluationController@sanitizeAll');
-    $app->get('/sanitize/{id}', 'EvaluationController@sanitize');
+    $app->get('/sanitize/{bfgid}', 'EvaluationController@sanitize');
+    $app->get('/sanitize/group/{gid}', 'EvaluationController@sanitizeByGroup');
     $app->get('/{id}', 'EvaluationController@show');
 
     $app->post('/', 'EvaluationController@store');

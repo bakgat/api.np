@@ -130,6 +130,21 @@ class EvaluationController extends Controller
         $bfg = $this->branchRepo->getBranchForGroup(NtUid::import($bfgid));
 
         $this->evaluationService->sanitizeTotals($date, $bfg);
+        return $this->response('done');
+    }
+
+    public function sanitizeByGroup(Request $request, $gid)
+    {
+        $date = $request->has('date') ?
+            convert_date_from_string($request->get('date')) :
+            new DateTime();
+
+        $group = $this->groupRepo->get(NtUid::import($gid));
+        $bfgs = $this->branchRepo->allBranchesInGroup($group);
+        foreach ($bfgs as $bfg) {
+            $this->evaluationService->sanitizeTotals($date, $bfg);
+        }
+        return $this->response('done');
     }
 
     public function show($id)
