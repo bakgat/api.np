@@ -241,7 +241,7 @@ class PdfReport
 
             /** @var BranchResult $branchResult */
             foreach ($majorResult->getBranchResults() as $branchResult) {
-                if (count($branchResult->getHistory()) > 0) {
+                if ($branchResult->getCurrentResult()) {
                     $hasResult = true;
                 }
                 if (count($branchResult->getIacs()) > 0) {
@@ -291,7 +291,6 @@ class PdfReport
                 /** @var BranchResult $branchResult */
                 foreach ($newBranchCollection as $branchResult) {
 
-                    $history = $branchResult->getHistory();
                     $branchSet = false;
 
                     $hasMultiplechoices = false;
@@ -332,9 +331,9 @@ class PdfReport
                         $this->resultsTable->addRow($row);
                         $branchSet = true;
                     }
-                    if (count($history) > 0) {
+                    if ($branchResult->getCurrentResult()) {
                         /** @var RangeResult $rangeResult */
-                        $rangeResult = $history->get(0);
+                        $rangeResult = $branchResult->getCurrentResult();
 
                         $isPerm = strtoupper($branchResult->getName()) == 'PERMANENTE EVALUATIE';
 
@@ -407,7 +406,8 @@ class PdfReport
                          * 3. insert into pdf
                          * 4. delete downloaded graphs
                          * -------------------------- */
-                        //generate url
+                        $history = $branchResult->getHistory();
+
                         if (count($history) > 1) {
                             $markers = [];
                             /** @var RangeResult $item */
@@ -418,6 +418,8 @@ class PdfReport
                             }
                             //reverse markers because they are ordered DESC
                             $markers = array_reverse($markers);
+                            //generate url for google charts.
+                            //this API is deprecated but the only hack for now
                             $url = 'http://chart.apis.google.com/chart?chs=75x30&chd=t:' .
                                 implode(',', $markers) .
                                 '&cht=lc:nda&chm=o,0066FF,0,-1,4|o,FFFFFF,0,-1,2&chma=2,2,2,2';
@@ -437,9 +439,6 @@ class PdfReport
                             //must add row here, because image is embedded then
                             //after this it is safe to remove temp chart image
                             $this->resultsTable->addRow($row);
-
-
-
                         } else {
                             $row[3] = [
                                 'TEXT' => '',

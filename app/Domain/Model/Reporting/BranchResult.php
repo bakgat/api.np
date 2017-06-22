@@ -35,6 +35,12 @@ class BranchResult
     private $history;
 
     /**
+     * @Groups({"result_dto"})
+     * @var RangeResult
+     */
+    private $current ;
+
+    /**
      * @Groups({"student_iac"})
      * @var ArrayCollection
      */
@@ -65,7 +71,7 @@ class BranchResult
     {
         $this->id = $id;
         $this->name = $name;
-        $this->order= $order;
+        $this->order = $order;
         $this->history = new ArrayCollection;
         $this->iacs = new ArrayCollection;
         $this->hasComprehensive = false;
@@ -91,7 +97,7 @@ class BranchResult
      * @param $data
      * @return RangeResult
      */
-    public function intoHistory($data)
+    public function intoHistory($data, $isCurrent = false)
     {
         $id = NtUid::import($data['grId']);
         $range = $this->hasRange($id);
@@ -106,6 +112,9 @@ class BranchResult
             $evCount = $data['prEvCount'];
             $range = new RangeResult($id, $start, $end, $perm, $final, $total, $max, $redicodi, $evCount);
             $this->history->add($range);
+            if ($isCurrent) {
+                $this->current = clone $range;
+            }
         }
         return $range;
     }
@@ -203,6 +212,14 @@ class BranchResult
     public function getHistory()
     {
         return clone $this->history;
+    }
+
+    /**
+     * @return RangeResult
+     */
+    public function getCurrentResult()
+    {
+        return $this->current ? clone $this->current : null;
     }
 
     /**

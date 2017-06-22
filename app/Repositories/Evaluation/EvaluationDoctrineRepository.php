@@ -251,7 +251,11 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-               WHERE gr.start <='{$start}' AND gr.end >= '{$end}'
+               WHERE gr.id = (SELECT igr.id 
+                             FROM graph_ranges igr 
+                             WHERE igr.start <='{$end}' AND igr.end >= '{$start}' 
+                              AND (igr.level_id = g.level_id OR igr.level_id IS NULL)
+                             ORDER BY igr.end DESC, igr.level_id DESC LIMIT 1) 
                   AND stig.type='X'
                   AND sig.group_id='{$group}'
               ORDER BY gr.end DESC, gr.level_id DESC, sig.number, m.order, b.order";
@@ -288,7 +292,11 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN branches b ON b.id = bfg.branch_id
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
-              WHERE gr.start <='{$end}' AND gr.end >= '{$start}'
+              WHERE gr.id = (SELECT igr.id 
+                             FROM graph_ranges igr 
+                             WHERE igr.start <='{$end}' AND igr.end >= '{$start}' 
+                              AND (igr.level_id = g.level_id OR igr.level_id IS NULL)
+                             ORDER BY igr.end DESC, igr.level_id DESC LIMIT 1)   
                   AND stig.type='X'
                   AND s.id IN('{$ids}')
                   AND (sig.end IS NULL OR sig.end >='{$end}')

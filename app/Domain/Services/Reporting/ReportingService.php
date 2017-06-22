@@ -125,7 +125,7 @@ class ReportingService
 
 
         $report = new Report($range, $withFrontPage, $withCommentPage);
-        $this->generateResultsReport($report, $pointResults);
+        $this->generateResultsReport($report, $pointResults, true);
         $this->generateResultsReport($report, $history);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
         $this->generateSpokenReport($report, $spokenResults);
@@ -151,14 +151,14 @@ class ReportingService
      * @param $data
      * @return Report
      */
-    private function generateResultsReport(Report $report, $data)
+    private function generateResultsReport(Report $report, $data, $isCurrent = false)
     {
 
         foreach ($data as $item) {
             $report->intoStudent($item)
                 ->intoMajor($item)
                 ->intoBranch($item)
-                ->intoHistory($item);
+                ->intoHistory($item, $isCurrent);
         }
 
         return $report;
