@@ -224,6 +224,7 @@ class PdfReport
      * **************************************************/
     private function makeResultsTable(StudentResult $studentResult)
     {
+        $charts = [];
 
         /** @var MajorResult $majorResult */
         foreach ($studentResult->getMajorResults() as $majorResult) {
@@ -423,7 +424,10 @@ class PdfReport
 
                             $chartId = NtUid::generate(4);
                             $chart = resource_path('charts/' . $chartId . '.png');
-                            file_put_contents($chart, file_get_contents($url));
+                            $chart_size = file_put_contents($chart, file_get_contents($url));
+                            if($chart_size) {
+                                $charts[] = $chart;
+                            }
 
                             $row[3] = [
                                 'TYPE' => 'IMAGE',
@@ -434,8 +438,7 @@ class PdfReport
                             //after this it is safe to remove temp chart image
                             $this->resultsTable->addRow($row);
 
-                            //remove temp saved chart
-                            unlink($chart);
+
 
                         } else {
                             $row[3] = [
@@ -657,6 +660,12 @@ class PdfReport
                 $this->pdf->AddPage();
             }
 
+        }
+
+        foreach ($charts as $chart) {
+            if(file_exists($chart)) {
+                unlink($chart);
+            }
         }
     }
 
