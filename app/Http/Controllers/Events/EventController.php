@@ -55,6 +55,8 @@ class EventController extends Controller
             $loginCount += $login['action_count'];
         }
 
+        $daily = $this->eventRepo->dailyReport();
+
         $result = [
             'evaluations' => [
                 'count' => $this->evaluationRepo->count(),
@@ -71,6 +73,7 @@ class EventController extends Controller
                 'actions' => $logins
             ],
             'redicodi' => $this->evaluationRepo->allRedicodiStats(new DateTime()),
+            'dailyReport' => $daily,
         ];
 
         return $this->response($result, ['track_list']);

@@ -39,4 +39,9 @@ interface EventTrackingRepository
      * @return ArrayCollection
      */
     public function allOfUser(NtUid $id, $userTable);
+
+    /**
+     * @return mixed
+     */
+    public function dailyReport();
 }

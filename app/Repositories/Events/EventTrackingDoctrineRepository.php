@@ -81,4 +81,30 @@ class EventTrackingDoctrineRepository implements EventTrackingRepository
             ->setParameter('userId', $id->toString());
         return $qb->getQuery()->getResult();
     }
+
+    public function dailyReport()
+    {
+        $eventsSQL = "select count(id) as count, action, action_table, DATE(timestamp) as order_day from event_tracking group by action_table, action, order_day order by order_day DESC;";
+        $stmt = $this->em->getConnection()->prepare($eventsSQL);
+        $stmt->execute();
+
+        $groups = [];
+        foreach ($stmt->fetchAll() as $item) {
+
+            $actionTable = camel_case($item['action_table']);
+            $action = camel_case($item['action']);
+
+            if(!isset($groups[$actionTable])) {
+                $groups[$actionTable] = [];
+            }
+            if(!isset($groups[$actionTable][$action])) {
+                $groups[$actionTable][$action] = [];
+            }
+            $groups[$actionTable][$action][] = [
+                'date' => $item['order_day'],
+                'count' => intval($item['count']),
+            ];
+        }
+        return $groups;
+    }
 }
