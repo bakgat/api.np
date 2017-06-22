@@ -121,6 +121,17 @@ class EvaluationController extends Controller
         return $this->response('done');
     }
 
+    public function sanitize(Request $request, $bfgid)
+    {
+        $date = $request->has('date') ?
+            convert_date_from_string($request->get('date')) :
+            new DateTime();
+
+        $bfg = $this->branchRepo->getBranchForGroup(NtUid::import($bfgid));
+
+        $this->evaluationService->sanitizeTotals($date, $bfg);
+    }
+
     public function show($id)
     {
         if (!$id instanceof NtUid) {
