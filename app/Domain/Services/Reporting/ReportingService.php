@@ -89,7 +89,7 @@ class ReportingService
 
         $report = new Report($range, $withFrontPage, $withCommentPage);
         $this->generateReportHeaders($report, $headers);
-        $this->generateResultsReport($report, $pointResults);
+        $this->generateResultsReport($report, $pointResults, true);
         $this->generateResultsReport($report, $history);
         $this->generateComprehensiveReport($report, $comprehensiveResults);
         $this->generateSpokenReport($report, $spokenResults);
