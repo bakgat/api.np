@@ -322,7 +322,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN majors m ON m.id = b.major_id
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
               WHERE s.id IN('{$ids}')
-               ORDER BY gr.end DESC, m.order, b.order";
+               ORDER BY gr.end DESC, gr.start DESC, m.order, b.order";
         return $this->getHistoryReport($sql);
     }
 
@@ -348,7 +348,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN graph_ranges gr ON gr.id = pr.graph_range_id
                WHERE sig.group_id='{$group}'
                 AND (sig.end IS NULL OR sig.end >= '{$range->getEnd()->format('Y-m-d')}')
-              ORDER BY gr.end DESC, sig.number, m.order, b.order";
+              ORDER BY gr.end DESC, gr.start DESC, sig.number, m.order, b.order";
         return $this->getHistoryReport($sql);
     }
 

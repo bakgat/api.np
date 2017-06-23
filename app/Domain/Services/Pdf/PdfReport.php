@@ -401,21 +401,46 @@ class PdfReport
 
                         /* --------------------------
                          * CHARTS
-                         * 1. generate google image
-                         * 2. download and store with unique id
-                         * 3. insert into pdf
-                         * 4. delete downloaded graphs
+                         * 1. get markers from history Range Results.
+                         *      Only set the first marker if two range results have same end date.
+                         *      When two or more have the same end date, the prior one is ordered to come first
+                         *          (defined in sql query)
+                         *      This prevents to add more marker points for semi-overlapping ranges
+                         *      eg   range 1: 2017-03-01|2017-06-30 (for level L1)
+                         *           range 2: 2017-01-01|2017-06-30 (for all levels)
+                         *          => only range 1 is a marker
+                         *
+                         *      eg   range 1: 2017-01-01|2017-06-30 (for all levels)
+                         *           range 2: 2017-01-01|2017-03-31 (for all levels)
+                         *          => only range 1 is a marker
+                         *
+                         *
+                         * a 2017-03-01 - 2017-06-30 *
+                         * b 2017-01-01 - 2017-06-30 <- overlaps a (end b > start a)
+                         * c 2017-01-01 - 2017-04-16 <- overlaps a (end c > start a)
+                         * d 2017-01-01 - 2017-02-28 *
+                         *
+                         * 2. generate google image
+                         * 3. download and store with unique id
+                         * 4. insert into pdf
+                         * 5. delete downloaded graphs
                          * -------------------------- */
                         $history = $branchResult->getHistory();
 
-                        if (count($history) > 1) {
-                            $markers = [];
-                            /** @var RangeResult $item */
-                            foreach ($history as $item) {
-                                //set percent
+                        $markers = [];
+                        $previousStarts = [];
+                        /** @var RangeResult $item */
+                        foreach ($history as $item) {
+                            //set percent
+                            if (!$this->overlapRange($previousStarts, $item->getRange()->getEnd())) {
                                 $marker = str_replace(',', '.', ($item->getTotal() / $item->getMax()) * 100);
                                 $markers[] = $marker;
+                                $previousStarts[] = $item->getRange()->getStart();
                             }
+
+                        }
+
+                        if (count($markers) > 1) {
                             //reverse markers because they are ordered DESC
                             $markers = array_reverse($markers);
                             //generate url for google charts.
@@ -427,7 +452,7 @@ class PdfReport
                             $chartId = NtUid::generate(4);
                             $chart = resource_path('charts/' . $chartId . '.png');
                             $chart_size = file_put_contents($chart, file_get_contents($url));
-                            if($chart_size) {
+                            if ($chart_size) {
                                 $charts[] = $chart;
                             }
 
@@ -662,10 +687,19 @@ class PdfReport
         }
 
         foreach ($charts as $chart) {
-            if(file_exists($chart)) {
+            if (file_exists($chart)) {
                 unlink($chart);
             }
         }
+    }
+
+    function overlapRange($starts, $end)  {
+        foreach ($starts as $start) {
+            if($end > $start) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function initFonts()
