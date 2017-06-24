@@ -136,7 +136,7 @@ $app->group(['prefix' => 'pdf/pivot', 'namespace' => 'App\Http\Controllers\Evalu
 });
 $app->group(['prefix' => 'report', 'namespace' => 'App\Http\Controllers\Evaluation'], function () use ($app) {
     $app->get('/group/{groupId}', 'ReportController@jsonByGroup');
-    $app->get('/student/{studentId}', 'ReportController@jsonByStudent');
+    $app->get('/student', 'ReportController@jsonByStudents');
     $app->get('/custom', 'ReportController@jsonCustom');
 });
 /* ***************************************************
