@@ -14,6 +14,7 @@ use App\Domain\NtUid;
 use Doctrine\Common\Collections\ArrayCollection;
 
 
+use Exception;
 use JMS\Serializer\Annotation\Groups;
 
 class Report
@@ -70,6 +71,9 @@ class Report
         $id = NtUid::import($data['sId']);
         $stud = $this->hasStudent($id);
         if (!$stud) {
+            if(!isset($data['sFirstName']) && !isset($data['sLastName'])) {
+                throw new Exception('404');
+            }
             $fn = $data['sFirstName'];
             $ln = $data['sLastName'];
 
@@ -86,6 +90,7 @@ class Report
             $stud = new StudentResult($id, $fn, $ln, $group, $stFn, $stLn, $stG);
             $this->students->add($stud);
         }
+
         return $stud;
     }
 

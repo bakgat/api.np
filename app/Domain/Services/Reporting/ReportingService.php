@@ -19,6 +19,7 @@ use App\Domain\Model\Identity\StudentRepository;
 use App\Domain\Model\Reporting\Report;
 use App\Domain\Model\Time\DateRange;
 use App\Domain\NtUid;
+use Exception;
 
 class ReportingService
 {
@@ -155,10 +156,17 @@ class ReportingService
     {
 
         foreach ($data as $item) {
-            $report->intoStudent($item)
-                ->intoMajor($item)
-                ->intoBranch($item)
-                ->intoHistory($item, $isCurrent);
+            try {
+                $report->intoStudent($item)
+                    ->intoMajor($item)
+                    ->intoBranch($item)
+                    ->intoHistory($item, $isCurrent);
+            } catch(Exception $ex) {
+                if(!$ex->getMessage() == '404') {
+                    //fall through if error was not 'student not found'
+                    throw $ex;
+                }
+            }
         }
 
         return $report;

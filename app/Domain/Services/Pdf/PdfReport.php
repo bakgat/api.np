@@ -75,59 +75,70 @@ class PdfReport
     {
         /** @var StudentResult $result */
         foreach ($this->report->getStudentResults() as $result) {
-            //hack to set footer or header with correct
-            // student info in any of the generated reports
-            // footer was updated with next student info
-            // before it was generated (FPDF genrates previous footer when new page is reached)
-            if ($this->report->hasCommentPage()) {
-                $this->_currentStudent = $result;
+            //See if any current result is avaiblable
+            //otherwise skip - probably not correct
+            $hasResult = false;
+            foreach ($result->getMajorResults() as $majorResult) {
+                foreach ($majorResult->getBranchResults() as $branchResult) {
+                    if ($branchResult->getCurrentResult()) {
+                        $hasResult = true;
+                    }
+                }
             }
+            if($hasResult) {
+                //hack to set footer or header with correct
+                // student info in any of the generated reports
+                // footer was updated with next student info
+                // before it was generated (FPDF genrates previous footer when new page is reached)
+                if ($this->report->hasCommentPage()) {
+                    $this->_currentStudent = $result;
+                }
 
-            $this->pdf->SetAutoPageBreak(false, 45);
-            $this->pdf->HideHeader();
-            $this->pdf->HideFooter();
-
-            if ($this->report->hasFrontpage()) {
-                $this->makeFrontPage($result);
-            }
-
-            $this->pdf->ShowHeader();
-
-            $this->pdf->header = $this->StudentHeader(true);
-
-            $this->pdf->footer = $this->StudentFooter();
-
-            $this->pdf->student = $result;
-
-            if ($this->report->hasCommentPage()) {
-                $this->pdf->AddPage();
-                $this->pdf->ShowFooter();
-                $this->makeFirstPage($result);
-            } else {
-                $this->pdf->ShowFooter();
-            }
-
-            $this->pdf->header = $this->StudentHeader(false);
-
-            $this->pdf->AddPage();
-
-            //hack to set footer or header with correct
-            // student info in any of the generated reports
-            // footer was updated with next student info
-            // before it was generated (FPDF genrates previous footer when new page is reached)
-            if (!$this->report->hasCommentPage()) {
-                $this->_currentStudent = $result;
-            }
-
-            $this->makeResultsTable($result);
-
-            $this->makeSignature();
-
-            if ($this->pdf->PageNo() % 2 != 0) {
+                $this->pdf->SetAutoPageBreak(false, 45);
                 $this->pdf->HideHeader();
-                $this->pdf->AddPage();
-            }
+                $this->pdf->HideFooter();
 
+                if ($this->report->hasFrontpage()) {
+                    $this->makeFrontPage($result);
+                }
+
+                $this->pdf->ShowHeader();
+
+                $this->pdf->header = $this->StudentHeader(true);
+
+                $this->pdf->footer = $this->StudentFooter();
+
+                $this->pdf->student = $result;
+
+                if ($this->report->hasCommentPage()) {
+                    $this->pdf->AddPage();
+                    $this->pdf->ShowFooter();
+                    $this->makeFirstPage($result);
+                } else {
+                    $this->pdf->ShowFooter();
+                }
+
+                $this->pdf->header = $this->StudentHeader(false);
+
+                $this->pdf->AddPage();
+
+                //hack to set footer or header with correct
+                // student info in any of the generated reports
+                // footer was updated with next student info
+                // before it was generated (FPDF genrates previous footer when new page is reached)
+                if (!$this->report->hasCommentPage()) {
+                    $this->_currentStudent = $result;
+                }
+
+                $this->makeResultsTable($result);
+
+                $this->makeSignature();
+
+                if ($this->pdf->PageNo() % 2 != 0) {
+                    $this->pdf->HideHeader();
+                    $this->pdf->AddPage();
+                }
+            }
         }
         return $this;
     }
