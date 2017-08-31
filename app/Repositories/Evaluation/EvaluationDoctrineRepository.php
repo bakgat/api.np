@@ -257,6 +257,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                               AND (igr.level_id = g.level_id OR igr.level_id IS NULL)
                              ORDER BY igr.end DESC, igr.level_id DESC LIMIT 1) 
                   AND stig.type='X'
+                  AND stig.start <='{$end}' AND stig.end >= '{$start}'
                   AND sig.group_id='{$group}'
               ORDER BY gr.end DESC, gr.level_id DESC, sig.number, m.order, b.order";
         return $this->getPointReport($sql);
@@ -298,6 +299,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
                               AND (igr.level_id = g.level_id OR igr.level_id IS NULL)
                              ORDER BY igr.end DESC, igr.level_id DESC LIMIT 1)   
                   AND stig.type='X'
+                  AND stig.start <='{$end}' AND stig.end >= '{$start}'
                   AND s.id IN('{$ids}')
                   AND (sig.end IS NULL OR sig.end >='{$end}')
                ORDER BY gr.end DESC, gr.level_id DESC, sig.number, m.order, b.order";
@@ -406,6 +408,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN majors m ON m.id = b.major_id
               WHERE (e.date BETWEEN '{$start}' AND '{$end}')
                     AND stig.type='X'
+                    AND stig.start <='{$end}' AND stig.end >= '{$start}'
                     AND sig.group_id='{$group}'
               GROUP BY s.id, bfg.id
               ORDER BY sig.number, m.order, b.order";
@@ -438,6 +441,7 @@ class EvaluationDoctrineRepository implements EvaluationRepository
               INNER JOIN majors m ON m.id = b.major_id
               WHERE (e.date BETWEEN '{$start}' AND '{$end}')
                     AND stig.type='X'
+                    AND stig.start <='{$end}' AND stig.end >= '{$start}'
                     AND s.id  IN ('{$ids}')
               GROUP BY s.id, bfg.id
               ORDER BY sig.number, m.order, b.order";
