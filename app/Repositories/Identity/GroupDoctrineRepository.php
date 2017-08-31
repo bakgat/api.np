@@ -60,11 +60,12 @@ class GroupDoctrineRepository implements GroupRepository
         $qb = $this->em->createQueryBuilder();
         $qb->select('g')
             ->from(Group::class, 'g')
-            ->join('g.studentInGroups', 'sig')
-            ->where('sig.dateRange.start<=?1')
-            ->andWhere('sig.dateRange.end>=?1')
+            /* ->join('g.studentInGroups', 'sig')
+             ->where('sig.dateRange.start<=?1')
+             ->andWhere('sig.dateRange.end>=?1')*/
+            ->where('g.active=?1')
             ->orderBy('g.name')
-            ->setParameter(1, new DateTime);
+            ->setParameter(1, true);
 
         return $qb->getQuery()->getResult();
     }
