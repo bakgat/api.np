@@ -27,6 +27,7 @@ class TrackService
     public function track($authId, $table, $action, $id)
     {
         $track = new EventTracking('staff', $authId, $table, $action, $id);
+        $track->setDetails('custom');
         $this->trackRepo->save($track);
         return true;
     }

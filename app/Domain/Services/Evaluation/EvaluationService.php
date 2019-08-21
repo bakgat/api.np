@@ -149,7 +149,7 @@ class EvaluationService
             $this->sanitizeTotals($date, $branchForGroup);
         }
 
-        $userId = $data['auth_token'];
+        $userId = '91c959d0-2432-4cbf-8ed3-b393ddc9ae5c';
         $track = new EventTracking('staff', $userId, 'evaluation', 'insert', $evaluation->getId());
         $this->trackRepo->save($track);
 
@@ -326,7 +326,7 @@ class EvaluationService
             $this->sanitizeTotals($date, $branchForGroup);
         }
 
-        $userId = NtUid::import($data['auth_token']);
+        $userId = '91c959d0-2432-4cbf-8ed3-b393ddc9ae5c';
         $track = new EventTracking('staff', $userId, 'evaluation', 'update', $evaluation->getId());
         $this->trackRepo->save($track);
 

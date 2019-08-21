@@ -84,7 +84,7 @@ class StudentService
 
         $this->studentRepo->insert($student);
 
-        $this->trackService->track($data['auth_token'], 'students', 'insert', $student->getId());
+        //$this->trackService->track($data['auth_token'], 'students', 'insert', $student->getId());
 
         return $student;
     }
@@ -106,7 +106,7 @@ class StudentService
         $student->updateProfile($firstName, $lastName, $schoolId, $gender, $birthday);
         $this->studentRepo->update($student);
 
-        $this->trackService->track($data['auth_token'], 'students', 'update', $student->getId());
+        //$this->trackService->track($data['auth_token'], 'students', 'update', $student->getId());
 
         return $student;
     }
@@ -192,7 +192,7 @@ class StudentService
         }
         $this->studentRepo->update($student);
 
-        $this->trackService->track($data['auth_token'], 'redicodi_for_students', 'insert', $studentRedicodi->getId());
+        //$this->trackService->track($data['auth_token'], 'redicodi_for_students', 'insert', $studentRedicodi->getId());
 
         return $studentRedicodi;
     }
@@ -234,7 +234,7 @@ class StudentService
         $studentRedicodi->resetStart($start);
         if ($end != null) {
             $studentRedicodi->stopRedicodi($end);
-            $trackDone =  $this->trackService->track($data['auth_token'], 'redicodi_for_students', 'stopped', $studentRedicodi->getId());
+            //$trackDone =  $this->trackService->track($data['auth_token'], 'redicodi_for_students', 'stopped', $studentRedicodi->getId());
         }
 
         $redicodi = new Redicodi($redicodi);
@@ -242,7 +242,7 @@ class StudentService
         $this->studentRepo->updateRedicodi($studentRedicodi);
 
         if (!$trackDone) {
-            $this->trackService->track($data['auth_token'], 'redicodi_for_students', 'update', $studentRedicodi->getId());
+            //$this->trackService->track($data['auth_token'], 'redicodi_for_students', 'update', $studentRedicodi->getId());
         }
 
         return $studentRedicodi;

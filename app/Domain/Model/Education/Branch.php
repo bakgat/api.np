@@ -84,9 +84,9 @@ class Branch
     private $goals;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="integer")
      *
-     * @var float
+     * @var integer
      */
     private $order;
 

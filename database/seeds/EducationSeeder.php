@@ -71,6 +71,7 @@ class EducationSeeder extends Seeder
         foreach ($majors as $key => $value) {
             $major = new Major($key);
 
+
             foreach ($value as $b) {
                 $branch = new Branch($b);
                 $major->addBranch($branch);

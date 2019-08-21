@@ -28,7 +28,7 @@ return [
     |
     */
     'connections' => [
-        'mysql' => [
+        'mariadb' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST', 'localhost'),
             'database'  => env('DB_DATABASE'),

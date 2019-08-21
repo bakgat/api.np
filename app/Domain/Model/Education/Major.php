@@ -55,9 +55,9 @@ class Major
     private $branches;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="integer")
      *
-     * @var float
+     * @var integer
      */
     private $order;
 

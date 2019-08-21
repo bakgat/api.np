@@ -117,7 +117,7 @@ class IacService
                 $iac->addGoal($goal);
             }
             $this->iacRepo->insert($iac);
-            $this->trackService->track($data['auth_token'], 'iacs', 'insert', $iac->getId());
+            $this->trackService->track('91c959d0-2432-4cbf-8ed3-b393ddc9ae5c', 'iacs', 'insert', $iac->getId());
             return $iac;
         }
 
